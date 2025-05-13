@@ -19,6 +19,11 @@
             font-family: 'Arial', sans-serif;
         }
         
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        /* मोबाइल फ्रेंडली हेडर */
         header {
             background-color: var(--primary-color);
             color: white;
@@ -27,6 +32,9 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         
         .logo {
@@ -34,23 +42,97 @@
             font-weight: bold;
         }
         
-        nav ul {
+        /* डेस्कटॉप नेविगेशन */
+        .desktop-nav ul {
             display: flex;
             list-style: none;
         }
         
-        nav ul li {
+        .desktop-nav ul li {
             margin-left: 1.5rem;
         }
         
-        nav ul li a {
+        .desktop-nav ul li a {
             color: white;
             text-decoration: none;
             transition: color 0.3s;
+            font-weight: 500;
         }
         
-        nav ul li a:hover {
+        .desktop-nav ul li a:hover {
             color: #FFD700;
+        }
+        
+        /* मोबाइल नेविगेशन */
+        .mobile-nav-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: var(--primary-color);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 2rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-nav.active {
+            left: 0;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        
+        .mobile-nav ul li {
+            margin-bottom: 1.5rem;
+        }
+        
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
         }
         
         .auth-buttons button {
@@ -62,31 +144,53 @@
             cursor: pointer;
             margin-left: 1rem;
             font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .auth-buttons button:hover {
+            background-color: #f0f0f0;
         }
         
         main {
-            padding: 2rem;
+            padding: 1rem;
             min-height: 80vh;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .hero {
             background-color: var(--secondary-color);
             color: white;
-            padding: 3rem;
+            padding: 2rem 1rem;
             text-align: center;
             border-radius: 8px;
             margin-bottom: 2rem;
+            background-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .hero h1 {
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
         }
         
         .posts-container {
             background-color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .posts-container h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
         }
         
         .post {
             border-bottom: 1px solid #eee;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             margin-bottom: 1rem;
         }
         
@@ -94,10 +198,40 @@
             border-bottom: none;
         }
         
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .post-user-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .post-user-name {
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .post-date {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 2px;
+        }
+        
+        .post-content {
+            margin: 1rem 0;
+            line-height: 1.5;
+        }
+        
         .post-actions {
             display: flex;
             gap: 1rem;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
         }
         
         .post-actions button {
@@ -108,12 +242,30 @@
             display: flex;
             align-items: center;
             gap: 0.3rem;
+            font-size: 0.9rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .post-actions button:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .post-image-container {
+            margin-top: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 400px;
+            display: flex;
+            justify-content: center;
+            background-color: #f5f5f5;
         }
         
         .post-image {
             max-width: 100%;
-            max-height: 300px;
-            margin-top: 1rem;
+            max-height: 400px;
+            object-fit: contain;
             border-radius: 4px;
         }
         
@@ -131,6 +283,7 @@
             font-weight: bold;
             width: 100%;
             margin-top: 15px;
+            transition: background-color 0.3s;
         }
         
         .google-signin-btn:hover {
@@ -142,19 +295,171 @@
             height: 18px;
         }
         
+        /* पोस्ट फॉर्म स्टाइल */
+        #post-form {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        #post-form h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        #post-content {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        #post-content:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .file-upload-container {
+            margin-bottom: 1rem;
+        }
+        
+        .file-upload-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        #post-image {
+            width: 100%;
+        }
+        
+        #submit-post {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        #submit-post:hover {
+            background-color: #7a0000;
+        }
+        
+        .image-preview {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        
+        .remove-image-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
         footer {
             background-color: var(--primary-color);
             color: white;
             text-align: center;
-            padding: 1rem;
+            padding: 1.5rem;
             margin-top: 2rem;
+        }
+        
+        /* लोडिंग इंडिकेटर */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* रेस्पॉन्सिव डिज़ाइन */
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-nav-btn {
+                display: block;
+            }
+            
+            .auth-buttons {
+                margin-left: auto;
+            }
+            
+            header {
+                padding: 0.8rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .hero {
+                padding: 1.5rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .posts-container, #post-form {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-buttons button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .post {
+                padding: 1rem 0;
+            }
+            
+            .post-actions button {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">ViratSwarup</div>
-        <nav>
+        
+        <!-- डेस्कटॉप नेविगेशन -->
+        <nav class="desktop-nav">
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="agnosia.html">Agnosia</a></li>
@@ -162,30 +467,57 @@
                 <li><a href="emulate.html">Emulate</a></li>
             </ul>
         </nav>
+        
+        <!-- मोबाइल नेविगेशन बटन -->
+        <button class="mobile-nav-btn">☰</button>
+        
         <div class="auth-buttons">
-            <button id="google-signin-btn">Sign In with Google</button>
+            <button id="google-signin-btn">Sign In</button>
         </div>
     </header>
+    
+    <!-- मोबाइल नेविगेशन मेनू -->
+    <div class="mobile-nav">
+        <button class="mobile-nav-close">×</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agnosia.html">Agnosia</a></li>
+            <li><a href="enigma.html">Enigma</a></li>
+            <li><a href="emulate.html">Emulate</a></li>
+        </ul>
+    </div>
+    
+    <!-- ओवरले -->
+    <div class="overlay"></div>
     
     <main>
         <section class="hero">
             <h1>Welcome to ViratSwarup Platform</h1>
             <p>Explore and join the community</p>
         </section>
+        
+        <!-- पोस्ट क्रिएट फॉर्म -->
+        <div id="post-form">
+            <h3>Create a Post</h3>
+            <textarea id="post-content" placeholder="What's on your mind?" rows="4"></textarea>
+            
+            <div class="file-upload-container">
+                <label for="post-image" class="file-upload-label">Upload Image (Optional)</label>
+                <input type="file" id="post-image" accept="image/*">
+            </div>
+            
+            <div class="image-preview">
+                <img id="preview-image" src="#" alt="Image preview">
+                <button class="remove-image-btn">Remove Image</button>
+            </div>
+            
+            <button id="submit-post">Post</button>
+        </div>
                        
         <section class="posts-container">
             <h2>Community Posts</h2>
             <div id="posts-list">
-                <!-- Posts will be loaded here dynamically -->
-            </div>
-            <div id="post-form" style="margin-top: 2rem; display: none;">
-                <h3>Create a Post</h3>
-                <textarea id="post-content" placeholder="What's on your mind?" rows="4"></textarea>
-                <div class="file-upload">
-                    <label for="post-image" class="file-upload-label">Upload Image (Optional)</label>
-                    <input type="file" id="post-image" accept="image/*">
-                </div>
-                <button id="submit-post">Post</button>
+                <p style="text-align: center; padding: 2rem;">Please sign in to view posts</p>
             </div>
         </section>
     </main>
@@ -199,12 +531,12 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
             from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, updateDoc, increment, arrayUnion, arrayRemove } 
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, updateDoc, increment, arrayUnion, arrayRemove, getDoc } 
             from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } 
             from "https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js";
 
-        // Your web app's Firebase configuration
+        // Your web app's Firebase configuration - वैसे का वैसा रखा गया है
         const firebaseConfig = {
             apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
             authDomain: "viratsawarup.firebaseapp.com",
@@ -229,21 +561,81 @@
         const postContent = document.getElementById('post-content');
         const postImage = document.getElementById('post-image');
         const submitPost = document.getElementById('submit-post');
+        const mobileNavBtn = document.querySelector('.mobile-nav-btn');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const mobileNavClose = document.querySelector('.mobile-nav-close');
+        const overlay = document.querySelector('.overlay');
+        const imagePreview = document.querySelector('.image-preview');
+        const previewImage = document.getElementById('preview-image');
+        const removeImageBtn = document.querySelector('.remove-image-btn');
+
+        // Mobile Navigation Toggle
+        mobileNavBtn.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+            overlay.classList.add('active');
+        });
+        
+        mobileNavClose.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Image Preview Functionality
+        postImage.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        
+        removeImageBtn.addEventListener('click', function() {
+            postImage.value = '';
+            previewImage.src = '#';
+            imagePreview.style.display = 'none';
+        });
 
         // Google Sign-In
-        googleSignInBtn.addEventListener('click', () => {
-            signInWithPopup(auth, provider)
-                .catch((error) => {
+        googleSignInBtn.addEventListener('click', async () => {
+            if (auth.currentUser) {
+                // User is signed in, show confirmation before logout
+                if (confirm('Are you sure you want to sign out?')) {
+                    try {
+                        googleSignInBtn.innerHTML = '<span class="loading"></span> Signing out...';
+                        await signOut(auth);
+                    } catch (error) {
+                        console.error("Sign out error:", error);
+                        alert('Error signing out. Please try again.');
+                    }
+                }
+            } else {
+                // User is not signed in, proceed with sign in
+                try {
+                    googleSignInBtn.innerHTML = '<span class="loading"></span> Signing in...';
+                    await signInWithPopup(auth, provider);
+                } catch (error) {
                     console.error("Google Sign-In Error:", error);
-                });
+                    alert('Error signing in. Please try again.');
+                    googleSignInBtn.textContent = 'Sign In with Google';
+                }
+            }
         });
 
         // Auth state listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is signed in with Google
-                googleSignInBtn.textContent = `Logout (${user.displayName || user.email})`;
-                googleSignInBtn.onclick = () => signOut(auth);
+                googleSignInBtn.innerHTML = `Logout (${user.displayName || user.email})`;
                 
                 // Show post form
                 postForm.style.display = 'block';
@@ -253,11 +645,10 @@
             } else {
                 // User is signed out
                 googleSignInBtn.textContent = 'Sign In with Google';
-                googleSignInBtn.onclick = () => signInWithPopup(auth, provider);
                 
                 // Hide post form
                 postForm.style.display = 'none';
-                postsList.innerHTML = '<p>Please sign in with Google to view and create posts.</p>';
+                postsList.innerHTML = '<p style="text-align: center; padding: 2rem;">Please sign in to view and create posts.</p>';
             }
         });
 
@@ -272,6 +663,9 @@
             }
             
             try {
+                submitPost.innerHTML = '<span class="loading"></span> Posting...';
+                submitPost.disabled = true;
+                
                 let imageUrl = '';
                 
                 // Upload image if exists
@@ -296,9 +690,16 @@
                 // Clear form
                 postContent.value = '';
                 postImage.value = '';
+                previewImage.src = '#';
+                imagePreview.style.display = 'none';
+                
+                submitPost.textContent = 'Post';
+                submitPost.disabled = false;
             } catch (error) {
                 console.error("Error adding post:", error);
                 alert('Error creating post. Please try again.');
+                submitPost.textContent = 'Post';
+                submitPost.disabled = false;
             }
         });
 
@@ -310,24 +711,31 @@
                 postsList.innerHTML = '';
                 
                 if (querySnapshot.empty) {
-                    postsList.innerHTML = '<p>No posts yet. Be the first to post!</p>';
+                    postsList.innerHTML = '<p style="text-align: center; padding: 2rem;">No posts yet. Be the first to post!</p>';
                     return;
                 }
                 
                 querySnapshot.forEach((doc) => {
                     const post = doc.data();
                     const isLiked = post.likedBy && post.likedBy.includes(auth.currentUser.uid);
+                    const postDate = post.createdAt?.toDate() || new Date();
                     
                     const postElement = document.createElement('div');
                     postElement.className = 'post';
                     postElement.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            ${post.userPhoto ? `<img src="${post.userPhoto}" style="width: 40px; height: 40px; border-radius: 50%;" alt="User">` : ''}
-                            <strong>${post.userName}</strong>
+                        <div class="post-header">
+                            ${post.userPhoto ? `<img src="${post.userPhoto}" class="post-user-img" alt="User">` : ''}
+                            <div>
+                                <div class="post-user-name">${post.userName}</div>
+                                <div class="post-date">${postDate.toLocaleString()}</div>
+                            </div>
                         </div>
-                        <p>${post.content || ''}</p>
-                        ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image">` : ''}
-                        <small>Posted on ${new Date(post.createdAt?.toDate()).toLocaleString()}</small>
+                        <div class="post-content">${post.content || ''}</div>
+                        ${post.imageUrl ? `
+                        <div class="post-image-container">
+                            <img src="${post.imageUrl}" class="post-image" alt="Post image">
+                        </div>
+                        ` : ''}
                         <div class="post-actions">
                             <button class="like-btn ${isLiked ? 'liked' : ''}" data-id="${doc.id}">
                                 <span>${isLiked ? '❤️' : '🤍'}</span> ${post.likes || 0} Likes
