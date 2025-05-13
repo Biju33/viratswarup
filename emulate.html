@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Emulate - ViratSwarup</title>
+    <style>
+        :root {
+            --primary-color: #8B0000;
+            --light-color: #F5F5F5;
+            --dark-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #FFD700;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            aspect-ratio: 16 / 9;
+            margin: 2rem auto;
+            cursor: pointer;
+        }
+
+        .video-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 6px;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .play-button::before {
+            content: '';
+            display: block;
+            border-style: solid;
+            border-width: 15px 0 15px 25px;
+            border-color: transparent transparent transparent white;
+            margin-left: 5px;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">ViratSwarup</div>
+        <nav>
+            <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="agnosia.html">Agnosia</a></li>
+                <li><a href="enigma.html">Enigma</a></li>
+                <li><a href="emulate.html">Emulate</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="video-container" id="videoBox" onclick="playVideo()">
+            <img src="https://img.youtube.com/vi/Qdv171GK030/hqdefault.jpg" alt="Video Thumbnail">
+            <div class="play-button"></div>
+        </div>
+		
+		<div class="video-container" id="videoBox" onclick="playVideo()">
+            <img src="https://img.youtube.com/vi/Qdv171GK030/hqdefault.jpg" alt="Video Thumbnail">
+            <div class="play-button"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 ViratSwarup. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function playVideo() {
+            const container = document.getElementById("videoBox");
+            container.innerHTML = `
+                <iframe width="100%" height="100%"
+                    src="https://www.youtube-nocookie.com/embed/Qdv171GK030?autoplay=1&rel=0&modestbranding=1"
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                </iframe>`;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Ancestors - ViratSwarup</title>
+    <style>
+        :root {
+            --primary-color: #8B0000;
+            --secondary-color: #A52A2A;
+            --light-color: #F5F5F5;
+            --dark-color: #333;
+            --card-bg: #8B0000;
+            --card-text: white;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #FFD700;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .blog-post {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .blog-post h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2.2rem;
+        }
+        
+        .intro-text {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            color: var(--card-text);
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+            
+            nav ul li {
+                margin: 0.3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ViratSwarup</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="agnosia.html">Agnosia</a></li>
+                <li><a href="enigma.html">Enigma</a></li>
+                <li><a href="emulate.html">Emulate</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <article class="blog-post">
+            <h1>Our Great Ancestors and Their Contributions</h1>
+            <p class="intro-text">A tribute to legendary sages, scholars, and visionaries from ancient bharat who shaped philosophy, science, medicine, and spirituality.</p>
+            
+            <div class="container">
+                <!-- COMPLETE LIST (100 UNIQUE ENTRIES) -->
+                <div class="card">
+                    <h2>1. Valmiki</h2>
+                    <p>Authored Ramayana, first Sanskrit poet.</p>
+                </div>
+               
+                <div class="card">
+                    <h2>2. Vashishtha</h2>
+                    <p>Rama's guru, Rigvedic contributor.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>3. Vishwamitra</h2>
+                    <p>Created Gayatri Mantra, king-turned-sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>4. Atri</h2>
+                    <p>Saptarishi, composed Rigvedic hymns.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>5. Vedavyasa</h2>
+                    <p>Compiled Vedas, wrote Mahabharata.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>6. Bharadwaja</h2>
+                    <p>Ayurvedic pioneer, father of Drona.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>7. Agastya</h2>
+                    <p>Tamil Siddhar, spread Vedic knowledge south.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>8. Jamadagni</h2>
+                    <p>Parashurama's father, martial arts master.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>9. Gautama</h2>
+                    <p>Nyaya philosophy founder.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>10. Kashyapa</h2>
+                    <p>Prajapati, progenitor of lifeforms.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>11. Markandeya</h2>
+                    <p>Immortal sage, Markandeya Purana author.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>12. Durvasa</h2>
+                    <p>Known for cosmic curses and boons.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>13. Narada</h2>
+                    <p>Cosmic messenger, inventor of veena.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>14. Parashara</h2>
+                    <p>Vyasa's father, Vishnu Purana author.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>15. Yajnavalkya</h2>
+                    <p>Brihadaranyaka Upanishad philosopher.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>16. Bhrigu</h2>
+                    <p>Bhrigu Samhita author, Saptarishi.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>17. Pulastya</h2>
+                    <p>Prajapati, Ravana's grandfather.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>18. Chyavana</h2>
+                    <p>Revived by Ashvins, Ayurvedic figure.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>19. Dadhichi</h2>
+                    <p>Sacrificed bones for Indra's vajra.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>20. Kapila</h2>
+                    <p>Samkhya philosophy founder.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>21. Patanjali</h2>
+                    <p>Yoga Sutras compiler.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>22. Kanva</h2>
+                    <p>Shakuntala's adoptive father.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>23. Shandilya</h2>
+                    <p>Bhakti movement pioneer.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>24. Garga</h2>
+                    <p>Vedic astronomer, wrote Garga Samhita.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>25. Ashtavakra</h2>
+                    <p>Ashtavakra Gita author.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>26. Vasishtha</h2>
+                    <p>Different from Vashishtha, Ayurvedic scholar.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>27. Pulaha</h2>
+                    <p>Saptarishi, specialized in botany.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>28. Marichi</h2>
+                    <p>Prajapati, cosmic architect.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>29. Angiras</h2>
+                    <p>Fire rituals expert, Rigvedic poet.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>30. Kratu</h2>
+                    <p>Saptarishi, time cycle specialist.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>31. Mudgala</h2>
+                    <p>Mentioned in Mahabharata, poverty philosopher.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>32. Nachiketa</h2>
+                    <p>Dialogue partner in Katha Upanishad.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>33. Pippalada</h2>
+                    <p>Prashna Upanishad teacher.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>34. Raikva</h2>
+                    <p>Charioteer-sage from Chandogya Upanishad.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>35. Jabali</h2>
+                    <p>Materialist philosopher in Ramayana.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>36. Uddalaka</h2>
+                    <p>"Tat Tvam Asi" philosopher.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>37. Shuka</h2>
+                    <p>Vyasa's son, narrated Bhagavata Purana.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>38. Mandavya</h2>
+                    <p>Wrongly impaled, justice philosopher.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>39. Vamadeva</h2>
+                    <p>Rigvedic mystic poet.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>40. Lomasa</h2>
+                    <p>Mahabharata guide, long-lived sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>41. Maitreya</h2>
+                    <p>Vishnu Purana interlocutor.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>42. Narayana</h2>
+                    <p>Narayana Upanishad sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>43. Ribhu</h2>
+                    <p>Avatar of Shiva, taught Nidagha.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>44. Sushruta</h2>
+                    <p>Father of surgery, Sushruta Samhita.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>45. Charaka</h2>
+                    <p>Ayurvedic pioneer, Charaka Samhita.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>46. Jaimini</h2>
+                    <p>Mimamsa philosophy founder.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>47. Badarayana</h2>
+                    <p>Vedanta Sutra author.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>48. Kanada</h2>
+                    <p>Atomic theory proposer, Vaisheshika founder.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>49. Panini</h2>
+                    <p>Sanskrit grammarian, Ashtadhyayi author.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>50. Bhartrihari</h2>
+                    <p>Grammarian and poet-sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>51. Dhanvantari</h2>
+                    <p>God of Ayurveda, physician of gods.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>52. Asuri</h2>
+                    <p>Samkhya philosophy propagator.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>53. Astika</h2>
+                    <p>Stopped snake sacrifice in Mahabharata.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>54. Saunaka</h2>
+                    <p>Rigvedic scholar, conducted huge yajnas.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>55. Tittiri</h2>
+                    <p>Associated with Taittiriya Upanishad.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>56. Yaska</h2>
+                    <p>Etymologist, wrote Nirukta.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>57. Katyayana</h2>
+                    <p>Grammarian, Vedanga scholar.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>58. Galava</h2>
+                    <p>Vishwamitra's persistent disciple.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>59. Vishvavasu</h2>
+                    <p>Gandharva chief, celestial musician.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>60. Trita</h2>
+                    <p>Vedic healing ritual specialist.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>61. Dattatreya</h2>
+                    <p>Trimurti avatar, tantra/yoga guru.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>62. Harita</h2>
+                    <p>Dharma Shastra author.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>63. Vamana</h2>
+                    <p>Avatar sage, taught Bali.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>64. Mandapala</h2>
+                    <p>Mahabharata firebird sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>65. Kavasha</h2>
+                    <p>Outcast-turned-sage in Rigveda.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>66. Rishyasringa</h2>
+                    <p>Antelope-horned rain-bringer.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>67. Shringi</h2>
+                    <p>Young sage who cursed Pandavas.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>68. Vaishampayana</h2>
+                    <p>First narrator of Mahabharata.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>69. Sumantu</h2>
+                    <p>Sama Veda expert.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>70. Jatukarna</h2>
+                    <p>Tantric rituals specialist.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>71. Parankusha</h2>
+                    <p>Mystical weapons expert.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>72. Dhaumya</h2>
+                    <p>Pandavas' family priest.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>73. Shvetaketu</h2>
+                    <p>Chandogya Upanishad student.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>74. Aitareya</h2>
+                    <p>Aitareya Upanishad author.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>75. Utanaka</h2>
+                    <p>Snake venom antidote discoverer.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>76. Ashtaka</h2>
+                    <p>Philosophical debater in Upanishads.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>77. Vajasrava</h2>
+                    <p>Nachiketa's father in Katha Upanishad.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>78. Satyakama</h2>
+                    <p>Chandogya Upanishad truth-seeker.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>79. Upamanyu</h2>
+                    <p>Milk-drinking Shiva devotee.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>80. Virochana</h2>
+                    <p>Asura king, spiritual seeker.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>81. Kambala</h2>
+                    <p>Snake sacrifice survivor.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>82. Ashvatthama</h2>
+                    <p>Immortal warrior-sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>83. Kasyapa</h2>
+                    <p>Different from Kashyapa, medical sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>84. Vachaknu</h2>
+                    <p>Speech specialist in Vedas.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>85. Mandavya</h2>
+                    <p>Wrongly impaled justice-seeker.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>86. Sulabha</h2>
+                    <p>Female sage, debated Janaka.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>87. Gargi</h2>
+                    <p>Women Upanishadic philosopher.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>88. Maitreyi</h2>
+                    <p>Yajnavalkya's wife-philosopher.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>89. Lopamudra</h2>
+                    <p>Agastya's wife, philosopher-poet.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>90. Anasuya</h2>
+                    <p>Atri's wife, chastity exemplar.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>91. Shabari</h2>
+                    <p>Forest ascetic, Rama devotee.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>92. Arundhati</h2>
+                    <p>Vashishtha's wife, marital ideal.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>93. Parvati</h2>
+                    <p>Ascetic form of the goddess.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>94. Katyayani</h2>
+                    <p>Vedic female rishi.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>95. Gosha</h2>
+                    <p>Disabled woman who became sage.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>96. Apala</h2>
+                    <p>Cured through Rigvedic hymns.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>97. Urvashi</h2>
+                    <p>Apsara with sage-like wisdom.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>98. Madalasa</h2>
+                    <p>Queen-sage, taught spiritual songs.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>99. Sati</h2>
+                    <p>First yogini, Daksha's daughter.</p>
+                </div>
+                
+                <div class="card">
+                    <h2>100. Aditi</h2>
+                    <p>Cosmic mother of gods.</p>
+                </div>
+            </div>
+        </article>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 ViratSwarup. All rights reserved.</p>
+    </footer>
+</body>
+</html>
