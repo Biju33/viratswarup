@@ -2,142 +2,540 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>VIRAT SWARUP Community</title>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js";
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViratSwarup Platform</title>
+    <style>
+        :root {
+            --primary-color: #8B0000;
+            --secondary-color: #A52A2A;
+            --light-color: #F5F5F5;
+            --dark-color: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #FFD700;
+        }
+        
+        .auth-buttons button {
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 1rem;
+            font-weight: bold;
+        }
+        
+        main {
+            padding: 2rem;
+            min-height: 80vh;
+        }
+        
+        .hero {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 3rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+      
+      
+        
+        .video-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        .posts-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        .post {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+        }
+        
+        .post:last-child {
+            border-bottom: none;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .post-actions button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .comments-section {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--primary-color);
+        }
+        
+        .comment-form {
+            margin-top: 1rem;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .comment-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            cursor: pointer;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .auth-form input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .auth-form button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ViratSwarup</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#agnosia">Agnosia</a></li>
+                <li><a href="#enigma">Enigma</a></li>
+                <li><a href="#emulate">Emulate</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <button id="login-btn">Login</button>
+            <button id="signup-btn">Sign Up</button>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Welcome to ViratSwarup Platform</h1>
+            <p>Explore our tools and join the community</p>
+            </section>
+            <section class="posts-container">
+            <h2>Community Posts</h2>
+            <div id="posts-list">
+                <!-- Posts will be loaded here dynamically -->
+            </div>
+            <div id="post-form" style="margin-top: 2rem;">
+                <h3>Create a Post</h3>
+                <textarea id="post-content" placeholder="What's on your mind?" rows="4"></textarea>
+                <button id="submit-post">Post</button>
+            </div>
+        </section>
+        </main>
+    
+    <footer>
+        <p>&copy; 2023 ViratSwarup. All rights reserved.</p>
+    </footer>
+    
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-content">
+            <span class="close-modal">&times;</span>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
+            </div>
+            
+            <div class="error-message" id="auth-error"></div>
+            
+            <div class="auth-form active" id="login-form">
+                <input type="email" id="login-email" placeholder="Email">
+                <input type="password" id="login-password" placeholder="Password">
+                <button id="submit-login">Login</button>
+            </div>
+            
+            <div class="auth-form" id="signup-form">
+                <input type="text" id="signup-username" placeholder="Username">
+                <input type="email" id="signup-email" placeholder="Email">
+                <input type="password" id="signup-password" placeholder="Password">
+                <input type="password" id="signup-confirm-password" placeholder="Confirm Password">
+                <button id="submit-signup">Sign Up</button>
+            </div>
+        </div>
+    </div>
 
+    <script type="module">
+        // Import the functions you need from the Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
+            from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, updateDoc, increment } 
+            from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBRPpxGpNqZKoF6dTT6YzPG1Am0ACxiW-Q",
-            authDomain: "virat-swarup.firebaseapp.com",
-            projectId: "virat-swarup",
-            storageBucket: "virat-swarup.appspot.com",
-            messagingSenderId: "394240177273",
-            appId: "1:394240177273:web:2e98d91c868a19b03b3099",
-            measurementId: "G-GX0TW8ZLZP"
+            apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
+            authDomain: "viratsawarup.firebaseapp.com",
+            projectId: "viratsawarup",
+            storageBucket: "viratsawarup.firebasestorage.app",
+            messagingSenderId: "264071748020",
+            appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
+            measurementId: "G-7GJQPJCR1L"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
+        // DOM Elements
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const authModal = document.getElementById('auth-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        const authError = document.getElementById('auth-error');
+        const postsList = document.getElementById('posts-list');
+        const postForm = document.getElementById('post-form');
         const postContent = document.getElementById('post-content');
         const submitPost = document.getElementById('submit-post');
-        const postsContainer = document.getElementById('posts');
-        const logoutBtn = document.getElementById('logout-btn');
-        const imageInput = document.getElementById('post-image');
 
-        onAuthStateChanged(auth, user => {
-            if (!user) {
-                window.location.href = "login.html";
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                document.querySelector('.auth-buttons').innerHTML = `
+                    <button id="logout-btn">Logout (${user.email})</button>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', () => {
+                    signOut(auth);
+                });
+                
+                // Show post form
+                postForm.style.display = 'block';
+                
+                // Load posts
+                loadPosts();
+            } else {
+                // User is signed out
+                document.querySelector('.auth-buttons').innerHTML = `
+                    <button id="login-btn">Login</button>
+                    <button id="signup-btn">Sign Up</button>
+                `;
+                
+                // Hide post form
+                postForm.style.display = 'none';
+                postsList.innerHTML = '<p>Please login to view and create posts.</p>';
             }
         });
 
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                window.location.href = "login.html";
+        // Modal functionality
+        function openAuthModal() {
+            authModal.style.display = 'flex';
+            authError.textContent = '';
+        }
+
+        function closeAuthModal() {
+            authModal.style.display = 'none';
+        }
+
+        // Event listeners
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'login-btn' || e.target.id === 'signup-btn') {
+                openAuthModal();
+            }
+            
+            if (e.target === authModal) {
+                closeAuthModal();
+            }
+        });
+
+        closeModal.addEventListener('click', closeAuthModal);
+
+        // Tab switching
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                authTabs.forEach(t => t.classList.remove('active'));
+                authForms.forEach(f => f.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+                authError.textContent = '';
             });
         });
 
-        submitPost.addEventListener('click', async () => {
-            const content = postContent.value.trim();
-            const imageFile = imageInput.files[0];
-
-            if (!content && !imageFile) return;
-
+        // Login functionality
+        document.getElementById('submit-login').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
             try {
-                let imageUrl = "";
+                await signInWithEmailAndPassword(auth, email, password);
+                closeAuthModal();
+            } catch (error) {
+                authError.textContent = error.message;
+            }
+        });
 
-                if (imageFile) {
-                    const storageRef = ref(storage, `postImages/${Date.now()}_${imageFile.name}`);
-                    await uploadBytes(storageRef, imageFile);
-                    imageUrl = await getDownloadURL(storageRef);
-                }
-
-                await addDoc(collection(db, "posts"), {
-                    content,
-                    imageUrl,
-                    userId: auth.currentUser.uid,
-                    userEmail: auth.currentUser.email,
-                    likes: [],
+        // Signup functionality
+        document.getElementById('submit-signup').addEventListener('click', async () => {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const username = document.getElementById('signup-username').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                authError.textContent = "Passwords don't match!";
+                return;
+            }
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Add user to Firestore
+                await addDoc(collection(db, "users"), {
+                    uid: userCredential.user.uid,
+                    username: username,
+                    email: email,
                     createdAt: serverTimestamp()
                 });
+                
+                closeAuthModal();
+            } catch (error) {
+                authError.textContent = error.message;
+            }
+        });
 
+        // Post functionality
+        submitPost.addEventListener('click', async () => {
+            const content = postContent.value.trim();
+            if (!content) return;
+            
+            try {
+                await addDoc(collection(db, "posts"), {
+                    content: content,
+                    userId: auth.currentUser.uid,
+                    userEmail: auth.currentUser.email,
+                    likes: 0,
+                    createdAt: serverTimestamp()
+                });
                 postContent.value = '';
-                imageInput.value = '';
             } catch (error) {
                 console.error("Error adding post:", error);
             }
         });
 
+        // Load posts
         function loadPosts() {
             const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-            onSnapshot(q, snapshot => {
-                postsContainer.innerHTML = "";
-                snapshot.forEach(docSnap => {
-                    const post = docSnap.data();
-                    const docId = docSnap.id;
+            
+            onSnapshot(q, (querySnapshot) => {
+                postsList.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    postsList.innerHTML = '<p>No posts yet. Be the first to post!</p>';
+                    return;
+                }
+                
+                querySnapshot.forEach((doc) => {
+                    const post = doc.data();
                     const postElement = document.createElement('div');
-                    postElement.classList.add('post');
+                    postElement.className = 'post';
                     postElement.innerHTML = `
                         <p>${post.content}</p>
-                        ${post.imageUrl ? `<img src="${post.imageUrl}" style="max-width:100%;margin-top:10px;" />` : ""}
                         <small>Posted by ${post.userEmail} on ${new Date(post.createdAt?.toDate()).toLocaleString()}</small>
                         <div class="post-actions">
-                            <button class="like-btn" data-id="${docId}">
-                                <span>👍</span> Like (${post.likes?.length || 0})
+                            <button class="like-btn" data-id="${doc.id}">
+                                <span>👍</span> Like (${post.likes || 0})
                             </button>
                         </div>
                     `;
-                    postsContainer.appendChild(postElement);
+                    postsList.appendChild(postElement);
                 });
-
-                // Add like/unlike logic
+                
+                // Add like button event listeners
                 document.querySelectorAll('.like-btn').forEach(btn => {
                     btn.addEventListener('click', async () => {
                         const postId = btn.getAttribute('data-id');
                         const postRef = doc(db, "posts", postId);
-                        const postSnap = await getDoc(postRef);
-                        const postData = postSnap.data();
-                        const userId = auth.currentUser.uid;
-
-                        let updatedLikes = postData.likes || [];
-
-                        if (updatedLikes.includes(userId)) {
-                            updatedLikes = updatedLikes.filter(id => id !== userId);
-                        } else {
-                            updatedLikes.push(userId);
-                        }
-
-                        await updateDoc(postRef, { likes: updatedLikes });
+                        await updateDoc(postRef, {
+                            likes: increment(1)
+                        });
                     });
                 });
             });
         }
 
-        loadPosts();
+        // Initialize tool functionality
+        document.querySelectorAll('.tool-card button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const toolInput = btn.parentElement.querySelector('textarea').value;
+                alert(`Tool processing: ${toolInput}`);
+                // Add specific tool functionality here
+            });
+        });
     </script>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 2rem; background-color: #f8f8f8; }
-        #dashboard { max-width: 600px; margin: auto; background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
-        textarea, input[type="file"] { width: 100%; margin-top: 1rem; }
-        button { margin-top: 1rem; background-color: #8B0000; color: #fff; border: none; padding: 0.5rem 1rem; cursor: pointer; }
-        .post { background: #eee; padding: 1rem; margin-top: 1rem; border-radius: 8px; }
-        .post-actions { margin-top: 0.5rem; }
-        .post-actions button { background: #ccc; color: #000; }
-    </style>
-</head>
-<body>
-    <div id="dashboard">
-        <h2>Welcome to VIRAT SWARUP</h2>
-        <button id="logout-btn">Logout</button>
-        <textarea id="post-content" placeholder="What's on your mind?" rows="4"></textarea>
-        <input type="file" id="post-image" accept="image/*">
-        <button id="submit-post">Post</button>
-        <div id="posts"></div>
-    </div>
 </body>
 </html>
