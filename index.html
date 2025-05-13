@@ -81,31 +81,6 @@
             text-align: center;
             border-radius: 8px;
             margin-bottom: 2rem;
-      
-      
-        
-        .video-section {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-        
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            margin-top: 1rem;
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 4px;
         }
         
         .posts-container {
@@ -140,33 +115,36 @@
             gap: 0.3rem;
         }
         
-        .comments-section {
+        .post-image {
+            max-width: 100%;
+            max-height: 300px;
             margin-top: 1rem;
-            padding-left: 1rem;
-            border-left: 2px solid var(--primary-color);
-        }
-        
-        .comment-form {
-            margin-top: 1rem;
-        }
-        
-        .comment-form textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
             border-radius: 4px;
-            resize: vertical;
-            min-height: 80px;
         }
         
-        .comment-form button {
-            background-color: var(--primary-color);
+        .google-signin-btn {
+            background-color: #4285F4;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 10px 15px;
             border-radius: 4px;
-            margin-top: 0.5rem;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .google-signin-btn:hover {
+            background-color: #357ABD;
+        }
+        
+        .google-icon {
+            width: 18px;
+            height: 18px;
         }
         
         footer {
@@ -176,85 +154,6 @@
             padding: 1rem;
             margin-top: 2rem;
         }
-        
-        /* Auth Modal */
-        .auth-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .auth-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 400px;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 1.5rem;
-        }
-        
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 0.5rem;
-            cursor: pointer;
-            border-bottom: 2px solid #ddd;
-        }
-        
-        .auth-tab.active {
-            border-bottom: 2px solid var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .auth-form {
-            display: none;
-        }
-        
-        .auth-form.active {
-            display: block;
-        }
-        
-        .auth-form input {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        
-        .auth-form button {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .close-modal {
-            float: right;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-        
-        .error-message {
-            color: red;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -262,75 +161,53 @@
         <div class="logo">ViratSwarup</div>
         <nav>
             <ul>
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#agnosia">Agnosia</a></li>
-                <li><a href="#enigma">Enigma</a></li>
-                <li><a href="#emulate">Emulate</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="agnosia.html">Agnosia</a></li>
+                <li><a href="enigma.html">Enigma</a></li>
+                <li><a href="emulate.html">Emulate</a></li>
             </ul>
         </nav>
         <div class="auth-buttons">
-            <button id="login-btn">Login</button>
-            <button id="signup-btn">Sign Up</button>
+            <button id="google-signin-btn">Sign In with Google</button>
         </div>
     </header>
     
     <main>
         <section class="hero">
             <h1>Welcome to ViratSwarup Platform</h1>
-            <p>Explore our tools and join the community</p>
-            </section>
-            <section class="posts-container">
+            <p>Explore and join the community</p>
+        </section>
+                       
+        <section class="posts-container">
             <h2>Community Posts</h2>
             <div id="posts-list">
                 <!-- Posts will be loaded here dynamically -->
             </div>
-            <div id="post-form" style="margin-top: 2rem;">
+            <div id="post-form" style="margin-top: 2rem; display: none;">
                 <h3>Create a Post</h3>
                 <textarea id="post-content" placeholder="What's on your mind?" rows="4"></textarea>
+                <div class="file-upload">
+                    <label for="post-image" class="file-upload-label">Upload Image (Optional)</label>
+                    <input type="file" id="post-image" accept="image/*">
+                </div>
                 <button id="submit-post">Post</button>
             </div>
         </section>
-        </main>
+    </main>
     
     <footer>
         <p>&copy; 2023 ViratSwarup. All rights reserved.</p>
     </footer>
-    
-    <!-- Auth Modal -->
-    <div class="auth-modal" id="auth-modal">
-        <div class="auth-content">
-            <span class="close-modal">&times;</span>
-            <div class="auth-tabs">
-                <div class="auth-tab active" data-tab="login">Login</div>
-                <div class="auth-tab" data-tab="signup">Sign Up</div>
-            </div>
-            
-            <div class="error-message" id="auth-error"></div>
-            
-            <div class="auth-form active" id="login-form">
-                <input type="email" id="login-email" placeholder="Email">
-                <input type="password" id="login-password" placeholder="Password">
-                <button id="submit-login">Login</button>
-            </div>
-            
-            <div class="auth-form" id="signup-form">
-                <input type="text" id="signup-username" placeholder="Username">
-                <input type="email" id="signup-email" placeholder="Email">
-                <input type="password" id="signup-password" placeholder="Password">
-                <input type="password" id="signup-confirm-password" placeholder="Confirm Password">
-                <button id="submit-signup">Sign Up</button>
-            </div>
-        </div>
-    </div>
 
     <script type="module">
         // Import the functions you need from the Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
             from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, updateDoc, increment } 
+        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, updateDoc, increment, arrayUnion, arrayRemove } 
             from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } 
+            from "https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -345,33 +222,33 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
+        const provider = new GoogleAuthProvider();
 
         // DOM Elements
-        const loginBtn = document.getElementById('login-btn');
-        const signupBtn = document.getElementById('signup-btn');
-        const authModal = document.getElementById('auth-modal');
-        const closeModal = document.querySelector('.close-modal');
-        const authTabs = document.querySelectorAll('.auth-tab');
-        const authForms = document.querySelectorAll('.auth-form');
-        const authError = document.getElementById('auth-error');
+        const googleSignInBtn = document.getElementById('google-signin-btn');
         const postsList = document.getElementById('posts-list');
         const postForm = document.getElementById('post-form');
         const postContent = document.getElementById('post-content');
+        const postImage = document.getElementById('post-image');
         const submitPost = document.getElementById('submit-post');
+
+        // Google Sign-In
+        googleSignInBtn.addEventListener('click', () => {
+            signInWithPopup(auth, provider)
+                .catch((error) => {
+                    console.error("Google Sign-In Error:", error);
+                });
+        });
 
         // Auth state listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is signed in
-                document.querySelector('.auth-buttons').innerHTML = `
-                    <button id="logout-btn">Logout (${user.email})</button>
-                `;
-                document.getElementById('logout-btn').addEventListener('click', () => {
-                    signOut(auth);
-                });
+                // User is signed in with Google
+                googleSignInBtn.textContent = `Logout (${user.displayName || user.email})`;
+                googleSignInBtn.onclick = () => signOut(auth);
                 
                 // Show post form
                 postForm.style.display = 'block';
@@ -380,110 +257,53 @@
                 loadPosts();
             } else {
                 // User is signed out
-                document.querySelector('.auth-buttons').innerHTML = `
-                    <button id="login-btn">Login</button>
-                    <button id="signup-btn">Sign Up</button>
-                `;
+                googleSignInBtn.textContent = 'Sign In with Google';
+                googleSignInBtn.onclick = () => signInWithPopup(auth, provider);
                 
                 // Hide post form
                 postForm.style.display = 'none';
-                postsList.innerHTML = '<p>Please login to view and create posts.</p>';
-            }
-        });
-
-        // Modal functionality
-        function openAuthModal() {
-            authModal.style.display = 'flex';
-            authError.textContent = '';
-        }
-
-        function closeAuthModal() {
-            authModal.style.display = 'none';
-        }
-
-        // Event listeners
-        document.addEventListener('click', (e) => {
-            if (e.target.id === 'login-btn' || e.target.id === 'signup-btn') {
-                openAuthModal();
-            }
-            
-            if (e.target === authModal) {
-                closeAuthModal();
-            }
-        });
-
-        closeModal.addEventListener('click', closeAuthModal);
-
-        // Tab switching
-        authTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                authTabs.forEach(t => t.classList.remove('active'));
-                authForms.forEach(f => f.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
-                authError.textContent = '';
-            });
-        });
-
-        // Login functionality
-        document.getElementById('submit-login').addEventListener('click', async () => {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                closeAuthModal();
-            } catch (error) {
-                authError.textContent = error.message;
-            }
-        });
-
-        // Signup functionality
-        document.getElementById('submit-signup').addEventListener('click', async () => {
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            const username = document.getElementById('signup-username').value;
-            const confirmPassword = document.getElementById('signup-confirm-password').value;
-            
-            if (password !== confirmPassword) {
-                authError.textContent = "Passwords don't match!";
-                return;
-            }
-            
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // Add user to Firestore
-                await addDoc(collection(db, "users"), {
-                    uid: userCredential.user.uid,
-                    username: username,
-                    email: email,
-                    createdAt: serverTimestamp()
-                });
-                
-                closeAuthModal();
-            } catch (error) {
-                authError.textContent = error.message;
+                postsList.innerHTML = '<p>Please sign in with Google to view and create posts.</p>';
             }
         });
 
         // Post functionality
         submitPost.addEventListener('click', async () => {
             const content = postContent.value.trim();
-            if (!content) return;
+            const imageFile = postImage.files[0];
+            
+            if (!content && !imageFile) {
+                alert('Please add text or an image to post');
+                return;
+            }
             
             try {
+                let imageUrl = '';
+                
+                // Upload image if exists
+                if (imageFile) {
+                    const storageRef = ref(storage, `posts/${auth.currentUser.uid}/${Date.now()}_${imageFile.name}`);
+                    await uploadBytes(storageRef, imageFile);
+                    imageUrl = await getDownloadURL(storageRef);
+                }
+                
+                // Create post
                 await addDoc(collection(db, "posts"), {
                     content: content,
                     userId: auth.currentUser.uid,
-                    userEmail: auth.currentUser.email,
+                    userName: auth.currentUser.displayName || auth.currentUser.email,
+                    userPhoto: auth.currentUser.photoURL || null,
                     likes: 0,
+                    likedBy: [],
+                    imageUrl: imageUrl || null,
                     createdAt: serverTimestamp()
                 });
+                
+                // Clear form
                 postContent.value = '';
+                postImage.value = '';
             } catch (error) {
                 console.error("Error adding post:", error);
+                alert('Error creating post. Please try again.');
             }
         });
 
@@ -501,14 +321,21 @@
                 
                 querySnapshot.forEach((doc) => {
                     const post = doc.data();
+                    const isLiked = post.likedBy && post.likedBy.includes(auth.currentUser.uid);
+                    
                     const postElement = document.createElement('div');
                     postElement.className = 'post';
                     postElement.innerHTML = `
-                        <p>${post.content}</p>
-                        <small>Posted by ${post.userEmail} on ${new Date(post.createdAt?.toDate()).toLocaleString()}</small>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            ${post.userPhoto ? `<img src="${post.userPhoto}" style="width: 40px; height: 40px; border-radius: 50%;" alt="User">` : ''}
+                            <strong>${post.userName}</strong>
+                        </div>
+                        <p>${post.content || ''}</p>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image">` : ''}
+                        <small>Posted on ${new Date(post.createdAt?.toDate()).toLocaleString()}</small>
                         <div class="post-actions">
-                            <button class="like-btn" data-id="${doc.id}">
-                                <span>👍</span> Like (${post.likes || 0})
+                            <button class="like-btn ${isLiked ? 'liked' : ''}" data-id="${doc.id}">
+                                <span>${isLiked ? '❤️' : '🤍'}</span> ${post.likes || 0} Likes
                             </button>
                         </div>
                     `;
@@ -520,22 +347,32 @@
                     btn.addEventListener('click', async () => {
                         const postId = btn.getAttribute('data-id');
                         const postRef = doc(db, "posts", postId);
-                        await updateDoc(postRef, {
-                            likes: increment(1)
-                        });
+                        const userId = auth.currentUser.uid;
+                        
+                        // Check if user already liked the post
+                        const postDoc = await getDoc(postRef);
+                        if (!postDoc.exists()) return;
+                        
+                        const post = postDoc.data();
+                        const isLiked = post.likedBy && post.likedBy.includes(userId);
+                        
+                        if (isLiked) {
+                            // Unlike the post
+                            await updateDoc(postRef, {
+                                likes: increment(-1),
+                                likedBy: arrayRemove(userId)
+                            });
+                        } else {
+                            // Like the post
+                            await updateDoc(postRef, {
+                                likes: increment(1),
+                                likedBy: arrayUnion(userId)
+                            });
+                        }
                     });
                 });
             });
         }
-
-        // Initialize tool functionality
-        document.querySelectorAll('.tool-card button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const toolInput = btn.parentElement.querySelector('textarea').value;
-                alert(`Tool processing: ${toolInput}`);
-                // Add specific tool functionality here
-            });
-        });
     </script>
 </body>
 </html>
