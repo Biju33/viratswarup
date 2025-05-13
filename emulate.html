@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>Emulate - ViratSwarup</title>
     <style>
         :root {
@@ -16,6 +16,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -24,6 +25,7 @@
             line-height: 1.6;
         }
 
+        /* मोबाइल फ्रेंडली हेडर */
         header {
             background-color: var(--primary-color);
             color: white;
@@ -32,6 +34,9 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
@@ -39,23 +44,98 @@
             font-weight: bold;
         }
 
-        nav ul {
+        /* डेस्कटॉप नेविगेशन */
+        .desktop-nav ul {
             display: flex;
             list-style: none;
         }
 
-        nav ul li {
+        .desktop-nav ul li {
             margin-left: 1.5rem;
         }
 
-        nav ul li a {
+        .desktop-nav ul li a {
             color: white;
             text-decoration: none;
             transition: color 0.3s;
+            font-weight: 500;
+            padding: 0.5rem 0;
         }
 
-        nav ul li a:hover {
+        .desktop-nav ul li a:hover {
             color: #FFD700;
+        }
+
+        /* मोबाइल नेविगेशन */
+        .mobile-nav-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: var(--primary-color);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 2rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .mobile-nav.active {
+            left: 0;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 1.5rem;
+        }
+
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
         }
 
         main {
@@ -71,6 +151,9 @@
             aspect-ratio: 16 / 9;
             margin: 2rem auto;
             cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .video-container img {
@@ -78,7 +161,11 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 6px;
+            transition: transform 0.3s;
+        }
+
+        .video-container:hover img {
+            transform: scale(1.02);
         }
 
         .play-button {
@@ -93,13 +180,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: all 0.3s;
+        }
+
+        .video-container:hover .play-button {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
         .play-button::before {
             content: '';
             display: block;
             border-style: solid;
-            border-width: 15px 0 15px 25px;
+            border-width: 12px 0 12px 20px;
             border-color: transparent transparent transparent white;
             margin-left: 5px;
         }
@@ -108,8 +201,62 @@
             background-color: var(--primary-color);
             color: white;
             text-align: center;
-            padding: 1rem;
+            padding: 1.5rem;
             margin-top: 2rem;
+        }
+
+        /* रेस्पॉन्सिव डिज़ाइन */
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-nav-btn {
+                display: block;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            main {
+                padding: 0 0.8rem;
+                margin: 1rem auto;
+            }
+            
+            .video-container {
+                margin: 1.5rem auto;
+            }
+            
+            .play-button {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .play-button::before {
+                border-width: 10px 0 10px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 0.8rem;
+            }
+            
+            .video-container {
+                margin: 1rem auto;
+                border-radius: 6px;
+            }
+            
+            footer {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* टच इफेक्ट्स */
+        .video-container:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -117,8 +264,9 @@
 
     <header>
         <div class="logo">ViratSwarup</div>
-        <nav>
-            <nav>
+        
+        <!-- डेस्कटॉप नेविगेशन -->
+        <nav class="desktop-nav">
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="agnosia.html">Agnosia</a></li>
@@ -126,16 +274,33 @@
                 <li><a href="emulate.html">Emulate</a></li>
             </ul>
         </nav>
+        
+        <!-- मोबाइल नेविगेशन बटन -->
+        <button class="mobile-nav-btn">☰</button>
     </header>
+    
+    <!-- मोबाइल नेविगेशन मेनू -->
+    <div class="mobile-nav">
+        <button class="mobile-nav-close">×</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agnosia.html">Agnosia</a></li>
+            <li><a href="enigma.html">Enigma</a></li>
+            <li><a href="emulate.html">Emulate</a></li>
+        </ul>
+    </div>
+    
+    <!-- ओवरले -->
+    <div class="overlay"></div>
 
     <main>
-        <div class="video-container" id="videoBox" onclick="playVideo()">
-            <img src="https://img.youtube.com/vi/Qdv171GK030/hqdefault.jpg" alt="Video Thumbnail">
+        <div class="video-container" id="videoBox1" onclick="playVideo('Qdv171GK030', this)">
+            <img src="https://img.youtube.com/vi/Qdv171GK030/hqdefault.jpg" alt="Video Thumbnail" loading="lazy">
             <div class="play-button"></div>
         </div>
-		
-		<div class="video-container" id="videoBox" onclick="playVideo()">
-            <img src="https://img.youtube.com/vi/Qdv171GK030/hqdefault.jpg" alt="Video Thumbnail">
+        
+        <div class="video-container" id="videoBox2" onclick="playVideo('Qdv171GK030', this)">
+            <img src="https://img.youtube.com/vi/Qdv171GK030/hqdefault.jpg" alt="Video Thumbnail" loading="lazy">
             <div class="play-button"></div>
         </div>
     </main>
@@ -145,14 +310,50 @@
     </footer>
 
     <script>
-        function playVideo() {
-            const container = document.getElementById("videoBox");
+        // मोबाइल नेविगेशन टॉगल
+        const mobileNavBtn = document.querySelector('.mobile-nav-btn');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const mobileNavClose = document.querySelector('.mobile-nav-close');
+        const overlay = document.querySelector('.overlay');
+        
+        mobileNavBtn.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        mobileNavClose.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // वीडियो प्ले फंक्शन
+        function playVideo(videoId, container) {
             container.innerHTML = `
                 <iframe width="100%" height="100%"
-                    src="https://www.youtube-nocookie.com/embed/Qdv171GK030?autoplay=1&rel=0&modestbranding=1"
-                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                    src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
                 </iframe>`;
+            
+            // iOS डिवाइस के लिए विशेष हैंडलिंग
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                const iframe = container.querySelector('iframe');
+                iframe.setAttribute('playsinline', '');
+                iframe.setAttribute('webkit-playsinline', '');
+            }
         }
+
+        // टच इवेंट के लिए हवर इफेक्ट को हटाना
+        document.addEventListener('touchstart', function() {}, true);
     </script>
 
 </body>
