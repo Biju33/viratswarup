@@ -23,7 +23,7 @@
             background-color: #f9f9f9;
         }
         
-        /* मोबाइल फ्रेंडली हेडर */
+        /* Header styles */
         header {
             background-color: var(--primary-color);
             color: white;
@@ -42,7 +42,7 @@
             font-weight: bold;
         }
         
-        /* डेस्कटॉप नेविगेशन */
+        /* Desktop navigation */
         .desktop-nav ul {
             display: flex;
             list-style: none;
@@ -63,7 +63,7 @@
             color: #FFD700;
         }
         
-        /* मोबाइल नेविगेशन */
+        /* Mobile navigation */
         .mobile-nav-btn {
             display: none;
             background: none;
@@ -269,24 +269,191 @@
             border-radius: 4px;
         }
         
-        .google-signin-btn {
-            background-color: #4285F4;
+        /* Auth Modal Styles */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-container {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .auth-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .close-auth {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .auth-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 15px;
             border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .auth-btn:hover {
+            background-color: #7a0000;
+        }
+        
+        .auth-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .social-auth {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .social-auth p {
+            margin-bottom: 1rem;
+            color: #777;
+            position: relative;
+        }
+        
+        .social-auth p::before,
+        .social-auth p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: #ddd;
+        }
+        
+        .social-auth p::before {
+            left: 0;
+        }
+        
+        .social-auth p::after {
+            right: 0;
+        }
+        
+        .google-auth-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            font-weight: bold;
             width: 100%;
-            margin-top: 15px;
+            padding: 0.8rem;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
             transition: background-color 0.3s;
         }
         
-        .google-signin-btn:hover {
+        .google-auth-btn:hover {
             background-color: #357ABD;
         }
         
@@ -295,7 +462,7 @@
             height: 18px;
         }
         
-        /* पोस्ट फॉर्म स्टाइल */
+        /* Post form styles */
         #post-form {
             background-color: white;
             padding: 1.5rem;
@@ -387,7 +554,7 @@
             margin-top: 2rem;
         }
         
-        /* लोडिंग इंडिकेटर */
+        /* Loading indicator */
         .loading {
             display: inline-block;
             width: 20px;
@@ -403,7 +570,7 @@
             to { transform: rotate(360deg); }
         }
         
-        /* रेस्पॉन्सिव डिज़ाइन */
+        /* Responsive design */
         @media (max-width: 768px) {
             .desktop-nav {
                 display: none;
@@ -436,6 +603,10 @@
             .posts-container, #post-form {
                 padding: 1rem;
             }
+            
+            .auth-container {
+                padding: 1.5rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -451,6 +622,22 @@
             .post-actions button {
                 font-size: 0.8rem;
             }
+            
+            .auth-tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            
+            .auth-tab {
+                border-bottom: 1px solid #ddd;
+                border-left: 2px solid transparent;
+                border-bottom: none;
+            }
+            
+            .auth-tab.active {
+                border-left: 2px solid var(--primary-color);
+                border-bottom: none;
+            }
         }
     </style>
 </head>
@@ -458,7 +645,7 @@
     <header>
         <div class="logo">ViratSwarup</div>
         
-        <!-- डेस्कटॉप नेविगेशन -->
+        <!-- Desktop navigation -->
         <nav class="desktop-nav">
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -468,15 +655,15 @@
             </ul>
         </nav>
         
-        <!-- मोबाइल नेविगेशन बटन -->
+        <!-- Mobile navigation button -->
         <button class="mobile-nav-btn">☰</button>
         
         <div class="auth-buttons">
-            <button id="google-signin-btn">Sign In</button>
+            <button id="auth-btn">Sign In</button>
         </div>
     </header>
     
-    <!-- मोबाइल नेविगेशन मेनू -->
+    <!-- Mobile navigation menu -->
     <div class="mobile-nav">
         <button class="mobile-nav-close">×</button>
         <ul>
@@ -487,8 +674,87 @@
         </ul>
     </div>
     
-    <!-- ओवरले -->
+    <!-- Overlay -->
     <div class="overlay"></div>
+    
+    <!-- Authentication Modal -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2 class="auth-title" id="auth-title">Sign In</h2>
+                <button class="close-auth" id="close-auth">&times;</button>
+            </div>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="signin">Sign In</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
+            </div>
+            
+            <!-- Sign In Form -->
+            <form class="auth-form active" id="signin-form">
+                <div class="form-group">
+                    <label for="signin-email">Email</label>
+                    <input type="email" id="signin-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signin-password">Password</label>
+                    <input type="password" id="signin-password" required>
+                </div>
+                
+                <button type="submit" class="auth-btn" id="signin-btn">Sign In</button>
+                
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" id="switch-to-signup">Sign Up</a></p>
+                </div>
+                
+                <div class="social-auth">
+                    <p>Or continue with</p>
+                    <button type="button" class="google-auth-btn" id="google-signin-btn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="google-icon" alt="Google">
+                        Sign in with Google
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Sign Up Form -->
+            <form class="auth-form" id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" required>
+                </div>
+                
+                <button type="submit" class="auth-btn" id="signup-btn">Sign Up</button>
+                
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" id="switch-to-signin">Sign In</a></p>
+                </div>
+                
+                <div class="social-auth">
+                    <p>Or sign up with</p>
+                    <button type="button" class="google-auth-btn" id="google-signup-btn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="google-icon" alt="Google">
+                        Sign up with Google
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <main>
         <section class="hero">
@@ -496,7 +762,7 @@
             <p>Explore and join the community</p>
         </section>
         
-        <!-- पोस्ट क्रिएट फॉर्म -->
+        <!-- Post creation form -->
         <div id="post-form">
             <h3>Create a Post</h3>
             <textarea id="post-content" placeholder="What's on your mind?" rows="4"></textarea>
@@ -529,14 +795,38 @@
     <script type="module">
         // Import the functions you need from the Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
-            from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, updateDoc, increment, arrayUnion, arrayRemove, getDoc } 
-            from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } 
-            from "https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js";
+        import { 
+            getAuth, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            signOut, 
+            onAuthStateChanged,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            serverTimestamp, 
+            query, 
+            orderBy, 
+            onSnapshot, 
+            doc, 
+            updateDoc, 
+            increment, 
+            arrayUnion, 
+            arrayRemove, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+        import { 
+            getStorage, 
+            ref, 
+            uploadBytes, 
+            getDownloadURL 
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js";
 
-        // Your web app's Firebase configuration - वैसे का वैसा रखा गया है
+        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
             authDomain: "viratsawarup.firebaseapp.com",
@@ -555,7 +845,20 @@
         const provider = new GoogleAuthProvider();
 
         // DOM Elements
-        const googleSignInBtn = document.getElementById('google-signin-btn');
+        const authBtn = document.getElementById('auth-btn');
+        const authModal = document.getElementById('auth-modal');
+        const closeAuth = document.getElementById('close-auth');
+        const authTitle = document.getElementById('auth-title');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const signinForm = document.getElementById('signin-form');
+        const signupForm = document.getElementById('signup-form');
+        const switchToSignup = document.getElementById('switch-to-signup');
+        const switchToSignin = document.getElementById('switch-to-signin');
+        const googleSigninBtn = document.getElementById('google-signin-btn');
+        const googleSignupBtn = document.getElementById('google-signup-btn');
+        const signinBtn = document.getElementById('signin-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        
         const postsList = document.getElementById('posts-list');
         const postForm = document.getElementById('post-form');
         const postContent = document.getElementById('post-content');
@@ -583,6 +886,7 @@
         overlay.addEventListener('click', () => {
             mobileNav.classList.remove('active');
             overlay.classList.remove('active');
+            authModal.style.display = 'none';
         });
 
         // Image Preview Functionality
@@ -605,37 +909,136 @@
             imagePreview.style.display = 'none';
         });
 
-        // Google Sign-In
-        googleSignInBtn.addEventListener('click', async () => {
-            if (auth.currentUser) {
-                // User is signed in, show confirmation before logout
-                if (confirm('Are you sure you want to sign out?')) {
-                    try {
-                        googleSignInBtn.innerHTML = '<span class="loading"></span> Signing out...';
-                        await signOut(auth);
-                    } catch (error) {
-                        console.error("Sign out error:", error);
-                        alert('Error signing out. Please try again.');
-                    }
+        // Auth Modal Functionality
+        authBtn.addEventListener('click', () => {
+            authModal.style.display = 'flex';
+        });
+        
+        closeAuth.addEventListener('click', () => {
+            authModal.style.display = 'none';
+        });
+        
+        // Switch between sign in and sign up tabs
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                authTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update form visibility
+                const tabName = tab.getAttribute('data-tab');
+                signinForm.classList.remove('active');
+                signupForm.classList.remove('active');
+                
+                if (tabName === 'signin') {
+                    signinForm.classList.add('active');
+                    authTitle.textContent = 'Sign In';
+                } else {
+                    signupForm.classList.add('active');
+                    authTitle.textContent = 'Sign Up';
                 }
-            } else {
-                // User is not signed in, proceed with sign in
-                try {
-                    googleSignInBtn.innerHTML = '<span class="loading"></span> Signing in...';
-                    await signInWithPopup(auth, provider);
-                } catch (error) {
-                    console.error("Google Sign-In Error:", error);
-                    alert('Error signing in. Please try again.');
-                    googleSignInBtn.textContent = 'Sign In with Google';
-                }
+            });
+        });
+        
+        // Switch to sign up from sign in footer
+        switchToSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            authTabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('.auth-tab[data-tab="signup"]').classList.add('active');
+            signinForm.classList.remove('active');
+            signupForm.classList.add('active');
+            authTitle.textContent = 'Sign Up';
+        });
+        
+        // Switch to sign in from sign up footer
+        switchToSignin.addEventListener('click', (e) => {
+            e.preventDefault();
+            authTabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('.auth-tab[data-tab="signin"]').classList.add('active');
+            signupForm.classList.remove('active');
+            signinForm.classList.add('active');
+            authTitle.textContent = 'Sign In';
+        });
+
+        // Email/Password Sign In
+        signinForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            
+            try {
+                signinBtn.innerHTML = '<span class="loading"></span> Signing in...';
+                await signInWithEmailAndPassword(auth, email, password);
+                authModal.style.display = 'none';
+                signinBtn.textContent = 'Sign In';
+            } catch (error) {
+                console.error("Sign in error:", error);
+                alert(error.message);
+                signinBtn.textContent = 'Sign In';
             }
         });
+        
+        // Email/Password Sign Up
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert("Passwords don't match!");
+                return;
+            }
+            
+            try {
+                signupBtn.innerHTML = '<span class="loading"></span> Signing up...';
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Here you can update the user profile with the name
+                // Note: In Firebase v9+, you would use updateProfile function
+                
+                authModal.style.display = 'none';
+                signupBtn.textContent = 'Sign Up';
+            } catch (error) {
+                console.error("Sign up error:", error);
+                alert(error.message);
+                signupBtn.textContent = 'Sign Up';
+            }
+        });
+
+        // Google Authentication
+        async function handleGoogleAuth() {
+            try {
+                if (auth.currentUser) {
+                    // User is signed in, show confirmation before logout
+                    if (confirm('Are you sure you want to sign out?')) {
+                        authBtn.innerHTML = '<span class="loading"></span> Signing out...';
+                        await signOut(auth);
+                    }
+                } else {
+                    // User is not signed in, proceed with sign in
+                    authBtn.innerHTML = '<span class="loading"></span> Signing in...';
+                    await signInWithPopup(auth, provider);
+                    authModal.style.display = 'none';
+                }
+            } catch (error) {
+                console.error("Google Auth Error:", error);
+                alert('Error with Google authentication. Please try again.');
+                authBtn.textContent = auth.currentUser ? `Logout (${auth.currentUser.displayName || auth.currentUser.email})` : 'Sign In';
+            }
+        }
+        
+        googleSigninBtn.addEventListener('click', handleGoogleAuth);
+        googleSignupBtn.addEventListener('click', handleGoogleAuth);
 
         // Auth state listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is signed in with Google
-                googleSignInBtn.innerHTML = `Logout (${user.displayName || user.email})`;
+                // User is signed in
+                authBtn.textContent = `Logout (${user.displayName || user.email})`;
                 
                 // Show post form
                 postForm.style.display = 'block';
@@ -644,7 +1047,7 @@
                 loadPosts();
             } else {
                 // User is signed out
-                googleSignInBtn.textContent = 'Sign In with Google';
+                authBtn.textContent = 'Sign In';
                 
                 // Hide post form
                 postForm.style.display = 'none';
