@@ -448,9 +448,26 @@
         
         <article class="blog-post">
             <h2>Connecting to Natural Intelligences</h2>
-            <video width="300" height="200" controls>
-            <source src="file:///C:/Users/User/Pictures/how%20dna%20make%20body.mp4">
-            </video>
+            <div class="video-container" id="videoBox2" onclick="playVideo('gG7uCskUOrA', this)">
+    <img src="https://img.youtube.com/vi/gG7uCskUOrA/hqdefault.jpg" alt="Video Thumbnail" loading="lazy">
+    <div class="play-button"></div>
+</div>
+
+<script>
+  function playVideo(videoId, container) {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+    iframe.frameBorder = '0';
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.allowFullscreen = true;
+    iframe.width = '100%';
+    iframe.height = '100%';
+
+    container.innerHTML = ''; // remove thumbnail and play button
+    container.appendChild(iframe);
+  }
+</script>
+
             <div class="blog-content">
 			
   <p>
