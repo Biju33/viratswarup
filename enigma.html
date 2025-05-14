@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enigma - ViratSwarup</title>
+    <title>What is our goal? - ViratSwarup</title>
     <style>
         :root {
             --primary-color: #8B0000;
@@ -25,6 +25,7 @@
             line-height: 1.6;
         }
         
+        /* मोबाइल फ्रेंडली हेडर */
         header {
             background-color: var(--primary-color);
             color: white;
@@ -33,6 +34,9 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         
         .logo {
@@ -40,23 +44,97 @@
             font-weight: bold;
         }
         
-        nav ul {
+        /* डेस्कटॉप नेविगेशन */
+        .desktop-nav ul {
             display: flex;
             list-style: none;
         }
         
-        nav ul li {
+        .desktop-nav ul li {
             margin-left: 1.5rem;
         }
         
-        nav ul li a {
+        .desktop-nav ul li a {
             color: white;
             text-decoration: none;
             transition: color 0.3s;
+            font-weight: 500;
         }
         
-        nav ul li a:hover {
+        .desktop-nav ul li a:hover {
             color: #FFD700;
+        }
+        
+        /* मोबाइल नेविगेशन */
+        .mobile-nav-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: var(--primary-color);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 2rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-nav.active {
+            left: 0;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        
+        .mobile-nav ul li {
+            margin-bottom: 1.5rem;
+        }
+        
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
         }
         
         main {
@@ -68,32 +146,40 @@
         .blog-post {
             background: white;
             border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .blog-post h2 {
             color: var(--primary-color);
             margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
         
         .post-meta {
             color: #666;
             font-size: 0.9rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-style: italic;
         }
         
         .blog-content {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .blog-content p {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
         }
         
         .blog-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 4px;
+            border-radius: 8px;
             margin: 1rem 0;
+            display: block;
         }
         
         .embed-container {
@@ -102,6 +188,7 @@
             height: 0;
             overflow: hidden;
             margin: 1rem 0;
+            border-radius: 8px;
         }
         
         .embed-container iframe {
@@ -110,22 +197,80 @@
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 4px;
+            border-radius: 8px;
         }
         
         footer {
             background-color: var(--primary-color);
             color: white;
             text-align: center;
-            padding: 1rem;
+            padding: 1.5rem;
             margin-top: 2rem;
+        }
+        
+        /* क्वोट स्टाइल */
+        blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #555;
+            font-style: italic;
+        }
+        
+        /* रेस्पॉन्सिव डिज़ाइन */
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-nav-btn {
+                display: block;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            main {
+                padding: 0 0.8rem;
+                margin: 1rem auto;
+            }
+            
+            .blog-post {
+                padding: 1.2rem;
+            }
+            
+            .blog-post h2 {
+                font-size: 1.3rem;
+            }
+            
+            .blog-content p {
+                font-size: 0.95rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .blog-post {
+                padding: 1rem;
+            }
+            
+            .blog-post h2 {
+                font-size: 1.2rem;
+            }
+            
+            footer {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">ViratSwarup</div>
-        <nav>
+        
+        <!-- डेस्कटॉप नेविगेशन -->
+        <nav class="desktop-nav">
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="agnosia.html">Agnosia</a></li>
@@ -133,9 +278,26 @@
                 <li><a href="emulate.html">Emulate</a></li>
             </ul>
         </nav>
+        
+        <!-- मोबाइल नेविगेशन बटन -->
+        <button class="mobile-nav-btn">☰</button>
     </header>
     
-    <main>
+    <!-- मोबाइल नेविगेशन मेनू -->
+    <div class="mobile-nav">
+        <button class="mobile-nav-close">×</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agnosia.html">Agnosia</a></li>
+            <li><a href="enigma.html">Enigma</a></li>
+            <li><a href="emulate.html">Emulate</a></li>
+        </ul>
+    </div>
+    
+    <!-- ओवरले -->
+    <div class="overlay"></div>
+    
+    <main>        
         <article class="blog-post">
             <h2>Who are we?</h2>
 			<img src="file:///C:/Users/User/Pictures/who%20are%20we.jpg" width="300" height="200">
@@ -183,10 +345,60 @@ Their wisdom and actions continue to guide us today.</p>
                 
             </div>
         </article>
-    </main>
+     </main>
     
-    <footer>
+<footer>
         <p>&copy; 2023 ViratSwarup. All rights reserved.</p>
     </footer>
+
+    <script>
+        // मोबाइल नेविगेशन टॉगल
+        const mobileNavBtn = document.querySelector('.mobile-nav-btn');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const mobileNavClose = document.querySelector('.mobile-nav-close');
+        const overlay = document.querySelector('.overlay');
+        
+        mobileNavBtn.addEventListener('click', () => {
+            mobileNav.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        mobileNavClose.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // इमेज लेजी लोडिंग
+        document.addEventListener("DOMContentLoaded", function() {
+            const lazyImages = [].slice.call(document.querySelectorAll("img[loading='lazy']"));
+            
+            if ("IntersectionObserver" in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            }
+        });
+        
+        // टच इवेंट के लिए हवर इफेक्ट को हटाना
+        document.addEventListener('touchstart', function() {}, true);
+    </script>
 </body>
 </html>
