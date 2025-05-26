@@ -1,334 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>agnosia</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VIRAT SWARUP</title>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary-color: #8B0000;
-            --secondary-color: #A52A2A;
-            --light-color: #F5F5F5;
-            --dark-color: #333;
-            --gold-accent: #FFD700;
+      /* Reset & Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Georgia", serif;
+      }
+
+      body {
+        background: #ffffff;
+        color: #2c2c2c;
+      }
+
+      /* हैडर सेक्शन */
+      .header {
+        padding: 95px 20px 45px;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #8b0000;
+      }
+      .header h1 {
+        font-size: 52px;
+        letter-spacing: 3.2px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        color: white;
+      }
+      .header h2 {
+        font-size: 22px;
+        color: #fff;
+        font-weight: 300;
+      }
+
+      /* हैमबर्गर मेन्यू */
+      .hamburger {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        cursor: pointer;
+        display: none;
+        z-index: 1000;
+      }
+      .hamburger-line {
+        width: 28px;
+        height: 2px;
+        background: #000000;
+        margin: 6px 0;
+        transition: 0.4s;
+      }
+
+      /* मोबाइल मेन्यू */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100%;
+        background: #8b0000;
+        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+        transition: 0.4s;
+        padding-top: 80px;
+        z-index: 999;
+      }
+      .mobile-menu.active {
+        right: 0;
+      }
+      .mobile-menu a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px 30px;
+        color: #fff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .mobile-menu i {
+        width: 25px;
+        font-size: 20px;
+        color: #fff;
+      }
+
+      /* बॉटम नेविगेशन */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #8b0000;
+        border-top: 1px solid #eee;
+        padding: 8px 0;
+        display: none;
+        z-index: 999;
+      }
+      .bottom-nav ul {
+        display: flex;
+        justify-content: space-around;
+        list-style: none;
+      }
+      .bottom-nav a {
+        color: #fff;
+        font-size: 16px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        transition: background 0.3s;
+      }
+
+      .bottom-nav a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      /* डेस्कटॉप नेविगेशन */
+      .desktop-nav {
+        margin: 45px 0;
+      }
+      .desktop-nav ul {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        list-style: none;
+      }
+      .desktop-nav a {
+        color: #8b0000;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+      }
+
+      /* रिस्पॉन्सिव डिज़ाइन */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: block;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Georgia', serif;
+        .desktop-nav {
+          display: none;
         }
-
-        body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.8;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        .bottom-nav {
+          display: block;
         }
-
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .header {
+          padding: 70px 20px 35px;
         }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .header h1 {
+          font-size: 42px;
         }
-
-        /* Navigation Styles */
-        .desktop-nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .desktop-nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-        }
-
-        .desktop-nav a:hover {
-            color: var(--gold-accent);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .mobile-nav-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background-color: var(--primary-color);
-            z-index: 1000;
-            transition: left 0.3s ease;
-            padding: 2rem;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-        }
-
-        .mobile-nav.active {
-            left: 0;
-        }
-
-        .mobile-nav ul {
-            list-style: none;
-            margin-top: 2rem;
-        }
-
-        .mobile-nav ul li {
-            margin-bottom: 1.5rem;
-        }
-
-        .mobile-nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            display: block;
-            padding: 0.5rem 0;
-        }
-
-        .mobile-nav-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
-        }
-
-        .overlay.active {
-            display: block;
-        }
-
-        main {
-            flex: 1;
-            width: 100%;
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .blog-post {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .blog-post:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-
-        .blog-post a {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            height: 100%;
-        }
-
-        .blog-post h2 {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 1.5rem;
-            margin: 0;
-            font-size: 1.4rem;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-        }
-
-        .blog-post img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-bottom: 4px solid var(--gold-accent);
-            transition: opacity 0.3s ease;
-        }
-
-        .blog-content {
-            padding: 1.5rem;
-        }
-
-        .blog-content p {
-            color: #444;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        footer {
-            background: var(--dark-color);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: auto;
-            border-top: 3px solid var(--gold-accent);
-        }
-
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-
-            .mobile-nav-btn {
-                display: block;
-            }
-
-            main {
-                padding: 0 1rem;
-                grid-template-columns: 1fr;
-            }
-
-            .blog-post h2 {
-                font-size: 1.2rem;
-                min-height: auto;
-                padding: 1rem;
-            }
-
-            .logo {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 1rem;
-            }
-
-            .blog-post img {
-                height: 200px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <header>
-        <div class="logo">ViratSwarup</div>
-        
-        <nav class="desktop-nav">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="agnosia.html">Agnosia</a></li>
-                <li><a href="enigma.html">Enigma</a></li>
-                <li><a href="emulate.html">Emulate</a></li>
-            </ul>
-        </nav>
-
-        <button class="mobile-nav-btn">☰</button>
-    </header>
-
-    <div class="mobile-nav">
-        <button class="mobile-nav-close">×</button>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="agnosia.html">Agnosia</a></li>
-            <li><a href="enigma.html">Enigma</a></li>
-            <li><a href="emulate.html">Emulate</a></li>
-        </ul>
+  </head>
+  <body>
+    <!-- हैमबर्गर आइकन -->
+    <div class="hamburger" onclick="toggleMenu()">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
     </div>
 
-    <div class="overlay"></div>
+    <!-- मोबाइल मेन्यू -->
+    <nav class="mobile-menu">
+      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
+      <a href="#share"><i class="fas fa-share"></i>Share</a>
+      <a href="index.html"><i class="fas fa-home"></i>Home</a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
+      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
+      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+    </nav>
 
-    <main>
-        <article class="blog-post">
-            <a href="Reality check.html">
-                <h2>Reality check</h2>
-                <img src="image/Reality_check.jpg" alt="Philosophical inquiry">
-                <div class="blog-content">
-                    <p>Reality check is the practice of questioning whether your current experience is real or a dream. It is often used in lucid dreaming and mindfulness to become more aware of the present moment.</p>
-                </div>
-            </a>
-        </article>
+    <!-- हैडर -->
+    <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
 
-        <article class="blog-post">
-            <a href="Agnosia check.html">
-                <h2>Agnosia check</h2>
-                <img src="Agnosia_check.jpg" alt="Purpose illustration">
-                <div class="blog-content">
-                    <p>Agnosia is a condition where a person cannot recognize objects, sounds, or people even though their senses are working normally. It happens due to a disconnect between perception and understanding,
-					not because of any problem with the eyes or ears.</p>
-                </div>
-            </a>
-        </article>
+  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
+  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
 
-    </main>
+    </header>
 
-    <footer>
-        <p>© 2023 ViratSwarup</p>
-    </footer>
+    <!-- डेस्कटॉप नेविगेशन -->
+    <nav class="desktop-nav">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      </ul>
+    </nav>
+
+    <!-- बॉटम नेविगेशन -->
+    <nav class="bottom-nav">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      </ul>
+    </nav>
 
     <script>
-        // Mobile Navigation
-        const mobileNavBtn = document.querySelector('.mobile-nav-btn');
-        const mobileNav = document.querySelector('.mobile-nav');
-        const mobileNavClose = document.querySelector('.mobile-nav-close');
-        const overlay = document.querySelector('.overlay');
-        
-        mobileNavBtn.addEventListener('click', () => {
-            mobileNav.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+      // हैमबर्गर मेन्यू फंक्शन
+      function toggleMenu() {
+        document.querySelector(".mobile-menu").classList.toggle("active");
+        document.querySelectorAll(".hamburger-line").forEach((line) => {
+          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
         });
-        
-        [mobileNavClose, overlay].forEach(element => {
-            element.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
+      }
 
-        // Image lazy loading
-        document.addEventListener("DOMContentLoaded", function() {
-            const images = document.querySelectorAll('img');
-            images.forEach(img => {
-                img.loading = 'lazy';
-            });
-        });
+      // क्लिक आउटसाइड करने पर मेन्यू बंद
+      document.addEventListener("click", (e) => {
+        if (
+          !e.target.closest(".hamburger") &&
+          !e.target.closest(".mobile-menu")
+        ) {
+          document.querySelector(".mobile-menu").classList.remove("active");
+          document.querySelectorAll(".hamburger-line").forEach((line) => {
+            line.style.transform = "";
+          });
+        }
+      });
     </script>
+
+	  <!-- बटन कार्ड सेक्शन -->
+<section style="padding: 40px 20px; background: #fff;">
+  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+    
+    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
+      Reality check
+    </h3>
+	
+    <img src="images/Reality_check.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px;" />
+
+    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
+Reality check is the practice of questioning whether your current experience is real or a dream.It is often used in lucid dreaming and mindfulness to become more aware of the present moment.</p>
+
+    <button onclick="window.location.href='Reality check.html" style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+      see more
+    </button>
+  </div>
+</section>
+<section style="padding: 40px 20px; background: #fff;">
+  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+    
+    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
+      Agnosia check
+    </h3>
+
+     <img src="images/agnosia_check.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px;" />
+
+    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
+Agnosia is a condition where a person cannot recognize objects, sounds, or people even though their senses are working normally. It happens due to a disconnect between perception and understanding, not because of any problem with the eyes or ears. 
+ </p>
+
+    <button onclick="window.location.href='Agnosia check.html" style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+      see more
+    </button>
+
+  </div>
+</section>
+	     	
 </body>
 </html>
