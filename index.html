@@ -1,1184 +1,539 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViratSwarup Platform</title>
+    <title>VIRAT SWARUP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
     <style>
-        :root {
-            --primary-color: #8B0000;
-            --secondary-color: #A52A2A;
-            --light-color: #F5F5F5;
-            --dark-color: #333;
-        }
-        
+        /* All Original CSS Here */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: "Georgia", serif;
         }
-        
+
         body {
-            background-color: #f9f9f9;
+            background: #ffffff;
+            color: #2c2c2c;
         }
-        
-        /* Header styles */
-        header {
-            background-color: var(--primary-color);
+
+        .header {
+            padding: 95px 20px 45px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #8b0000;
+        }
+        .header h1 {
+            font-size: 52px;
+            letter-spacing: 3.2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
             color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
+        }
+        .header h2 {
+            font-size: 22px;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .hamburger {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            cursor: pointer;
+            display: none;
             z-index: 1000;
         }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .hamburger-line {
+            width: 28px;
+            height: 2px;
+            background: #fff;
+            margin: 6px 0;
+            transition: 0.4s;
         }
-        
-        /* Desktop navigation */
-        .desktop-nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        .desktop-nav ul li {
-            margin-left: 1.5rem;
-        }
-        
-        .desktop-nav ul li a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-        
-        .desktop-nav ul li a:hover {
-            color: #FFD700;
-        }
-        
-        /* Mobile navigation */
-        .mobile-nav-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
-        .mobile-nav {
+
+        .mobile-menu {
             position: fixed;
             top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background-color: var(--primary-color);
-            z-index: 1000;
-            transition: left 0.3s ease;
-            padding: 2rem;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-        }
-        
-        .mobile-nav.active {
-            left: 0;
-        }
-        
-        .mobile-nav ul {
-            list-style: none;
-            margin-top: 2rem;
-        }
-        
-        .mobile-nav ul li {
-            margin-bottom: 1.5rem;
-        }
-        
-        .mobile-nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            display: block;
-            padding: 0.5rem 0;
-        }
-        
-        .mobile-nav-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-        
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            right: -300px;
+            width: 300px;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
+            background: #8b0000;
+            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+            transition: 0.4s;
+            padding-top: 80px;
         }
-        
-        .overlay.active {
-            display: block;
-        }
-        
-        .auth-buttons button {
-            background-color: white;
-            color: var(--primary-color);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 1rem;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .auth-buttons button:hover {
-            background-color: #f0f0f0;
-        }
-        
-        main {
-            padding: 1rem;
-            min-height: 80vh;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .hero {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            background-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        }
-        
-        .hero h1 {
-            margin-bottom: 0.5rem;
-            font-size: 2rem;
-        }
-        
-        .posts-container {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-        }
-        
-        .posts-container h2 {
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #eee;
-        }
-        
-        .post {
-            border-bottom: 1px solid #eee;
-            padding: 1.5rem 0;
-            margin-bottom: 1rem;
-        }
-        
-        .post:last-child {
-            border-bottom: none;
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .post-user-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .post-user-name {
-            font-weight: bold;
-            color: var(--dark-color);
-        }
-        
-        .post-date {
-            font-size: 0.8rem;
-            color: #777;
-            margin-top: 2px;
-        }
-        
-        .post-content {
-            margin: 1rem 0;
-            line-height: 1.5;
-        }
-        
-        .post-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .post-actions button {
-            background: none;
-            border: none;
-            color: var(--primary-color);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.9rem;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        
-        .post-actions button:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .post-image-container {
-            margin-top: 1rem;
-            border-radius: 8px;
-            overflow: hidden;
-            max-height: 400px;
-            display: flex;
-            justify-content: center;
-            background-color: #f5f5f5;
-        }
-        
-        .post-image {
-            max-width: 100%;
-            max-height: 400px;
-            object-fit: contain;
-            border-radius: 4px;
-        }
-        
-        /* Auth Modal Styles */
-        .auth-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1001;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .auth-container {
-            background-color: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 400px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            animation: modalFadeIn 0.3s ease;
-        }
-        
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .auth-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .auth-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-        
-        .close-auth {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #777;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .auth-tab {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .auth-tab.active {
-            border-bottom: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .auth-form {
-            display: none;
-        }
-        
-        .auth-form.active {
-            display: block;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-        
-        .auth-btn {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: background-color 0.3s;
-        }
-        
-        .auth-btn:hover {
-            background-color: #7a0000;
-        }
-        
-        .auth-footer {
-            margin-top: 1.5rem;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        
-        .auth-footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .auth-footer a:hover {
-            text-decoration: underline;
-        }
-        
-        .social-auth {
-            margin-top: 1.5rem;
-            text-align: center;
-        }
-        
-        .social-auth p {
-            margin-bottom: 1rem;
-            color: #777;
-            position: relative;
-        }
-        
-        .social-auth p::before,
-        .social-auth p::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 30%;
-            height: 1px;
-            background-color: #ddd;
-        }
-        
-        .social-auth p::before {
-            left: 0;
-        }
-        
-        .social-auth p::after {
+        .mobile-menu.active {
             right: 0;
         }
-        
-        .google-auth-btn {
+        .mobile-menu a {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            padding: 18px 30px;
+            color: #fff !important;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        .mobile-menu i {
+            width: 25px;
+            font-size: 20px;
+            color: #fff !important;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            padding: 0.8rem;
-            background-color: #4285F4;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            background: #8b0000;
+            border-top: 1px solid #eee;
+            padding: 8px 0;
+            display: none;
+            z-index: 999;
         }
-        
-        .google-auth-btn:hover {
-            background-color: #357ABD;
+        .bottom-nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
         }
-        
-        .google-icon {
-            width: 18px;
-            height: 18px;
-        }
-        
-        /* Post form styles */
-        #post-form {
-            background-color: white;
-            padding: 1.5rem;
+        .bottom-nav a {
+            color: #fff !important;
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-            display: none;
+            transition: background 0.3s;
         }
-        
-        #post-form h3 {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
+
+        .bottom-nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
-        
-        #post-content {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            resize: vertical;
-            min-height: 100px;
-            font-size: 1rem;
-            margin-bottom: 1rem;
+
+        .desktop-nav {
+            margin: 45px 0;
         }
-        
-        #post-content:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        .desktop-nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            list-style: none;
         }
-        
-        .file-upload-container {
-            margin-bottom: 1rem;
+        .desktop-nav a {
+            color: #8b0000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
         }
-        
-        .file-upload-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        #post-image {
-            width: 100%;
-        }
-        
-        #submit-post {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-        
-        #submit-post:hover {
-            background-color: #7a0000;
-        }
-        
-        .image-preview {
-            margin-top: 1rem;
-            display: none;
-        }
-        
-        .image-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 4px;
-            margin-top: 0.5rem;
-        }
-        
-        .remove-image-btn {
-            background-color: #ff4444;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-        }
-        
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        /* Loading indicator */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Responsive design */
+
         @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
             .desktop-nav {
                 display: none;
             }
-            
-            .mobile-nav-btn {
+            .bottom-nav {
                 display: block;
             }
-            
-            .auth-buttons {
-                margin-left: auto;
+            .header {
+                padding: 70px 20px 35px;
             }
-            
-            header {
-                padding: 0.8rem;
-            }
-            
-            .logo {
-                font-size: 1.3rem;
-            }
-            
-            .hero {
-                padding: 1.5rem 1rem;
-            }
-            
-            .hero h1 {
-                font-size: 1.5rem;
-            }
-            
-            .posts-container, #post-form {
-                padding: 1rem;
-            }
-            
-            .auth-container {
-                padding: 1.5rem;
+            .header h1 {
+                font-size: 42px;
             }
         }
-        
-        @media (max-width: 480px) {
-            .auth-buttons button {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.9rem;
-            }
-            
-            .post {
-                padding: 1rem 0;
-            }
-            
-            .post-actions button {
-                font-size: 0.8rem;
-            }
-            
-            .auth-tabs {
-                flex-direction: column;
-                border-bottom: none;
-            }
-            
-            .auth-tab {
-                border-bottom: 1px solid #ddd;
-                border-left: 2px solid transparent;
-                border-bottom: none;
-            }
-            
-            .auth-tab.active {
-                border-left: 2px solid var(--primary-color);
-                border-bottom: none;
-            }
+
+        /* Social Media App CSS */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .login-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 50px;
+        }
+        .login-section h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .login-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .google-btn {
+            background: #4285F4;
+            color: white;
+            border: none;
+        }
+        .facebook-btn {
+            background: #3b5998;
+            color: white;
+            border: none;
+        }
+        .login-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .login-btn img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .app-section {
+            display: none;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .post-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .post-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+            min-height: 80px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        .post-form button {
+            background: #4285F4;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .posts-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .post {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .post:last-child {
+            border-bottom: none;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .post-actions {
+            display: flex;
+            margin-top: 10px;
+        }
+        .post-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 15px;
+            color: #666;
+            display: flex;
+            align-items: center;
+        }
+        .post-actions button img {
+            width: 16px;
+            margin-right: 5px;
+        }
+        .comments {
+            margin-top: 10px;
+            padding-left: 20px;
+            border-left: 2px solid #eee;
+        }
+        .comment {
+            margin: 8px 0;
+        }
+        .comment-form {
+            display: flex;
+            margin-top: 10px;
+        }
+        .comment-form input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+        }
+        .comment-form button {
+            background: #4285F4;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">ViratSwarup</div>
-        
-        <!-- Desktop navigation -->
-        <nav class="desktop-nav">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="agnosia.html">Agnosia</a></li>
-                <li><a href="enigma.html">Enigma</a></li>
-                <li><a href="emulate.html">Emulate</a></li>
-            </ul>
-        </nav>
-        
-        <!-- Mobile navigation button -->
-        <button class="mobile-nav-btn">☰</button>
-        
-        <div class="auth-buttons">
-            <button id="auth-btn">Sign In</button>
-        </div>
+    <!-- Hamburger Icon -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-menu">
+        <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
+        <a href="#share"><i class="fas fa-share"></i>Share</a>
+        <a href="#home"><i class="fas fa-home"></i>Home</a>
+        <a href="#agnosia"><i class="fas fa-eye-slash"></i>Agnosia</a>
+        <a href="#enigma"><i class="fas fa-question-circle"></i>Enigma</a>
+        <a href="#emulate"><i class="fas fa-copy"></i>Emulate</a>
+        <a href="#post"><i class="fas fa-comment"></i>Post</a>
+    </nav>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>VIRAT SWARUP</h1>
+        <h2>The Supreme Divine of Every Faith</h2>
     </header>
-    
-    <!-- Mobile navigation menu -->
-    <div class="mobile-nav">
-        <button class="mobile-nav-close">×</button>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="agnosia.html">Agnosia</a></li>
-            <li><a href="enigma.html">Enigma</a></li>
-            <li><a href="emulate.html">Emulate</a></li>
+            <li><a href="#home"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="#agnosia"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+            <li><a href="#enigma"><i class="fas fa-question-circle"></i>Enigma</a></li>
+            <li><a href="#emulate"><i class="fas fa-copy"></i>Emulate</a></li>
+            <li><a href="#post"><i class="fas fa-comment"></i>Post</a></li>
         </ul>
-    </div>
-    
-    <!-- Overlay -->
-    <div class="overlay"></div>
-    
-    <!-- Authentication Modal -->
-    <div class="auth-modal" id="auth-modal">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h2 class="auth-title" id="auth-title">Sign In</h2>
-                <button class="close-auth" id="close-auth">&times;</button>
-            </div>
-            
-            <div class="auth-tabs">
-                <div class="auth-tab active" data-tab="signin">Sign In</div>
-                <div class="auth-tab" data-tab="signup">Sign Up</div>
-            </div>
-            
-            <!-- Sign In Form -->
-            <form class="auth-form active" id="signin-form">
-                <div class="form-group">
-                    <label for="signin-email">Email</label>
-                    <input type="email" id="signin-email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="signin-password">Password</label>
-                    <input type="password" id="signin-password" required>
-                </div>
-                
-                <button type="submit" class="auth-btn" id="signin-btn">Sign In</button>
-                
-                <div class="auth-footer">
-                    <p>Don't have an account? <a href="#" id="switch-to-signup">Sign Up</a></p>
-                </div>
-                
-                <div class="social-auth">
-                    <p>Or continue with</p>
-                    <button type="button" class="google-auth-btn" id="google-signin-btn">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="google-icon" alt="Google">
-                        Sign in with Google
-                    </button>
-                </div>
-            </form>
-            
-            <!-- Sign Up Form -->
-            <form class="auth-form" id="signup-form">
-                <div class="form-group">
-                    <label for="signup-name">Full Name</label>
-                    <input type="text" id="signup-name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" required minlength="6">
-                </div>
-                
-                <div class="form-group">
-                    <label for="signup-confirm-password">Confirm Password</label>
-                    <input type="password" id="signup-confirm-password" required>
-                </div>
-                
-                <button type="submit" class="auth-btn" id="signup-btn">Sign Up</button>
-                
-                <div class="auth-footer">
-                    <p>Already have an account? <a href="#" id="switch-to-signin">Sign In</a></p>
-                </div>
-                
-                <div class="social-auth">
-                    <p>Or sign up with</p>
-                    <button type="button" class="google-auth-btn" id="google-signup-btn">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="google-icon" alt="Google">
-                        Sign up with Google
-                    </button>
-                </div>
-            </form>
+    </nav>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <ul>
+            <li><a href="#home"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="#agnosia"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+            <li><a href="#enigma"><i class="fas fa-question-circle"></i>Enigma</a></li>
+            <li><a href="#emulate"><i class="fas fa-copy"></i>Emulate</a></li>
+            <li><a href="#post"><i class="fas fa-comment"></i>Post</a></li>
+        </ul>
+    </nav>
+
+    <!-- Social Media App -->
+    <div class="container">
+        <div class="login-section" id="loginSection">
+            <h1>Welcome to Social App</h1>
+            <button class="login-btn google-btn" id="googleLogin">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
+                Sign in with Google
+            </button>
+            <button class="login-btn facebook-btn" id="facebookLogin">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+                Sign in with Facebook
+            </button>
         </div>
-    </div>
-    
-    <main>
-        <section class="hero">
-            <h1>Welcome to ViratSwarup </h1>
-            <p>Reach your main inteligance join the community</p>
-        </section>
         
-        <!-- Post creation form -->
-        <div id="post-form">
-            <h3>Create a Post</h3>
-            <textarea id="post-content" placeholder="What's on your mind?" rows="4"></textarea>
-            
-            <div class="file-upload-container">
-                <label for="post-image" class="file-upload-label">Upload Image (Optional)</label>
-                <input type="file" id="post-image" accept="image/*">
+        <div class="app-section" id="appSection">
+            <div class="user-info">
+                <img id="userPhoto" src="" alt="User Photo">
+                <div>
+                    <h2 id="userName"></h2>
+                    <button id="logoutBtn">Logout</button>
+                </div>
             </div>
             
-            <div class="image-preview">
-                <img id="preview-image" src="#" alt="Image preview">
-                <button class="remove-image-btn">Remove Image</button>
+            <div class="post-form">
+                <h3>Create Post</h3>
+                <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+                <button id="postBtn">Post</button>
             </div>
             
-            <button id="submit-post">Post</button>
+            <div class="posts-container" id="postsContainer">
+                <h3>Feed</h3>
+            </div>
         </div>
-                       
-        <section class="posts-container">
-            <h2>Community Posts</h2>
-            <div id="posts-list">
-                <p style="text-align: center; padding: 2rem;">Please sign in to view posts</p>
-            </div>
-        </section>
-    </main>
-    
-    <footer>
-        <p>&copy; 2023 ViratSwarup. All rights reserved.</p>
-    </footer>
+    </div>
 
-    <script type="module">
-        // Import the functions you need from the Firebase SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithPopup, 
-            GoogleAuthProvider, 
-            signOut, 
-            onAuthStateChanged,
-            createUserWithEmailAndPassword,
-            signInWithEmailAndPassword
-        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            addDoc, 
-            serverTimestamp, 
-            query, 
-            orderBy, 
-            onSnapshot, 
-            doc, 
-            updateDoc, 
-            increment, 
-            arrayUnion, 
-            arrayRemove, 
-            getDoc 
-        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-        import { 
-            getStorage, 
-            ref, 
-            uploadBytes, 
-            getDownloadURL 
-        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js";
-
-        // Your web app's Firebase configuration
+    <script>
+        // Firebase Config (Replace with yours)
         const firebaseConfig = {
-            apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
-            authDomain: "viratsawarup.firebaseapp.com",
-            projectId: "viratsawarup",
-            storageBucket: "viratsawarup.firebasestorage.app",
-            messagingSenderId: "264071748020",
-            appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-            measurementId: "G-7GJQPJCR1L"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-        const provider = new GoogleAuthProvider();
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
         // DOM Elements
-        const authBtn = document.getElementById('auth-btn');
-        const authModal = document.getElementById('auth-modal');
-        const closeAuth = document.getElementById('close-auth');
-        const authTitle = document.getElementById('auth-title');
-        const authTabs = document.querySelectorAll('.auth-tab');
-        const signinForm = document.getElementById('signin-form');
-        const signupForm = document.getElementById('signup-form');
-        const switchToSignup = document.getElementById('switch-to-signup');
-        const switchToSignin = document.getElementById('switch-to-signin');
-        const googleSigninBtn = document.getElementById('google-signin-btn');
-        const googleSignupBtn = document.getElementById('google-signup-btn');
-        const signinBtn = document.getElementById('signin-btn');
-        const signupBtn = document.getElementById('signup-btn');
-        
-        const postsList = document.getElementById('posts-list');
-        const postForm = document.getElementById('post-form');
-        const postContent = document.getElementById('post-content');
-        const postImage = document.getElementById('post-image');
-        const submitPost = document.getElementById('submit-post');
-        const mobileNavBtn = document.querySelector('.mobile-nav-btn');
-        const mobileNav = document.querySelector('.mobile-nav');
-        const mobileNavClose = document.querySelector('.mobile-nav-close');
-        const overlay = document.querySelector('.overlay');
-        const imagePreview = document.querySelector('.image-preview');
-        const previewImage = document.getElementById('preview-image');
-        const removeImageBtn = document.querySelector('.remove-image-btn');
+        const elements = {
+            loginSection: document.getElementById('loginSection'),
+            appSection: document.getElementById('appSection'),
+            googleLoginBtn: document.getElementById('googleLogin'),
+            facebookLoginBtn: document.getElementById('facebookLogin'),
+            logoutBtn: document.getElementById('logoutBtn'),
+            userPhoto: document.getElementById('userPhoto'),
+            userName: document.getElementById('userName'),
+            postBtn: document.getElementById('postBtn'),
+            postContent: document.getElementById('postContent'),
+            postsContainer: document.getElementById('postsContainer')
+        };
 
-        // Mobile Navigation Toggle
-        mobileNavBtn.addEventListener('click', () => {
-            mobileNav.classList.add('active');
-            overlay.classList.add('active');
-        });
-        
-        mobileNavClose.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            overlay.classList.remove('active');
-        });
-        
-        overlay.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            overlay.classList.remove('active');
-            authModal.style.display = 'none';
-        });
-
-        // Image Preview Functionality
-        postImage.addEventListener('change', function() {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                }
-                
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-        
-        removeImageBtn.addEventListener('click', function() {
-            postImage.value = '';
-            previewImage.src = '#';
-            imagePreview.style.display = 'none';
-        });
-
-        // Auth Modal Functionality
-        authBtn.addEventListener('click', () => {
-            authModal.style.display = 'flex';
-        });
-        
-        closeAuth.addEventListener('click', () => {
-            authModal.style.display = 'none';
-        });
-        
-        // Switch between sign in and sign up tabs
-        authTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Update active tab
-                authTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                // Update form visibility
-                const tabName = tab.getAttribute('data-tab');
-                signinForm.classList.remove('active');
-                signupForm.classList.remove('active');
-                
-                if (tabName === 'signin') {
-                    signinForm.classList.add('active');
-                    authTitle.textContent = 'Sign In';
-                } else {
-                    signupForm.classList.add('active');
-                    authTitle.textContent = 'Sign Up';
-                }
-            });
-        });
-        
-        // Switch to sign up from sign in footer
-        switchToSignup.addEventListener('click', (e) => {
-            e.preventDefault();
-            authTabs.forEach(t => t.classList.remove('active'));
-            document.querySelector('.auth-tab[data-tab="signup"]').classList.add('active');
-            signinForm.classList.remove('active');
-            signupForm.classList.add('active');
-            authTitle.textContent = 'Sign Up';
-        });
-        
-        // Switch to sign in from sign up footer
-        switchToSignin.addEventListener('click', (e) => {
-            e.preventDefault();
-            authTabs.forEach(t => t.classList.remove('active'));
-            document.querySelector('.auth-tab[data-tab="signin"]').classList.add('active');
-            signupForm.classList.remove('active');
-            signinForm.classList.add('active');
-            authTitle.textContent = 'Sign In';
-        });
-
-        // Email/Password Sign In
-        signinForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('signin-email').value;
-            const password = document.getElementById('signin-password').value;
-            
-            try {
-                signinBtn.innerHTML = '<span class="loading"></span> Signing in...';
-                await signInWithEmailAndPassword(auth, email, password);
-                authModal.style.display = 'none';
-                signinBtn.textContent = 'Sign In';
-            } catch (error) {
-                console.error("Sign in error:", error);
-                alert(error.message);
-                signinBtn.textContent = 'Sign In';
-            }
-        });
-        
-        // Email/Password Sign Up
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            const confirmPassword = document.getElementById('signup-confirm-password').value;
-            
-            if (password !== confirmPassword) {
-                alert("Passwords don't match!");
-                return;
-            }
-            
-            try {
-                signupBtn.innerHTML = '<span class="loading"></span> Signing up...';
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // Here you can update the user profile with the name
-                // Note: In Firebase v9+, you would use updateProfile function
-                
-                authModal.style.display = 'none';
-                signupBtn.textContent = 'Sign Up';
-            } catch (error) {
-                console.error("Sign up error:", error);
-                alert(error.message);
-                signupBtn.textContent = 'Sign Up';
-            }
-        });
-
-        // Google Authentication
-        async function handleGoogleAuth() {
-            try {
-                if (auth.currentUser) {
-                    // User is signed in, show confirmation before logout
-                    if (confirm('Are you sure you want to sign out?')) {
-                        authBtn.innerHTML = '<span class="loading"></span> Signing out...';
-                        await signOut(auth);
-                    }
-                } else {
-                    // User is not signed in, proceed with sign in
-                    authBtn.innerHTML = '<span class="loading"></span> Signing in...';
-                    await signInWithPopup(auth, provider);
-                    authModal.style.display = 'none';
-                }
-            } catch (error) {
-                console.error("Google Auth Error:", error);
-                alert('Error with Google authentication. Please try again.');
-                authBtn.textContent = auth.currentUser ? `Logout (${auth.currentUser.displayName || auth.currentUser.email})` : 'Sign In';
-            }
-        }
-        
-        googleSigninBtn.addEventListener('click', handleGoogleAuth);
-        googleSignupBtn.addEventListener('click', handleGoogleAuth);
-
-        // Auth state listener
-        onAuthStateChanged(auth, (user) => {
+        // Auth State Listener
+        auth.onAuthStateChanged(user => {
             if (user) {
-                // User is signed in
-                authBtn.textContent = `Logout (${user.displayName || user.email})`;
-                
-                // Show post form
-                postForm.style.display = 'block';
-                
-                // Load posts
+                elements.loginSection.style.display = 'none';
+                elements.appSection.style.display = 'block';
+                elements.userPhoto.src = user.photoURL;
+                elements.userName.textContent = user.displayName;
                 loadPosts();
             } else {
-                // User is signed out
-                authBtn.textContent = 'Sign In';
-                
-                // Hide post form
-                postForm.style.display = 'none';
-                postsList.innerHTML = '<p style="text-align: center; padding: 2rem;">Please sign in to view and create posts.</p>';
+                elements.loginSection.style.display = 'block';
+                elements.appSection.style.display = 'none';
             }
         });
 
-        // Post functionality
-        submitPost.addEventListener('click', async () => {
-            const content = postContent.value.trim();
-            const imageFile = postImage.files[0];
-            
-            if (!content && !imageFile) {
-                alert('Please add text or an image to post');
-                return;
-            }
-            
+        // Auth Functions
+        elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
+        elements.facebookLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.FacebookAuthProvider()));
+        elements.logoutBtn.addEventListener('click', () => auth.signOut());
+
+        async function handleAuth(provider) {
             try {
-                submitPost.innerHTML = '<span class="loading"></span> Posting...';
-                submitPost.disabled = true;
-                
-                let imageUrl = '';
-                
-                // Upload image if exists
-                if (imageFile) {
-                    const storageRef = ref(storage, `posts/${auth.currentUser.uid}/${Date.now()}_${imageFile.name}`);
-                    await uploadBytes(storageRef, imageFile);
-                    imageUrl = await getDownloadURL(storageRef);
-                }
-                
-                // Create post
-                await addDoc(collection(db, "posts"), {
+                await auth.signInWithPopup(provider);
+            } catch (error) {
+                alert(`Login Error: ${error.message}`);
+            }
+        }
+
+        // Post Functions
+        elements.postBtn.addEventListener('click', async () => {
+            const content = elements.postContent.value.trim();
+            if (!content) return;
+
+            try {
+                await db.collection('posts').add({
                     content: content,
                     userId: auth.currentUser.uid,
-                    userName: auth.currentUser.displayName || auth.currentUser.email,
-                    userPhoto: auth.currentUser.photoURL || null,
-                    likes: 0,
-                    likedBy: [],
-                    imageUrl: imageUrl || null,
-                    createdAt: serverTimestamp()
+                    userName: auth.currentUser.displayName,
+                    userPhoto: auth.currentUser.photoURL,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: [],
+                    comments: []
                 });
-                
-                // Clear form
-                postContent.value = '';
-                postImage.value = '';
-                previewImage.src = '#';
-                imagePreview.style.display = 'none';
-                
-                submitPost.textContent = 'Post';
-                submitPost.disabled = false;
+                elements.postContent.value = '';
+                loadPosts();
             } catch (error) {
-                console.error("Error adding post:", error);
-                alert('Error creating post. Please try again.');
-                submitPost.textContent = 'Post';
-                submitPost.disabled = false;
+                alert(`Post Error: ${error.message}`);
             }
         });
 
-        // Load posts
-        function loadPosts() {
-            const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+        // Load Posts
+        async function loadPosts() {
+            elements.postsContainer.innerHTML = '<h3>Feed</h3>';
             
-            onSnapshot(q, (querySnapshot) => {
-                postsList.innerHTML = '';
-                
-                if (querySnapshot.empty) {
-                    postsList.innerHTML = '<p style="text-align: center; padding: 2rem;">No posts yet. Be the first to post!</p>';
-                    return;
-                }
-                
-                querySnapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const isLiked = post.likedBy && post.likedBy.includes(auth.currentUser.uid);
-                    const postDate = post.createdAt?.toDate() || new Date();
+            try {
+                const snapshot = await db.collection('posts')
+                    .orderBy('timestamp', 'desc')
+                    .get();
                     
-                    const postElement = document.createElement('div');
-                    postElement.className = 'post';
-                    postElement.innerHTML = `
-                        <div class="post-header">
-                            ${post.userPhoto ? `<img src="${post.userPhoto}" class="post-user-img" alt="User">` : ''}
-                            <div>
-                                <div class="post-user-name">${post.userName}</div>
-                                <div class="post-date">${postDate.toLocaleString()}</div>
-                            </div>
+                snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
+            } catch (error) {
+                alert(`Load Error: ${error.message}`);
+            }
+        }
+
+        // Post Element Creation
+        function createPostElement(postId, post) {
+            const isLiked = post.likes.includes(auth.currentUser?.uid);
+            
+            const postHTML = `
+                <div class="post">
+                    <div class="post-header">
+                        <img src="${post.userPhoto}" alt="${post.userName}">
+                        <div>
+                            <strong>${post.userName}</strong>
+                            <p>${post.timestamp?.toDate().toLocaleString()}</p>
                         </div>
-                        <div class="post-content">${post.content || ''}</div>
-                        ${post.imageUrl ? `
-                        <div class="post-image-container">
-                            <img src="${post.imageUrl}" class="post-image" alt="Post image">
-                        </div>
-                        ` : ''}
-                        <div class="post-actions">
-                            <button class="like-btn ${isLiked ? 'liked' : ''}" data-id="${doc.id}">
-                                <span>${isLiked ? '❤️' : '🤍'}</span> ${post.likes || 0} Likes
-                            </button>
-                        </div>
-                    `;
-                    postsList.appendChild(postElement);
-                });
-                
-                // Add like button event listeners
-                document.querySelectorAll('.like-btn').forEach(btn => {
-                    btn.addEventListener('click', async () => {
-                        const postId = btn.getAttribute('data-id');
-                        const postRef = doc(db, "posts", postId);
-                        const userId = auth.currentUser.uid;
-                        
-                        // Check if user already liked the post
-                        const postDoc = await getDoc(postRef);
-                        if (!postDoc.exists()) return;
-                        
-                        const post = postDoc.data();
-                        const isLiked = post.likedBy && post.likedBy.includes(userId);
-                        
-                        if (isLiked) {
-                            // Unlike the post
-                            await updateDoc(postRef, {
-                                likes: increment(-1),
-                                likedBy: arrayRemove(userId)
-                            });
-                        } else {
-                            // Like the post
-                            await updateDoc(postRef, {
-                                likes: increment(1),
-                                likedBy: arrayUnion(userId)
-                            });
-                        }
-                    });
-                });
+                    </div>
+                    <div class="post-content">
+                        <p>${post.content}</p>
+                    </div>
+                    <div class="post-actions">
+                        <button class="like-btn" data-post-id="${postId}">
+                            <img src="${isLiked ? 'liked.png' : 'unliked.png'}" alt="Like">
+                            <span>${post.likes.length}</span>
+                        </button>
+                        <button class="comment-btn" data-post-id="${postId}">
+                            <img src="comment.png" alt="Comment">
+                            <span>${post.comments.length}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            elements.postsContainer.insertAdjacentHTML('beforeend', postHTML);
+        }
+
+        // Hamburger Menu
+        function toggleMenu() {
+            document.querySelector('.mobile-menu').classList.toggle('active');
+            document.querySelectorAll('.hamburger-line').forEach(line => {
+                line.style.transform = line.style.transform ? '' : 'rotate(45deg)';
             });
         }
+
+        // Close Menu on Outside Click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.hamburger') && !e.target.closest('.mobile-menu')) {
+                document.querySelector('.mobile-menu').classList.remove('active');
+                document.querySelectorAll('.hamburger-line').forEach(line => {
+                    line.style.transform = '';
+                });
+            }
+        });
     </script>
 </body>
 </html>
