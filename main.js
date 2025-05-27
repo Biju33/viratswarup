@@ -1,8 +1,23 @@
-// main.js (Firebase Modular SDK v9+)
+// main.js
 
-// Import the functions you need from the SDKs
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"; // Using CDN for simplicity in a single file setup
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
+// Import Firebase instances initialized in HTML
+import { auth, db } from './firebase-init.js'; // This path might need adjustment if your init script is not named like this conceptually
+                                            // BUT since init is in HTML, we'd actually get them from the global scope
+                                            // if we didn't use modules properly.
+                                            // The better way is to make the HTML script that initializes firebase EXPORT the values
+
+// For the setup where firebase-init.js IS the script in the HTML:
+// If you have <script type="module" id="firebaseInit"> /* ... exports app, auth, db ... */ </script>
+// and then <script type="module" src="main.js"></script>
+// You CANNOT directly import from the inline script.
+//
+// THE BEST APPROACH is to have firebase-init.js as a SEPARATE file, or put ALL JS in main.js
+
+// --- LET'S ASSUME YOU PUT FIREBASE INIT AT THE TOP OF main.js as per my previous full example ---
+// --- This makes main.js self-contained with Firebase initialization ---
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
 import {
     getAuth,
     onAuthStateChanged,
@@ -10,7 +25,7 @@ import {
     FacebookAuthProvider,
     signInWithPopup,
     signOut
-} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import {
     getFirestore,
     collection,
@@ -23,31 +38,30 @@ import {
     updateDoc,
     arrayUnion,
     arrayRemove,
-    serverTimestamp // For server-side timestamps
-} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
   authDomain: "viratsawarup.firebaseapp.com",
-  // databaseURL: "https://viratsawarup-default-rtdb.asia-southeast1.firebasedatabase.app", // Firestore doesn't use databaseURL in config
   projectId: "viratsawarup",
-  storageBucket: "viratsawarup.appspot.com", // Corrected this based on common patterns, if it was .firebasestorage.app ensure it's correct.
+  storageBucket: "viratsawarup.appspot.com", // <<< RE-VERIFY THIS
   messagingSenderId: "264071748020",
   appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
   measurementId: "G-7GJQPJCR1L"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app); // Optional: if you want to use analytics
+// const analytics = getAnalytics(app); // Uncomment if you use analytics features in main.js
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// DOM Elements
+
+// DOM Elements (same as before)
 const elements = {
     loginSection: document.getElementById('loginSection'),
     appSection: document.getElementById('appSection'),
+    // ... rest of the elements
     googleLoginBtn: document.getElementById('googleLoginBtn'),
     facebookLoginBtn: document.getElementById('facebookLoginBtn'),
     logoutBtn: document.getElementById('logoutBtn'),
@@ -60,8 +74,9 @@ const elements = {
     hamburger: document.querySelector('.hamburger')
 };
 
-// --- Auth State Listener ---
+// --- Auth State Listener --- (same as before)
 onAuthStateChanged(auth, user => {
+    // ... same logic
     if (user) {
         if (elements.loginSection) elements.loginSection.style.display = 'none';
         if (elements.appSection) elements.appSection.style.display = 'block';
@@ -77,12 +92,13 @@ onAuthStateChanged(auth, user => {
     }
 });
 
-// --- Auth Functions ---
+// --- Auth Functions --- (same as before, using imported auth, GoogleAuthProvider, etc.)
 async function handleAuth(provider) {
     try {
         await signInWithPopup(auth, provider);
     } catch (error) {
         console.error("Login Error:", error);
+        // ... error handling
         if (error.code === 'auth/popup-closed-by-user') {
             console.log("Login popup closed by user.");
         } else if (error.code === 'auth/account-exists-with-different-credential') {
@@ -96,11 +112,11 @@ async function handleAuth(provider) {
 if (elements.googleLoginBtn) {
     elements.googleLoginBtn.addEventListener('click', () => handleAuth(new GoogleAuthProvider()));
 }
+// ... rest of facebookLoginBtn and logoutBtn listeners
 
 if (elements.facebookLoginBtn) {
     elements.facebookLoginBtn.addEventListener('click', () => {
         alert("Facebook login requires developer setup. Please use Google Sign-In for now.");
-        // handleAuth(new FacebookAuthProvider());
     });
 }
 
@@ -108,9 +124,11 @@ if (elements.logoutBtn) {
     elements.logoutBtn.addEventListener('click', () => signOut(auth));
 }
 
-// --- Post Functions ---
+
+// --- Post Functions --- (same as before, using imported db, collection, addDoc, serverTimestamp, etc.)
 if (elements.postBtn) {
     elements.postBtn.addEventListener('click', async () => {
+        // ... same logic
         if (!elements.postContent) return;
         const content = elements.postContent.value.trim();
         const currentUser = auth.currentUser;
@@ -133,7 +151,7 @@ if (elements.postBtn) {
                 userId: currentUser.uid,
                 userName: currentUser.displayName || 'Anonymous User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                timestamp: serverTimestamp(), // Use serverTimestamp for consistency
+                timestamp: serverTimestamp(),
                 likes: [],
                 comments: []
             });
@@ -148,10 +166,11 @@ if (elements.postBtn) {
     });
 }
 
-// --- Load Posts (Real-time listener) ---
-let postsListenerUnsubscribe = null;
 
+// --- Load Posts (Real-time listener) --- (same as before)
+let postsListenerUnsubscribe = null;
 function loadPosts() {
+    // ... same logic
     if (!elements.postsContainer) return;
     if (postsListenerUnsubscribe) {
         postsListenerUnsubscribe();
@@ -164,8 +183,8 @@ function loadPosts() {
             elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
             return;
         }
-        querySnapshot.forEach((doc) => {
-            createPostElement(doc.id, doc.data());
+        querySnapshot.forEach((docSnap) => { // Changed doc to docSnap to avoid conflict with imported doc
+            createPostElement(docSnap.id, docSnap.data());
         });
     }, (error) => {
         console.error("Error loading posts: ", error);
@@ -174,8 +193,9 @@ function loadPosts() {
     });
 }
 
-// --- Post Element Creation and Interaction ---
+// --- Post Element Creation and Interaction --- (same logic, but ensure `doc` from firestore is used for postRef)
 function createPostElement(postId, post) {
+    // ... same logic
     if (!elements.postsContainer) return;
 
     const currentUser = auth.currentUser;
@@ -232,8 +252,8 @@ function createPostElement(postId, post) {
     postDiv.querySelector('.comment-toggle-btn').addEventListener('click', () => toggleComments(postId));
     postDiv.querySelector('.comment-form-actual').addEventListener('submit', (e) => handleCommentSubmit(e, postId));
 }
-
 function renderComment(comment, commentsListElement) {
+    // ... same logic
     const commentDiv = document.createElement('div');
     commentDiv.className = 'comment';
     const commentTimestamp = comment.timestamp ? (typeof comment.timestamp.toDate === 'function' ? comment.timestamp.toDate().toLocaleString() : new Date(comment.timestamp).toLocaleString()) : 'Recently';
@@ -255,36 +275,50 @@ function renderComment(comment, commentsListElement) {
 }
 
 async function handleLike(postId) {
+    // ... same logic
     const currentUser = auth.currentUser;
     if (!currentUser) {
         alert("Please log in to like posts.");
         return;
     }
 
-    const postRef = doc(db, 'posts', postId); // Use doc() for modular SDK
+    const postRef = doc(db, 'posts', postId);
     try {
-        await runTransaction(db, async (transaction) => { // Pass db to runTransaction
+        await runTransaction(db, async (transaction) => {
             const sfDoc = await transaction.get(postRef);
             if (!sfDoc.exists()) {
                 throw "Document does not exist!";
             }
             
+            // Use sfDoc.data().likes for array, not sfDoc.likes
             const currentLikes = sfDoc.data().likes || [];
-            let newLikes;
-            if (currentLikes.includes(currentUser.uid)) {
-                newLikes = arrayRemove(currentUser.uid); // Use arrayRemove for unliking
+            let newLikesArray = [...currentLikes]; // Create a mutable copy
+
+            if (newLikesArray.includes(currentUser.uid)) {
+                // Unlike: filter out the UID
+                newLikesArray = newLikesArray.filter(uid => uid !== currentUser.uid);
             } else {
-                newLikes = arrayUnion(currentUser.uid); // Use arrayUnion for liking
+                // Like: add the UID
+                newLikesArray.push(currentUser.uid);
             }
-            transaction.update(postRef, { likes: newLikes });
+            // The update object for transaction.update must use field paths for array operations with arrayUnion/Remove
+            // Simpler to just set the new array if not using arrayUnion/Remove directly in transaction
+            transaction.update(postRef, { likes: newLikesArray });
+
+            // Alternative using arrayUnion/Remove if preferred (more atomic but more verbose here)
+            // if (currentLikes.includes(currentUser.uid)) {
+            //     transaction.update(postRef, { likes: arrayRemove(currentUser.uid) });
+            // } else {
+            //     transaction.update(postRef, { likes: arrayUnion(currentUser.uid) });
+            // }
         });
     } catch (error) {
         console.error("Like transaction failed: ", error);
         alert("Failed to update like: " + error.message);
     }
 }
-
 function toggleComments(postId) {
+    // ... same logic
     const commentsArea = document.getElementById(`comments-area-${postId}`);
     if (commentsArea) {
         const isHidden = commentsArea.style.display === 'none' || commentsArea.style.display === '';
@@ -295,8 +329,8 @@ function toggleComments(postId) {
         }
     }
 }
-
 async function handleCommentSubmit(event, postId) {
+    // ... same logic
     event.preventDefault();
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -321,13 +355,13 @@ async function handleCommentSubmit(event, postId) {
         userName: currentUser.displayName || 'User',
         userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
         text: commentText,
-        timestamp: serverTimestamp() // Use serverTimestamp
+        timestamp: serverTimestamp()
     };
 
-    const postRef = doc(db, 'posts', postId); // Use doc()
+    const postRef = doc(db, 'posts', postId);
     try {
-        await updateDoc(postRef, { // Use updateDoc()
-            comments: arrayUnion(newComment) // Use arrayUnion()
+        await updateDoc(postRef, {
+            comments: arrayUnion(newComment)
         });
         commentTextInput.value = '';
     } catch (error) {
@@ -339,8 +373,9 @@ async function handleCommentSubmit(event, postId) {
     }
 }
 
-// --- Hamburger Menu & Navigation ---
+// --- Hamburger Menu & Navigation --- (same as before)
 function toggleMenu() {
+    // ... same logic
     if (elements.mobileMenu) {
         elements.mobileMenu.classList.toggle('active');
         if (elements.hamburger) {
@@ -348,8 +383,8 @@ function toggleMenu() {
         }
     }
 }
-
 function closeMenuAndScroll(event) {
+    // ... same logic
     if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
         toggleMenu();
     }
@@ -362,12 +397,11 @@ function closeMenuAndScroll(event) {
         }
     }
 }
-
 if (elements.hamburger) {
     elements.hamburger.addEventListener('click', toggleMenu);
 }
-
 document.querySelectorAll('.mobile-menu a').forEach(link => {
+    // ... same logic
     if (link.getAttribute('href').startsWith('#')) {
         link.addEventListener('click', closeMenuAndScroll);
     } else {
@@ -378,8 +412,8 @@ document.querySelectorAll('.mobile-menu a').forEach(link => {
         });
     }
 });
-
 document.addEventListener('click', (e) => {
+    // ... same logic
     if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
         elements.hamburger && !elements.hamburger.contains(e.target) &&
         !elements.mobileMenu.contains(e.target)) {
@@ -387,17 +421,17 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// --- Utility function to escape HTML ---
+// --- Utility function to escape HTML --- (same as before)
 function escapeHTML(str) {
+    // ... same logic
     const div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
 }
 
-// --- Initial load check ---
-// The onAuthStateChanged listener is the primary way to handle this.
-// This explicit check can sometimes make the UI feel slightly faster on first load if the user is already signed in.
+// --- Initial load check --- (same as before)
 if (auth.currentUser) {
+    // ... same logic
     if (elements.loginSection) elements.loginSection.style.display = 'none';
     if (elements.appSection) elements.appSection.style.display = 'block';
     if (elements.userPhoto) elements.userPhoto.src = auth.currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
