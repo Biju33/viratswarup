@@ -1,5 +1,6 @@
-// main.js
-// Firebase Configuration and Initialization
+// ---------------------------
+// Firebase Initialization
+// ---------------------------
 const firebaseConfig = {
   apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
   authDomain: "viratsawarup.firebaseapp.com",
@@ -12,54 +13,84 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+const analytics = firebase.analytics();
 
+// ---------------------------
 // DOM Elements
+// ---------------------------
 const elements = {
+  // Auth Elements
   loginSection: document.getElementById('loginSection'),
   appSection: document.getElementById('appSection'),
   googleLoginBtn: document.getElementById('googleLogin'),
   facebookLoginBtn: document.getElementById('facebookLogin'),
   logoutBtn: document.getElementById('logoutBtn'),
+  
+  // User Profile
   userPhoto: document.getElementById('userPhoto'),
   userName: document.getElementById('userName'),
+  
+  // Post Elements
   postBtn: document.getElementById('postBtn'),
   postContent: document.getElementById('postContent'),
   postsContainer: document.getElementById('postsContainer'),
+  
+  // Navigation
   hamburger: document.querySelector('.hamburger'),
   mobileMenu: document.querySelector('.mobile-menu')
 };
 
-// Auth State Listener
+// ---------------------------
+// Auth Management
+// ---------------------------
 auth.onAuthStateChanged(user => {
   if (user) {
+    // Show app content
     elements.loginSection.style.display = 'none';
     elements.appSection.style.display = 'block';
-    elements.userPhoto.src = user.photoURL;
+    
+    // Update user profile
+    elements.userPhoto.src = user.photoURL || 'default-user.png';
     elements.userName.textContent = user.displayName;
+    
+    // Track login event
+    firebase.analytics().logEvent('login');
+    
+    // Load posts
     loadPosts();
   } else {
+    // Show login screen
     elements.loginSection.style.display = 'block';
     elements.appSection.style.display = 'none';
   }
 });
 
-// Auth Functions
+// Social Login Handlers
 elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
 elements.facebookLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.FacebookAuthProvider()));
-elements.logoutBtn.addEventListener('click', () => auth.signOut());
 
+// Logout Handler
+elements.logoutBtn.addEventListener('click', () => {
+  auth.signOut();
+  firebase.analytics().logEvent('logout');
+});
+
+// Auth Function
 async function handleAuth(provider) {
   try {
     await auth.signInWithPopup(provider);
   } catch (error) {
-    alert(`Login Error: ${error.message}`);
+    showError(`Login Failed: ${error.message}`);
   }
 }
 
-// Post Functions
+// ---------------------------
+// Post Management
+// ---------------------------
+// Create Post
 elements.postBtn.addEventListener('click', async () => {
   const content = elements.postContent.value.trim();
   if (!content) return;
@@ -76,30 +107,88 @@ elements.postBtn.addEventListener('click', async () => {
     });
     elements.postContent.value = '';
     loadPosts();
+    firebase.analytics().logEvent('create_post');
   } catch (error) {
-    alert(`Post Error: ${error.message}`);
+    showError(`Post Failed: ${error.message}`);
   }
 });
 
-// Load and Display Posts
+// Load Posts
 async function loadPosts() {
-  elements.postsContainer.innerHTML = '<h3>Feed</h3>';
-  
   try {
+    elements.postsContainer.innerHTML = '<h3>Loading Posts...</h3>';
+    
     const snapshot = await db.collection('posts')
       .orderBy('timestamp', 'desc')
       .get();
-      
+
+    elements.postsContainer.innerHTML = '<h3>Feed</h3>';
     snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
   } catch (error) {
-    alert(`Load Error: ${error.message}`);
+    showError(`Failed to Load Posts: ${error.message}`);
   }
 }
 
+// Like/Unlike Post
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('.like-btn')) {
+    const postId = e.target.closest('.like-btn').dataset.postId;
+    const postRef = db.collection('posts').doc(postId);
+    const userId = auth.currentUser.uid;
+
+    const post = await postRef.get();
+    const likes = post.data().likes;
+
+    if (likes.includes(userId)) {
+      await postRef.update({
+        likes: firebase.firestore.FieldValue.arrayRemove(userId)
+      });
+      firebase.analytics().logEvent('unlike_post');
+    } else {
+      await postRef.update({
+        likes: firebase.firestore.FieldValue.arrayUnion(userId)
+      });
+      firebase.analytics().logEvent('like_post');
+    }
+    loadPosts();
+  }
+});
+
+// Add Comment
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('.comment-btn')) {
+    const postId = e.target.closest('.comment-btn').dataset.postId;
+    const comment = prompt('Enter your comment:');
+    
+    if (comment) {
+      await db.collection('posts').doc(postId).update({
+        comments: firebase.firestore.FieldValue.arrayUnion({
+          text: comment,
+          user: auth.currentUser.displayName,
+          timestamp: new Date()
+        })
+      });
+      firebase.analytics().logEvent('add_comment');
+      loadPosts();
+    }
+  }
+});
+
+// ---------------------------
+// UI Components
+// ---------------------------
 function createPostElement(postId, post) {
   const isLiked = post.likes.includes(auth.currentUser?.uid);
+  const commentsHTML = post.comments.map(comment => `
+    <div class="comment">
+      <strong>${comment.user}</strong>
+      <p>${comment.text}</p>
+      <small>${comment.timestamp.toDate().toLocaleString()}</small>
+    </div>
+  `).join('');
+
   const postHTML = `
-    <div class="post">
+    <div class="post" data-post-id="${postId}">
       <div class="post-header">
         <img src="${post.userPhoto}" alt="${post.userName}">
         <div>
@@ -112,20 +201,34 @@ function createPostElement(postId, post) {
       </div>
       <div class="post-actions">
         <button class="like-btn" data-post-id="${postId}">
-          <img src="${isLiked ? 'liked.png' : 'unliked.png'}" alt="Like">
-          <span>${post.likes.length}</span>
+          <i class="fas fa-heart ${isLiked ? 'liked' : ''}"></i>
+          ${post.likes.length}
         </button>
         <button class="comment-btn" data-post-id="${postId}">
-          <img src="comment.png" alt="Comment">
-          <span>${post.comments.length}</span>
+          <i class="fas fa-comment"></i>
+          ${post.comments.length}
         </button>
+      </div>
+      <div class="comments">
+        ${commentsHTML}
       </div>
     </div>
   `;
   elements.postsContainer.insertAdjacentHTML('beforeend', postHTML);
 }
 
-// Hamburger Menu Functions
+// ---------------------------
+// Helper Functions
+// ---------------------------
+function showError(message) {
+  alert(message);
+  console.error(message);
+}
+
+// ---------------------------
+// Navigation Management
+// ---------------------------
+// Hamburger Menu
 elements.hamburger.addEventListener('click', toggleMenu);
 
 function toggleMenu() {
@@ -145,7 +248,19 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Initial Load
+// Smooth Scroll for Mobile Menu
+document.querySelectorAll('.mobile-menu a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const section = document.querySelector(e.target.getAttribute('href'));
+    section.scrollIntoView({ behavior: 'smooth' });
+    toggleMenu();
+  });
+});
+
+// ---------------------------
+// Initialization
+// ---------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  // Any initialization code needed when page loads
+  firebase.analytics().logEvent('page_view');
 });
