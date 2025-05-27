@@ -1,460 +1,391 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What is our goal? - ViratSwarup</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VIRAT SWARUP</title>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary-color: #8B0000;
-            --secondary-color: #A52A2A;
-            --light-color: #F5F5F5;
-            --dark-color: #333;
+      /* Reset & Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Georgia", serif;
+      }
+
+      body {
+        background: #ffffff;
+        color: #2c2c2c;
+      }
+
+      /* हैडर सेक्शन */
+      .header {
+        padding: 95px 20px 45px;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #8b0000;
+      }
+      .header h1 {
+        font-size: 52px;
+        letter-spacing: 3.2px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        color: white;
+      }
+      .header h2 {
+        font-size: 22px;
+        color: #fff;
+        font-weight: 300;
+      }
+
+      /* हैमबर्गर मेन्यू */
+      .hamburger {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        cursor: pointer;
+        display: none;
+        z-index: 1000;
+      }
+      .hamburger-line {
+        width: 28px;
+        height: 2px;
+        background: #000000;
+        margin: 6px 0;
+        transition: 0.4s;
+      }
+
+      /* मोबाइल मेन्यू */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100%;
+        background: #8b0000;
+        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+        transition: 0.4s;
+        padding-top: 80px;
+        z-index: 999;
+      }
+      .mobile-menu.active {
+        right: 0;
+      }
+      .mobile-menu a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px 30px;
+        color: #fff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .mobile-menu i {
+        width: 25px;
+        font-size: 20px;
+        color: #fff;
+      }
+
+      /* बॉटम नेविगेशन */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #8b0000;
+        border-top: 1px solid #eee;
+        padding: 8px 0;
+        display: none;
+        z-index: 999;
+      }
+      .bottom-nav ul {
+        display: flex;
+        justify-content: space-around;
+        list-style: none;
+      }
+      .bottom-nav a {
+        color: #fff;
+        font-size: 16px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        transition: background 0.3s;
+      }
+
+      .bottom-nav a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      /* डेस्कटॉप नेविगेशन */
+      .desktop-nav {
+        margin: 45px 0;
+      }
+      .desktop-nav ul {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        list-style: none;
+      }
+      .desktop-nav a {
+        color: #8b0000;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+      }
+
+      /* रिस्पॉन्सिव डिज़ाइन */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: block;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+        .desktop-nav {
+          display: none;
         }
-        
-        body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.6;
+        .bottom-nav {
+          display: block;
         }
-        
-        /* मोबाइल फ्रेंडली हेडर */
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        .header {
+          padding: 70px 20px 35px;
         }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .header h1 {
+          font-size: 42px;
         }
-        
-        /* डेस्कटॉप नेविगेशन */
-        .desktop-nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        .desktop-nav ul li {
-            margin-left: 1.5rem;
-        }
-        
-        .desktop-nav ul li a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-        
-        .desktop-nav ul li a:hover {
-            color: #FFD700;
-        }
-        
-        /* मोबाइल नेविगेशन */
-        .mobile-nav-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background-color: var(--primary-color);
-            z-index: 1000;
-            transition: left 0.3s ease;
-            padding: 2rem;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-        }
-        
-        .mobile-nav.active {
-            left: 0;
-        }
-        
-        .mobile-nav ul {
-            list-style: none;
-            margin-top: 2rem;
-        }
-        
-        .mobile-nav ul li {
-            margin-bottom: 1.5rem;
-        }
-        
-        .mobile-nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            display: block;
-            padding: 0.5rem 0;
-        }
-        
-        .mobile-nav-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-        
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
-        }
-        
-        .overlay.active {
-            display: block;
-        }
-        
-        main {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        
-        .blog-post {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .blog-post h2 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-        
-        .post-meta {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-        
-        .blog-content {
-            margin-bottom: 1rem;
-        }
-        
-        .blog-content p {
-            margin-bottom: 1rem;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        
-        .blog-content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 1rem 0;
-            display: block;
-        }
-        
-        .embed-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            margin: 1rem 0;
-            border-radius: 8px;
-        }
-        
-        .embed-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-        }
-        
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        /* क्वोट स्टाइल */
-        blockquote {
-            border-left: 4px solid var(--primary-color);
-            padding-left: 1rem;
-            margin: 1rem 0;
-            color: #555;
-            font-style: italic;
-        }
-        
-        /* रेस्पॉन्सिव डिज़ाइन */
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            
-            .mobile-nav-btn {
-                display: block;
-            }
-            
-            .logo {
-                font-size: 1.3rem;
-            }
-            
-            main {
-                padding: 0 0.8rem;
-                margin: 1rem auto;
-            }
-            
-            .blog-post {
-                padding: 1.2rem;
-            }
-            
-            .blog-post h2 {
-                font-size: 1.3rem;
-            }
-            
-            .blog-content p {
-                font-size: 0.95rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .blog-post {
-                padding: 1rem;
-            }
-            
-            .blog-post h2 {
-                font-size: 1.2rem;
-            }
-            
-            footer {
-                padding: 1rem;
-                font-size: 0.9rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <header>
-        <div class="logo">ViratSwarup</div>
-        
-        <!-- डेस्कटॉप नेविगेशन -->
-        <nav class="desktop-nav">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="agnosia.html">Agnosia</a></li>
-                <li><a href="enigma.html">Enigma</a></li>
-                <li><a href="emulate.html">Emulate</a></li>
-            </ul>
-        </nav>
-        
-        <!-- मोबाइल नेविगेशन बटन -->
-        <button class="mobile-nav-btn">☰</button>
-    </header>
-    
-    <!-- मोबाइल नेविगेशन मेनू -->
-    <div class="mobile-nav">
-        <button class="mobile-nav-close">×</button>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="agnosia.html">Agnosia</a></li>
-            <li><a href="enigma.html">Enigma</a></li>
-            <li><a href="emulate.html">Emulate</a></li>
-        </ul>
+  </head>
+  <body>
+    <!-- हैमबर्गर आइकन -->
+    <div class="hamburger" onclick="toggleMenu()">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
     </div>
-    
-    <!-- ओवरले -->
-    <div class="overlay"></div>
-    
-    <main>        
-        <article class="blog-post">
-            <h1>Reality and Non-Reality: The Search for True Reality</h2>
-			            <h2>What is Reality?</h2>
-                      <div class="blog-content">
-                             
-                <p>Reality is the true and permanent truth, something that is constant and unchanging.
-				The things we see, hear, and feel are not actually reality. What we experience through our senses—like sight, hearing, and touch—is just an impression or a perception, and it changes all the time.
 
-For example, when we look at the sun, we see a bright, glowing object in the sky. But in reality, the sun is a massive ball of gas.
- What we see with our eyes is not the full truth. Our senses can only perceive a small part of the whole reality, and what we see is just a tiny fraction of what exists.
+    <!-- मोबाइल मेन्यू -->
+    <nav class="mobile-menu">
+      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
+      <a href="#share"><i class="fas fa-share"></i>Share</a>
+      <a href="index.html"><i class="fas fa-home"></i>Home</a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
+      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
+      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+    </nav>
 
-Reality is Unchanging:
+    <!-- हैडर -->
+    <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
 
-True reality is something that stays the same, no matter the time, place, or situation. Whether or not we understand it, reality remains constant. Things like the universe, stars, and planets are all part of this deeper, unchanging reality, but we can't fully grasp their true form with our senses alone.
+  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
+  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
 
-Why Can't We See Reality?
+    </header>
 
-What we perceive through our senses is just a filtered version of reality. Our eyes, for example, can only see three primary colors, but there are many more colors beyond what we can detect. This shows us that everything we experience is a limited version of what’s truly out there.
+    <!-- डेस्कटॉप नेविगेशन -->
+    <nav class="desktop-nav">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="#agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+        <li><a href="#enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
+        <li><a href="#emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      </ul>
+    </nav>
 
-The real essence of reality can only be understood by going beyond the limitations of our senses—through deep meditation, self-awareness, and spiritual understanding. When we break free from the illusions created by our mind and senses, we begin to connect with the true nature of reality.</p>
-                                                
-            </div>
-        </article>
-        
-        <article class="blog-post">
-            <h2>The Illusion of Non-Reality:</h2>
-            <div class="blog-content">
-                <p>Non-reality is the world as we experience it through our senses.
-				The objects, phenomena, and events we encounter
-				daily are not the true essence of existence but mere representations of a deeper, 
-				unseen reality. This world of appearances is fleeting, ever-changing, and filled with illusions.
-				From the nature of life to the form of matter,
-				everything we interact with is subject to time and decay.
-
-In essence, the world we experience is a projection of the mind and senses. The objects we see, the sounds we hear, the tastes and smells we encounter — all of these are merely interpretations created by our brain based on the sensory data it receives. Thus, they are not ultimate truths but a filtered, incomplete version of the real world.</p>
-
-            </div>
-        </article>
-		
-		<article class="blog-post">
-            <div class="blog-content">
-			<h2>The Limitation of Human Perception</h2>
-             <p>Human perception is inherently limited. Our senses are designed to interact with the world in specific ways, yet they fail to offer us a complete understanding of reality. One of the clearest examples is our limited range of vision. Humans can only perceive three colors — red, green, and blue — and all other colors are simply a blend of these. The vast spectrum of light, including ultraviolet and infrared, is invisible to us.
-
-Similarly, our hearing is restricted to a narrow band of frequencies, and our sense of touch only allows us to perceive a small portion of the textures and temperatures around us. We rely on our senses to navigate the world, but these senses are not capable of capturing the totality of existence.
-
-Even time itself is an illusion created by our perception. We perceive time as linear, moving forward from the past to the present and into the future. Yet, in the grand scheme of the universe, time is not so straightforward. It is merely a construct of our limited mind and senses, providing us with a framework through which we can make sense of our lives.</p>
-                                        
-            </div>
-        </article>
-        
-        <article class="blog-post">
-            <h2>Searching for Reality in Non-Reality:</h2>
-            <div class="blog-content">
-                <p>Despite the limitations of our senses, humans have an innate desire to seek truth, to uncover the nature of existence beyond the veil of illusion. This search for reality, for what is truly real, is an ongoing pursuit in human consciousness. We constantly search for answers to questions like "What is the nature of life?" "What is the purpose of our existence?" and "What lies beyond this world?"
-
-Philosophers, scientists, and spiritual seekers alike have embarked on this quest for understanding. Yet, while science explores the material world and its physical laws, it often fails to address the deeper questions of existence. Spiritual traditions, on the other hand, teach that the path to reality lies not through the senses but through inner contemplation and transcendence.
-
-We search for reality within the world of non-reality, but the true nature of existence can only be known when we transcend the limitations of our senses. Spiritual practices such as meditation, yoga, and self-inquiry offer a pathway to experience a deeper reality that exists beyond the physical world.<p>               
- 
-           </div>
-       </article>
-
-        <article class="blog-post">
-            <h2>The Interplay Between Reality and Non-Reality:</h2>
-            <div class="blog-content">
-                <p>Reality and non-reality are not two separate entities; they are two aspects of the same existence. Non-reality is not something to be dismissed or rejected, but rather understood as a part of the whole. It is through the non-reality — through our physical world, our experiences, and our perceptions — that we are able to begin the search for the ultimate reality.
-
-Non-reality is the canvas upon which reality is painted. It is the field of play in which the divine unfolds, where the human soul seeks to understand its true nature. As we grow in awareness, we come to realize that the line between reality and non-reality is not always so clear-cut. The more we explore and question the world around us, the closer we come to understanding the deeper truths that lie hidden beneath the surface.</p>
-               
-            </div>
-       </article>
-
-        <article class="blog-post">
-            <h2>The Role of the Mind in Shaping Reality:<h2>
-            <div class="blog-content">
-                <p>The mind plays a central role in how we experience both reality and non-reality. Our thoughts, beliefs, and perceptions create the lens through which we view the world. The mind filters and interprets sensory information, creating a version of reality that is unique to each individual.
-
-In this way, the mind is both a tool for understanding and a barrier to true understanding. While it allows us to navigate the world and make sense of our experiences, it also distorts and limits our perception. The mind is bound by the limitations of the senses and is often caught in the web of illusion.
-
-To experience reality in its purest form, we must transcend the mind's conditioning and ego. This can only be achieved through practices that quiet the mind and open us to higher states of consciousness. Meditation, mindfulness, and spiritual discipline offer a means of transcending the mind and experiencing a deeper reality that lies beyond the senses.<p>
-            </div>
-       </article>
-
-        <article class="blog-post">
-            <h2>​The Search for Ultimate Reality:</h2>
-            <div class="blog-content">
-                <p>The ultimate reality, or "Sat," as described in Vedantic philosophy, is not something that can be seen or touched. It is the unchanging, eternal essence of existence. It is pure consciousness, beyond form and beyond time. To experience this reality, one must look beyond the transient world of non-reality and turn inward.
-
-The search for ultimate reality is a spiritual journey, one that requires dedication, introspection, and the shedding of illusions. It is a journey that can only be undertaken by those who are willing to question everything they have been taught and see the world through a new lens. The true reality is within us, and it is through self-realization and awakening that we come to know it<p>            
-            </div>
-       </article>
-
-<article class="blog-post">
-            <h2>​Conclusion:</h2>
-            <div class="blog-content">
-                <p>Reality and non-reality are two sides of the same coin. While non-reality offers us the material world and the sensory experiences we rely on daily, it is through transcending these illusions that we come closer to understanding the true nature of existence. The search for reality is not a search for something external, but a journey inward, where we seek to uncover the eternal truth that lies beyond the limitations of the senses and the mind.
-
-By understanding the relationship between reality and non-reality, we can begin to see through the illusions that govern our perception and move closer to the ultimate truth that is present within us all. It is only through this inner awakening that we can experience reality in its purest form — a reality that is beyond time, space, and the material world.</p>
-               
-            </div>
-       </article>
-
-    </main>
-    
-<footer>
-        <p>&copy; 2023 ViratSwarup. All rights reserved.</p>
-    </footer>
+    <!-- बॉटम नेविगेशन -->
+    <nav class="bottom-nav">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      </ul>
+    </nav>
 
     <script>
-        // मोबाइल नेविगेशन टॉगल
-        const mobileNavBtn = document.querySelector('.mobile-nav-btn');
-        const mobileNav = document.querySelector('.mobile-nav');
-        const mobileNavClose = document.querySelector('.mobile-nav-close');
-        const overlay = document.querySelector('.overlay');
-        
-        mobileNavBtn.addEventListener('click', () => {
-            mobileNav.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+      // हैमबर्गर मेन्यू फंक्शन
+      function toggleMenu() {
+        document.querySelector(".mobile-menu").classList.toggle("active");
+        document.querySelectorAll(".hamburger-line").forEach((line) => {
+          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
         });
-        
-        mobileNavClose.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-        
-        overlay.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-        
-        // इमेज लेजी लोडिंग
-        document.addEventListener("DOMContentLoaded", function() {
-            const lazyImages = [].slice.call(document.querySelectorAll("img[loading='lazy']"));
-            
-            if ("IntersectionObserver" in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
-                
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            }
-        });
-        
-        // टच इवेंट के लिए हवर इफेक्ट को हटाना
-        document.addEventListener('touchstart', function() {}, true);
+      }
+
+      // क्लिक आउटसाइड करने पर मेन्यू बंद
+      document.addEventListener("click", (e) => {
+        if (
+          !e.target.closest(".hamburger") &&
+          !e.target.closest(".mobile-menu")
+        ) {
+          document.querySelector(".mobile-menu").classList.remove("active");
+          document.querySelectorAll(".hamburger-line").forEach((line) => {
+            line.style.transform = "";
+          });
+        }
+      });
     </script>
-</body>
+    <!-- विराट स्वरूप का दर्शन कंटेंट सेक्शन -->
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   What is Reality?
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    Reality is the true and permanent truth, something that is constant and unchanging. The things we see, hear, and feel are not actually reality. What we experience through our senses—like sight, hearing, and touch—is just an impression or a perception, and it changes all the time. For example, when we look at the sun, we see a bright, glowing object in the sky. But in reality, the sun is a massive ball of gas. What we see with our eyes is not the full truth. Our senses can only perceive a small part of the whole reality, and what we see is just a tiny fraction of what exists. Reality is Unchanging: True reality is something that stays the same, no matter the time, place, or situation. Whether or not we understand it, reality remains constant. Things like the universe, stars, and planets are all part of this deeper, unchanging reality, but we can't fully grasp their true form with our senses alone. Why Can't We See Reality? What we perceive through our senses is just a filtered version of reality. Our eyes, for example, can only see three primary colors, but there are many more colors beyond what we can detect. This shows us that everything we experience is a limited version of what’s truly out there. The real essence of reality can only be understood by going beyond the limitations of our senses—through deep meditation, self-awareness, and spiritual understanding. When we break free from the illusions created by our mind and senses, we begin to connect with the true nature of reality.
+	</p>
+</section>
+
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   The Illusion of Non-Reality:
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    Non-reality is the world as we experience it through our senses. The objects, phenomena, and events we encounter daily are not the true essence of existence but mere representations of a deeper, unseen reality. This world of appearances is fleeting, ever-changing, and filled with illusions. From the nature of life to the form of matter, everything we interact with is subject to time and decay. In essence, the world we experience is a projection of the mind and senses. The objects we see, the sounds we hear, the tastes and smells we encounter — all of these are merely interpretations created by our brain based on the sensory data it receives. Thus, they are not ultimate truths but a filtered, incomplete version of the real world.
+	</p>
+</section>
+
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   The Limitation of Human Perception:
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    Human perception is inherently limited. Our senses are designed to interact with the world in specific ways, yet they fail to offer us a complete understanding of reality. One of the clearest examples is our limited range of vision. Humans can only perceive three colors — red, green, and blue — and all other colors are simply a blend of these. The vast spectrum of light, including ultraviolet and infrared, is invisible to us. Similarly, our hearing is restricted to a narrow band of frequencies, and our sense of touch only allows us to perceive a small portion of the textures and temperatures around us. We rely on our senses to navigate the world, but these senses are not capable of capturing the totality of existence. Even time itself is an illusion created by our perception. We perceive time as linear, moving forward from the past to the present and into the future. Yet, in the grand scheme of the universe, time is not so straightforward. It is merely a construct of our limited mind and senses, providing us with a framework through which we can make sense of our lives.
+	</p>
+</section>
+
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   Searching for Reality in Non-Reality:
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    Despite the limitations of our senses, humans have an innate desire to seek truth, to uncover the nature of existence beyond the veil of illusion. This search for reality, for what is truly real, is an ongoing pursuit in human consciousness. We constantly search for answers to questions like "What is the nature of life?" "What is the purpose of our existence?" and "What lies beyond this world?" Philosophers, scientists, and spiritual seekers alike have embarked on this quest for understanding. Yet, while science explores the material world and its physical laws, it often fails to address the deeper questions of existence. Spiritual traditions, on the other hand, teach that the path to reality lies not through the senses but through inner contemplation and transcendence. We search for reality within the world of non-reality, but the true nature of existence can only be known when we transcend the limitations of our senses. Spiritual practices such as meditation, yoga, and self-inquiry offer a pathway to experience a deeper reality that exists beyond the physical world.
+	</p>
+</section>
+
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   The Interplay Between Reality and Non-Reality:
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    Reality and non-reality are not two separate entities; they are two aspects of the same existence. Non-reality is not something to be dismissed or rejected, but rather understood as a part of the whole. It is through the non-reality — through our physical world, our experiences, and our perceptions — that we are able to begin the search for the ultimate reality. Non-reality is the canvas upon which reality is painted. It is the field of play in which the divine unfolds, where the human soul seeks to understand its true nature. As we grow in awareness, we come to realize that the line between reality and non-reality is not always so clear-cut. The more we explore and question the world around us, the closer we come to understanding the deeper truths that lie hidden beneath the surface.
+	</p>
+</section>
+
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   The Role of the Mind in Shaping Reality:
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    The mind plays a central role in how we experience both reality and non-reality. Our thoughts, beliefs, and perceptions create the lens through which we view the world. The mind filters and interprets sensory information, creating a version of reality that is unique to each individual. In this way, the mind is both a tool for understanding and a barrier to true understanding. While it allows us to navigate the world and make sense of our experiences, it also distorts and limits our perception. The mind is bound by the limitations of the senses and is often caught in the web of illusion. To experience reality in its purest form, we must transcend the mind's conditioning and ego. This can only be achieved through practices that quiet the mind and open us to higher states of consciousness. Meditation, mindfulness, and spiritual discipline offer a means of transcending the mind and experiencing a deeper reality that lies beyond the senses.
+	</p>
+</section>
+
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   The Search for Ultimate Reality:
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    The ultimate reality, or "Sat," as described in Vedantic philosophy, is not something that can be seen or touched. It is the unchanging, eternal essence of existence. It is pure consciousness, beyond form and beyond time. To experience this reality, one must look beyond the transient world of non-reality and turn inward. The search for ultimate reality is a spiritual journey, one that requires dedication, introspection, and the shedding of illusions. It is a journey that can only be undertaken by those who are willing to question everything they have been taught and see the world through a new lens. The true reality is within us, and it is through self-realization and awakening that we come to know it.
+	</p>
+</section>
+
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+   Conclusion:
+  </h2>
+ 
+  <p style="font-size: 18px; line-height: 1.8;">
+    Reality and non-reality are two sides of the same coin. While non-reality offers us the material world and the sensory experiences we rely on daily, it is through transcending these illusions that we come closer to understanding the true nature of existence. The search for reality is not a search for something external, but a journey inward, where we seek to uncover the eternal truth that lies beyond the limitations of the senses and the mind. By understanding the relationship between reality and non-reality, we can begin to see through the illusions that govern our perception and move closer to the ultimate truth that is present within us all. It is only through this inner awakening that we can experience reality in its purest form — a reality that is beyond time, space, and the material world.
+	</p>
+</section>
+
+
 </html>
