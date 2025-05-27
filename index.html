@@ -410,6 +410,24 @@ const firebaseConfig = {
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        <!-- Login Button -->
+<button onclick="signInWithGoogle()">Google से लॉगिन करें</button>
+
+<script>
+  function signInWithGoogle() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        var user = result.user;
+        alert("Welcome " + user.displayName);
+        // आगे का code जैसे dashboard ले जाना, user data दिखाना आदि
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+  }
+</script>
+
         // DOM Elements
         const elements = {
             loginSection: document.getElementById('loginSection'),
