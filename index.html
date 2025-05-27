@@ -538,5 +538,121 @@ const firebaseConfig = {
             }
         });
     </script>
+<script>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
+        authDomain: "viratsawarup.firebaseapp.com",
+        projectId: "viratsawarup",
+        storageBucket: "viratsawarup.appspot.com",
+        messagingSenderId: "264071748020",
+        appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
+        measurementId: "G-7GJQPJCR1L"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // UI Elements
+    const loginSection = document.getElementById('loginSection');
+    const appSection = document.getElementById('appSection');
+    const googleLoginBtn = document.getElementById('googleLogin');
+    const facebookLoginBtn = document.getElementById('facebookLogin');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userPhoto = document.getElementById('userPhoto');
+    const userName = document.getElementById('userName');
+    const postBtn = document.getElementById('postBtn');
+    const postContent = document.getElementById('postContent');
+    const postsContainer = document.getElementById('postsContainer');
+
+    // Toggle UI
+    function showApp(user) {
+        loginSection.style.display = "none";
+        appSection.style.display = "block";
+        userName.innerText = user.displayName;
+        userPhoto.src = user.photoURL;
+        loadPosts();
+    }
+
+    function showLogin() {
+        loginSection.style.display = "block";
+        appSection.style.display = "none";
+    }
+
+    // Google Sign In
+    googleLoginBtn.onclick = () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider)
+            .then(result => showApp(result.user))
+            .catch(error => alert(error.message));
+    };
+
+    // Facebook Sign In
+    facebookLoginBtn.onclick = () => {
+        const provider = new firebase.auth.FacebookAuthProvider();
+        auth.signInWithPopup(provider)
+            .then(result => showApp(result.user))
+            .catch(error => alert(error.message));
+    };
+
+    // Logout
+    logoutBtn.onclick = () => {
+        auth.signOut().then(showLogin);
+    };
+
+    // Auth State Listener
+    auth.onAuthStateChanged(user => {
+        if (user) showApp(user);
+        else showLogin();
+    });
+
+    // Post Button Click
+    postBtn.onclick = () => {
+        const content = postContent.value.trim();
+        const user = auth.currentUser;
+        if (content && user) {
+            db.collection("posts").add({
+                content: content,
+                uid: user.uid,
+                name: user.displayName,
+                photo: user.photoURL,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                postContent.value = "";
+                loadPosts();
+            });
+        }
+    };
+
+    // Load Posts
+    function loadPosts() {
+        postsContainer.innerHTML = "";
+        db.collection("posts").orderBy("timestamp", "desc").get()
+            .then(snapshot => {
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const postDiv = document.createElement("div");
+                    postDiv.className = "post";
+                    postDiv.innerHTML = `
+                        <div class="post-header">
+                            <img src="${data.photo}" alt="user" />
+                            <strong>${data.name}</strong>
+                        </div>
+                        <p>${data.content}</p>
+                    `;
+                    postsContainer.appendChild(postDiv);
+                });
+            });
+    }
+
+    // Mobile Menu Toggle
+    function toggleMenu() {
+        document.querySelector('.mobile-menu').classList.toggle('active');
+    }
+</script>
+
+    
 </body>
 </html>
