@@ -1,28 +1,13 @@
-// main.js
+// main.js (Firebase Modular SDK v9+)
 
-// Import Firebase instances initialized in HTML
-import { auth, db } from './firebase-init.js'; // This path might need adjustment if your init script is not named like this conceptually
-                                            // BUT since init is in HTML, we'd actually get them from the global scope
-                                            // if we didn't use modules properly.
-                                            // The better way is to make the HTML script that initializes firebase EXPORT the values
-
-// For the setup where firebase-init.js IS the script in the HTML:
-// If you have <script type="module" id="firebaseInit"> /* ... exports app, auth, db ... */ </script>
-// and then <script type="module" src="main.js"></script>
-// You CANNOT directly import from the inline script.
-//
-// THE BEST APPROACH is to have firebase-init.js as a SEPARATE file, or put ALL JS in main.js
-
-// --- LET'S ASSUME YOU PUT FIREBASE INIT AT THE TOP OF main.js as per my previous full example ---
-// --- This makes main.js self-contained with Firebase initialization ---
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+// Import Firebase services
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"; // Use a recent, stable version
+// import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js"; // Uncomment if you need analytics
 import {
     getAuth,
     onAuthStateChanged,
     GoogleAuthProvider,
-    FacebookAuthProvider,
+    FacebookAuthProvider, // Keep if you might add it later
     signInWithPopup,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -37,31 +22,39 @@ import {
     runTransaction,
     updateDoc,
     arrayUnion,
-    arrayRemove,
+    // arrayRemove, // Not directly used in like logic, but good to know
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
+  apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
   authDomain: "viratsawarup.firebaseapp.com",
+  // databaseURL: "https://viratsawarup-default-rtdb.asia-southeast1.firebasedatabase.app", // Not for Firestore
   projectId: "viratsawarup",
-  storageBucket: "viratsawarup.appspot.com", // <<< RE-VERIFY THIS
+  storageBucket: "viratsawarup.appspot.com", // CRITICAL: Use your-project-id.appspot.com
   messagingSenderId: "264071748020",
   appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-  measurementId: "G-7GJQPJCR1L"
+  measurementId: "G-7GJQPJCR1L" // Optional
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app); // Uncomment if you use analytics features in main.js
+// const analytics = getAnalytics(app); // Uncomment if you need analytics
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-
-// DOM Elements (same as before)
+// DOM Elements
 const elements = {
     loginSection: document.getElementById('loginSection'),
     appSection: document.getElementById('appSection'),
-    // ... rest of the elements
     googleLoginBtn: document.getElementById('googleLoginBtn'),
     facebookLoginBtn: document.getElementById('facebookLoginBtn'),
     logoutBtn: document.getElementById('logoutBtn'),
@@ -71,37 +64,60 @@ const elements = {
     postContent: document.getElementById('postContent'),
     postsContainer: document.getElementById('postsContainer'),
     mobileMenu: document.querySelector('.mobile-menu'),
-    hamburger: document.querySelector('.hamburger')
+    hamburger: document.querySelector('.hamburger'),
+    postImageFile: document.getElementById('postImageFile'),
+    imagePreview: document.getElementById('imagePreview'),
+    uploadProgressContainer: document.getElementById('uploadProgressContainer'),
+    uploadProgress: document.getElementById('uploadProgress'),
+    uploadProgressText: document.getElementById('uploadProgressText')
 };
 
-// --- Auth State Listener --- (same as before)
+// --- Image Preview Handler ---
+if (elements.postImageFile) {
+    elements.postImageFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if(elements.imagePreview) {
+                    elements.imagePreview.src = event.target.result;
+                    elements.imagePreview.style.display = 'block';
+                }
+            }
+            reader.readAsDataURL(file);
+        } else {
+            if(elements.imagePreview) {
+                elements.imagePreview.src = '#';
+                elements.imagePreview.style.display = 'none';
+            }
+        }
+    });
+}
+
+// --- Auth State Listener ---
 onAuthStateChanged(auth, user => {
-    // ... same logic
     if (user) {
-        if (elements.loginSection) elements.loginSection.style.display = 'none';
-        if (elements.appSection) elements.appSection.style.display = 'block';
-        if (elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-        if (elements.userName) elements.userName.textContent = user.displayName || 'User';
+        if(elements.loginSection) elements.loginSection.style.display = 'none';
+        if(elements.appSection) elements.appSection.style.display = 'block';
+        if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+        if(elements.userName) elements.userName.textContent = user.displayName || 'User';
         loadPosts();
     } else {
-        if (elements.loginSection) elements.loginSection.style.display = 'block';
-        if (elements.appSection) elements.appSection.style.display = 'none';
-        if (elements.postsContainer) {
-            elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
-        }
+        if(elements.loginSection) elements.loginSection.style.display = 'block';
+        if(elements.appSection) elements.appSection.style.display = 'none';
+        if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
+        if (postsUnsubscribe) postsUnsubscribe(); // Unsubscribe when user logs out
     }
 });
 
-// --- Auth Functions --- (same as before, using imported auth, GoogleAuthProvider, etc.)
+// --- Auth Functions ---
 async function handleAuth(provider) {
     try {
         await signInWithPopup(auth, provider);
     } catch (error) {
         console.error("Login Error:", error);
-        // ... error handling
-        if (error.code === 'auth/popup-closed-by-user') {
-            console.log("Login popup closed by user.");
-        } else if (error.code === 'auth/account-exists-with-different-credential') {
+        if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') return;
+        if (error.code === 'auth/account-exists-with-different-credential') {
             alert("An account already exists with the same email address but different sign-in credentials. Try signing in with the original method.");
         } else {
             alert(`Login Error: ${error.message}`);
@@ -109,32 +125,22 @@ async function handleAuth(provider) {
     }
 }
 
-if (elements.googleLoginBtn) {
-    elements.googleLoginBtn.addEventListener('click', () => handleAuth(new GoogleAuthProvider()));
-}
-// ... rest of facebookLoginBtn and logoutBtn listeners
-
-if (elements.facebookLoginBtn) {
-    elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires developer setup. Please use Google Sign-In for now.");
-    });
-}
-
-if (elements.logoutBtn) {
-    elements.logoutBtn.addEventListener('click', () => signOut(auth));
-}
+if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new GoogleAuthProvider()));
+if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
+    alert("Facebook login requires developer setup. Please use Google Sign-In for now.");
+});
+if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => signOut(auth));
 
 
-// --- Post Functions --- (same as before, using imported db, collection, addDoc, serverTimestamp, etc.)
+// --- Post Functions ---
 if (elements.postBtn) {
     elements.postBtn.addEventListener('click', async () => {
-        // ... same logic
-        if (!elements.postContent) return;
-        const content = elements.postContent.value.trim();
+        const content = elements.postContent ? elements.postContent.value.trim() : "";
+        const imageFile = elements.postImageFile ? elements.postImageFile.files[0] : null;
         const currentUser = auth.currentUser;
 
-        if (!content) {
-            alert("Post content cannot be empty!");
+        if (!content && !imageFile) {
+            alert("Post content or an image is required!");
             return;
         }
         if (!currentUser) {
@@ -142,81 +148,146 @@ if (elements.postBtn) {
             return;
         }
 
-        try {
-            elements.postBtn.disabled = true;
-            elements.postBtn.textContent = "Posting...";
+        elements.postBtn.disabled = true;
+        elements.postBtn.textContent = "Posting...";
+        if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+        if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
 
-            await addDoc(collection(db, 'posts'), {
-                content: content,
+        try {
+            let imageUrl = null;
+
+            if (imageFile) {
+                if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
+                if(elements.uploadProgress) elements.uploadProgress.value = 0;
+
+                const imageName = `post_images/${currentUser.uid}_${Date.now()}_${imageFile.name}`;
+                const storageFileRef = ref(storage, imageName); // Use ref() from Modular SDK
+                const uploadTask = uploadBytesResumable(storageFileRef, imageFile); // Use uploadBytesResumable()
+
+                await new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed',
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            if(elements.uploadProgress) elements.uploadProgress.value = progress;
+                            if(elements.uploadProgressText) elements.uploadProgressText.textContent = `Uploading: ${Math.round(progress)}%`;
+                        },
+                        (error) => {
+                            console.error("Upload failed:", error);
+                            reject(error);
+                        },
+                        async () => {
+                            try {
+                                imageUrl = await getDownloadURL(uploadTask.snapshot.ref); // Use getDownloadURL()
+                                resolve();
+                            } catch (error) {
+                                console.error("Failed to get download URL:", error);
+                                reject(error);
+                            }
+                        }
+                    );
+                });
+                if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+                if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
+
+            }
+
+            const postData = {
+                content: content || "",
                 userId: currentUser.uid,
                 userName: currentUser.displayName || 'Anonymous User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                timestamp: serverTimestamp(),
+                timestamp: serverTimestamp(), // Modular SDK serverTimestamp
                 likes: [],
                 comments: []
-            });
-            elements.postContent.value = '';
+            };
+
+            if (imageUrl) {
+                postData.imageUrl = imageUrl;
+            }
+
+            await addDoc(collection(db, 'posts'), postData); // Use addDoc() and collection()
+
+            if(elements.postContent) elements.postContent.value = '';
+            if(elements.postImageFile) elements.postImageFile.value = null;
+            if(elements.imagePreview) {
+                elements.imagePreview.src = '#';
+                elements.imagePreview.style.display = 'none';
+            }
+
         } catch (error) {
             console.error("Post Error:", error);
             alert(`Post Error: ${error.message}`);
         } finally {
-            elements.postBtn.disabled = false;
-            elements.postBtn.textContent = "Post";
+            if(elements.postBtn) {
+                elements.postBtn.disabled = false;
+                elements.postBtn.textContent = "Post";
+            }
+             if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
         }
     });
 }
 
+// --- Load Posts (Real-time listener) ---
+let postsUnsubscribe = null; // To store the unsubscribe function
 
-// --- Load Posts (Real-time listener) --- (same as before)
-let postsListenerUnsubscribe = null;
 function loadPosts() {
-    // ... same logic
     if (!elements.postsContainer) return;
-    if (postsListenerUnsubscribe) {
-        postsListenerUnsubscribe();
+
+    if (postsUnsubscribe) {
+        postsUnsubscribe(); // Unsubscribe from previous listener if it exists
     }
 
-    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
-    postsListenerUnsubscribe = onSnapshot(q, (querySnapshot) => {
-        elements.postsContainer.innerHTML = '<h3>Feed</h3>';
-        if (querySnapshot.empty) {
-            elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
-            return;
+    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc')); // Use query(), collection(), orderBy()
+    postsUnsubscribe = onSnapshot(q, (querySnapshot) => { // Use onSnapshot()
+        if (elements.postsContainer) {
+            elements.postsContainer.innerHTML = '<h3>Feed</h3>';
+            if (querySnapshot.empty) {
+                elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
+                return;
+            }
+            querySnapshot.forEach((docSnap) => { // docSnap to avoid conflict with imported doc
+                createPostElement(docSnap.id, docSnap.data());
+            });
         }
-        querySnapshot.forEach((docSnap) => { // Changed doc to docSnap to avoid conflict with imported doc
-            createPostElement(docSnap.id, docSnap.data());
-        });
     }, (error) => {
         console.error("Error loading posts: ", error);
-        alert(`Error loading posts: ${error.message}`);
-        elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts. Please try again later.</p>';
+        if (elements.postsContainer) {
+            elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts. Please try again later.</p>';
+        }
     });
 }
 
-// --- Post Element Creation and Interaction --- (same logic, but ensure `doc` from firestore is used for postRef)
+// --- Post Element Creation and Interaction ---
 function createPostElement(postId, post) {
-    // ... same logic
-    if (!elements.postsContainer) return;
-
     const currentUser = auth.currentUser;
     const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-
+    
     const postDiv = document.createElement('div');
     postDiv.className = 'post';
     postDiv.setAttribute('data-post-id', postId);
 
-    const formattedTimestamp = post.timestamp ? post.timestamp.toDate().toLocaleString() : 'Just now';
+    // Ensure post.timestamp is a Firestore Timestamp before calling toDate()
+    const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function' 
+                                ? post.timestamp.toDate().toLocaleString() 
+                                : (post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Just now');
+
+
+    let contentHTML = `<p>${post.content ? escapeHTML(post.content).replace(/\n/g, '<br>') : ''}</p>`;
+    if (post.imageUrl) {
+        contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.error('Error loading image: ${post.imageUrl}')">`;
+    }
 
     postDiv.innerHTML = `
         <div class="post-header">
-            <img src="${post.userPhoto}" alt="${post.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+            <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
             <div>
-                <strong>${post.userName}</strong>
+                <strong>${escapeHTML(post.userName)}</strong>
             </div>
             <span class="timestamp">${formattedTimestamp}</span>
         </div>
         <div class="post-content">
-            <p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>
+            ${contentHTML}
         </div>
         <div class="post-actions">
             <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
@@ -236,37 +307,40 @@ function createPostElement(postId, post) {
             </form>
         </div>
     `;
-
-    elements.postsContainer.appendChild(postDiv);
+    
+    if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
 
     const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
-    if (post.comments && post.comments.length > 0) {
-        post.comments.forEach(comment => {
-            renderComment(comment, commentsList);
-        });
-    } else {
-        commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
+    if (commentsList) {
+        if (post.comments && post.comments.length > 0) {
+            post.comments.forEach(comment => renderComment(comment, commentsList));
+        } else {
+            commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
+        }
     }
 
-    postDiv.querySelector('.like-btn').addEventListener('click', () => handleLike(postId));
-    postDiv.querySelector('.comment-toggle-btn').addEventListener('click', () => toggleComments(postId));
-    postDiv.querySelector('.comment-form-actual').addEventListener('submit', (e) => handleCommentSubmit(e, postId));
+    const likeBtn = postDiv.querySelector('.like-btn');
+    if (likeBtn) likeBtn.addEventListener('click', () => handleLike(postId));
+    const commentToggleBtn = postDiv.querySelector('.comment-toggle-btn');
+    if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
+    const commentForm = postDiv.querySelector('.comment-form-actual');
+    if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
 }
+
 function renderComment(comment, commentsListElement) {
-    // ... same logic
     const commentDiv = document.createElement('div');
     commentDiv.className = 'comment';
-    const commentTimestamp = comment.timestamp ? (typeof comment.timestamp.toDate === 'function' ? comment.timestamp.toDate().toLocaleString() : new Date(comment.timestamp).toLocaleString()) : 'Recently';
+    const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function' 
+                                ? comment.timestamp.toDate().toLocaleString() 
+                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
     
-    const noCommentP = commentsListElement.querySelector('p');
-    if(noCommentP && noCommentP.textContent.includes('No comments yet')) {
-        noCommentP.remove();
-    }
+    const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
+    if(noCommentP) noCommentP.remove();
 
     commentDiv.innerHTML = `
         <div class="comment-header">
-            <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${comment.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
-            <strong>${comment.userName || 'User'}</strong>
+            <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+            <strong>${escapeHTML(comment.userName) || 'User'}</strong>
             <span class="timestamp">${commentTimestamp}</span>
         </div>
         <p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>
@@ -275,50 +349,34 @@ function renderComment(comment, commentsListElement) {
 }
 
 async function handleLike(postId) {
-    // ... same logic
     const currentUser = auth.currentUser;
-    if (!currentUser) {
-        alert("Please log in to like posts.");
-        return;
-    }
+    if (!currentUser) { alert("Please log in to like posts."); return; }
 
-    const postRef = doc(db, 'posts', postId);
+    const postRef = doc(db, 'posts', postId); // Use doc() from Modular SDK
     try {
-        await runTransaction(db, async (transaction) => {
+        await runTransaction(db, async (transaction) => { // Pass db to runTransaction
             const sfDoc = await transaction.get(postRef);
-            if (!sfDoc.exists()) {
+            if (!sfDoc.exists()) { // Check sfDoc.exists()
                 throw "Document does not exist!";
             }
             
-            // Use sfDoc.data().likes for array, not sfDoc.likes
             const currentLikes = sfDoc.data().likes || [];
-            let newLikesArray = [...currentLikes]; // Create a mutable copy
+            let newLikesArray = [...currentLikes]; 
 
             if (newLikesArray.includes(currentUser.uid)) {
-                // Unlike: filter out the UID
                 newLikesArray = newLikesArray.filter(uid => uid !== currentUser.uid);
             } else {
-                // Like: add the UID
                 newLikesArray.push(currentUser.uid);
             }
-            // The update object for transaction.update must use field paths for array operations with arrayUnion/Remove
-            // Simpler to just set the new array if not using arrayUnion/Remove directly in transaction
             transaction.update(postRef, { likes: newLikesArray });
-
-            // Alternative using arrayUnion/Remove if preferred (more atomic but more verbose here)
-            // if (currentLikes.includes(currentUser.uid)) {
-            //     transaction.update(postRef, { likes: arrayRemove(currentUser.uid) });
-            // } else {
-            //     transaction.update(postRef, { likes: arrayUnion(currentUser.uid) });
-            // }
         });
     } catch (error) {
         console.error("Like transaction failed: ", error);
         alert("Failed to update like: " + error.message);
     }
 }
+
 function toggleComments(postId) {
-    // ... same logic
     const commentsArea = document.getElementById(`comments-area-${postId}`);
     if (commentsArea) {
         const isHidden = commentsArea.style.display === 'none' || commentsArea.style.display === '';
@@ -329,91 +387,88 @@ function toggleComments(postId) {
         }
     }
 }
+
 async function handleCommentSubmit(event, postId) {
-    // ... same logic
     event.preventDefault();
     const currentUser = auth.currentUser;
-    if (!currentUser) {
-        alert("Please log in to comment.");
-        return;
-    }
+    if (!currentUser) { alert("Please log in to comment."); return; }
 
     const form = event.target;
     const commentTextInput = form.elements.commentText;
     const commentText = commentTextInput.value.trim();
-    if (!commentText) {
-        alert("Comment cannot be empty.");
-        return;
-    }
+    if (!commentText) { alert("Comment cannot be empty."); return; }
 
     const submitButton = form.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-    submitButton.textContent = "Posting...";
+    if (submitButton) {
+         submitButton.disabled = true;
+         submitButton.textContent = "Posting...";
+    }
 
     const newComment = {
         userId: currentUser.uid,
         userName: currentUser.displayName || 'User',
         userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
         text: commentText,
-        timestamp: serverTimestamp()
+        timestamp: serverTimestamp() // Modular SDK serverTimestamp
     };
 
-    const postRef = doc(db, 'posts', postId);
+    const postRef = doc(db, 'posts', postId); // Use doc()
     try {
-        await updateDoc(postRef, {
-            comments: arrayUnion(newComment)
+        await updateDoc(postRef, { // Use updateDoc()
+            comments: arrayUnion(newComment) // Use arrayUnion()
         });
         commentTextInput.value = '';
     } catch (error) {
         console.error("Error adding comment: ", error);
         alert("Failed to add comment: " + error.message);
     } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Post";
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Post";
+        }
     }
 }
 
-// --- Hamburger Menu & Navigation --- (same as before)
+// --- Hamburger Menu & Navigation ---
 function toggleMenu() {
-    // ... same logic
     if (elements.mobileMenu) {
         elements.mobileMenu.classList.toggle('active');
         if (elements.hamburger) {
-            elements.hamburger.classList.toggle('active');
+            document.querySelectorAll('.hamburger-line').forEach(line => {
+                line.style.background = elements.mobileMenu.classList.contains('active') ? '#8b0000' : '#ffffff';
+            });
         }
     }
 }
 function closeMenuAndScroll(event) {
-    // ... same logic
     if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
         toggleMenu();
     }
-    const href = event.currentTarget.getAttribute('href');
-    if (href && href.startsWith('#')) {
-        event.preventDefault();
-        const targetElement = document.querySelector(href);
+    const targetId = event.currentTarget.getAttribute('href');
+    if (targetId && targetId.startsWith('#')) {
+        const targetElement = document.querySelector(targetId);
         if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth' });
+            event.preventDefault();
+            targetElement.scrollIntoView({ behavior: "smooth" });
         }
     }
 }
-if (elements.hamburger) {
-    elements.hamburger.addEventListener('click', toggleMenu);
-}
+
+if (elements.hamburger) elements.hamburger.addEventListener('click', toggleMenu);
+
 document.querySelectorAll('.mobile-menu a').forEach(link => {
-    // ... same logic
-    if (link.getAttribute('href').startsWith('#')) {
-        link.addEventListener('click', closeMenuAndScroll);
-    } else {
-        link.addEventListener('click', (event) => {
+    link.addEventListener('click', (event) => {
+        if (link.getAttribute('href').startsWith('#')) {
+            closeMenuAndScroll(event);
+        } else {
             if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
                 toggleMenu();
             }
-        });
-    }
+        }
+    });
 });
+
 document.addEventListener('click', (e) => {
-    // ... same logic
     if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
         elements.hamburger && !elements.hamburger.contains(e.target) &&
         !elements.mobileMenu.contains(e.target)) {
@@ -421,23 +476,24 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// --- Utility function to escape HTML --- (same as before)
+// --- Utility function to escape HTML ---
 function escapeHTML(str) {
-    // ... same logic
+    if (typeof str !== 'string') return ''; // Handle non-string inputs
     const div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
 }
 
-// --- Initial load check --- (same as before)
+// --- Initial load check ---
+// The onAuthStateChanged listener will handle this, but this explicit check can sometimes
+// make the UI respond faster if the user is already authenticated.
 if (auth.currentUser) {
-    // ... same logic
-    if (elements.loginSection) elements.loginSection.style.display = 'none';
-    if (elements.appSection) elements.appSection.style.display = 'block';
-    if (elements.userPhoto) elements.userPhoto.src = auth.currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-    if (elements.userName) elements.userName.textContent = auth.currentUser.displayName || 'User';
+    if(elements.loginSection) elements.loginSection.style.display = 'none';
+    if(elements.appSection) elements.appSection.style.display = 'block';
+    if(elements.userPhoto) elements.userPhoto.src = auth.currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+    if(elements.userName) elements.userName.textContent = auth.currentUser.displayName || 'User';
     loadPosts();
 } else {
-    if (elements.loginSection) elements.loginSection.style.display = 'block';
-    if (elements.appSection) elements.appSection.style.display = 'none';
+    if(elements.loginSection) elements.loginSection.style.display = 'block';
+    if(elements.appSection) elements.appSection.style.display = 'none';
 }
