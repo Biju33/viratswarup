@@ -1,468 +1,500 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What is our goal? - ViratSwarup</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VIRAT SWARUP</title>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary-color: #8B0000;
-            --secondary-color: #A52A2A;
-            --light-color: #F5F5F5;
-            --dark-color: #333;
+      /* Reset & Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Georgia", serif;
+      }
+
+      body {
+        background: #ffffff;
+        color: #2c2c2c;
+      }
+
+      /* हैडर सेक्शन */
+      .header {
+        padding: 95px 20px 45px;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #8b0000;
+      }
+      .header h1 {
+        font-size: 52px;
+        letter-spacing: 3.2px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        color: white;
+      }
+      .header h2 {
+        font-size: 22px;
+        color: #fff;
+        font-weight: 300;
+      }
+
+      /* हैमबर्गर मेन्यू */
+      .hamburger {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        cursor: pointer;
+        display: none;
+        z-index: 1000;
+      }
+      .hamburger-line {
+        width: 28px;
+        height: 2px;
+        background: #000000;
+        margin: 6px 0;
+        transition: 0.4s;
+      }
+
+      /* मोबाइल मेन्यू */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100%;
+        background: #8b0000;
+        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+        transition: 0.4s;
+        padding-top: 80px;
+        z-index: 999;
+      }
+      .mobile-menu.active {
+        right: 0;
+      }
+      .mobile-menu a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px 30px;
+        color: #fff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .mobile-menu i {
+        width: 25px;
+        font-size: 20px;
+        color: #fff;
+      }
+
+      /* बॉटम नेविगेशन */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #8b0000;
+        border-top: 1px solid #eee;
+        padding: 8px 0;
+        display: none;
+        z-index: 999;
+      }
+      .bottom-nav ul {
+        display: flex;
+        justify-content: space-around;
+        list-style: none;
+      }
+      .bottom-nav a {
+        color: #fff;
+        font-size: 16px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        transition: background 0.3s;
+      }
+
+      .bottom-nav a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      /* डेस्कटॉप नेविगेशन */
+      .desktop-nav {
+        margin: 45px 0;
+      }
+      .desktop-nav ul {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        list-style: none;
+      }
+      .desktop-nav a {
+        color: #8b0000;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+      }
+
+      /* रिस्पॉन्सिव डिज़ाइन */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: block;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+        .desktop-nav {
+          display: none;
         }
-        
-        body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            line-height: 1.6;
+        .bottom-nav {
+          display: block;
         }
-        
-        /* मोबाइल फ्रेंडली हेडर */
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        .header {
+          padding: 70px 20px 35px;
         }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .header h1 {
+          font-size: 42px;
         }
-        
-        /* डेस्कटॉप नेविगेशन */
-        .desktop-nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        .desktop-nav ul li {
-            margin-left: 1.5rem;
-        }
-        
-        .desktop-nav ul li a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-        
-        .desktop-nav ul li a:hover {
-            color: #FFD700;
-        }
-        
-        /* मोबाइल नेविगेशन */
-        .mobile-nav-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-        
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background-color: var(--primary-color);
-            z-index: 1000;
-            transition: left 0.3s ease;
-            padding: 2rem;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-        }
-        
-        .mobile-nav.active {
-            left: 0;
-        }
-        
-        .mobile-nav ul {
-            list-style: none;
-            margin-top: 2rem;
-        }
-        
-        .mobile-nav ul li {
-            margin-bottom: 1.5rem;
-        }
-        
-        .mobile-nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            display: block;
-            padding: 0.5rem 0;
-        }
-        
-        .mobile-nav-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-        
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
-        }
-        
-        .overlay.active {
-            display: block;
-        }
-        
-        main {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        
-        .blog-post {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .blog-post h2 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-        
-        .post-meta {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-        
-        .blog-content {
-            margin-bottom: 1rem;
-        }
-        
-        .blog-content p {
-            margin-bottom: 1rem;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        
-        .blog-content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 1rem 0;
-            display: block;
-        }
-        
-        .embed-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            margin: 1rem 0;
-            border-radius: 8px;
-        }
-        
-        .embed-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-        }
-        
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        /* क्वोट स्टाइल */
-        blockquote {
-            border-left: 4px solid var(--primary-color);
-            padding-left: 1rem;
-            margin: 1rem 0;
-            color: #555;
-            font-style: italic;
-        }
-        
-        /* रेस्पॉन्सिव डिज़ाइन */
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            
-            .mobile-nav-btn {
-                display: block;
-            }
-            
-            .logo {
-                font-size: 1.3rem;
-            }
-            
-            main {
-                padding: 0 0.8rem;
-                margin: 1rem auto;
-            }
-            
-            .blog-post {
-                padding: 1.2rem;
-            }
-            
-            .blog-post h2 {
-                font-size: 1.3rem;
-            }
-            
-            .blog-content p {
-                font-size: 0.95rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .blog-post {
-                padding: 1rem;
-            }
-            
-            .blog-post h2 {
-                font-size: 1.2rem;
-            }
-            
-            footer {
-                padding: 1rem;
-                font-size: 0.9rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <header>
-        <div class="logo">ViratSwarup</div>
-        
-        <!-- डेस्कटॉप नेविगेशन -->
-        <nav class="desktop-nav">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="agnosia.html">Agnosia</a></li>
-                <li><a href="enigma.html">Enigma</a></li>
-                <li><a href="emulate.html">Emulate</a></li>
-            </ul>
-        </nav>
-        
-        <!-- मोबाइल नेविगेशन बटन -->
-        <button class="mobile-nav-btn">☰</button>
-    </header>
-    
-    <!-- मोबाइल नेविगेशन मेनू -->
-    <div class="mobile-nav">
-        <button class="mobile-nav-close">×</button>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="agnosia.html">Agnosia</a></li>
-            <li><a href="enigma.html">Enigma</a></li>
-            <li><a href="emulate.html">Emulate</a></li>
-        </ul>
+  </head>
+  <body>
+    <!-- हैमबर्गर आइकन -->
+    <div class="hamburger" onclick="toggleMenu()">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
     </div>
-    
-    <!-- ओवरले -->
-    <div class="overlay"></div>
-    
-    <main>
-        <article class="blog-post">
-            <h2>Birth from a Point?</h2>
-              <img src="image/birth_from_point.jpg" width="100%">
 
-            <div class="blog-content">
-                             
-                <p>Imagine — somewhere in the vast expanse of the universe, an invisible droplet is born, which we call a cell. It wasn't a machine, nor a mere physical structure. It held the seed of life. A single cell… that never went to school, never read scriptures, yet somehow it knew it had to divide, grow, build structure — it was the definition of intelligence itself.
+    <!-- मोबाइल मेन्यू -->
+    <nav class="mobile-menu">
+      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
+      <a href="#share"><i class="fas fa-share"></i>Share</a>
+      <a href="index.html"><i class="fas fa-home"></i>Home</a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
+      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
+      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+    </nav>
 
-The origin of every living being begins here — from a small unit holding limitless design. But the real question arises: Where did that design come from? Who instructed the cell what to do? That’s the mystery where science pauses, and meditation begins.
+    <!-- हैडर -->
+    <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
 
-“The first spark of life — a single cell born in cosmic silence.”</p>
-                                                
-            </div>
-        </article>
-        
-        <article class="blog-post">
-            <h2>Rise of Consciousness</h2>
-              <img src="image/rise_of_cociusness.jpg" width="100%">
+  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
+  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
 
-            <div class="blog-content">
-                <p>As the cell develops, it doesn't remain just a physical form. A capacity to make decisions emerges within it. Neurons, senses, perception — none of these were programmed externally, but arose from within that very cell’s innate consciousness.
+    </header>
 
-The human brain, made of trillions of cells, traces its origin to that first living cell. When we concentrate, feel emotions, or slip into meditation — it is that same cell manifesting as consciousness.
+    <!-- डेस्कटॉप नेविगेशन -->
+    <nav class="desktop-nav">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="#agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+        <li><a href="#enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
+        <li><a href="#emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      </ul>
+    </nav>
 
-“From cell to self-awareness — neurons birthing thought.”
-
-"The senses are superior, the mind is higher than the senses,
-but the intellect is even higher than the mind,
-and the Self is higher than the intellect."
-— Bhagavad Gita 3.42</p>
-
-            </div>
-        </article>
-		
-		<article class="blog-post">
-            <h2>The Path of Knowledge</h2>
-              <img src="image/path_of_knowledge.jpg" width="100%">
-
-              <div class="blog-content">
-			  
-             <p>Consciousness awakens when knowledge is truly understood.
-It is the moment when awareness transforms knowledge into deeper wisdom.
-True understanding comes when consciousness and knowledge unite.</p>
-            
-                             
-            </div>
-        </article>
-        
-        <article class="blog-post">
-            <h2>Connect with Your Cellular Intelligence through
-Meditation & Yoga</h2>
-            <div class="blog-content">
-                <p>Every cell in the human body is a center of subtle consciousness. Through yoga and meditation, we can connect with this intelligence and experience a higher spiritual awareness.
-				Follow the steps below to tune into the divine energy within your body:</p>
-                
-            </div>
-        </article>
-
-        <article class="blog-post">
-            <h2>Inner Journey through Meditation</h2>
-             <img src="image/Inner_Journey_through_Meditation.jpg" width="100%">
-
-            <div class="blog-content">
-                <p>Practice silent meditation for 10–15 minutes daily.Focus on your breath to calm the mind.Feel the presence of each cell in your body.
-				Visualize each cell glowing with energy and light.</p>
-                
-            </div>
-        </article>
-
-        <article class="blog-post">
-            <h2>Energy Flow through Yoga</h2>
-              <img src="image/Energy_Flow_through_Yoga.jpg" width="100%">
-
-            <div class="blog-content">
-                <p>Practice Surya Namaskar, pranayama,and basic asanas.
-				Yoga activates not only the muscles but also awakens the cells.</p>
-                
-            </div>
-        </article> 
-
-        <article class="blog-post">
-            <h2>Practice Surya Namaskar, pranayama,and basic asanas.
-			Yoga activates not only the muscles but also awakens the cells.</h2>
-             <img src="image/Practice_Surya_Namaskar.jpg" width="100%">
-
-            <div class="blog-content">
-                <p>Speak lovingly to your cells. Express gratitude and appreciation.
-				This practice creates a deep inner connection.</p>
-                
-            </div>
-        </article>
-        <article class="blog-post">
-            <h2>Sattvic Lifestyle</h2>
-              <img src="image/satvik_ifestyle.jpg" width="100%">
-
-            <div class="blog-content">
-                <p>Adopt pure diet and positive thinking.
-
-Stay in spiritual company and treat your body as a temple.</p>
-                
-            </div>
-        </article>
- 
-         <article class="blog-post">
-            <h2>Divine Perspective</h2>
-             <img src="image/devine_perspective.jpg" width="100%">
-
-            <div class="blog-content">
-                <p>See each cell as a reflection of the universe. By understanding the language of your cells, 
-				you understand the language of the cosmos.</p>
-
- </main>
-    
-<footer>
-        <p>&copy; 2023 ViratSwarup. All rights reserved.</p>
-    </footer>
+    <!-- बॉटम नेविगेशन -->
+    <nav class="bottom-nav">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      </ul>
+    </nav>
 
     <script>
-        // मोबाइल नेविगेशन टॉगल
-        const mobileNavBtn = document.querySelector('.mobile-nav-btn');
-        const mobileNav = document.querySelector('.mobile-nav');
-        const mobileNavClose = document.querySelector('.mobile-nav-close');
-        const overlay = document.querySelector('.overlay');
-        
-        mobileNavBtn.addEventListener('click', () => {
-            mobileNav.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+      // हैमबर्गर मेन्यू फंक्शन
+      function toggleMenu() {
+        document.querySelector(".mobile-menu").classList.toggle("active");
+        document.querySelectorAll(".hamburger-line").forEach((line) => {
+          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
         });
-        
-        mobileNavClose.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-        
-        overlay.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-        
-        // इमेज लेजी लोडिंग
-        document.addEventListener("DOMContentLoaded", function() {
-            const lazyImages = [].slice.call(document.querySelectorAll("img[loading='lazy']"));
-            
-            if ("IntersectionObserver" in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
-                
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            }
-        });
-        
-        // टच इवेंट के लिए हवर इफेक्ट को हटाना
-        document.addEventListener('touchstart', function() {}, true);
+      }
+
+      // क्लिक आउटसाइड करने पर मेन्यू बंद
+      document.addEventListener("click", (e) => {
+        if (
+          !e.target.closest(".hamburger") &&
+          !e.target.closest(".mobile-menu")
+        ) {
+          document.querySelector(".mobile-menu").classList.remove("active");
+          document.querySelectorAll(".hamburger-line").forEach((line) => {
+            line.style.transform = "";
+          });
+        }
+      });
     </script>
-</body>
+    <!-- विराट स्वरूप का दर्शन कंटेंट सेक्शन -->
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    Birth from a Point
+  </h2>
+  <img 
+    src="images/birth_from_point.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    Imagine — somewhere in the vast expanse of the universe, an invisible droplet is born, which we call a cell. It wasn't a machine, nor a mere physical structure. It held the seed of life. A single cell… that never went to school, never read scriptures, yet somehow it knew it had to divide, grow, build structure — it was the definition of intelligence itself. The origin of every living being begins here — from a small unit holding limitless design. But the real question arises: Where did that design come from? Who instructed the cell what to do? That’s the mystery where science pauses, and meditation begins. “The first spark of life — a single cell born in cosmic silence.”
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    Rise of Consciousness
+  </h2>
+  <img 
+    src="images/rise_of_cociusness.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    As the cell develops, it doesn't remain just a physical form. A capacity to make decisions emerges within it. Neurons, senses, perception — none of these were programmed externally, but arose from within that very cell’s innate consciousness. The human brain, made of trillions of cells, traces its origin to that first living cell. When we concentrate, feel emotions, or slip into meditation — it is that same cell manifesting as consciousness. “From cell to self-awareness — neurons birthing thought.” "The senses are superior, the mind is higher than the senses, but the intellect is even higher than the mind, and the Self is higher than the intellect." — Bhagavad Gita 3.42
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    The Path of Knowledge
+  </h2>
+  <img 
+    src="images/path_of_knowledge.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    Consciousness awakens when knowledge is truly understood. It is the moment when awareness transforms knowledge into deeper wisdom. True understanding comes when consciousness and knowledge unite.
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    Connect with Your Cellular Intelligence through Meditation & Yoga
+  </h2>
+  <img 
+    src="images/conecting_to_natural_inteligence.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+Every cell in the human body is a center of subtle consciousness. Through yoga and meditation, we can connect with this intelligence and experience a higher spiritual awareness. Follow the steps below to tune into the divine energy within your body:
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    Inner Journey through Meditation
+  </h2>
+  <img 
+    src="images/Inner_Journey_through_Meditation.jpg
+" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    Practice silent meditation for 10–15 minutes daily.Focus on your breath to calm the mind.Feel the presence of each cell in your body. Visualize each cell glowing with energy and light.
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    Energy Flow through Yoga
+  </h2>
+  <img 
+    src="images/Energy_Flow_through_Yoga.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    Practice Surya Namaskar, pranayama,and basic asanas. Yoga activates not only the muscles but also awakens the cells.
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    Practice yoga
+  </h2>
+  <img 
+    src="images/Practice_Surya_Namaskar.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    Speak lovingly to your cells. Express gratitude and appreciation. This practice creates a deep inner connection.
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    Sattvic Lifestyle
+  </h2>
+  <img 
+    src="images/satvik_ifestyle.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    Adopt pure diet and positive thinking. Stay in spiritual company and treat your body as a temple.
+  </p>
+</section>
+<section style="
+    padding: 40px 20px; 
+    text-align: center; 
+    background: #fff; 
+    max-width: 700px; 
+    margin: 40px auto; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
+    color: #333;
+">
+  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
+    वDivine Perspective
+  </h2>
+  <img 
+    src="images/devine_perspective.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
+  <p style="font-size: 18px; line-height: 1.8;">
+    See each cell as a reflection of the universe. By understanding the language of your cells, you understand the language of the cosmos.
+  </p>
+</section>
 </html>
