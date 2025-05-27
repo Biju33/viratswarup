@@ -212,84 +212,520 @@
       </ul>
     </nav>
 
-<!-- वीडियो सेक्शन -->
-<section style="padding: 50px 20px; background-color: #fff;">
-  <h2 style="text-align: center; font-size: 32px; color: #8b0000; margin-bottom: 40px;">
-    Emulation
-  </h2>
-
-  <!-- वीडियो ग्रिड -->
-  <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
-
-    <!-- वीडियो 1 -->
-    <div style="flex: 1 1 300px; max-width: 480px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden;">
-      <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-        <iframe 
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-          frameborder="0"
-          allowfullscreen
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-        </iframe>
-      </div>
-      <div style="padding: 12px; background-color: #f5f5f5;">
-        <p style="font-weight: bold; font-size: 16px; color: #333; margin: 0;">Video 1 Title</p>
-      </div>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EvoRun: Cell to Cosmos (Endless)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scrollbars from canvas */
+        }
+        #gameContainer {
+            position: relative;
+            border: 2px solid #555;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.5);
+        }
+        canvas {
+            display: block;
+            background-color: #000; /* Fallback, will be drawn over */
+        }
+        #uiOverlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none; /* Allow clicks to pass through to canvas */
+        }
+        #score, #stageName {
+            font-size: 9px;
+            background-color: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        #progressBarContainer {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 20px;
+            margin: 10px 0;
+            border: 1px solid #fff;
+        }
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background-color: #8b0000;
+            transition: width 0.3s ease-in-out;
+        }
+        #controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        button:hover {
+            background-color: #8b0000;
+        }
+        #startScreen, #stageCompleteScreen { /* Removed #gameWonScreen style */
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10;
+        }
+        #startScreen h2, #stageCompleteScreen h2 { margin-top: 0; }
+        #startScreen p, #stageCompleteScreen p { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="uiOverlay">
+            <div id="stageName">Cell</div>
+            <div id="score">Score: 0</div>
+        </div>
+        <div id="startScreen">
+            <h2>Cell to Cosmos</h2>     
+            <p>The final stage is endless. Reach for the highest score!</p>
+            <button id="startButton">Start Game</button>
+        </div>
+        <div id="stageCompleteScreen" style="display: none;">
+            <h2 id="stageCompleteTitle">Stage Complete!</h2>
+            <p id="stageCompleteMessage">Preparing for the next phase of evolution...</p>
+            <button id="nextStageButton">Next Stage</button>
+        </div>
+         <!-- Removed gameWonScreen div -->
     </div>
-
-    <!-- वीडियो 2 -->
-    <div style="flex: 1 1 300px; max-width: 480px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden;">
-      <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-        <iframe 
-          src="https://www.youtube.com/embed/FTQbiNvZqaY"
-          frameborder="0"
-          allowfullscreen
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-        </iframe>
-      </div>
-      <div style="padding: 12px; background-color: #f5f5f5;">
-        <p style="font-weight: bold; font-size: 16px; color: #333; margin: 0;">Video 2 Title</p>
-      </div>
+    <div id="progressBarContainer">
+        <div id="progressBar"></div>
     </div>
-
-    <!-- वीडियो 3 -->
-    <div style="flex: 1 1 300px; max-width: 480px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden;">
-      <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-        <iframe 
-          src="https://www.youtube.com/embed/kXYiU_JCYtU"
-          frameborder="0"
-          allowfullscreen
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-        </iframe>
-      </div>
-      <div style="padding: 12px; background-color: #f5f5f5;">
-        <p style="font-weight: bold; font-size: 16px; color: #333; margin: 0;">Video 3 Title</p>
-      </div>
+    <div id="controls">
+        <button id="musicToggle">Music: OFF</button>
+        <button id="sfxToggle">SFX: ON</button>
+        <button id="restartGameButton" title="Restart Game">Restart</button>
     </div>
-
-  </div>
-</section>
 
     <script>
-      // हैमबर्गर मेन्यू फंक्शन
-      function toggleMenu() {
-        document.querySelector(".mobile-menu").classList.toggle("active");
-        document.querySelectorAll(".hamburger-line").forEach((line) => {
-          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
-        });
-      }
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-      // क्लिक आउटसाइड करने पर मेन्यू बंद
-      document.addEventListener("click", (e) => {
-        if (
-          !e.target.closest(".hamburger") &&
-          !e.target.closest(".mobile-menu")
-        ) {
-          document.querySelector(".mobile-menu").classList.remove("active");
-          document.querySelectorAll(".hamburger-line").forEach((line) => {
-            line.style.transform = "";
-          });
+        const scoreDisplay = document.getElementById('score');
+        const stageNameDisplay = document.getElementById('stageName');
+        const progressBar = document.getElementById('progressBar');
+
+        const startScreen = document.getElementById('startScreen');
+        const stageCompleteScreen = document.getElementById('stageCompleteScreen');
+        // const gameWonScreen = document.getElementById('gameWonScreen'); // Removed
+        const stageCompleteTitle = document.getElementById('stageCompleteTitle');
+        const stageCompleteMessage = document.getElementById('stageCompleteMessage');
+        // const finalScoreDisplay = document.getElementById('finalScore'); // Removed
+        
+        const startButton = document.getElementById('startButton');
+        const nextStageButton = document.getElementById('nextStageButton');
+        const restartGameButton = document.getElementById('restartGameButton');
+        const musicToggleButton = document.getElementById('musicToggle');
+        const sfxToggleButton = document.getElementById('sfxToggle');
+
+        let gameWidth, gameHeight;
+        let player;
+        let collectibles = [];
+        let obstacles = [];
+        let score = 0;
+        let currentStageIndex = 0;
+        let stageProgress = 0;
+        let gameSpeed = 2;
+        let animationFrameId;
+        let isGameRunning = false;
+        let isJumping = false;
+        let isInEndlessMode = false; // New flag
+
+        let sfxOn = true;
+        let musicOn = false;
+
+        let audioCtx;
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            console.warn("Web Audio API is not supported. SFX disabled.");
+            sfxOn = false;
+            sfxToggleButton.textContent = "SFX: N/A";
+            sfxToggleButton.disabled = true;
         }
-      });
-    </script>
 
+        function playSound(type = 'collect') {
+            if (!sfxOn || !audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'collect') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            } else if (type === 'stage_complete') {
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(261.63, audioCtx.currentTime); // C4
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
+            }
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + (type === 'collect' ? 0.2 : 0.8));
+        }
+        
+        const STAGES = [
+            {
+                name: "Cell",
+                bgColor: "#001f3f", playerColor: "#7FDBFF", playerRadius: 15,
+                collectibleColor: "#FFDC00", collectibleRadius: 8, collectibleValue: 10,
+                goal: 100, itemSpawnRate: 100,
+                playerRepresentation: (p) => {
+                    ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+                    const pulse = Math.sin(Date.now() * 0.01) * 2;
+                    ctx.strokeStyle = `rgba(127, 219, 255, ${0.5 + Math.sin(Date.now() * 0.01)*0.5})`;
+                    ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius + pulse, 0, Math.PI * 2); ctx.stroke();
+                },
+                collectibleRepresentation: (c) => {
+                    ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2); ctx.fill();
+                }
+            },
+            {
+                name: "Heart",
+                bgColor: "#600000", playerColor: "#FF4136", playerRadius: 20,
+                collectibleColor: "#FF851B", collectibleRadius: 10, collectibleValue: 15,
+                goal: 150, itemSpawnRate: 80,
+                playerRepresentation: (p) => {
+                    ctx.fillStyle = p.color; const pulse = Math.sin(Date.now() * 0.02) * 5;
+                    const w = (p.radius + pulse) * 2; const h = w * 0.9;
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y + h / 4);
+                    ctx.bezierCurveTo(p.x, p.y, p.x - w / 2, p.y, p.x - w / 2, p.y + h / 4);
+                    ctx.bezierCurveTo(p.x - w / 2, p.y + h / 2, p.x, p.y + h / 1.5, p.x, p.y + h);
+                    ctx.bezierCurveTo(p.x, p.y + h / 1.5, p.x + w / 2, p.y + h / 2, p.x + w / 2, p.y + h / 4);
+                    ctx.bezierCurveTo(p.x + w / 2, p.y, p.x, p.y, p.x, p.y + h / 4); ctx.fill();
+                },
+                collectibleRepresentation: (c) => {
+                    ctx.fillStyle = c.color; const pulse = Math.sin(Date.now() * 0.015 + c.x) * 2;
+                    ctx.beginPath(); ctx.arc(c.x, c.y, c.radius + pulse, 0, Math.PI * 2); ctx.fill();
+                }
+            },
+            {
+                name: "Earth",
+                bgColor: "#003366", playerColor: "#3D9970", playerRadius: 25,
+                collectibleColor: "#0074D9", collectibleRadius: 12, collectibleValue: 20,
+                goal: 200, itemSpawnRate: 120,
+                playerRepresentation: (p) => {
+                    ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+                    ctx.fillStyle = "#7FDBFF"; ctx.beginPath();
+                    ctx.arc(p.x + p.radius*0.2, p.y - p.radius*0.3, p.radius*0.7, Math.PI*0.3, Math.PI*1.2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(p.x - p.radius*0.3, p.y + p.radius*0.1, p.radius*0.5, Math.PI*1.5, Math.PI*0.5); ctx.fill();
+                },
+                collectibleRepresentation: (c) => {
+                    ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2); ctx.fill();
+                    ctx.fillStyle = "rgba(173, 216, 230, 0.5)"; ctx.beginPath();
+                    ctx.moveTo(c.x + c.radius, c.y); ctx.lineTo(c.x + c.radius + 20, c.y - 5);
+                    ctx.lineTo(c.x + c.radius + 20, c.y + 5); ctx.closePath(); ctx.fill();
+                }
+            },
+            { // New Universe stage - will become endless
+                name: "Universe",
+                bgColor: "#0c0014", // Very dark purple/black
+                playerColor: "#f0f0f0", // Bright point of light / cosmic spark
+                playerRadius: 10, // Smaller, more ethereal
+                collectibleColor: "#dda0dd", // Plum / light purple (Dark Matter Filaments)
+                collectibleRadius: 7,
+                collectibleValue: 25,
+                goal: 250, // Initial goal before becoming endless
+                itemSpawnRate: 90,
+                playerRepresentation: (p) => { // Pulsing star/spark
+                    ctx.fillStyle = p.color;
+                    const corePulse = Math.sin(Date.now() * 0.03) * (p.radius * 0.3);
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius * 0.7 + corePulse, 0, Math.PI * 2);
+                    ctx.fill();
+                    // Outer glow
+                    const glowPulse = Math.sin(Date.now() * 0.02) * 5;
+                    const gradient = ctx.createRadialGradient(p.x, p.y, p.radius * 0.5, p.x, p.y, p.radius + glowPulse + 5);
+                    gradient.addColorStop(0, `rgba(255, 255, 255, ${0.3 + Math.sin(Date.now() * 0.025) * 0.2})`);
+                    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius + glowPulse + 5, 0, Math.PI * 2);
+                    ctx.fill();
+                },
+                collectibleRepresentation: (c) => { // Wispy strands
+                    ctx.strokeStyle = c.color;
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(c.x - c.radius, c.y - c.radius/2 + Math.sin(c.x*0.1)*3);
+                    ctx.quadraticCurveTo(c.x, c.y + Math.cos(c.x*0.1)*5, c.x + c.radius, c.y + c.radius/2 + Math.sin(c.x*0.1)*3);
+                    ctx.stroke();
+                }
+            }
+        ];
+
+        class Player {
+            constructor(x, y, radius, color) {
+                this.x = x; this.y = y; this.baseY = y; this.radius = radius; this.color = color;
+                this.velocityY = 0; this.gravity = 0.3; this.lift = -7;
+                this.stageConfig = STAGES[currentStageIndex];
+            }
+            update() {
+                this.velocityY += this.gravity; this.y += this.velocityY;
+                if (this.y - this.radius < 0) { this.y = this.radius; this.velocityY = 0; }
+                if (this.y + this.radius > gameHeight) { this.y = gameHeight - this.radius; this.velocityY = 0; }
+            }
+            draw() { this.stageConfig.playerRepresentation(this); }
+            jump() {
+                if (this.y + this.radius >= gameHeight - 5 || this.y - this.radius <= 5 || this.velocityY > -2) {
+                     this.velocityY = this.lift;
+                }
+            }
+            resetForStage(stageConfig) {
+                this.stageConfig = stageConfig; this.radius = stageConfig.playerRadius;
+                this.color = stageConfig.playerColor; this.y = gameHeight / 2; this.velocityY = 0;
+            }
+        }
+
+        class Collectible {
+            constructor(x, y, radius, color, value, speed) {
+                this.x = x; this.y = y; this.radius = radius; this.color = color;
+                this.value = value; this.speed = speed;
+                this.stageConfig = STAGES[currentStageIndex];
+            }
+            update() { this.x -= this.speed; }
+            draw() { this.stageConfig.collectibleRepresentation(this); }
+        }
+
+        function fullyResetGame() {
+            cancelAnimationFrame(animationFrameId);
+            isGameRunning = false;
+            isInEndlessMode = false;
+            currentStageIndex = 0;
+            score = 0;
+            stageProgress = 0;
+            gameSpeed = 2;
+            collectibles = [];
+            obstacles = [];
+            loadStage(0); // Ensure STAGES[0].name is used for display
+            updateScoreDisplay();
+            updateProgressBar();
+            startScreen.style.display = 'flex';
+            stageCompleteScreen.style.display = 'none';
+        }
+
+
+        function initGame() {
+            resizeCanvas();
+            currentStageIndex = 0;
+            score = 0;
+            gameSpeed = 2;
+            isInEndlessMode = false; // Crucial reset
+            player = new Player(gameWidth / 4, gameHeight / 2, STAGES[0].playerRadius, STAGES[0].playerColor);
+            loadStage(currentStageIndex);
+            startScreen.style.display = 'none';
+            stageCompleteScreen.style.display = 'none';
+            isGameRunning = true;
+            gameLoop();
+        }
+
+        function loadStage(stageIndex) {
+            currentStageIndex = stageIndex;
+            const stage = STAGES[stageIndex];
+            stageProgress = 0; // Reset progress for new stage
+            collectibles = [];
+            obstacles = [];
+            
+            if (player) {
+                player.resetForStage(stage);
+            } else {
+                 player = new Player(gameWidth / 4, gameHeight / 2, stage.playerRadius, stage.playerColor);
+            }
+
+            // Ensure original stage name is used if coming from endless mode reset
+            const originalStageName = STAGES[stageIndex].originalName || STAGES[stageIndex].name;
+            stageNameDisplay.textContent = `Stage: ${originalStageName}`;
+            if(STAGES[stageIndex].originalName) STAGES[stageIndex].name = originalStageName; // Restore it
+
+            updateScoreDisplay();
+            updateProgressBar();
+            gameSpeed = 2 + stageIndex * 0.5; // Base speed for stage
+        }
+
+        function updateScoreDisplay() {
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+
+        function updateProgressBar() {
+            const stage = STAGES[currentStageIndex];
+            let progressPercent = 0;
+            if (isInEndlessMode && currentStageIndex === STAGES.length -1) {
+                progressPercent = 100; // Bar stays full in endless mode for the final stage
+            } else if (stage.goal > 0) {
+                progressPercent = Math.min((stageProgress / stage.goal) * 100, 100);
+            }
+            progressBar.style.width = `${progressPercent}%`;
+        }
+
+        let frameCount = 0;
+        function gameLoop() {
+            if (!isGameRunning) return;
+
+            frameCount++;
+            ctx.clearRect(0, 0, gameWidth, gameHeight);
+
+            const currentStageData = STAGES[currentStageIndex];
+            ctx.fillStyle = currentStageData.bgColor;
+            ctx.fillRect(0, 0, gameWidth, gameHeight);
+
+            if (frameCount % currentStageData.itemSpawnRate === 0 && collectibles.length < 15) { // Limit max collectibles
+                const y = Math.random() * (gameHeight - currentStageData.collectibleRadius * 2) + currentStageData.collectibleRadius;
+                collectibles.push(new Collectible(
+                    gameWidth, y,
+                    currentStageData.collectibleRadius,
+                    currentStageData.collectibleColor,
+                    currentStageData.collectibleValue,
+                    gameSpeed + Math.random() * 0.5 
+                ));
+            }
+
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                const collectible = collectibles[i];
+                collectible.update();
+                collectible.draw();
+
+                const dist = Math.hypot(player.x - collectible.x, player.y - collectible.y);
+                if (dist < player.radius + collectible.radius) {
+                    score += collectible.value;
+                    if (!isInEndlessMode || currentStageIndex < STAGES.length -1) { // Don't add to stageProgress if in endless final stage
+                        stageProgress += collectible.value;
+                    }
+                    playSound('collect');
+                    updateScoreDisplay();
+                    updateProgressBar();
+                    collectibles.splice(i, 1); 
+
+                    if (!isInEndlessMode && stageProgress >= currentStageData.goal) {
+                        completeStage();
+                        // return; // Don't return if it might go into endless immediately
+                    }
+                } else if (collectible.x + collectible.radius < 0) {
+                    collectibles.splice(i, 1); 
+                }
+            }
+            
+            player.update();
+            player.draw();
+
+            if (isInEndlessMode) {
+                gameSpeed += 0.0003; // Slower, more gradual increase for endless
+            }
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+        
+        function completeStage() {
+            playSound('stage_complete');
+
+            if (currentStageIndex < STAGES.length - 1) { // If not the very last defined stage
+                isGameRunning = false; // Pause game for stage transition
+                cancelAnimationFrame(animationFrameId);
+                stageCompleteTitle.textContent = `Stage ${STAGES[currentStageIndex].name} Complete!`;
+                stageCompleteMessage.textContent = `Preparing for the ${STAGES[currentStageIndex + 1].name} stage.`;
+                stageCompleteScreen.style.display = 'flex';
+            } else { // This is the last defined stage, it now becomes truly endless
+                isInEndlessMode = true;
+                // Store original name if not already stored
+                if (!STAGES[currentStageIndex].originalName) {
+                    STAGES[currentStageIndex].originalName = STAGES[currentStageIndex].name;
+                }
+                STAGES[currentStageIndex].name = `${STAGES[currentStageIndex].originalName} (Endless)`;
+                stageNameDisplay.textContent = `Stage: ${STAGES[currentStageIndex].name}`;
+                stageProgress = STAGES[currentStageIndex].goal; // Mark as "complete" for progress bar
+                updateProgressBar(); // Ensure bar is full
+                // Game continues, gameLoop is not stopped. Speed will increase in gameLoop.
+            }
+        }
+
+        function advanceToNextStage() {
+            stageCompleteScreen.style.display = 'none';
+            currentStageIndex++;
+            // No need to check if currentStageIndex < STAGES.length here,
+            // loadStage will handle it.
+            loadStage(currentStageIndex);
+            isGameRunning = true; // Resume game
+            gameLoop();
+        }
+
+        function resizeCanvas() {
+            const maxWidth = 800; const maxHeight = 600; const aspectRatio = 4 / 3;
+            let newWidth = window.innerWidth * 0.9; let newHeight = window.innerHeight * 0.65;
+            if (newWidth / newHeight > aspectRatio) { newWidth = newHeight * aspectRatio; } 
+            else { newHeight = newWidth / aspectRatio; }
+            newWidth = Math.min(newWidth, maxWidth); newHeight = Math.min(newHeight, maxHeight);
+            canvas.width = newWidth; canvas.height = newHeight;
+            gameWidth = canvas.width; gameHeight = canvas.height;
+            if (player) { player.x = gameWidth / 4; }
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            if(isGameRunning) { updateProgressBar(); } // Redraw UI elements if needed
+        });
+
+        function handleInteractionStart(event) {
+            if (isGameRunning && player) {
+                event.preventDefault(); player.jump();
+            }
+        }
+        canvas.addEventListener('mousedown', handleInteractionStart);
+        canvas.addEventListener('touchstart', handleInteractionStart, { passive: false });
+
+        startButton.addEventListener('click', initGame);
+        nextStageButton.addEventListener('click', advanceToNextStage);
+        restartGameButton.addEventListener('click', fullyResetGame); // New restart button
+        
+        musicToggleButton.addEventListener('click', () => {
+            musicOn = !musicOn;
+            musicToggleButton.textContent = `Music: ${musicOn ? 'ON' : 'OFF'}`;
+            console.log("Music toggled:", musicOn ? "ON" : "OFF", "(Music playback not implemented)");
+        });
+
+        sfxToggleButton.addEventListener('click', () => {
+            if (!audioCtx) return;
+            sfxOn = !sfxOn;
+            sfxToggleButton.textContent = `SFX: ${sfxOn ? 'ON' : 'OFF'}`;
+        });
+
+        // Initial setup
+        resizeCanvas();
+        startScreen.style.display = 'flex';
+
+    </script>
+</body>
 </html>
