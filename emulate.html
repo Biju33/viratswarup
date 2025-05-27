@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VIRAT SWARUP</title>
+    <title>VIRAT SWARUP - Cell to Cosmos</title> <!-- Combined title -->
     <!-- Font Awesome Icons -->
     <link
       rel="stylesheet"
@@ -59,6 +59,19 @@
         margin: 6px 0;
         transition: 0.4s;
       }
+      .hamburger.active .hamburger-line { /* For 'X' icon lines */
+        background: #ffffff; /* White lines on active for contrast with menu */
+      }
+      .hamburger.active .hamburger-line:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+      .hamburger.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.active .hamburger-line:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+
 
       /* मोबाइल मेन्यू */
       .mobile-menu {
@@ -127,9 +140,10 @@
       /* डेस्कटॉप नेविगेशन */
       .desktop-nav {
         margin: 45px 0;
+        text-align: center; /* Center the ul */
       }
       .desktop-nav ul {
-        display: flex;
+        display: inline-flex; /* Allows centering of the flex container itself */
         justify-content: center;
         gap: 32px;
         list-style: none;
@@ -154,16 +168,107 @@
         .bottom-nav {
           display: block;
         }
-        .header {
+        .header { /* This style will now apply */
           padding: 70px 20px 35px;
         }
-        .header h1 {
+        .header h1 { /* This style will now apply (unless overridden by inline) */
           font-size: 42px;
         }
       }
     </style>
-  </head>
-  <body>
+    <style>
+        /* Styles for EvoRun Game - Applied to gameAreaWrapper and its children */
+        #gameAreaWrapper {
+            font-family: Arial, sans-serif;
+            /* background-color: #fff; /* Body background is already white */
+            /* color: #fff; Game UI elements set their own colors, this could be a default for text within this wrapper */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Vertically centers the game block if there's space */
+            padding: 20px 0; /* Some spacing around the game area */
+            width: 100%;
+        }
+
+        #gameContainer {
+            position: relative;
+            border: 2px solid #555;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.5);
+            /* overflow: hidden; /* To contain canvas if it ever tries to exceed bounds */
+        }
+        canvas {
+            display: block;
+            background-color: #000; /* Fallback, will be drawn over */
+        }
+        #uiOverlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none; /* Allow clicks to pass through to canvas */
+            color: #fff; /* Explicitly set color for score/stage text */
+        }
+        #score, #stageName {
+            font-size: 9px; /* Adjusted to be more readable perhaps */
+            background-color: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        #progressBarContainer {
+            width: 100%;
+            max-width: 800px; /* Match max game width for consistency */
+            box-sizing: border-box; /* Include padding/border in width */
+            background-color: #ddd; /* Changed for better visibility */
+            border-radius: 5px;
+            overflow: hidden;
+            height: 20px;
+            margin: 10px 0;
+            border: 1px solid #ccc; /* Changed for better visibility */
+        }
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background-color: #8b0000;
+            transition: width 0.3s ease-in-out;
+        }
+        #controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        button { /* Generic button style for game controls */
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        button:hover {
+            background-color: #a52a2a; /* Darken on hover slightly */
+        }
+        #startScreen, #stageCompleteScreen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.85);
+            color: #fff; /* Ensure text is white */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10; /* Above canvas, below mobile menu */
+        }
+        #startScreen h2, #stageCompleteScreen h2 { margin-top: 0; }
+        #startScreen p, #stageCompleteScreen p { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
     <!-- हैमबर्गर आइकन -->
     <div class="hamburger" onclick="toggleMenu()">
       <div class="hamburger-line"></div>
@@ -179,29 +284,27 @@
       <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
       <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
       <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+      <a href="index.html"><i class="fas fa-comment"></i>Post</a> <!-- Assuming index.html for Post -->
     </nav>
 
     <!-- हैडर -->
-    <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-
-  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
-
+    <header class="header" style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
+        <h1 style="color: white; font-size: 24px; margin: 0;">VIRAT SWARUP</h1> <!-- Corrected font-size -->
+        <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
     </header>
 
     <!-- डेस्कटॉप नेविगेशन -->
     <nav class="desktop-nav">
       <ul>
         <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="#agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="#enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="#emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li> <!-- Corrected href -->
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li> <!-- Corrected href -->
+        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li> <!-- Corrected href -->
+        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li> <!-- Assuming index.html for Post -->
       </ul>
     </nav>
 
-    <!-- बॉटम नेविगेशन -->
+    <!-- बॉटम नेविगेशन (visible on mobile) -->
     <nav class="bottom-nav">
       <ul>
         <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
@@ -212,124 +315,45 @@
       </ul>
     </nav>
       
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EvoRun: Cell to Cosmos (Endless)</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #fff;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden; /* Prevent scrollbars from canvas */
-        }
-        #gameContainer {
-            position: relative;
-            border: 2px solid #555;
-            box-shadow: 0 0 15px rgba(0, 200, 255, 0.5);
-        }
-        canvas {
-            display: block;
-            background-color: #000; /* Fallback, will be drawn over */
-        }
-        #uiOverlay {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            pointer-events: none; /* Allow clicks to pass through to canvas */
-        }
-        #score, #stageName {
-            font-size: 9px;
-            background-color: rgba(0,0,0,0.5);
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        #progressBarContainer {
-            width: 100%;
-            background-color: #fff;
-            border-radius: 5px;
-            overflow: hidden;
-            height: 20px;
-            margin: 10px 0;
-            border: 1px solid #fff;
-        }
-        #progressBar {
-            width: 0%;
-            height: 100%;
-            background-color: #8b0000;
-            transition: width 0.3s ease-in-out;
-        }
-        #controls {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 16px;
-            background-color: #8b0000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-        button:hover {
-            background-color: #8b0000;
-        }
-        #startScreen, #stageCompleteScreen { /* Removed #gameWonScreen style */
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0,0,0,0.85);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            z-index: 10;
-        }
-        #startScreen h2, #stageCompleteScreen h2 { margin-top: 0; }
-        #startScreen p, #stageCompleteScreen p { margin-bottom: 20px; }
-    </style>
-</head>
-<body>
-    <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
-        <div id="uiOverlay">
-            <div id="stageName">Cell</div>
-            <div id="score">Score: 0</div>
+    <!-- Wrapper for Game Elements -->
+    <div id="gameAreaWrapper">
+        <div id="gameContainer">
+            <canvas id="gameCanvas"></canvas>
+            <div id="uiOverlay">
+                <div id="stageName">Cell</div>
+                <div id="score">Score: 0</div>
+            </div>
+            <div id="startScreen">
+                <h2>Cell to Cosmos</h2>     
+                <p>The final stage is endless. Reach for the highest score!</p>
+                <button id="startButton">Start Game</button>
+            </div>
+            <div id="stageCompleteScreen" style="display: none;">
+                <h2 id="stageCompleteTitle">Stage Complete!</h2>
+                <p id="stageCompleteMessage">Preparing for the next phase of evolution...</p>
+                <button id="nextStageButton">Next Stage</button>
+            </div>
         </div>
-        <div id="startScreen">
-            <h2>Cell to Cosmos</h2>     
-            <p>The final stage is endless. Reach for the highest score!</p>
-            <button id="startButton">Start Game</button>
+        <div id="progressBarContainer">
+            <div id="progressBar"></div>
         </div>
-        <div id="stageCompleteScreen" style="display: none;">
-            <h2 id="stageCompleteTitle">Stage Complete!</h2>
-            <p id="stageCompleteMessage">Preparing for the next phase of evolution...</p>
-            <button id="nextStageButton">Next Stage</button>
+        <div id="controls">
+            <button id="musicToggle">Music: OFF</button>
+            <button id="sfxToggle">SFX: ON</button>
+            <button id="restartGameButton" title="Restart Game">Restart</button>
         </div>
-         <!-- Removed gameWonScreen div -->
-    </div>
-    <div id="progressBarContainer">
-        <div id="progressBar"></div>
-    </div>
-    <div id="controls">
-        <button id="musicToggle">Music: OFF</button>
-        <button id="sfxToggle">SFX: ON</button>
-        <button id="restartGameButton" title="Restart Game">Restart</button>
     </div>
 
     <script>
+        // Hamburger Menu Toggle Function
+        function toggleMenu() {
+          const mobileMenu = document.querySelector('.mobile-menu');
+          const hamburger = document.querySelector('.hamburger');
+          mobileMenu.classList.toggle('active');
+          hamburger.classList.toggle('active');
+        }
+
+        // Game Script (EvoRun: Cell to Cosmos)
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -339,10 +363,8 @@
 
         const startScreen = document.getElementById('startScreen');
         const stageCompleteScreen = document.getElementById('stageCompleteScreen');
-        // const gameWonScreen = document.getElementById('gameWonScreen'); // Removed
         const stageCompleteTitle = document.getElementById('stageCompleteTitle');
         const stageCompleteMessage = document.getElementById('stageCompleteMessage');
-        // const finalScoreDisplay = document.getElementById('finalScore'); // Removed
         
         const startButton = document.getElementById('startButton');
         const nextStageButton = document.getElementById('nextStageButton');
@@ -353,15 +375,15 @@
         let gameWidth, gameHeight;
         let player;
         let collectibles = [];
-        let obstacles = [];
+        let obstacles = []; // Declared but not used in provided code, kept for consistency
         let score = 0;
         let currentStageIndex = 0;
         let stageProgress = 0;
         let gameSpeed = 2;
         let animationFrameId;
         let isGameRunning = false;
-        let isJumping = false;
-        let isInEndlessMode = false; // New flag
+        // let isJumping = false; // Declared but not directly used for logic, jump mechanics don't rely on it
+        let isInEndlessMode = false; 
 
         let sfxOn = true;
         let musicOn = false;
@@ -451,23 +473,22 @@
                     ctx.lineTo(c.x + c.radius + 20, c.y + 5); ctx.closePath(); ctx.fill();
                 }
             },
-            { // New Universe stage - will become endless
+            { 
                 name: "Universe",
-                bgColor: "#0c0014", // Very dark purple/black
-                playerColor: "#f0f0f0", // Bright point of light / cosmic spark
-                playerRadius: 10, // Smaller, more ethereal
-                collectibleColor: "#dda0dd", // Plum / light purple (Dark Matter Filaments)
+                bgColor: "#0c0014", 
+                playerColor: "#f0f0f0", 
+                playerRadius: 10, 
+                collectibleColor: "#dda0dd", 
                 collectibleRadius: 7,
                 collectibleValue: 25,
-                goal: 250, // Initial goal before becoming endless
+                goal: 250, 
                 itemSpawnRate: 90,
-                playerRepresentation: (p) => { // Pulsing star/spark
+                playerRepresentation: (p) => { 
                     ctx.fillStyle = p.color;
                     const corePulse = Math.sin(Date.now() * 0.03) * (p.radius * 0.3);
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius * 0.7 + corePulse, 0, Math.PI * 2);
                     ctx.fill();
-                    // Outer glow
                     const glowPulse = Math.sin(Date.now() * 0.02) * 5;
                     const gradient = ctx.createRadialGradient(p.x, p.y, p.radius * 0.5, p.x, p.y, p.radius + glowPulse + 5);
                     gradient.addColorStop(0, `rgba(255, 255, 255, ${0.3 + Math.sin(Date.now() * 0.025) * 0.2})`);
@@ -477,7 +498,7 @@
                     ctx.arc(p.x, p.y, p.radius + glowPulse + 5, 0, Math.PI * 2);
                     ctx.fill();
                 },
-                collectibleRepresentation: (c) => { // Wispy strands
+                collectibleRepresentation: (c) => { 
                     ctx.strokeStyle = c.color;
                     ctx.lineWidth = 3;
                     ctx.beginPath();
@@ -530,8 +551,8 @@
             stageProgress = 0;
             gameSpeed = 2;
             collectibles = [];
-            obstacles = [];
-            loadStage(0); // Ensure STAGES[0].name is used for display
+            // obstacles = []; // Already empty or reset
+            loadStage(0); 
             updateScoreDisplay();
             updateProgressBar();
             startScreen.style.display = 'flex';
@@ -540,12 +561,12 @@
 
 
         function initGame() {
-            resizeCanvas();
+            resizeCanvas(); // Ensure dimensions are set first
             currentStageIndex = 0;
             score = 0;
             gameSpeed = 2;
-            isInEndlessMode = false; // Crucial reset
-            player = new Player(gameWidth / 4, gameHeight / 2, STAGES[0].playerRadius, STAGES[0].playerColor);
+            isInEndlessMode = false; 
+            // Player is initialized/reset in loadStage
             loadStage(currentStageIndex);
             startScreen.style.display = 'none';
             stageCompleteScreen.style.display = 'none';
@@ -556,24 +577,25 @@
         function loadStage(stageIndex) {
             currentStageIndex = stageIndex;
             const stage = STAGES[stageIndex];
-            stageProgress = 0; // Reset progress for new stage
+            stageProgress = 0; 
             collectibles = [];
-            obstacles = [];
-            
+            // obstacles = [];
+
             if (player) {
                 player.resetForStage(stage);
             } else {
                  player = new Player(gameWidth / 4, gameHeight / 2, stage.playerRadius, stage.playerColor);
             }
 
-            // Ensure original stage name is used if coming from endless mode reset
             const originalStageName = STAGES[stageIndex].originalName || STAGES[stageIndex].name;
             stageNameDisplay.textContent = `Stage: ${originalStageName}`;
-            if(STAGES[stageIndex].originalName) STAGES[stageIndex].name = originalStageName; // Restore it
+            if(STAGES[stageIndex].originalName && STAGES[stageIndex].name !== originalStageName) {
+                 STAGES[stageIndex].name = originalStageName; 
+            }
 
             updateScoreDisplay();
             updateProgressBar();
-            gameSpeed = 2 + stageIndex * 0.5; // Base speed for stage
+            gameSpeed = 2 + stageIndex * 0.5; 
         }
 
         function updateScoreDisplay() {
@@ -584,7 +606,7 @@
             const stage = STAGES[currentStageIndex];
             let progressPercent = 0;
             if (isInEndlessMode && currentStageIndex === STAGES.length -1) {
-                progressPercent = 100; // Bar stays full in endless mode for the final stage
+                progressPercent = 100; 
             } else if (stage.goal > 0) {
                 progressPercent = Math.min((stageProgress / stage.goal) * 100, 100);
             }
@@ -602,7 +624,7 @@
             ctx.fillStyle = currentStageData.bgColor;
             ctx.fillRect(0, 0, gameWidth, gameHeight);
 
-            if (frameCount % currentStageData.itemSpawnRate === 0 && collectibles.length < 15) { // Limit max collectibles
+            if (frameCount % currentStageData.itemSpawnRate === 0 && collectibles.length < 15) { 
                 const y = Math.random() * (gameHeight - currentStageData.collectibleRadius * 2) + currentStageData.collectibleRadius;
                 collectibles.push(new Collectible(
                     gameWidth, y,
@@ -621,7 +643,7 @@
                 const dist = Math.hypot(player.x - collectible.x, player.y - collectible.y);
                 if (dist < player.radius + collectible.radius) {
                     score += collectible.value;
-                    if (!isInEndlessMode || currentStageIndex < STAGES.length -1) { // Don't add to stageProgress if in endless final stage
+                    if (!isInEndlessMode || currentStageIndex < STAGES.length -1) { 
                         stageProgress += collectible.value;
                     }
                     playSound('collect');
@@ -631,7 +653,6 @@
 
                     if (!isInEndlessMode && stageProgress >= currentStageData.goal) {
                         completeStage();
-                        // return; // Don't return if it might go into endless immediately
                     }
                 } else if (collectible.x + collectible.radius < 0) {
                     collectibles.splice(i, 1); 
@@ -641,8 +662,8 @@
             player.update();
             player.draw();
 
-            if (isInEndlessMode) {
-                gameSpeed += 0.0003; // Slower, more gradual increase for endless
+            if (isInEndlessMode && currentStageIndex === STAGES.length - 1) { // Only increase speed if in endless mode on the FINAL stage
+                gameSpeed += 0.0003; 
             }
 
             animationFrameId = requestAnimationFrame(gameLoop);
@@ -651,50 +672,97 @@
         function completeStage() {
             playSound('stage_complete');
 
-            if (currentStageIndex < STAGES.length - 1) { // If not the very last defined stage
-                isGameRunning = false; // Pause game for stage transition
+            if (currentStageIndex < STAGES.length - 1) { 
+                isGameRunning = false; 
                 cancelAnimationFrame(animationFrameId);
                 stageCompleteTitle.textContent = `Stage ${STAGES[currentStageIndex].name} Complete!`;
                 stageCompleteMessage.textContent = `Preparing for the ${STAGES[currentStageIndex + 1].name} stage.`;
                 stageCompleteScreen.style.display = 'flex';
-            } else { // This is the last defined stage, it now becomes truly endless
+            } else { 
                 isInEndlessMode = true;
-                // Store original name if not already stored
                 if (!STAGES[currentStageIndex].originalName) {
                     STAGES[currentStageIndex].originalName = STAGES[currentStageIndex].name;
                 }
                 STAGES[currentStageIndex].name = `${STAGES[currentStageIndex].originalName} (Endless)`;
                 stageNameDisplay.textContent = `Stage: ${STAGES[currentStageIndex].name}`;
-                stageProgress = STAGES[currentStageIndex].goal; // Mark as "complete" for progress bar
-                updateProgressBar(); // Ensure bar is full
-                // Game continues, gameLoop is not stopped. Speed will increase in gameLoop.
+                stageProgress = STAGES[currentStageIndex].goal; 
+                updateProgressBar(); 
             }
         }
 
         function advanceToNextStage() {
             stageCompleteScreen.style.display = 'none';
             currentStageIndex++;
-            // No need to check if currentStageIndex < STAGES.length here,
-            // loadStage will handle it.
             loadStage(currentStageIndex);
-            isGameRunning = true; // Resume game
+            isGameRunning = true; 
             gameLoop();
         }
 
         function resizeCanvas() {
-            const maxWidth = 800; const maxHeight = 600; const aspectRatio = 4 / 3;
-            let newWidth = window.innerWidth * 0.9; let newHeight = window.innerHeight * 0.65;
-            if (newWidth / newHeight > aspectRatio) { newWidth = newHeight * aspectRatio; } 
-            else { newHeight = newWidth / aspectRatio; }
-            newWidth = Math.min(newWidth, maxWidth); newHeight = Math.min(newHeight, maxHeight);
-            canvas.width = newWidth; canvas.height = newHeight;
-            gameWidth = canvas.width; gameHeight = canvas.height;
-            if (player) { player.x = gameWidth / 4; }
+            const gameArea = document.getElementById('gameAreaWrapper');
+            const maxWidth = 800; 
+            const maxHeight = 600; 
+            const aspectRatio = 4 / 3;
+            
+            // Calculate available width for game based on parent, minus some padding perhaps
+            let availableWidth = gameArea.clientWidth * 0.95; // Use 95% of wrapper width
+            if (window.innerWidth < 768) availableWidth = gameArea.clientWidth * 0.9; // Smaller screens, use more width
+
+            let newWidth = Math.min(availableWidth, maxWidth);
+            let newHeight = newWidth / aspectRatio;
+
+            if (newHeight > maxHeight) {
+                newHeight = maxHeight;
+                newWidth = newHeight * aspectRatio;
+            }
+            
+            // Ensure it doesn't exceed window height significantly
+            const windowHeightThreshold = window.innerHeight * 0.7;
+            if (newHeight > windowHeightThreshold) {
+                newHeight = windowHeightThreshold;
+                newWidth = newHeight * aspectRatio;
+            }
+
+
+            canvas.width = newWidth; 
+            canvas.height = newHeight;
+            gameWidth = canvas.width; 
+            gameHeight = canvas.height;
+
+            // Make progress bar and controls responsive to canvas width
+            const progressBarContainer = document.getElementById('progressBarContainer');
+            const controlsDiv = document.getElementById('controls');
+            if (progressBarContainer) progressBarContainer.style.width = `${newWidth}px`;
+            if (controlsDiv) controlsDiv.style.width = `${newWidth}px`;
+
+
+            if (player) { 
+                player.x = gameWidth / 4;
+                // If game is running, player's Y might need adjustment if height changed drastically
+                if (isGameRunning) {
+                     player.y = Math.max(player.radius, Math.min(player.y, gameHeight - player.radius));
+                } else {
+                    player.y = gameHeight / 2; // Reset to middle if game not running
+                }
+            }
         }
 
         window.addEventListener('resize', () => {
             resizeCanvas();
-            if(isGameRunning) { updateProgressBar(); } // Redraw UI elements if needed
+            if(isGameRunning) { 
+                updateProgressBar(); 
+                // Potentially redraw canvas or elements if not in gameLoop
+                // but gameLoop will handle redraw if active
+            } else if (player) { // If game not running (e.g. on start screen)
+                // Clear and redraw player placeholder if needed, or simply update dimensions
+                ctx.clearRect(0,0, gameWidth, gameHeight);
+                const stage = STAGES[currentStageIndex];
+                ctx.fillStyle = stage.bgColor;
+                ctx.fillRect(0,0, gameWidth, gameHeight);
+                if(startScreen.style.display === 'none' && stageCompleteScreen.style.display === 'none') {
+                    player.draw(); // Redraw player if on canvas but not actively looping
+                }
+            }
         });
 
         function handleInteractionStart(event) {
@@ -707,7 +775,7 @@
 
         startButton.addEventListener('click', initGame);
         nextStageButton.addEventListener('click', advanceToNextStage);
-        restartGameButton.addEventListener('click', fullyResetGame); // New restart button
+        restartGameButton.addEventListener('click', fullyResetGame); 
         
         musicToggleButton.addEventListener('click', () => {
             musicOn = !musicOn;
@@ -722,7 +790,7 @@
         });
 
         // Initial setup
-        resizeCanvas();
+        resizeCanvas(); // Call resize at start to set initial dimensions
         startScreen.style.display = 'flex';
 
     </script>
