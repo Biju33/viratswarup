@@ -332,20 +332,27 @@ Life never asked us for anything — it only wanted us to feel, to live, to simp
   <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
    How DNA Builds the Body – A Silent Architect
   </h2>
-  <img 
-    src="images/virat-swarup.jpg" 
-    alt="विराट स्वरूप" 
-    style="
-      width: 100%; 
-      max-width: 600px; 
-      height: auto; 
-      border-radius: 16px; 
-      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
-      margin-bottom: 25px;
-    " 
-  />
+    <div class="video-container" id="videoBox2" onclick="playVideo('gG7uCskUOrA', this)">
+    <img src="https://img.youtube.com/vi/gG7uCskUOrA/hqdefault.jpg" alt="Video Thumbnail" loading="lazy">
+    <div class="play-button"></div>
+</div>
+
+<script>
+  function playVideo(videoId, container) {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+    iframe.frameBorder = '0';
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.allowFullscreen = true;
+    iframe.width = '100%';
+    iframe.height = '100%';
+
+    container.innerHTML = ''; // remove thumbnail and play button
+    container.appendChild(iframe);
+  }
+</script>
   <p style="font-size: 18px; line-height: 1.8;">
-    शImagine a blueprint so detailed, so vast, that it can create an entire human body — bones, skin, blood, organs, brain, breath. Now imagine this blueprint isn’t stored in a computer, or designed by an engineer... but quietly folded inside every cell of your body.
+    Imagine a blueprint so detailed, so vast, that it can create an entire human body — bones, skin, blood, organs, brain, breath. Now imagine this blueprint isn’t stored in a computer, or designed by an engineer... but quietly folded inside every cell of your body.
 
 This is DNA — not just a molecule, but a silent architect. It doesn’t speak, yet it instructs. It doesn’t think, yet it designs. It doesn’t move, yet it builds. Within its spiral strands lies the encoded intelligence of life itself — guiding the formation of every part of you, from a single cell to a fully conscious being.
 
@@ -375,25 +382,18 @@ DNA is not just the language of life — it is a whisper from the universe, sayi
   <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
     Connecting to Natural Intelligences
   </h2>
-   <div class="video-container" id="videoBox2" onclick="playVideo('gG7uCskUOrA', this)">
-    <img src="https://img.youtube.com/vi/gG7uCskUOrA/hqdefault.jpg" alt="Video Thumbnail" loading="lazy">
-    <div class="play-button"></div>
-</div>
-
-<script>
-  function playVideo(videoId, container) {
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
-    iframe.frameBorder = '0';
-    iframe.allow = 'autoplay; encrypted-media';
-    iframe.allowFullscreen = true;
-    iframe.width = '100%';
-    iframe.height = '100%';
-
-    container.innerHTML = ''; // remove thumbnail and play button
-    container.appendChild(iframe);
-  }
-</script>
+    <img 
+    src="images/conecting_to_natural_inteligence.jpg" 
+    alt="विराट स्वरूप" 
+    style="
+      width: 100%; 
+      max-width: 600px; 
+      height: auto; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
+      margin-bottom: 25px;
+    " 
+  />
   <p style="font-size: 18px; line-height: 1.8;">
     The journey to understanding and gaining knowledge starts not by accumulating more data, but by connecting to the natural intelligence that exists within and around us.
 
