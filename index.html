@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIRAT SWARUP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script> 
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Georgia", serif;
+        }
+
+        body {
+            background: #ffffff;
+            color: #2c2c2c;
+            padding-bottom: 70px; /* Space for bottom nav */
+        }
+
+        .header {
+            padding: 95px 20px 45px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #8b0000;
+        }
+        .header h1 {
+            font-size: 52px;
+            letter-spacing: 3.2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            color: white;
+        }
+        .header h2 {
+            font-size: 22px;
+            color: white;
+            font-weight: 300;
+        }
+
+        .hamburger {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            cursor: pointer;
+            display: none;
+            z-index: 1001;
+        }
+        .hamburger-line {
+            width: 28px;
+            height: 2px;
+            background: #ffffff;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: #8b0000;
+            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+            transition: 0.4s;
+            padding-top: 80px;
+            z-index: 1000;
+        }
+        .mobile-menu.active {
+            right: 0;
+        }
+        .mobile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 30px;
+            color: #fff !important;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .mobile-menu i {
+            width: 25px;
+            font-size: 20px;
+            color: #fff !important;
+        }
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #8b0000;
+            border-top: 1px solid #eee;
+            padding: 8px 0;
+            display: none;
+            z-index: 999;
+        }
+        .bottom-nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+        }
+        .bottom-nav a {
+            color: #fff !important;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        .bottom-nav a i {
+            font-size: 20px;
+        }
+        .bottom-nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .desktop-nav {
+            margin: 45px 0;
+        }
+        .desktop-nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            list-style: none;
+        }
+        .desktop-nav a {
+            color: #8b0000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .desktop-nav { display: none; }
+            .bottom-nav { display: block; }
+            .header { padding: 70px 20px 35px; }
+            .header h1 { font-size: 36px; }
+            .header h2 { font-size: 18px; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .login-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 50px;
+        }
+        .login-section h1 { color: #333; margin-bottom: 20px; }
+        .login-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        .google-btn { background: #4285F4; color: white; border: none; }
+        .facebook-btn { background: #3b5998; color: white; border: none; }
+        .login-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .login-btn i { margin-right: 10px; font-size: 18px; }
+
+        .app-section { display: none; }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #8b0000;
+        }
+        .user-info div h2 { margin: 0; font-size: 18px; color: #333; }
+        #logoutBtn {
+            background: #8b0000;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        #logoutBtn:hover { background: #6a0000; }
+
+        .post-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .post-form h3 { margin-bottom: 15px; color: #333; }
+        .post-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 10px;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        .post-form button#postBtn { /* Specific ID for post button styling */
+            background: #8b0000;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .post-form button#postBtn:hover { background: #6a0000; }
+        .post-form button#postBtn:disabled { background: #cccccc; cursor: not-allowed; }
+
+
+        .posts-container h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+            border-bottom: 2px solid #8b0000;
+            padding-bottom: 10px;
+        }
+        .post {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 1px solid #eee;
+        }
+        .post-header strong { font-size: 16px; color: #333; }
+        .post-header span.timestamp { font-size: 12px; color: #777; margin-left: auto; }
+        .post-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+        .post-content img.post-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: block;
+            border: 1px solid #eee;
+        }
+
+        .post-actions {
+            display: flex;
+            margin-top: 10px;
+            gap: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        .post-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            padding: 5px;
+        }
+        .post-actions button i { font-size: 18px; margin-right: 8px; color: #8b0000; }
+        .post-actions button:hover i, .post-actions button:hover span { color: #6a0000; }
+        .like-btn.liked i { color: red !important; }
+
+        .comments-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
+        .comments-list .comment {
+            margin-bottom: 12px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .comment-header { display: flex; align-items: center; margin-bottom: 5px; }
+        .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
+        .comment-header strong { font-size: 13px; color: #333; }
+        .comment-header .timestamp { font-size: 11px; color: #888; margin-left: auto; }
+        .comment p { margin: 0; color: #555; white-space: pre-wrap; }
+        .comment-form-actual { display: flex; margin-top: 10px; }
+        .comment-form-actual input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 14px;
+        }
+        .comment-form-actual button {
+            background: #8b0000;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .comment-form-actual button:hover { background: #6a0000; }
+        .comment-form-actual button:disabled { background: #cccccc; cursor: not-allowed; }
+
+    </style>
+</head>
+<body>
+    <!-- Hamburger Icon -->
+    <div class="hamburger">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-menu">
+        <a href="index.html"><i class="fas fa-home"></i>Home</a>
+        <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
+        <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
+        <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
+        <a href="#post-form-container"><i class="fas fa-pen-to-square"></i>Post</a>
+        <a href="#loginSection"><i class="fas fa-sign-in-alt"></i>Login</a>
+    </nav>
+
+    <!-- Header -->
+ <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
+
+  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
+  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
+ </header>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
+            <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
+            <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
+            <li><a href="#post-form-container"><i class="fas fa-pen-to-square"></i>Post</a></li>
+        </ul>
+    </nav>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span>Agnosia</span></a></li>
+            <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span>Enigma</span></a></li>
+            <li><a href="emulate.html"><i class="fas fa-copy"></i><span>Emulate</span></a></li>
+            <li><a href="#post-form-container"><i class="fas fa-pen-to-square"></i><span>Post</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="login-section" id="loginSection">
+            <h1>Welcome</h1>
+            <p style="margin-bottom: 20px; color: #555;">Sign in to share and connect.</p>
+            <button class="login-btn google-btn" id="googleLoginBtn">
+                <i class="fab fa-google"></i> Sign in with Google
+            </button>
+            <button class="login-btn facebook-btn" id="facebookLoginBtn">
+                <i class="fab fa-facebook-f"></i> Sign in with Facebook
+            </button>
+        </div>
+        
+        <div class="app-section" id="appSection">
+            <div class="user-info">
+                <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo">
+                <div>
+                    <h2 id="userName"></h2>
+                    <button id="logoutBtn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="post-form" id="post-form-container">
+                <h3>Create Post</h3>
+                <textarea id="postContent" placeholder="What's on your mind, Virat Bhakt?"></textarea>
+                
+                <label for="postImageFile" style="cursor: pointer; display: inline-block; margin-bottom: 10px; color: #555; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                    <i class="fas fa-image"></i> Add Image (Optional)
+                </label>
+                <input type="file" id="postImageFile" accept="image/*" style="display: none;">
+                <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee;">
+                <div id="uploadProgressContainer" style="display: none; margin-bottom: 10px;">
+                    <progress id="uploadProgress" value="0" max="100" style="width: 100%; height: 10px;"></progress>
+                    <span id="uploadProgressText" style="font-size: 0.8em; display: block; text-align: center;"></span>
+                </div>
+
+                <button id="postBtn">Post</button>
+            </div>
+            
+            <div class="posts-container" id="postsContainer">
+                <h3>Feed</h3>
+                <!-- Posts will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
+      authDomain: "viratsawarup.firebaseapp.com",
+      // databaseURL: "https://viratsawarup-default-rtdb.asia-southeast1.firebasedatabase.app", // Not needed for Firestore
+      projectId: "viratsawarup",
+      storageBucket: "viratsawarup.appspot.com", // CRITICAL: Use your-project-id.appspot.com
+      messagingSenderId: "264071748020",
+      appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
+      measurementId: "G-7GJQPJCR1L" // Optional
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    const elements = {
+        loginSection: document.getElementById('loginSection'),
+        appSection: document.getElementById('appSection'),
+        googleLoginBtn: document.getElementById('googleLoginBtn'),
+        facebookLoginBtn: document.getElementById('facebookLoginBtn'),
+        logoutBtn: document.getElementById('logoutBtn'),
+        userPhoto: document.getElementById('userPhoto'),
+        userName: document.getElementById('userName'),
+        postBtn: document.getElementById('postBtn'),
+        postContent: document.getElementById('postContent'),
+        postsContainer: document.getElementById('postsContainer'),
+        mobileMenu: document.querySelector('.mobile-menu'),
+        hamburger: document.querySelector('.hamburger'),
+        postImageFile: document.getElementById('postImageFile'),
+        imagePreview: document.getElementById('imagePreview'),
+        uploadProgressContainer: document.getElementById('uploadProgressContainer'),
+        uploadProgress: document.getElementById('uploadProgress'),
+        uploadProgressText: document.getElementById('uploadProgressText')
+    };
+
+    if (elements.postImageFile) {
+        elements.postImageFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    elements.imagePreview.src = event.target.result;
+                    elements.imagePreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                elements.imagePreview.src = '#';
+                elements.imagePreview.style.display = 'none';
+            }
+        });
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            if(elements.loginSection) elements.loginSection.style.display = 'none';
+            if(elements.appSection) elements.appSection.style.display = 'block';
+            if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+            if(elements.userName) elements.userName.textContent = user.displayName || 'User';
+            loadPosts();
+        } else {
+            if(elements.loginSection) elements.loginSection.style.display = 'block';
+            if(elements.appSection) elements.appSection.style.display = 'none';
+            if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
+        }
+    });
+
+    async function handleAuth(provider) {
+        try {
+            await auth.signInWithPopup(provider);
+        } catch (error) {
+            console.error("Login Error:", error);
+            if (error.code === 'auth/popup-closed-by-user') return; // User closed popup
+            if (error.code === 'auth/cancelled-popup-request') return; // User closed popup
+            alert(`Login Error: ${error.message}`);
+        }
+    }
+
+    if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
+    if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
+        alert("Facebook login requires developer setup. Please use Google Sign-In for now.");
+    });
+    if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
+
+    if (elements.postBtn) {
+        elements.postBtn.addEventListener('click', async () => {
+            const content = elements.postContent ? elements.postContent.value.trim() : "";
+            const imageFile = elements.postImageFile ? elements.postImageFile.files[0] : null;
+            const currentUser = auth.currentUser;
+
+            if (!content && !imageFile) {
+                alert("Post content or an image is required!");
+                return;
+            }
+            if (!currentUser) {
+                alert("You must be logged in to post!");
+                return;
+            }
+
+            elements.postBtn.disabled = true;
+            elements.postBtn.textContent = "Posting...";
+            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+            if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
+
+
+            try {
+                let imageUrl = null;
+
+                if (imageFile) {
+                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
+                    if(elements.uploadProgress) elements.uploadProgress.value = 0;
+
+                    const imageName = `post_images/${currentUser.uid}_${Date.now()}_${imageFile.name}`;
+                    const storageRef = storage.ref(imageName);
+                    const uploadTask = storageRef.put(imageFile);
+
+                    await new Promise((resolve, reject) => {
+                        uploadTask.on('state_changed',
+                            (snapshot) => {
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                if(elements.uploadProgress) elements.uploadProgress.value = progress;
+                                if(elements.uploadProgressText) elements.uploadProgressText.textContent = `Uploading: ${Math.round(progress)}%`;
+                            },
+                            (error) => {
+                                console.error("Upload failed:", error);
+                                reject(error);
+                            },
+                            async () => {
+                                try {
+                                    imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+                                    resolve();
+                                } catch (error) {
+                                    reject(error);
+                                }
+                            }
+                        );
+                    });
+                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
+                }
+
+                const postData = {
+                    content: content || "",
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName || 'Anonymous User',
+                    userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: [],
+                    comments: []
+                };
+
+                if (imageUrl) {
+                    postData.imageUrl = imageUrl;
+                }
+
+                await db.collection('posts').add(postData);
+
+                if(elements.postContent) elements.postContent.value = '';
+                if(elements.postImageFile) elements.postImageFile.value = null;
+                if(elements.imagePreview) {
+                    elements.imagePreview.src = '#';
+                    elements.imagePreview.style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error("Post Error:", error);
+                alert(`Post Error: ${error.message}`);
+            } finally {
+                if(elements.postBtn) {
+                    elements.postBtn.disabled = false;
+                    elements.postBtn.textContent = "Post";
+                }
+                if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+                if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
+
+            }
+        });
+    }
+    let postsUnsubscribe = null;
+    function loadPosts() {
+        if (postsUnsubscribe) {
+            postsUnsubscribe(); // Unsubscribe from previous listener
+        }
+        postsUnsubscribe = db.collection('posts')
+          .orderBy('timestamp', 'desc')
+          .onSnapshot(snapshot => {
+              if (elements.postsContainer) {
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3>';
+                  if (snapshot.empty) {
+                      elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
+                      return;
+                  }
+                  snapshot.forEach(doc => {
+                      createPostElement(doc.id, doc.data());
+                  });
+              }
+          }, error => {
+              console.error("Error loading posts: ", error);
+              if (elements.postsContainer) {
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts. Please try again later.</p>';
+              }
+          });
+    }
+    
+    function createPostElement(postId, post) {
+        const currentUser = auth.currentUser;
+        const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
+        
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
+        postDiv.setAttribute('data-post-id', postId);
+
+        const formattedTimestamp = post.timestamp ? post.timestamp.toDate().toLocaleString() : 'Just now';
+
+        let contentHTML = `<p>${post.content ? escapeHTML(post.content).replace(/\n/g, '<br>') : ''}</p>`;
+        if (post.imageUrl) {
+            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image">`;
+        }
+
+        postDiv.innerHTML = `
+            <div class="post-header">
+                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${post.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <div>
+                    <strong>${escapeHTML(post.userName)}</strong>
+                </div>
+                <span class="timestamp">${formattedTimestamp}</span>
+            </div>
+            <div class="post-content">
+                ${contentHTML}
+            </div>
+            <div class="post-actions">
+                <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
+                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart" ${isLiked ? 'style="color:red;"' : ''}></i>
+                    <span>${post.likes ? post.likes.length : 0} Likes</span>
+                </button>
+                <button class="comment-toggle-btn" data-post-id="${postId}">
+                    <i class="far fa-comment"></i>
+                    <span>${post.comments ? post.comments.length : 0} Comments</span>
+                </button>
+            </div>
+            <div class="comments-area" id="comments-area-${postId}" style="display: none;">
+                <div class="comments-list" id="comments-list-${postId}"></div>
+                <form class="comment-form-actual" data-post-id="${postId}">
+                    <input type="text" name="commentText" placeholder="Add a comment..." required>
+                    <button type="submit">Post</button>
+                </form>
+            </div>
+        `;
+        
+        if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
+
+        const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
+        if (commentsList) {
+            if (post.comments && post.comments.length > 0) {
+                post.comments.forEach(comment => renderComment(comment, commentsList));
+            } else {
+                commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
+            }
+        }
+
+        const likeBtn = postDiv.querySelector('.like-btn');
+        if (likeBtn) likeBtn.addEventListener('click', () => handleLike(postId));
+        const commentToggleBtn = postDiv.querySelector('.comment-toggle-btn');
+        if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
+        const commentForm = postDiv.querySelector('.comment-form-actual');
+        if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
+    }
+
+    function renderComment(comment, commentsListElement) {
+        const commentDiv = document.createElement('div');
+        commentDiv.className = 'comment';
+        const commentTimestamp = comment.timestamp ? (typeof comment.timestamp.toDate === 'function' ? comment.timestamp.toDate().toLocaleString() : new Date(comment.timestamp).toLocaleString()) : 'Recently';
+        
+        const noCommentP = commentsListElement.querySelector('p');
+        if(noCommentP && noCommentP.textContent.includes('No comments yet')) {
+            noCommentP.remove();
+        }
+
+        commentDiv.innerHTML = `
+            <div class="comment-header">
+                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${comment.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <strong>${escapeHTML(comment.userName) || 'User'}</strong>
+                <span class="timestamp">${commentTimestamp}</span>
+            </div>
+            <p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>
+        `;
+        commentsListElement.appendChild(commentDiv);
+    }
+
+    async function handleLike(postId) {
+        const currentUser = auth.currentUser;
+        if (!currentUser) { alert("Please log in to like posts."); return; }
+
+        const postRef = db.collection('posts').doc(postId);
+        try {
+            await db.runTransaction(async (transaction) => {
+                const doc = await transaction.get(postRef);
+                if (!doc.exists) throw "Document does not exist!";
+                
+                let currentLikes = doc.data().likes || [];
+                let newLikesArray = [...currentLikes]; 
+
+                if (newLikesArray.includes(currentUser.uid)) {
+                    newLikesArray = newLikesArray.filter(uid => uid !== currentUser.uid);
+                } else {
+                    newLikesArray.push(currentUser.uid);
+                }
+                transaction.update(postRef, { likes: newLikesArray });
+            });
+        } catch (error) {
+            console.error("Like transaction failed: ", error);
+            alert("Failed to update like: " + error.message);
+        }
+    }
+
+    function toggleComments(postId) {
+        const commentsArea = document.getElementById(`comments-area-${postId}`);
+        if (commentsArea) {
+            const isHidden = commentsArea.style.display === 'none' || commentsArea.style.display === '';
+            commentsArea.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) {
+               const inputField = commentsArea.querySelector('input[name="commentText"]');
+               if (inputField) inputField.focus();
+            }
+        }
+    }
+
+    async function handleCommentSubmit(event, postId) {
+        event.preventDefault();
+        const currentUser = auth.currentUser;
+        if (!currentUser) { alert("Please log in to comment."); return; }
+
+        const form = event.target;
+        const commentTextInput = form.elements.commentText;
+        const commentText = commentTextInput.value.trim();
+        if (!commentText) { alert("Comment cannot be empty."); return; }
+
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton) {
+             submitButton.disabled = true;
+             submitButton.textContent = "Posting...";
+        }
+
+        const newComment = {
+            userId: currentUser.uid,
+            userName: currentUser.displayName || 'User',
+            userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+            text: commentText,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        const postRef = db.collection('posts').doc(postId);
+        try {
+            await postRef.update({
+                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
+            });
+            commentTextInput.value = '';
+        } catch (error) {
+            console.error("Error adding comment: ", error);
+            alert("Failed to add comment: " + error.message);
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Post";
+            }
+        }
+    }
+
+    function toggleMenu() {
+        if (elements.mobileMenu) {
+            elements.mobileMenu.classList.toggle('active');
+            if (elements.hamburger) { // Check if hamburger exists
+                document.querySelectorAll('.hamburger-line').forEach(line => {
+                    line.style.background = elements.mobileMenu.classList.contains('active') ? '#8b0000' : '#ffffff';
+                });
+            }
+        }
+    }
+    function closeMenuAndScroll(event) {
+        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
+            toggleMenu();
+        }
+        const targetId = event.currentTarget.getAttribute('href');
+        if (targetId && targetId.startsWith('#')) {
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                event.preventDefault();
+                targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }
+
+    if (elements.hamburger) elements.hamburger.addEventListener('click', toggleMenu);
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+        link.addEventListener('click', (event) => {
+            if (link.getAttribute('href').startsWith('#')) {
+                closeMenuAndScroll(event);
+            } else {
+                if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
+        });
+    });
+    document.addEventListener('click', (e) => {
+        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
+            elements.hamburger && !elements.hamburger.contains(e.target) &&
+            !elements.mobileMenu.contains(e.target)) {
+            toggleMenu();
+        }
+    });
+    
+    function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
+    if (auth.currentUser) {
+        loadPosts();
+    }
+    </script>
+</body>
+</html>
