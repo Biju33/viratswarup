@@ -435,8 +435,6 @@
                 <input type="file" id="postImageFile" accept="image/*" style="display: none;">
                 <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee;">
                 <div id="uploadProgressContainer" style="display: none; margin-bottom: 10px;">
-                    <!-- Cloudinary upload progress is harder to get client-side with simple fetch -->
-                    <!-- We'll just show a generic "Uploading..." message on the button -->
                     <p id="uploadProgressText" style="font-size: 0.9em; text-align: center;"></p>
                 </div>
 
@@ -452,8 +450,8 @@
 
     <script>
     // --- START CLOUDINARY CONFIGURATION ---
-    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f"; // UPDATED
-    const CLOUDINARY_UPLOAD_PRESET = "public_uploader"; // UPDATED
+    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f";
+    const CLOUDINARY_UPLOAD_PRESET = "public_uploader";
     const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
     // --- END CLOUDINARY CONFIGURATION ---
 
@@ -462,7 +460,6 @@
       apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
       authDomain: "viratsawarup.firebaseapp.com",
       projectId: "viratsawarup",
-      // storageBucket: "viratsawarup.appspot.com", // Not needed for Cloudinary image uploads
       messagingSenderId: "264071748020",
       appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
       measurementId: "G-7GJQPJCR1L"
@@ -471,7 +468,6 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    // const storage = firebase.storage(); // Not needed for Cloudinary image uploads
 
     const elements = {
         loginSection: document.getElementById('loginSection'),
@@ -489,7 +485,7 @@
         postImageFile: document.getElementById('postImageFile'),
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
-        uploadProgressText: document.getElementById('uploadProgressText') // Changed from uploadProgress
+        uploadProgressText: document.getElementById('uploadProgressText')
     };
 
     if (elements.postImageFile) {
@@ -550,16 +546,8 @@
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
 
 
-    // --- MODIFIED POST BUTTON CLICK LISTENER FOR CLOUDINARY ---
     if (elements.postBtn) {
         elements.postBtn.addEventListener('click', async () => {
-            // Removed the check for "YOUR_CLOUD_NAME" as it's now hardcoded with your values
-            // if (!CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME === "YOUR_CLOUD_NAME" ||
-            //     !CLOUDINARY_UPLOAD_PRESET || CLOUDINARY_UPLOAD_PRESET === "YOUR_UPLOAD_PRESET") {
-            //     alert("Cloudinary configuration is missing. Please set YOUR_CLOUD_NAME and YOUR_UPLOAD_PRESET in the script.");
-            //     return;
-            // }
-
             const content = elements.postContent ? elements.postContent.value.trim() : "";
             const imageFile = elements.postImageFile ? elements.postImageFile.files[0] : null;
             const currentUser = auth.currentUser;
@@ -575,7 +563,7 @@
 
             elements.postBtn.disabled = true;
             elements.postBtn.textContent = "Posting...";
-            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none'; // Hide initially
+            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
 
 
@@ -589,8 +577,6 @@
                     const formData = new FormData();
                     formData.append('file', imageFile);
                     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-                    // You can add more parameters like tags, context, etc.
-                    // formData.append('tags', 'social_post, user_generated');
 
                     console.log("Uploading to Cloudinary...");
                     const response = await fetch(CLOUDINARY_UPLOAD_URL, {
@@ -605,7 +591,7 @@
                     }
 
                     const data = await response.json();
-                    imageUrl = data.secure_url; // Or data.url
+                    imageUrl = data.secure_url;
                     console.log("Image uploaded to Cloudinary:", imageUrl);
                     if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Image uploaded!';
                 }
@@ -638,17 +624,15 @@
                 console.error("Post Error (Cloudinary or Firestore):", error);
                 alert(`Post Error: ${error.message}`);
                 if(elements.uploadProgressText && elements.uploadProgressContainer.style.display === 'block') {
-                     elements.uploadProgressText.textContent = `Upload failed.`; // Simplified error
+                     elements.uploadProgressText.textContent = `Upload failed.`;
                 }
             } finally {
                 if(elements.postBtn) {
                     elements.postBtn.disabled = false;
                     elements.postBtn.textContent = "Post";
                 }
-                // Optionally hide progress text after a delay or on next action
                 setTimeout(() => {
                     if(elements.uploadProgressContainer && elements.postBtn && !elements.postBtn.disabled) {
-                        // Check if it's not already displaying a failure message from the catch block
                         if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
                             elements.uploadProgressContainer.style.display = 'none';
                             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
@@ -700,7 +684,7 @@
         if (post.content) {
             contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
         }
-        if (post.imageUrl) { // This will now be a Cloudinary URL
+        if (post.imageUrl) {
             contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.error('Failed to load post image: ${post.imageUrl}')">`;
         }
 
@@ -764,9 +748,6 @@
         if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl));
     }
 
-    // --- MODIFIED handleDeletePost ---
-    // Note: This version only deletes from Firestore.
-    // Securely deleting from Cloudinary usually requires a backend.
     async function handleDeletePost(postId, imageUrl) {
         const currentUser = auth.currentUser;
         if (!currentUser) {
@@ -783,19 +764,10 @@
         try {
             const doc = await postRef.get();
             if (doc.exists && doc.data().userId === currentUser.uid) {
-                // Delete the post document from Firestore
                 await postRef.delete();
                 console.log("Post deleted from Firestore.");
-
-                // IMPORTANT: Deleting the image from Cloudinary
-                // Securely deleting from Cloudinary from the client-side is complex and
-                // generally requires backend involvement (e.g., a Cloud Function) to use your API secret.
-                // If you have an Upload Preset that allows deletion (less common/secure for unsigned),
-                // you might attempt it, but it's not standard.
-                // For now, the image will remain on Cloudinary but its reference is gone from your app.
                 if (imageUrl) {
                     console.warn(`Image at ${imageUrl} was not deleted from Cloudinary. Implement server-side deletion for this.`);
-                    // alert("Post deleted from feed. Image remains on Cloudinary until server-side deletion is implemented.");
                 }
             } else {
                 alert("You do not have permission to delete this post or it no longer exists.");
@@ -830,29 +802,46 @@
         commentsListElement.appendChild(commentDiv);
     }
 
+    // --- handleLike with extensive console.log debugging ---
     async function handleLike(postId) {
+        console.log("Attempting to like post ID:", postId); // DEBUG
         const currentUser = auth.currentUser;
-        if (!currentUser) { alert("Please log in to like posts."); return; }
+        if (!currentUser) {
+            console.error("User not logged in for like action. Post ID:", postId); // DEBUG
+            alert("Please log in to like posts.");
+            return;
+        }
+        console.log("Current user for like:", currentUser.uid, "for Post ID:", postId); // DEBUG
 
         const postRef = db.collection('posts').doc(postId);
         try {
             await db.runTransaction(async (transaction) => {
+                console.log(`Transaction for like on post ${postId} started. User: ${currentUser.uid}`); // DEBUG
+
                 const doc = await transaction.get(postRef);
-                if (!doc.exists) throw "Document does not exist!";
+                if (!doc.exists) {
+                    console.error(`Document ${postId} does not exist in transaction!`); // DEBUG
+                    throw "Document does not exist!";
+                }
 
                 const postData = doc.data();
+                console.log(`Post ${postId} data in transaction:`, JSON.stringify(postData)); // DEBUG (stringify to see nested data)
                 let currentLikes = postData.likes || [];
                 let newLikesArray;
 
                 if (currentLikes.includes(currentUser.uid)) {
                     newLikesArray = currentLikes.filter(uid => uid !== currentUser.uid);
+                    console.log(`User ${currentUser.uid} is UNLIKING post ${postId}. New likes array:`, newLikesArray); // DEBUG
                 } else {
                     newLikesArray = [...currentLikes, currentUser.uid];
+                    console.log(`User ${currentUser.uid} is LIKING post ${postId}. New likes array:`, newLikesArray); // DEBUG
                 }
                 transaction.update(postRef, { likes: newLikesArray });
+                console.log(`Transaction for like on post ${postId} attempting update.`); // DEBUG
             });
+            console.log(`Like transaction for post ${postId} successful.`); // DEBUG
         } catch (error) {
-            console.error("Like transaction failed: ", error);
+            console.error("Like transaction failed for post ID:", postId, "Error:", error); // DEBUG
             alert("Failed to update like: " + error.message);
         }
     }
@@ -869,14 +858,22 @@
         }
     }
 
+    // --- handleCommentSubmit with extensive console.log debugging ---
     async function handleCommentSubmit(event, postId) {
         event.preventDefault();
+        console.log("Attempting to submit comment for post ID:", postId); // DEBUG
         const currentUser = auth.currentUser;
-        if (!currentUser) { alert("Please log in to comment."); return; }
+        if (!currentUser) {
+            console.error("User not logged in for comment action. Post ID:", postId); // DEBUG
+            alert("Please log in to comment.");
+            return;
+        }
+        console.log("Current user for comment:", currentUser.uid, "for Post ID:", postId); // DEBUG
 
         const form = event.target;
         const commentTextInput = form.elements.commentText;
         const commentText = commentTextInput.value.trim();
+        console.log("Comment text entered:", commentText, "for Post ID:", postId); // DEBUG
         if (!commentText) { alert("Comment cannot be empty."); return; }
 
         const submitButton = form.querySelector('button[type="submit"]');
@@ -892,15 +889,18 @@
             text: commentText,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
+        console.log("New comment object being prepared:", JSON.stringify(newComment), "for Post ID:", postId); // DEBUG
 
         const postRef = db.collection('posts').doc(postId);
         try {
+            console.log(`Attempting to update comments for post ${postId} with arrayUnion.`); // DEBUG
             await postRef.update({
                 comments: firebase.firestore.FieldValue.arrayUnion(newComment)
             });
+            console.log(`Comment successfully added to post ${postId}.`); // DEBUG
             commentTextInput.value = '';
         } catch (error) {
-            console.error("Error adding comment: ", error);
+            console.error("Error adding comment for post ID:", postId, "Error:", error); // DEBUG
             alert("Failed to add comment: " + error.message);
         } finally {
             if (submitButton) {
