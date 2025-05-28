@@ -1,13 +1,12 @@
 // main.js (Firebase Modular SDK v9+)
 
 // Import Firebase services
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"; // Use a recent, stable version
-// import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js"; // Uncomment if you need analytics
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import {
     getAuth,
     onAuthStateChanged,
     GoogleAuthProvider,
-    FacebookAuthProvider, // Keep if you might add it later
+    FacebookAuthProvider,
     signInWithPopup,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -22,31 +21,30 @@ import {
     runTransaction,
     updateDoc,
     arrayUnion,
-    // arrayRemove, // Not directly used in like logic, but good to know
-    serverTimestamp
+    serverTimestamp,
+    deleteDoc // Import for delete functionality if you add it
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import {
     getStorage,
     ref,
     uploadBytesResumable,
-    getDownloadURL
+    getDownloadURL,
+    deleteObject // Import for deleting images from storage
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
   authDomain: "viratsawarup.firebaseapp.com",
-  // databaseURL: "https://viratsawarup-default-rtdb.asia-southeast1.firebasedatabase.app", // Not for Firestore
   projectId: "viratsawarup",
-  storageBucket: "viratsawarup.appspot.com", // CRITICAL: Use your-project-id.appspot.com
+  storageBucket: "viratsawarup.appspot.com", // CRITICAL: Ensure this matches your Firebase project
   messagingSenderId: "264071748020",
   appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-  measurementId: "G-7GJQPJCR1L" // Optional
+  measurementId: "G-7GJQPJCR1L"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app); // Uncomment if you need analytics
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -106,7 +104,10 @@ onAuthStateChanged(auth, user => {
         if(elements.loginSection) elements.loginSection.style.display = 'block';
         if(elements.appSection) elements.appSection.style.display = 'none';
         if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
-        if (postsUnsubscribe) postsUnsubscribe(); // Unsubscribe when user logs out
+        if (postsUnsubscribe) {
+            postsUnsubscribe(); // Unsubscribe when user logs out
+            postsUnsubscribe = null;
+        }
     }
 });
 
@@ -160,9 +161,9 @@ if (elements.postBtn) {
                 if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
                 if(elements.uploadProgress) elements.uploadProgress.value = 0;
 
-                const imageName = `post_images/${currentUser.uid}_${Date.now()}_${imageFile.name}`;
-                const storageFileRef = ref(storage, imageName); // Use ref() from Modular SDK
-                const uploadTask = uploadBytesResumable(storageFileRef, imageFile); // Use uploadBytesResumable()
+                const imageName = `post_images/${currentUser.uid}/${Date.now()}_${imageFile.name}`; // Store under user's UID folder
+                const storageFileRef = ref(storage, imageName);
+                const uploadTask = uploadBytesResumable(storageFileRef, imageFile);
 
                 await new Promise((resolve, reject) => {
                     uploadTask.on('state_changed',
@@ -173,22 +174,34 @@ if (elements.postBtn) {
                         },
                         (error) => {
                             console.error("Upload failed:", error);
-                            reject(error);
+                            // Provide more specific error feedback
+                            let message = "Image upload failed.";
+                            switch (error.code) {
+                                case 'storage/unauthorized':
+                                    message = "Upload failed: You do not have permission. Please check Firebase Storage security rules.";
+                                    break;
+                                case 'storage/canceled':
+                                    message = "Upload canceled by user.";
+                                    break;
+                                case 'storage/object-not-found':
+                                    message = "Upload failed: File path not found. This might be a configuration issue.";
+                                    break;
+                                default:
+                                    message = `Upload error: ${error.message}`;
+                            }
+                            reject(new Error(message)); // Reject with a new error containing the user-friendly message
                         },
                         async () => {
                             try {
-                                imageUrl = await getDownloadURL(uploadTask.snapshot.ref); // Use getDownloadURL()
+                                imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
                                 resolve();
                             } catch (error) {
                                 console.error("Failed to get download URL:", error);
-                                reject(error);
+                                reject(new Error("Failed to get image URL after upload."));
                             }
                         }
                     );
                 });
-                if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
-                if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
-
             }
 
             const postData = {
@@ -196,7 +209,7 @@ if (elements.postBtn) {
                 userId: currentUser.uid,
                 userName: currentUser.displayName || 'Anonymous User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                timestamp: serverTimestamp(), // Modular SDK serverTimestamp
+                timestamp: serverTimestamp(),
                 likes: [],
                 comments: []
             };
@@ -205,7 +218,7 @@ if (elements.postBtn) {
                 postData.imageUrl = imageUrl;
             }
 
-            await addDoc(collection(db, 'posts'), postData); // Use addDoc() and collection()
+            await addDoc(collection(db, 'posts'), postData);
 
             if(elements.postContent) elements.postContent.value = '';
             if(elements.postImageFile) elements.postImageFile.value = null;
@@ -215,8 +228,8 @@ if (elements.postBtn) {
             }
 
         } catch (error) {
-            console.error("Post Error:", error);
-            alert(`Post Error: ${error.message}`);
+            console.error("Post Error Full:", error); // Log the full error object
+            alert(error.message || "An error occurred while creating the post. Check console for details."); // Display the specific error message from the promise rejection or a generic one
         } finally {
             if(elements.postBtn) {
                 elements.postBtn.disabled = false;
@@ -229,24 +242,24 @@ if (elements.postBtn) {
 }
 
 // --- Load Posts (Real-time listener) ---
-let postsUnsubscribe = null; // To store the unsubscribe function
+let postsUnsubscribe = null;
 
 function loadPosts() {
     if (!elements.postsContainer) return;
 
     if (postsUnsubscribe) {
-        postsUnsubscribe(); // Unsubscribe from previous listener if it exists
+        postsUnsubscribe();
     }
 
-    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc')); // Use query(), collection(), orderBy()
-    postsUnsubscribe = onSnapshot(q, (querySnapshot) => { // Use onSnapshot()
+    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
+    postsUnsubscribe = onSnapshot(q, (querySnapshot) => {
         if (elements.postsContainer) {
             elements.postsContainer.innerHTML = '<h3>Feed</h3>';
             if (querySnapshot.empty) {
                 elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
                 return;
             }
-            querySnapshot.forEach((docSnap) => { // docSnap to avoid conflict with imported doc
+            querySnapshot.forEach((docSnap) => {
                 createPostElement(docSnap.id, docSnap.data());
             });
         }
@@ -261,19 +274,18 @@ function loadPosts() {
 // --- Post Element Creation and Interaction ---
 function createPostElement(postId, post) {
     const currentUser = auth.currentUser;
+    const isOwner = currentUser && post.userId === currentUser.uid;
     const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-    
+
     const postDiv = document.createElement('div');
     postDiv.className = 'post';
     postDiv.setAttribute('data-post-id', postId);
 
-    // Ensure post.timestamp is a Firestore Timestamp before calling toDate()
-    const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function' 
-                                ? post.timestamp.toDate().toLocaleString() 
+    const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
+                                ? post.timestamp.toDate().toLocaleString()
                                 : (post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Just now');
 
-
-    let contentHTML = `<p>${post.content ? escapeHTML(post.content).replace(/\n/g, '<br>') : ''}</p>`;
+    let contentHTML = post.content ? `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>` : '';
     if (post.imageUrl) {
         contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.error('Error loading image: ${post.imageUrl}')">`;
     }
@@ -287,7 +299,7 @@ function createPostElement(postId, post) {
             <span class="timestamp">${formattedTimestamp}</span>
         </div>
         <div class="post-content">
-            ${contentHTML}
+            ${contentHTML || '<p style="color: #888;"><em>No text content for this post.</em></p>'}
         </div>
         <div class="post-actions">
             <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
@@ -298,6 +310,11 @@ function createPostElement(postId, post) {
                 <i class="far fa-comment"></i>
                 <span>${post.comments ? post.comments.length : 0} Comments</span>
             </button>
+            ${isOwner ? `
+                <button class="delete-post-btn" data-post-id="${postId}" style="margin-left: auto; color: #cc0000;">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            ` : ''}
         </div>
         <div class="comments-area" id="comments-area-${postId}" style="display: none;">
             <div class="comments-list" id="comments-list-${postId}"></div>
@@ -307,13 +324,20 @@ function createPostElement(postId, post) {
             </form>
         </div>
     `;
-    
+
     if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
 
     const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
     if (commentsList) {
+        commentsList.innerHTML = ''; // Clear previous comments before rendering
         if (post.comments && post.comments.length > 0) {
-            post.comments.forEach(comment => renderComment(comment, commentsList));
+            // Sort comments by timestamp before rendering (oldest first)
+            const sortedComments = [...post.comments].sort((a, b) => {
+                const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : 0;
+                const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : 0;
+                return timeA - timeB;
+            });
+            sortedComments.forEach(comment => renderComment(comment, commentsList));
         } else {
             commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
         }
@@ -321,19 +345,67 @@ function createPostElement(postId, post) {
 
     const likeBtn = postDiv.querySelector('.like-btn');
     if (likeBtn) likeBtn.addEventListener('click', () => handleLike(postId));
+
     const commentToggleBtn = postDiv.querySelector('.comment-toggle-btn');
     if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
+
     const commentForm = postDiv.querySelector('.comment-form-actual');
     if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
+
+    const deleteBtn = postDiv.querySelector('.delete-post-btn');
+    if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, post.imageUrl));
 }
+
+async function handleDeletePost(postId, postImageUrl) {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+        alert("Please log in to delete posts.");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
+        return;
+    }
+
+    const postRef = doc(db, 'posts', postId);
+    try {
+        // Optional: First check if the user owns the post (Security rules should enforce this anyway)
+        // const postSnap = await getDoc(postRef);
+        // if (!postSnap.exists() || postSnap.data().userId !== currentUser.uid) {
+        //     alert("You do not have permission to delete this post or it no longer exists.");
+        //     return;
+        // }
+
+        // Delete the image from Storage if it exists
+        if (postImageUrl) {
+            try {
+                const imageRef = ref(storage, postImageUrl); // refFromURL might be better if full URL stored
+                await deleteObject(imageRef);
+            } catch (storageError) {
+                console.warn("Could not delete image from storage (it might be already deleted or rules changed):", storageError);
+                // Don't block post deletion if image deletion fails, but log it.
+            }
+        }
+
+        // Delete the post document from Firestore
+        await deleteDoc(postRef);
+        // Post will be removed from UI by onSnapshot listener automatically
+        alert("Post deleted successfully.");
+
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        alert("Failed to delete post: " + error.message);
+    }
+}
+
 
 function renderComment(comment, commentsListElement) {
     const commentDiv = document.createElement('div');
     commentDiv.className = 'comment';
-    const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function' 
-                                ? comment.timestamp.toDate().toLocaleString() 
+    const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
+                                ? comment.timestamp.toDate().toLocaleString()
                                 : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
-    
+
     const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
     if(noCommentP) noCommentP.remove();
 
@@ -352,21 +424,21 @@ async function handleLike(postId) {
     const currentUser = auth.currentUser;
     if (!currentUser) { alert("Please log in to like posts."); return; }
 
-    const postRef = doc(db, 'posts', postId); // Use doc() from Modular SDK
+    const postRef = doc(db, 'posts', postId);
     try {
-        await runTransaction(db, async (transaction) => { // Pass db to runTransaction
+        await runTransaction(db, async (transaction) => {
             const sfDoc = await transaction.get(postRef);
-            if (!sfDoc.exists()) { // Check sfDoc.exists()
+            if (!sfDoc.exists()) {
                 throw "Document does not exist!";
             }
-            
-            const currentLikes = sfDoc.data().likes || [];
-            let newLikesArray = [...currentLikes]; 
 
-            if (newLikesArray.includes(currentUser.uid)) {
-                newLikesArray = newLikesArray.filter(uid => uid !== currentUser.uid);
+            const currentLikes = sfDoc.data().likes || [];
+            let newLikesArray;
+
+            if (currentLikes.includes(currentUser.uid)) {
+                newLikesArray = currentLikes.filter(uid => uid !== currentUser.uid);
             } else {
-                newLikesArray.push(currentUser.uid);
+                newLikesArray = [...currentLikes, currentUser.uid];
             }
             transaction.update(postRef, { likes: newLikesArray });
         });
@@ -409,13 +481,13 @@ async function handleCommentSubmit(event, postId) {
         userName: currentUser.displayName || 'User',
         userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
         text: commentText,
-        timestamp: serverTimestamp() // Modular SDK serverTimestamp
+        timestamp: serverTimestamp()
     };
 
-    const postRef = doc(db, 'posts', postId); // Use doc()
+    const postRef = doc(db, 'posts', postId);
     try {
-        await updateDoc(postRef, { // Use updateDoc()
-            comments: arrayUnion(newComment) // Use arrayUnion()
+        await updateDoc(postRef, {
+            comments: arrayUnion(newComment)
         });
         commentTextInput.value = '';
     } catch (error) {
@@ -431,15 +503,12 @@ async function handleCommentSubmit(event, postId) {
 
 // --- Hamburger Menu & Navigation ---
 function toggleMenu() {
-    if (elements.mobileMenu) {
+    if (elements.mobileMenu && elements.hamburger) {
         elements.mobileMenu.classList.toggle('active');
-        if (elements.hamburger) {
-            document.querySelectorAll('.hamburger-line').forEach(line => {
-                line.style.background = elements.mobileMenu.classList.contains('active') ? '#8b0000' : '#ffffff';
-            });
-        }
+        elements.hamburger.classList.toggle('active'); // For CSS-driven 'X' transform
     }
 }
+
 function closeMenuAndScroll(event) {
     if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
         toggleMenu();
@@ -478,15 +547,13 @@ document.addEventListener('click', (e) => {
 
 // --- Utility function to escape HTML ---
 function escapeHTML(str) {
-    if (typeof str !== 'string') return ''; // Handle non-string inputs
+    if (typeof str !== 'string') return '';
     const div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
 }
 
 // --- Initial load check ---
-// The onAuthStateChanged listener will handle this, but this explicit check can sometimes
-// make the UI respond faster if the user is already authenticated.
 if (auth.currentUser) {
     if(elements.loginSection) elements.loginSection.style.display = 'none';
     if(elements.appSection) elements.appSection.style.display = 'block';
