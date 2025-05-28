@@ -8,7 +8,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <!-- Firebase Storage SDK is NOT needed if using Cloudinary for images -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script> -->
 
     <style>
         * {
@@ -434,8 +435,9 @@
                 <input type="file" id="postImageFile" accept="image/*" style="display: none;">
                 <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee;">
                 <div id="uploadProgressContainer" style="display: none; margin-bottom: 10px;">
-                    <progress id="uploadProgress" value="0" max="100" style="width: 100%; height: 10px;"></progress>
-                    <span id="uploadProgressText" style="font-size: 0.8em; display: block; text-align: center;"></span>
+                    <!-- Cloudinary upload progress is harder to get client-side with simple fetch -->
+                    <!-- We'll just show a generic "Uploading..." message on the button -->
+                    <p id="uploadProgressText" style="font-size: 0.9em; text-align: center;"></p>
                 </div>
 
                 <button id="postBtn">Post</button>
@@ -449,14 +451,18 @@
     </div>
 
     <script>
-    // IMPORTANT: For a production app, your API key and Firebase config should be protected.
-    // Consider using Firebase App Check to protect your backend resources.
-    // Also, ensure you have strong Firebase Security Rules for Firestore and Storage.
+    // --- START CLOUDINARY CONFIGURATION ---
+    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f"; // UPDATED
+    const CLOUDINARY_UPLOAD_PRESET = "public_uploader"; // UPDATED
+    const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+    // --- END CLOUDINARY CONFIGURATION ---
+
+
     const firebaseConfig = {
       apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
       authDomain: "viratsawarup.firebaseapp.com",
       projectId: "viratsawarup",
-      storageBucket: "viratsawarup.appspot.com",
+      // storageBucket: "viratsawarup.appspot.com", // Not needed for Cloudinary image uploads
       messagingSenderId: "264071748020",
       appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
       measurementId: "G-7GJQPJCR1L"
@@ -465,7 +471,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    const storage = firebase.storage();
+    // const storage = firebase.storage(); // Not needed for Cloudinary image uploads
 
     const elements = {
         loginSection: document.getElementById('loginSection'),
@@ -483,8 +489,7 @@
         postImageFile: document.getElementById('postImageFile'),
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
-        uploadProgress: document.getElementById('uploadProgress'),
-        uploadProgressText: document.getElementById('uploadProgressText')
+        uploadProgressText: document.getElementById('uploadProgressText') // Changed from uploadProgress
     };
 
     if (elements.postImageFile) {
@@ -519,7 +524,7 @@
             if(elements.loginSection) elements.loginSection.style.display = 'block';
             if(elements.appSection) elements.appSection.style.display = 'none';
             if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
-            if (postsUnsubscribe) { // Unsubscribe when user logs out
+            if (postsUnsubscribe) {
                 postsUnsubscribe();
                 postsUnsubscribe = null;
             }
@@ -532,7 +537,6 @@
         } catch (error) {
             console.error("Login Error:", error);
             if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-                 // User closed popup, do nothing or provide gentle feedback
                 return;
             }
             alert(`Login Error: ${error.message}`);
@@ -545,16 +549,17 @@
     });
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
 
-    // Helper function to avoid double alerts if upload already failed and alerted
-    function alertContainsUploadFailure(message) {
-        const uploadErrorKeywords = ["upload failed", "permission denied", "storage/"];
-        if (typeof message !== 'string') return false;
-        return uploadErrorKeywords.some(keyword => message.toLowerCase().includes(keyword.toLowerCase()));
-    }
 
-    // --- START OF REPLACED/UPDATED CODE FOR POST BUTTON ---
+    // --- MODIFIED POST BUTTON CLICK LISTENER FOR CLOUDINARY ---
     if (elements.postBtn) {
         elements.postBtn.addEventListener('click', async () => {
+            // Removed the check for "YOUR_CLOUD_NAME" as it's now hardcoded with your values
+            // if (!CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME === "YOUR_CLOUD_NAME" ||
+            //     !CLOUDINARY_UPLOAD_PRESET || CLOUDINARY_UPLOAD_PRESET === "YOUR_UPLOAD_PRESET") {
+            //     alert("Cloudinary configuration is missing. Please set YOUR_CLOUD_NAME and YOUR_UPLOAD_PRESET in the script.");
+            //     return;
+            // }
+
             const content = elements.postContent ? elements.postContent.value.trim() : "";
             const imageFile = elements.postImageFile ? elements.postImageFile.files[0] : null;
             const currentUser = auth.currentUser;
@@ -570,9 +575,8 @@
 
             elements.postBtn.disabled = true;
             elements.postBtn.textContent = "Posting...";
-            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none'; // Hide initially
             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
-            if(elements.uploadProgress) elements.uploadProgress.value = 0;
 
 
             try {
@@ -580,69 +584,30 @@
 
                 if (imageFile) {
                     if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Uploading image...';
 
-                    const uniqueFileName = `${Date.now()}_${imageFile.name}`;
-                    const storagePath = `post_images/${currentUser.uid}/${uniqueFileName}`;
-                    const storageRef = storage.ref(storagePath);
-                    
-                    console.log("Starting image upload to:", storagePath);
+                    const formData = new FormData();
+                    formData.append('file', imageFile);
+                    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    // You can add more parameters like tags, context, etc.
+                    // formData.append('tags', 'social_post, user_generated');
 
-                    const uploadTask = storageRef.put(imageFile);
-
-                    await new Promise((resolve, reject) => {
-                        uploadTask.on('state_changed',
-                            (snapshot) => {
-                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                                if(elements.uploadProgress) elements.uploadProgress.value = progress;
-                                if(elements.uploadProgressText) elements.uploadProgressText.textContent = `Uploading: ${Math.round(progress)}%`;
-                            },
-                            (error) => {
-                                console.error("Upload failed:", error);
-                                console.error("Error Code:", error.code);
-                                console.error("Error Message:", error.message);
-
-                                let message = "Image upload failed. Check browser console for details.";
-                                switch (error.code) {
-                                    case 'storage/unauthorized':
-                                        message = "Upload failed: Permission denied. Please check your Firebase Storage Security Rules. Ensure users can write to paths like 'post_images/USER_ID/filename.jpg'.";
-                                        break;
-                                    case 'storage/canceled':
-                                        message = "Upload canceled by the user.";
-                                        break;
-                                    case 'storage/object-not-found':
-                                        message = "Upload failed: Object (path) not found. This usually means an issue with the storage path or rules structure.";
-                                        break;
-                                    case 'storage/bucket-not-found':
-                                        message = "Upload failed: Storage bucket not found. Check your `storageBucket` in `firebaseConfig`.";
-                                        break;
-                                    case 'storage/project-not-found':
-                                        message = "Upload failed: Firebase project not found.";
-                                        break;
-                                    case 'storage/quota-exceeded':
-                                        message = "Upload failed: Storage quota exceeded for your Firebase project.";
-                                        break;
-                                    case 'storage/unauthenticated':
-                                        message = "Upload failed: User is not authenticated. Please log in again.";
-                                        break;
-                                    default:
-                                        message = `Image upload failed: ${error.message}`;
-                                }
-                                alert(message);
-                                reject(error); 
-                            },
-                            async () => {
-                                try {
-                                    imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
-                                    console.log("Image uploaded successfully. URL:", imageUrl);
-                                    resolve();
-                                } catch (getUrlError) {
-                                     console.error("Error getting download URL:", getUrlError);
-                                     alert("Image uploaded, but failed to get its URL. " + getUrlError.message);
-                                    reject(getUrlError);
-                                }
-                            }
-                        );
+                    console.log("Uploading to Cloudinary...");
+                    const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+                        method: 'POST',
+                        body: formData
                     });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("Cloudinary Error Response:", errorData);
+                        throw new Error(`Cloudinary upload failed: ${errorData.error.message}`);
+                    }
+
+                    const data = await response.json();
+                    imageUrl = data.secure_url; // Or data.url
+                    console.log("Image uploaded to Cloudinary:", imageUrl);
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Image uploaded!';
                 }
 
                 const postData = {
@@ -669,33 +634,42 @@
                     elements.imagePreview.style.display = 'none';
                 }
 
-            } catch (error) { 
-                console.error("Error during post creation (could be upload or Firestore):", error);
-                if (!alertContainsUploadFailure(error.message)) { 
-                    alert(`Post Error: ${error.message}`);
+            } catch (error) {
+                console.error("Post Error (Cloudinary or Firestore):", error);
+                alert(`Post Error: ${error.message}`);
+                if(elements.uploadProgressText && elements.uploadProgressContainer.style.display === 'block') {
+                     elements.uploadProgressText.textContent = `Upload failed.`; // Simplified error
                 }
             } finally {
                 if(elements.postBtn) {
                     elements.postBtn.disabled = false;
                     elements.postBtn.textContent = "Post";
                 }
-                if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
+                // Optionally hide progress text after a delay or on next action
+                setTimeout(() => {
+                    if(elements.uploadProgressContainer && elements.postBtn && !elements.postBtn.disabled) {
+                        // Check if it's not already displaying a failure message from the catch block
+                        if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
+                            elements.uploadProgressContainer.style.display = 'none';
+                            if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
+                        }
+                    }
+                }, 3000);
             }
         });
     }
-    // --- END OF REPLACED/UPDATED CODE FOR POST BUTTON ---
 
 
     let postsUnsubscribe = null;
     function loadPosts() {
         if (postsUnsubscribe) {
-            postsUnsubscribe(); // Unsubscribe from previous listener if any
+            postsUnsubscribe();
         }
         postsUnsubscribe = db.collection('posts')
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3>'; // Clear previous posts
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3>';
                   if (snapshot.empty) {
                       elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
                       return;
@@ -723,10 +697,10 @@
         const formattedTimestamp = post.timestamp && post.timestamp.toDate ? post.timestamp.toDate().toLocaleString() : 'Just now';
 
         let contentHTML = '';
-        if (post.content) { 
+        if (post.content) {
             contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
         }
-        if (post.imageUrl) {
+        if (post.imageUrl) { // This will now be a Cloudinary URL
             contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.error('Failed to load post image: ${post.imageUrl}')">`;
         }
 
@@ -751,7 +725,7 @@
                     <span>${post.comments ? post.comments.length : 0} Comments</span>
                 </button>
                 ${currentUser && post.userId === currentUser.uid ?
-                    `<button class="delete-post-btn" data-post-id="${postId}" style="margin-left: auto; color: #cc0000;">
+                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" style="margin-left: auto; color: #cc0000;">
                         <i class="fas fa-trash"></i> Delete
                      </button>` : ''
                 }
@@ -770,7 +744,7 @@
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
         if (commentsList) {
             if (post.comments && post.comments.length > 0) {
-                post.comments.sort((a,b) => (a.timestamp && b.timestamp && a.timestamp.toDate && b.timestamp.toDate) ? a.timestamp.toDate() - b.timestamp.toDate() : 0) 
+                post.comments.sort((a,b) => (a.timestamp && b.timestamp && a.timestamp.toDate && b.timestamp.toDate) ? a.timestamp.toDate() - b.timestamp.toDate() : 0)
                            .forEach(comment => renderComment(comment, commentsList));
             } else {
                 commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
@@ -787,10 +761,12 @@
         if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
 
         const deleteBtn = postDiv.querySelector('.delete-post-btn');
-        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, post.imageUrl));
-
+        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl));
     }
 
+    // --- MODIFIED handleDeletePost ---
+    // Note: This version only deletes from Firestore.
+    // Securely deleting from Cloudinary usually requires a backend.
     async function handleDeletePost(postId, imageUrl) {
         const currentUser = auth.currentUser;
         if (!currentUser) {
@@ -807,15 +783,20 @@
         try {
             const doc = await postRef.get();
             if (doc.exists && doc.data().userId === currentUser.uid) {
-                if (imageUrl) {
-                    try {
-                        const imageStorageRef = storage.refFromURL(imageUrl);
-                        await imageStorageRef.delete();
-                    } catch (storageError) {
-                        console.warn("Could not delete image from storage, it might have been already deleted or permissions changed:", storageError);
-                    }
-                }
+                // Delete the post document from Firestore
                 await postRef.delete();
+                console.log("Post deleted from Firestore.");
+
+                // IMPORTANT: Deleting the image from Cloudinary
+                // Securely deleting from Cloudinary from the client-side is complex and
+                // generally requires backend involvement (e.g., a Cloud Function) to use your API secret.
+                // If you have an Upload Preset that allows deletion (less common/secure for unsigned),
+                // you might attempt it, but it's not standard.
+                // For now, the image will remain on Cloudinary but its reference is gone from your app.
+                if (imageUrl) {
+                    console.warn(`Image at ${imageUrl} was not deleted from Cloudinary. Implement server-side deletion for this.`);
+                    // alert("Post deleted from feed. Image remains on Cloudinary until server-side deletion is implemented.");
+                }
             } else {
                 alert("You do not have permission to delete this post or it no longer exists.");
             }
@@ -831,7 +812,7 @@
         commentDiv.className = 'comment';
         const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
                                 ? comment.timestamp.toDate().toLocaleString()
-                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently'); 
+                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
 
         const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
         if(noCommentP) {
@@ -860,7 +841,7 @@
                 if (!doc.exists) throw "Document does not exist!";
 
                 const postData = doc.data();
-                let currentLikes = postData.likes || []; 
+                let currentLikes = postData.likes || [];
                 let newLikesArray;
 
                 if (currentLikes.includes(currentUser.uid)) {
@@ -917,7 +898,7 @@
             await postRef.update({
                 comments: firebase.firestore.FieldValue.arrayUnion(newComment)
             });
-            commentTextInput.value = ''; 
+            commentTextInput.value = '';
         } catch (error) {
             console.error("Error adding comment: ", error);
             alert("Failed to add comment: " + error.message);
@@ -932,7 +913,7 @@
     function toggleMenu() {
         if (elements.mobileMenu && elements.hamburger) {
             elements.mobileMenu.classList.toggle('active');
-            elements.hamburger.classList.toggle('active'); 
+            elements.hamburger.classList.toggle('active');
         }
     }
 
@@ -944,7 +925,7 @@
         if (targetId && targetId.startsWith('#')) {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                event.preventDefault(); 
+                event.preventDefault();
                 targetElement.scrollIntoView({ behavior: "smooth" });
             }
         }
@@ -956,9 +937,9 @@
         link.addEventListener('click', (event) => {
             if (link.getAttribute('href').startsWith('#')) {
                 closeMenuAndScroll(event);
-            } else { 
+            } else {
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                    toggleMenu(); 
+                    toggleMenu();
                 }
             }
         });
@@ -966,8 +947,8 @@
 
     document.addEventListener('click', (e) => {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            elements.hamburger && !elements.hamburger.contains(e.target) && 
-            !elements.mobileMenu.contains(e.target)) { 
+            elements.hamburger && !elements.hamburger.contains(e.target) &&
+            !elements.mobileMenu.contains(e.target)) {
             toggleMenu();
         }
     });
@@ -979,9 +960,6 @@
         return div.innerHTML;
     }
 
-    if (auth.currentUser) {
-        // loadPosts(); // Redundant due to onAuthStateChanged
-    }
     </script>
 </body>
 </html>
