@@ -335,8 +335,10 @@
         .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
         .comment-header strong { font-size: 13px; color: #333; }
         .comment-header .timestamp { font-size: 11px; color: #888; margin-left: auto; }
-        .comment p { margin: 0; color: #555; white-space: pre-wrap; } /* Preserves newlines in comments */
-        .comment-form-actual { display: flex; margin-top: 10px; }
+        .comment-content p { margin: 0 0 5px 0; color: #555; white-space: pre-wrap; } /* Preserves newlines in comments */
+
+        /* OLD COMMENT FORM STYLES - TO BE REPLACED/AUGMENTED */
+        /* .comment-form-actual { display: flex; margin-top: 10px; }
         .comment-form-actual input {
             flex: 1;
             padding: 10px;
@@ -354,7 +356,91 @@
             font-weight: bold;
         }
         .comment-form-actual button:hover { background: #6a0000; }
-        .comment-form-actual button:disabled { background: #cccccc; cursor: not-allowed; }
+        .comment-form-actual button:disabled { background: #cccccc; cursor: not-allowed; } */
+
+
+        /* --- NEW/IMPROVED COMMENT FORM STYLES --- */
+        .comment-form-actual {
+            display: flex;
+            align-items: center; /* Align items vertically */
+            margin-top: 10px;
+            gap: 5px; /* Add some gap between elements */
+        }
+
+        .comment-form-actual input[type="text"].comment-text-input { /* Be more specific */
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .comment-image-upload-label {
+            padding: 8px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px; /* Match input height approx */
+            box-sizing: border-box;
+        }
+        .comment-image-upload-label:hover {
+            background-color: #e0e0e0;
+        }
+        .comment-image-upload-label i {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .comment-form-actual button.comment-submit-btn { /* Be more specific */
+            background: #8b0000;
+            color: white;
+            border: none;
+            padding: 10px 15px; /* Consistent padding */
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            height: 40px; /* Match input height approx */
+            box-sizing: border-box;
+        }
+        .comment-form-actual button.comment-submit-btn:hover {
+            background: #6a0000;
+        }
+        .comment-form-actual button.comment-submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .comment-image-preview {
+            max-width: 80px; /* Smaller preview for comments */
+            max-height: 80px;
+            display: none;
+            margin-top: 8px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            object-fit: cover;
+        }
+        .comment-upload-progress {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: #555;
+            display: none;
+            width: 100%; /* Make it span below the form */
+            text-align: left; /* Align with form */
+            padding-left: 5px; /* Small indent */
+        }
+        .comment-content img.comment-image { /* For displaying image in a rendered comment */
+            max-width: 200px; /* Or your preferred max size */
+            max-height: 150px;
+            border-radius: 5px;
+            margin-top: 8px;
+            display: block;
+            border: 1px solid #eee;
+        }
+        /* --- END OF NEW/IMPROVED COMMENT FORM STYLES --- */
 
     </style>
 </head>
@@ -457,7 +543,7 @@
 
 
     const firebaseConfig = {
-      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
+      apiKey: "YOUR_API_KEY", // Replace with your actual API key & RESTRICT IT
       authDomain: "viratsawarup.firebaseapp.com",
       projectId: "viratsawarup",
       messagingSenderId: "264071748020",
@@ -569,6 +655,7 @@
 
             try {
                 let imageUrl = null;
+                let imagePublicId = null;
 
                 if (imageFile) {
                     if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
@@ -587,11 +674,12 @@
                     if (!response.ok) {
                         const errorData = await response.json();
                         console.error("Cloudinary Error Response:", errorData);
-                        throw new Error(`Cloudinary upload failed: ${errorData.error.message}`);
+                        throw new Error(`Cloudinary upload failed: ${errorData.error.message || 'Unknown error'}`);
                     }
 
                     const data = await response.json();
                     imageUrl = data.secure_url;
+                    imagePublicId = data.public_id;
                     console.log("Image uploaded to Cloudinary:", imageUrl);
                     if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Image uploaded!';
                 }
@@ -608,6 +696,9 @@
 
                 if (imageUrl) {
                     postData.imageUrl = imageUrl;
+                    if (imagePublicId) {
+                        postData.imagePublicId = imagePublicId; // Store for potential future deletion
+                    }
                 }
 
                 await db.collection('posts').add(postData);
@@ -623,7 +714,7 @@
             } catch (error) {
                 console.error("Post Error (Cloudinary or Firestore):", error);
                 alert(`Post Error: ${error.message}`);
-                if(elements.uploadProgressText && elements.uploadProgressContainer.style.display === 'block') {
+                if(elements.uploadProgressText && elements.uploadProgressContainer && elements.uploadProgressContainer.style.display === 'block') {
                      elements.uploadProgressText.textContent = `Upload failed.`;
                 }
             } finally {
@@ -633,7 +724,7 @@
                 }
                 setTimeout(() => {
                     if(elements.uploadProgressContainer && elements.postBtn && !elements.postBtn.disabled) {
-                        if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
+                        if (elements.uploadProgressText && !elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
                             elements.uploadProgressContainer.style.display = 'none';
                             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
                         }
@@ -709,7 +800,7 @@
                     <span>${post.comments ? post.comments.length : 0} Comments</span>
                 </button>
                 ${currentUser && post.userId === currentUser.uid ?
-                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" style="margin-left: auto; color: #cc0000;">
+                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}" style="margin-left: auto; color: #cc0000;">
                         <i class="fas fa-trash"></i> Delete
                      </button>` : ''
                 }
@@ -717,19 +808,50 @@
             <div class="comments-area" id="comments-area-${postId}" style="display: none;">
                 <div class="comments-list" id="comments-list-${postId}"></div>
                 <form class="comment-form-actual" data-post-id="${postId}">
-                    <input type="text" name="commentText" placeholder="Add a comment..." required>
-                    <button type="submit">Post</button>
+                    <input type="text" name="commentText" class="comment-text-input" placeholder="Add a comment...">
+                    <label class="comment-image-upload-label" title="Add image">
+                        <i class="fas fa-paperclip"></i>
+                        <input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;">
+                    </label>
+                    <button type="submit" class="comment-submit-btn">Post</button>
                 </form>
+                <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;">
+                <div class="comment-upload-progress" style="display: none;"></div>
             </div>
         `;
 
         if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
 
+        const commentImageInput = postDiv.querySelector('.comment-image-input');
+        const commentImagePreview = postDiv.querySelector('.comment-image-preview');
+        if (commentImageInput && commentImagePreview) {
+            commentImageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        commentImagePreview.src = event.target.result;
+                        commentImagePreview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    commentImagePreview.src = '#';
+                    commentImagePreview.style.display = 'none';
+                }
+            });
+        }
+
+
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
         if (commentsList) {
             if (post.comments && post.comments.length > 0) {
-                post.comments.sort((a,b) => (a.timestamp && b.timestamp && a.timestamp.toDate && b.timestamp.toDate) ? a.timestamp.toDate() - b.timestamp.toDate() : 0)
-                           .forEach(comment => renderComment(comment, commentsList));
+                // Sort comments by timestamp before rendering
+                const sortedComments = [...post.comments].sort((a,b) => {
+                    const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : 0;
+                    const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : 0;
+                    return timeA - timeB; // Ascending order
+                });
+                sortedComments.forEach(comment => renderComment(comment, commentsList));
             } else {
                 commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
             }
@@ -745,10 +867,10 @@
         if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
 
         const deleteBtn = postDiv.querySelector('.delete-post-btn');
-        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl));
+        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl, deleteBtn.dataset.imagePublicId));
     }
 
-    async function handleDeletePost(postId, imageUrl) {
+    async function handleDeletePost(postId, imageUrl, imagePublicId) {
         const currentUser = auth.currentUser;
         if (!currentUser) {
             alert("You must be logged in to delete posts.");
@@ -766,8 +888,10 @@
             if (doc.exists && doc.data().userId === currentUser.uid) {
                 await postRef.delete();
                 console.log("Post deleted from Firestore.");
+                // Note: Deleting from Cloudinary ideally requires a backend for secure API key use.
+                // The public_id is needed for Cloudinary's Admin API to delete.
                 if (imageUrl) {
-                    console.warn(`Image at ${imageUrl} was not deleted from Cloudinary. Implement server-side deletion for this.`);
+                     console.warn(`Image at ${imageUrl} (public_id: ${imagePublicId || 'not available'}) was not deleted from Cloudinary. Implement server-side deletion for this.`);
                 }
             } else {
                 alert("You do not have permission to delete this post or it no longer exists.");
@@ -791,57 +915,50 @@
             noCommentP.remove();
         }
 
+        let commentContentHTML = `<p>${escapeHTML(comment.text || "").replace(/\n/g, '<br>')}</p>`;
+        if (comment.imageUrl) {
+            commentContentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none'; console.error('Failed to load comment image: ${comment.imageUrl}')">`;
+        }
+
         commentDiv.innerHTML = `
             <div class="comment-header">
                 <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <strong>${escapeHTML(comment.userName) || 'User'}</strong>
                 <span class="timestamp">${commentTimestamp}</span>
             </div>
-            <p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>
+            <div class="comment-content">
+                ${commentContentHTML}
+            </div>
         `;
-        commentsListElement.appendChild(commentDiv);
+        commentsListElement.appendChild(commentDiv); // Appends new comments at the end
     }
 
-    // --- handleLike with extensive console.log debugging ---
     async function handleLike(postId) {
-        console.log("Attempting to like post ID:", postId); // DEBUG
         const currentUser = auth.currentUser;
         if (!currentUser) {
-            console.error("User not logged in for like action. Post ID:", postId); // DEBUG
             alert("Please log in to like posts.");
             return;
         }
-        console.log("Current user for like:", currentUser.uid, "for Post ID:", postId); // DEBUG
 
         const postRef = db.collection('posts').doc(postId);
         try {
             await db.runTransaction(async (transaction) => {
-                console.log(`Transaction for like on post ${postId} started. User: ${currentUser.uid}`); // DEBUG
-
                 const doc = await transaction.get(postRef);
-                if (!doc.exists) {
-                    console.error(`Document ${postId} does not exist in transaction!`); // DEBUG
-                    throw "Document does not exist!";
-                }
+                if (!doc.exists) { throw "Document does not exist!"; }
 
                 const postData = doc.data();
-                console.log(`Post ${postId} data in transaction:`, JSON.stringify(postData)); // DEBUG (stringify to see nested data)
                 let currentLikes = postData.likes || [];
                 let newLikesArray;
 
                 if (currentLikes.includes(currentUser.uid)) {
                     newLikesArray = currentLikes.filter(uid => uid !== currentUser.uid);
-                    console.log(`User ${currentUser.uid} is UNLIKING post ${postId}. New likes array:`, newLikesArray); // DEBUG
                 } else {
                     newLikesArray = [...currentLikes, currentUser.uid];
-                    console.log(`User ${currentUser.uid} is LIKING post ${postId}. New likes array:`, newLikesArray); // DEBUG
                 }
                 transaction.update(postRef, { likes: newLikesArray });
-                console.log(`Transaction for like on post ${postId} attempting update.`); // DEBUG
             });
-            console.log(`Like transaction for post ${postId} successful.`); // DEBUG
         } catch (error) {
-            console.error("Like transaction failed for post ID:", postId, "Error:", error); // DEBUG
+            console.error("Like transaction failed for post ID:", postId, "Error:", error);
             alert("Failed to update like: " + error.message);
         }
     }
@@ -858,55 +975,123 @@
         }
     }
 
-    // --- handleCommentSubmit with extensive console.log debugging ---
     async function handleCommentSubmit(event, postId) {
         event.preventDefault();
-        console.log("Attempting to submit comment for post ID:", postId); // DEBUG
+        console.log("Attempting to submit comment for post ID:", postId);
         const currentUser = auth.currentUser;
         if (!currentUser) {
-            console.error("User not logged in for comment action. Post ID:", postId); // DEBUG
             alert("Please log in to comment.");
             return;
         }
-        console.log("Current user for comment:", currentUser.uid, "for Post ID:", postId); // DEBUG
 
         const form = event.target;
-        const commentTextInput = form.elements.commentText;
-        const commentText = commentTextInput.value.trim();
-        console.log("Comment text entered:", commentText, "for Post ID:", postId); // DEBUG
-        if (!commentText) { alert("Comment cannot be empty."); return; }
+        const commentTextInput = form.querySelector('.comment-text-input');
+        const commentImageInput = form.querySelector('.comment-image-input');
+        // Correctly target the preview and progress elements relative to the form's parent structure
+        const commentsArea = form.closest('.comments-area');
+        const commentImagePreview = commentsArea ? commentsArea.querySelector('.comment-image-preview') : null;
+        const commentUploadProgress = commentsArea ? commentsArea.querySelector('.comment-upload-progress') : null;
 
-        const submitButton = form.querySelector('button[type="submit"]');
-        if (submitButton) {
-             submitButton.disabled = true;
-             submitButton.textContent = "Posting...";
+
+        const commentText = commentTextInput ? commentTextInput.value.trim() : "";
+        const imageFile = commentImageInput ? commentImageInput.files[0] : null;
+
+        if (!commentText && !imageFile) {
+            alert("Comment text or an image is required.");
+            return;
         }
 
-        const newComment = {
-            userId: currentUser.uid,
-            userName: currentUser.displayName || 'User',
-            userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-            text: commentText,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        console.log("New comment object being prepared:", JSON.stringify(newComment), "for Post ID:", postId); // DEBUG
+        const submitButton = form.querySelector('.comment-submit-btn');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Posting...";
+        }
+        if(commentUploadProgress) {
+            commentUploadProgress.textContent = ''; // Clear previous messages
+            commentUploadProgress.style.display = 'none';
+        }
 
-        const postRef = db.collection('posts').doc(postId);
+
+        let commentImageUrl = null;
+        let commentImagePublicId = null;
+
         try {
-            console.log(`Attempting to update comments for post ${postId} with arrayUnion.`); // DEBUG
+            if (imageFile) {
+                if(commentUploadProgress) {
+                    commentUploadProgress.textContent = 'Uploading image...';
+                    commentUploadProgress.style.display = 'block';
+                }
+
+                const formData = new FormData();
+                formData.append('file', imageFile);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                console.log("Uploading comment image to Cloudinary...");
+                const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Cloudinary Error Response (comment image):", errorData);
+                    throw new Error(`Cloudinary comment image upload failed: ${errorData.error.message || 'Unknown error'}`);
+                }
+
+                const data = await response.json();
+                commentImageUrl = data.secure_url;
+                commentImagePublicId = data.public_id;
+                console.log("Comment image uploaded to Cloudinary:", commentImageUrl);
+                if(commentUploadProgress) commentUploadProgress.textContent = 'Image uploaded!';
+            }
+
+            const newComment = {
+                userId: currentUser.uid,
+                userName: currentUser.displayName || 'User',
+                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+                text: commentText || "",
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (commentImageUrl) {
+                newComment.imageUrl = commentImageUrl;
+                if (commentImagePublicId) {
+                    newComment.imagePublicId = commentImagePublicId;
+                }
+            }
+            console.log("New comment object being prepared:", JSON.stringify(newComment));
+
+            const postRef = db.collection('posts').doc(postId);
             await postRef.update({
                 comments: firebase.firestore.FieldValue.arrayUnion(newComment)
             });
-            console.log(`Comment successfully added to post ${postId}.`); // DEBUG
-            commentTextInput.value = '';
+
+            console.log(`Comment successfully added to post ${postId}.`);
+            if (commentTextInput) commentTextInput.value = '';
+            if (commentImageInput) commentImageInput.value = null;
+            if (commentImagePreview) {
+                commentImagePreview.src = '#';
+                commentImagePreview.style.display = 'none';
+            }
+            // The onSnapshot listener will automatically re-render the comments.
+
         } catch (error) {
-            console.error("Error adding comment for post ID:", postId, "Error:", error); // DEBUG
+            console.error("Error adding comment for post ID:", postId, "Full Error:", error);
             alert("Failed to add comment: " + error.message);
+            if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
+                commentUploadProgress.textContent = 'Upload failed.';
+            }
         } finally {
             if (submitButton) {
                 submitButton.disabled = false;
                 submitButton.textContent = "Post";
             }
+            setTimeout(() => {
+                if(commentUploadProgress && commentUploadProgress.style.display === 'block' &&
+                   commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
+                    commentUploadProgress.style.display = 'none';
+                }
+            }, 3000);
         }
     }
 
@@ -956,7 +1141,7 @@
     function escapeHTML(str) {
         if (str === null || str === undefined) return '';
         const div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
+        div.appendChild(document.createTextNode(String(str))); // Ensure str is a string
         return div.innerHTML;
     }
 
