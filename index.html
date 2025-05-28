@@ -376,7 +376,6 @@
     </nav>
 
     <!-- Header -->
-    <!-- Removed inline styles from header, h1, h2. Now controlled by CSS classes -->
     <header class="header">
       <h1>VIRAT SWARUP</h1>
       <h2>The Supreme Devine of Every Faith</h2>
@@ -546,6 +545,14 @@
     });
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
 
+    // Helper function to avoid double alerts if upload already failed and alerted
+    function alertContainsUploadFailure(message) {
+        const uploadErrorKeywords = ["upload failed", "permission denied", "storage/"];
+        if (typeof message !== 'string') return false;
+        return uploadErrorKeywords.some(keyword => message.toLowerCase().includes(keyword.toLowerCase()));
+    }
+
+    // --- START OF REPLACED/UPDATED CODE FOR POST BUTTON ---
     if (elements.postBtn) {
         elements.postBtn.addEventListener('click', async () => {
             const content = elements.postContent ? elements.postContent.value.trim() : "";
@@ -565,6 +572,7 @@
             elements.postBtn.textContent = "Posting...";
             if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
+            if(elements.uploadProgress) elements.uploadProgress.value = 0;
 
 
             try {
@@ -572,12 +580,13 @@
 
                 if (imageFile) {
                     if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
-                    if(elements.uploadProgress) elements.uploadProgress.value = 0;
 
-                    // IMPORTANT: Secure your Firebase Storage with rules to only allow authenticated users
-                    // to upload to their specific paths, e.g., /post_images/{userId}/{filename}
-                    const imageName = `post_images/${currentUser.uid}_${Date.now()}_${imageFile.name}`;
-                    const storageRef = storage.ref(imageName);
+                    const uniqueFileName = `${Date.now()}_${imageFile.name}`;
+                    const storagePath = `post_images/${currentUser.uid}/${uniqueFileName}`;
+                    const storageRef = storage.ref(storagePath);
+                    
+                    console.log("Starting image upload to:", storagePath);
+
                     const uploadTask = storageRef.put(imageFile);
 
                     await new Promise((resolve, reject) => {
@@ -589,23 +598,47 @@
                             },
                             (error) => {
                                 console.error("Upload failed:", error);
-                                // Handle specific storage errors (permissions, etc.)
-                                let message = "Image upload failed.";
-                                if (error.code_ === 'storage/unauthorized') {
-                                    message = "Upload failed: You do not have permission to upload images.";
-                                } else if (error.code_ === 'storage/canceled') {
-                                    message = "Upload canceled.";
+                                console.error("Error Code:", error.code);
+                                console.error("Error Message:", error.message);
+
+                                let message = "Image upload failed. Check browser console for details.";
+                                switch (error.code) {
+                                    case 'storage/unauthorized':
+                                        message = "Upload failed: Permission denied. Please check your Firebase Storage Security Rules. Ensure users can write to paths like 'post_images/USER_ID/filename.jpg'.";
+                                        break;
+                                    case 'storage/canceled':
+                                        message = "Upload canceled by the user.";
+                                        break;
+                                    case 'storage/object-not-found':
+                                        message = "Upload failed: Object (path) not found. This usually means an issue with the storage path or rules structure.";
+                                        break;
+                                    case 'storage/bucket-not-found':
+                                        message = "Upload failed: Storage bucket not found. Check your `storageBucket` in `firebaseConfig`.";
+                                        break;
+                                    case 'storage/project-not-found':
+                                        message = "Upload failed: Firebase project not found.";
+                                        break;
+                                    case 'storage/quota-exceeded':
+                                        message = "Upload failed: Storage quota exceeded for your Firebase project.";
+                                        break;
+                                    case 'storage/unauthenticated':
+                                        message = "Upload failed: User is not authenticated. Please log in again.";
+                                        break;
+                                    default:
+                                        message = `Image upload failed: ${error.message}`;
                                 }
                                 alert(message);
-                                reject(error);
+                                reject(error); 
                             },
                             async () => {
                                 try {
                                     imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+                                    console.log("Image uploaded successfully. URL:", imageUrl);
                                     resolve();
-                                } catch (error) {
-                                     console.error("Error getting download URL:", error);
-                                    reject(error);
+                                } catch (getUrlError) {
+                                     console.error("Error getting download URL:", getUrlError);
+                                     alert("Image uploaded, but failed to get its URL. " + getUrlError.message);
+                                    reject(getUrlError);
                                 }
                             }
                         );
@@ -613,33 +646,34 @@
                 }
 
                 const postData = {
-                    content: content || "", // Ensure content is at least an empty string
+                    content: content || "",
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: [],    // Initialize as empty array
-                    comments: []  // Initialize as empty array
+                    likes: [],
+                    comments: []
                 };
 
                 if (imageUrl) {
                     postData.imageUrl = imageUrl;
                 }
 
-                // IMPORTANT: Secure your Firestore with rules. e.g., only authenticated users can create posts,
-                // and userId in postData must match auth.currentUser.uid.
                 await db.collection('posts').add(postData);
+                console.log("Post created successfully in Firestore.");
 
                 if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null; // Reset file input
+                if(elements.postImageFile) elements.postImageFile.value = null;
                 if(elements.imagePreview) {
                     elements.imagePreview.src = '#';
                     elements.imagePreview.style.display = 'none';
                 }
 
-            } catch (error) {
-                console.error("Post Error:", error);
-                alert(`Post Error: ${error.message}`);
+            } catch (error) { 
+                console.error("Error during post creation (could be upload or Firestore):", error);
+                if (!alertContainsUploadFailure(error.message)) { 
+                    alert(`Post Error: ${error.message}`);
+                }
             } finally {
                 if(elements.postBtn) {
                     elements.postBtn.disabled = false;
@@ -649,14 +683,14 @@
             }
         });
     }
+    // --- END OF REPLACED/UPDATED CODE FOR POST BUTTON ---
+
 
     let postsUnsubscribe = null;
     function loadPosts() {
         if (postsUnsubscribe) {
             postsUnsubscribe(); // Unsubscribe from previous listener if any
         }
-        // IMPORTANT: Secure Firestore reads. e.g., ensure users are authenticated to read posts.
-        // Consider pagination for large number of posts.
         postsUnsubscribe = db.collection('posts')
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
@@ -689,7 +723,7 @@
         const formattedTimestamp = post.timestamp && post.timestamp.toDate ? post.timestamp.toDate().toLocaleString() : 'Just now';
 
         let contentHTML = '';
-        if (post.content) { // Only add paragraph if content exists
+        if (post.content) { 
             contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
         }
         if (post.imageUrl) {
@@ -736,7 +770,7 @@
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
         if (commentsList) {
             if (post.comments && post.comments.length > 0) {
-                post.comments.sort((a,b) => (a.timestamp && b.timestamp && a.timestamp.toDate && b.timestamp.toDate) ? a.timestamp.toDate() - b.timestamp.toDate() : 0) // Sort comments by timestamp
+                post.comments.sort((a,b) => (a.timestamp && b.timestamp && a.timestamp.toDate && b.timestamp.toDate) ? a.timestamp.toDate() - b.timestamp.toDate() : 0) 
                            .forEach(comment => renderComment(comment, commentsList));
             } else {
                 commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
@@ -764,7 +798,6 @@
             return;
         }
 
-        // Confirm before deleting
         if (!confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
             return;
         }
@@ -774,19 +807,15 @@
         try {
             const doc = await postRef.get();
             if (doc.exists && doc.data().userId === currentUser.uid) {
-                // Delete the image from Storage if it exists
                 if (imageUrl) {
                     try {
                         const imageStorageRef = storage.refFromURL(imageUrl);
                         await imageStorageRef.delete();
                     } catch (storageError) {
                         console.warn("Could not delete image from storage, it might have been already deleted or permissions changed:", storageError);
-                        // Don't block post deletion if image deletion fails, but log it.
                     }
                 }
-                // Delete the post document from Firestore
                 await postRef.delete();
-                // Post will be removed from UI by onSnapshot listener
             } else {
                 alert("You do not have permission to delete this post or it no longer exists.");
             }
@@ -802,7 +831,7 @@
         commentDiv.className = 'comment';
         const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
                                 ? comment.timestamp.toDate().toLocaleString()
-                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently'); // Fallback for non-Firestore timestamp
+                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently'); 
 
         const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
         if(noCommentP) {
@@ -825,15 +854,13 @@
         if (!currentUser) { alert("Please log in to like posts."); return; }
 
         const postRef = db.collection('posts').doc(postId);
-        // IMPORTANT: Secure Firestore updates for likes.
-        // Rules should allow authenticated users to modify the 'likes' array.
         try {
             await db.runTransaction(async (transaction) => {
                 const doc = await transaction.get(postRef);
                 if (!doc.exists) throw "Document does not exist!";
 
                 const postData = doc.data();
-                let currentLikes = postData.likes || []; // Ensure likes is an array
+                let currentLikes = postData.likes || []; 
                 let newLikesArray;
 
                 if (currentLikes.includes(currentUser.uid)) {
@@ -843,7 +870,6 @@
                 }
                 transaction.update(postRef, { likes: newLikesArray });
             });
-            // UI update will be handled by onSnapshot
         } catch (error) {
             console.error("Like transaction failed: ", error);
             alert("Failed to update like: " + error.message);
@@ -883,19 +909,15 @@
             userName: currentUser.displayName || 'User',
             userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
             text: commentText,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp() // Use server timestamp
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
 
         const postRef = db.collection('posts').doc(postId);
-        // IMPORTANT: Secure Firestore updates for comments.
-        // Rules should allow authenticated users to add to the 'comments' array,
-        // and validate the structure of the newComment object (e.g., newComment.userId === auth.uid).
         try {
             await postRef.update({
                 comments: firebase.firestore.FieldValue.arrayUnion(newComment)
             });
-            commentTextInput.value = ''; // Clear input after successful post
-            // UI update of comment list and count will be handled by onSnapshot
+            commentTextInput.value = ''; 
         } catch (error) {
             console.error("Error adding comment: ", error);
             alert("Failed to add comment: " + error.message);
@@ -910,7 +932,7 @@
     function toggleMenu() {
         if (elements.mobileMenu && elements.hamburger) {
             elements.mobileMenu.classList.toggle('active');
-            elements.hamburger.classList.toggle('active'); // Toggle active class for hamburger icon styling (X)
+            elements.hamburger.classList.toggle('active'); 
         }
     }
 
@@ -919,37 +941,33 @@
             toggleMenu();
         }
         const targetId = event.currentTarget.getAttribute('href');
-        // Check if it's an internal anchor link
         if (targetId && targetId.startsWith('#')) {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                event.preventDefault(); // Prevent default anchor behavior
+                event.preventDefault(); 
                 targetElement.scrollIntoView({ behavior: "smooth" });
             }
         }
-        // If it's a full page link, it will navigate normally after closing the menu
     }
 
     if (elements.hamburger) elements.hamburger.addEventListener('click', toggleMenu);
 
     document.querySelectorAll('.mobile-menu a').forEach(link => {
         link.addEventListener('click', (event) => {
-            // For anchor links on the same page, use closeMenuAndScroll
             if (link.getAttribute('href').startsWith('#')) {
                 closeMenuAndScroll(event);
-            } else { // For other links (e.g., index.html, agnosia.html)
+            } else { 
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                    toggleMenu(); // Just close the menu, then let the link navigate
+                    toggleMenu(); 
                 }
             }
         });
     });
 
-    // Close mobile menu if clicked outside
     document.addEventListener('click', (e) => {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            elements.hamburger && !elements.hamburger.contains(e.target) && // Click was not on hamburger
-            !elements.mobileMenu.contains(e.target)) { // Click was not inside menu
+            elements.hamburger && !elements.hamburger.contains(e.target) && 
+            !elements.mobileMenu.contains(e.target)) { 
             toggleMenu();
         }
     });
@@ -961,13 +979,8 @@
         return div.innerHTML;
     }
 
-    // Initial load if user is already logged in (e.g., page refresh)
     if (auth.currentUser) {
-        // The onAuthStateChanged listener will handle this,
-        // but explicitly calling here can be useful if onAuthStateChanged
-        // fires after some initial UI setup that depends on posts.
-        // However, the current setup with onAuthStateChanged calling loadPosts is generally sufficient.
-        // loadPosts(); // This might be redundant due to onAuthStateChanged
+        // loadPosts(); // Redundant due to onAuthStateChanged
     }
     </script>
 </body>
