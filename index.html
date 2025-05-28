@@ -8,8 +8,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script> 
-    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -25,20 +25,20 @@
         }
 
         .header {
-            padding: 95px 20px 45px;
+            padding: 95px 20px 45px; /* Default large padding for desktop */
             text-align: center;
             border-bottom: 1px solid #e0e0e0;
             background-color: #8b0000;
         }
         .header h1 {
-            font-size: 52px;
+            font-size: 52px; /* Default large font for desktop */
             letter-spacing: 3.2px;
             text-transform: uppercase;
             margin-bottom: 12px;
             color: white;
         }
         .header h2 {
-            font-size: 22px;
+            font-size: 22px; /* Default large font for desktop */
             color: white;
             font-weight: 300;
         }
@@ -58,6 +58,17 @@
             margin: 6px 0;
             transition: 0.4s;
         }
+        /* Hamburger active state (X icon) */
+        .hamburger.active .hamburger-line:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active .hamburger-line:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
 
         .mobile-menu {
             position: fixed;
@@ -149,9 +160,9 @@
             .hamburger { display: block; }
             .desktop-nav { display: none; }
             .bottom-nav { display: block; }
-            .header { padding: 70px 20px 35px; }
-            .header h1 { font-size: 36px; }
-            .header h2 { font-size: 18px; }
+            .header { padding: 70px 20px 35px; } /* Adjusted padding for mobile */
+            .header h1 { font-size: 36px; } /* Adjusted font size for mobile */
+            .header h2 { font-size: 18px; } /* Adjusted font size for mobile */
         }
 
         .container {
@@ -232,7 +243,8 @@
             font-family: inherit;
             font-size: 16px;
         }
-        .post-form button#postBtn { /* Specific ID for post button styling */
+        /* Specific ID for post button styling */
+        .post-form button#postBtn {
             background: #8b0000;
             color: white;
             border: none;
@@ -279,7 +291,7 @@
             line-height: 1.6;
             color: #444;
             margin-bottom: 10px;
-            white-space: pre-wrap;
+            white-space: pre-wrap; /* Preserves user-entered newlines and spaces */
         }
         .post-content img.post-image {
             max-width: 100%;
@@ -308,7 +320,7 @@
         }
         .post-actions button i { font-size: 18px; margin-right: 8px; color: #8b0000; }
         .post-actions button:hover i, .post-actions button:hover span { color: #6a0000; }
-        .like-btn.liked i { color: red !important; }
+        .like-btn.liked i { color: red !important; } /* Ensure liked icon is red */
 
         .comments-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
         .comments-list .comment {
@@ -322,7 +334,7 @@
         .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
         .comment-header strong { font-size: 13px; color: #333; }
         .comment-header .timestamp { font-size: 11px; color: #888; margin-left: auto; }
-        .comment p { margin: 0; color: #555; white-space: pre-wrap; }
+        .comment p { margin: 0; color: #555; white-space: pre-wrap; } /* Preserves newlines in comments */
         .comment-form-actual { display: flex; margin-top: 10px; }
         .comment-form-actual input {
             flex: 1;
@@ -364,11 +376,11 @@
     </nav>
 
     <!-- Header -->
- <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-
-  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
- </header>
+    <!-- Removed inline styles from header, h1, h2. Now controlled by CSS classes -->
+    <header class="header">
+      <h1>VIRAT SWARUP</h1>
+      <h2>The Supreme Devine of Every Faith</h2>
+    </header>
 
     <!-- Desktop Navigation -->
     <nav class="desktop-nav">
@@ -403,20 +415,20 @@
                 <i class="fab fa-facebook-f"></i> Sign in with Facebook
             </button>
         </div>
-        
+
         <div class="app-section" id="appSection">
             <div class="user-info">
-                <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo">
+                <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
                     <button id="logoutBtn">Logout</button>
                 </div>
             </div>
-            
+
             <div class="post-form" id="post-form-container">
                 <h3>Create Post</h3>
                 <textarea id="postContent" placeholder="What's on your mind, Virat Bhakt?"></textarea>
-                
+
                 <label for="postImageFile" style="cursor: pointer; display: inline-block; margin-bottom: 10px; color: #555; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
                     <i class="fas fa-image"></i> Add Image (Optional)
                 </label>
@@ -429,7 +441,7 @@
 
                 <button id="postBtn">Post</button>
             </div>
-            
+
             <div class="posts-container" id="postsContainer">
                 <h3>Feed</h3>
                 <!-- Posts will be loaded here -->
@@ -438,15 +450,17 @@
     </div>
 
     <script>
+    // IMPORTANT: For a production app, your API key and Firebase config should be protected.
+    // Consider using Firebase App Check to protect your backend resources.
+    // Also, ensure you have strong Firebase Security Rules for Firestore and Storage.
     const firebaseConfig = {
       apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
       authDomain: "viratsawarup.firebaseapp.com",
-      // databaseURL: "https://viratsawarup-default-rtdb.asia-southeast1.firebasedatabase.app", // Not needed for Firestore
       projectId: "viratsawarup",
-      storageBucket: "viratsawarup.appspot.com", // CRITICAL: Use your-project-id.appspot.com
+      storageBucket: "viratsawarup.appspot.com",
       messagingSenderId: "264071748020",
       appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-      measurementId: "G-7GJQPJCR1L" // Optional
+      measurementId: "G-7GJQPJCR1L"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -480,13 +494,17 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    elements.imagePreview.src = event.target.result;
-                    elements.imagePreview.style.display = 'block';
+                    if (elements.imagePreview) {
+                        elements.imagePreview.src = event.target.result;
+                        elements.imagePreview.style.display = 'block';
+                    }
                 }
                 reader.readAsDataURL(file);
             } else {
-                elements.imagePreview.src = '#';
-                elements.imagePreview.style.display = 'none';
+                if (elements.imagePreview) {
+                    elements.imagePreview.src = '#';
+                    elements.imagePreview.style.display = 'none';
+                }
             }
         });
     }
@@ -502,6 +520,10 @@
             if(elements.loginSection) elements.loginSection.style.display = 'block';
             if(elements.appSection) elements.appSection.style.display = 'none';
             if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
+            if (postsUnsubscribe) { // Unsubscribe when user logs out
+                postsUnsubscribe();
+                postsUnsubscribe = null;
+            }
         }
     });
 
@@ -510,15 +532,17 @@
             await auth.signInWithPopup(provider);
         } catch (error) {
             console.error("Login Error:", error);
-            if (error.code === 'auth/popup-closed-by-user') return; // User closed popup
-            if (error.code === 'auth/cancelled-popup-request') return; // User closed popup
+            if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+                 // User closed popup, do nothing or provide gentle feedback
+                return;
+            }
             alert(`Login Error: ${error.message}`);
         }
     }
 
     if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
     if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires developer setup. Please use Google Sign-In for now.");
+        alert("Facebook login requires additional developer setup and app configuration on Facebook's platform. Please use Google Sign-In for now.");
     });
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
 
@@ -550,6 +574,8 @@
                     if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
                     if(elements.uploadProgress) elements.uploadProgress.value = 0;
 
+                    // IMPORTANT: Secure your Firebase Storage with rules to only allow authenticated users
+                    // to upload to their specific paths, e.g., /post_images/{userId}/{filename}
                     const imageName = `post_images/${currentUser.uid}_${Date.now()}_${imageFile.name}`;
                     const storageRef = storage.ref(imageName);
                     const uploadTask = storageRef.put(imageFile);
@@ -563,6 +589,14 @@
                             },
                             (error) => {
                                 console.error("Upload failed:", error);
+                                // Handle specific storage errors (permissions, etc.)
+                                let message = "Image upload failed.";
+                                if (error.code_ === 'storage/unauthorized') {
+                                    message = "Upload failed: You do not have permission to upload images.";
+                                } else if (error.code_ === 'storage/canceled') {
+                                    message = "Upload canceled.";
+                                }
+                                alert(message);
                                 reject(error);
                             },
                             async () => {
@@ -570,33 +604,34 @@
                                     imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
                                     resolve();
                                 } catch (error) {
+                                     console.error("Error getting download URL:", error);
                                     reject(error);
                                 }
                             }
                         );
                     });
-                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
-                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
                 }
 
                 const postData = {
-                    content: content || "",
+                    content: content || "", // Ensure content is at least an empty string
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: [],
-                    comments: []
+                    likes: [],    // Initialize as empty array
+                    comments: []  // Initialize as empty array
                 };
 
                 if (imageUrl) {
                     postData.imageUrl = imageUrl;
                 }
 
+                // IMPORTANT: Secure your Firestore with rules. e.g., only authenticated users can create posts,
+                // and userId in postData must match auth.currentUser.uid.
                 await db.collection('posts').add(postData);
 
                 if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null;
+                if(elements.postImageFile) elements.postImageFile.value = null; // Reset file input
                 if(elements.imagePreview) {
                     elements.imagePreview.src = '#';
                     elements.imagePreview.style.display = 'none';
@@ -611,21 +646,22 @@
                     elements.postBtn.textContent = "Post";
                 }
                 if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
-                if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
-
             }
         });
     }
+
     let postsUnsubscribe = null;
     function loadPosts() {
         if (postsUnsubscribe) {
-            postsUnsubscribe(); // Unsubscribe from previous listener
+            postsUnsubscribe(); // Unsubscribe from previous listener if any
         }
+        // IMPORTANT: Secure Firestore reads. e.g., ensure users are authenticated to read posts.
+        // Consider pagination for large number of posts.
         postsUnsubscribe = db.collection('posts')
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3>';
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3>'; // Clear previous posts
                   if (snapshot.empty) {
                       elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
                       return;
@@ -641,25 +677,28 @@
               }
           });
     }
-    
+
     function createPostElement(postId, post) {
         const currentUser = auth.currentUser;
         const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-        
+
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
         postDiv.setAttribute('data-post-id', postId);
 
-        const formattedTimestamp = post.timestamp ? post.timestamp.toDate().toLocaleString() : 'Just now';
+        const formattedTimestamp = post.timestamp && post.timestamp.toDate ? post.timestamp.toDate().toLocaleString() : 'Just now';
 
-        let contentHTML = `<p>${post.content ? escapeHTML(post.content).replace(/\n/g, '<br>') : ''}</p>`;
+        let contentHTML = '';
+        if (post.content) { // Only add paragraph if content exists
+            contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
+        }
         if (post.imageUrl) {
-            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image">`;
+            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.error('Failed to load post image: ${post.imageUrl}')">`;
         }
 
         postDiv.innerHTML = `
             <div class="post-header">
-                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${post.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <strong>${escapeHTML(post.userName)}</strong>
                 </div>
@@ -670,13 +709,18 @@
             </div>
             <div class="post-actions">
                 <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
-                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart" ${isLiked ? 'style="color:red;"' : ''}></i>
+                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
                     <span>${post.likes ? post.likes.length : 0} Likes</span>
                 </button>
                 <button class="comment-toggle-btn" data-post-id="${postId}">
                     <i class="far fa-comment"></i>
                     <span>${post.comments ? post.comments.length : 0} Comments</span>
                 </button>
+                ${currentUser && post.userId === currentUser.uid ?
+                    `<button class="delete-post-btn" data-post-id="${postId}" style="margin-left: auto; color: #cc0000;">
+                        <i class="fas fa-trash"></i> Delete
+                     </button>` : ''
+                }
             </div>
             <div class="comments-area" id="comments-area-${postId}" style="display: none;">
                 <div class="comments-list" id="comments-list-${postId}"></div>
@@ -686,13 +730,14 @@
                 </form>
             </div>
         `;
-        
+
         if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
 
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
         if (commentsList) {
             if (post.comments && post.comments.length > 0) {
-                post.comments.forEach(comment => renderComment(comment, commentsList));
+                post.comments.sort((a,b) => (a.timestamp && b.timestamp && a.timestamp.toDate && b.timestamp.toDate) ? a.timestamp.toDate() - b.timestamp.toDate() : 0) // Sort comments by timestamp
+                           .forEach(comment => renderComment(comment, commentsList));
             } else {
                 commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
             }
@@ -700,25 +745,73 @@
 
         const likeBtn = postDiv.querySelector('.like-btn');
         if (likeBtn) likeBtn.addEventListener('click', () => handleLike(postId));
+
         const commentToggleBtn = postDiv.querySelector('.comment-toggle-btn');
         if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
+
         const commentForm = postDiv.querySelector('.comment-form-actual');
         if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
+
+        const deleteBtn = postDiv.querySelector('.delete-post-btn');
+        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, post.imageUrl));
+
     }
+
+    async function handleDeletePost(postId, imageUrl) {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            alert("You must be logged in to delete posts.");
+            return;
+        }
+
+        // Confirm before deleting
+        if (!confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
+            return;
+        }
+
+        const postRef = db.collection('posts').doc(postId);
+
+        try {
+            const doc = await postRef.get();
+            if (doc.exists && doc.data().userId === currentUser.uid) {
+                // Delete the image from Storage if it exists
+                if (imageUrl) {
+                    try {
+                        const imageStorageRef = storage.refFromURL(imageUrl);
+                        await imageStorageRef.delete();
+                    } catch (storageError) {
+                        console.warn("Could not delete image from storage, it might have been already deleted or permissions changed:", storageError);
+                        // Don't block post deletion if image deletion fails, but log it.
+                    }
+                }
+                // Delete the post document from Firestore
+                await postRef.delete();
+                // Post will be removed from UI by onSnapshot listener
+            } else {
+                alert("You do not have permission to delete this post or it no longer exists.");
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("Failed to delete post: " + error.message);
+        }
+    }
+
 
     function renderComment(comment, commentsListElement) {
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
-        const commentTimestamp = comment.timestamp ? (typeof comment.timestamp.toDate === 'function' ? comment.timestamp.toDate().toLocaleString() : new Date(comment.timestamp).toLocaleString()) : 'Recently';
-        
-        const noCommentP = commentsListElement.querySelector('p');
-        if(noCommentP && noCommentP.textContent.includes('No comments yet')) {
+        const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
+                                ? comment.timestamp.toDate().toLocaleString()
+                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently'); // Fallback for non-Firestore timestamp
+
+        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
+        if(noCommentP) {
             noCommentP.remove();
         }
 
         commentDiv.innerHTML = `
             <div class="comment-header">
-                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${comment.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <strong>${escapeHTML(comment.userName) || 'User'}</strong>
                 <span class="timestamp">${commentTimestamp}</span>
             </div>
@@ -732,21 +825,25 @@
         if (!currentUser) { alert("Please log in to like posts."); return; }
 
         const postRef = db.collection('posts').doc(postId);
+        // IMPORTANT: Secure Firestore updates for likes.
+        // Rules should allow authenticated users to modify the 'likes' array.
         try {
             await db.runTransaction(async (transaction) => {
                 const doc = await transaction.get(postRef);
                 if (!doc.exists) throw "Document does not exist!";
-                
-                let currentLikes = doc.data().likes || [];
-                let newLikesArray = [...currentLikes]; 
 
-                if (newLikesArray.includes(currentUser.uid)) {
-                    newLikesArray = newLikesArray.filter(uid => uid !== currentUser.uid);
+                const postData = doc.data();
+                let currentLikes = postData.likes || []; // Ensure likes is an array
+                let newLikesArray;
+
+                if (currentLikes.includes(currentUser.uid)) {
+                    newLikesArray = currentLikes.filter(uid => uid !== currentUser.uid);
                 } else {
-                    newLikesArray.push(currentUser.uid);
+                    newLikesArray = [...currentLikes, currentUser.uid];
                 }
                 transaction.update(postRef, { likes: newLikesArray });
             });
+            // UI update will be handled by onSnapshot
         } catch (error) {
             console.error("Like transaction failed: ", error);
             alert("Failed to update like: " + error.message);
@@ -786,15 +883,19 @@
             userName: currentUser.displayName || 'User',
             userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
             text: commentText,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestamp: firebase.firestore.FieldValue.serverTimestamp() // Use server timestamp
         };
 
         const postRef = db.collection('posts').doc(postId);
+        // IMPORTANT: Secure Firestore updates for comments.
+        // Rules should allow authenticated users to add to the 'comments' array,
+        // and validate the structure of the newComment object (e.g., newComment.userId === auth.uid).
         try {
             await postRef.update({
                 comments: firebase.firestore.FieldValue.arrayUnion(newComment)
             });
-            commentTextInput.value = '';
+            commentTextInput.value = ''; // Clear input after successful post
+            // UI update of comment list and count will be handled by onSnapshot
         } catch (error) {
             console.error("Error adding comment: ", error);
             alert("Failed to add comment: " + error.message);
@@ -807,57 +908,66 @@
     }
 
     function toggleMenu() {
-        if (elements.mobileMenu) {
+        if (elements.mobileMenu && elements.hamburger) {
             elements.mobileMenu.classList.toggle('active');
-            if (elements.hamburger) { // Check if hamburger exists
-                document.querySelectorAll('.hamburger-line').forEach(line => {
-                    line.style.background = elements.mobileMenu.classList.contains('active') ? '#8b0000' : '#ffffff';
-                });
-            }
+            elements.hamburger.classList.toggle('active'); // Toggle active class for hamburger icon styling (X)
         }
     }
+
     function closeMenuAndScroll(event) {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
             toggleMenu();
         }
         const targetId = event.currentTarget.getAttribute('href');
+        // Check if it's an internal anchor link
         if (targetId && targetId.startsWith('#')) {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                event.preventDefault();
+                event.preventDefault(); // Prevent default anchor behavior
                 targetElement.scrollIntoView({ behavior: "smooth" });
             }
         }
+        // If it's a full page link, it will navigate normally after closing the menu
     }
 
     if (elements.hamburger) elements.hamburger.addEventListener('click', toggleMenu);
+
     document.querySelectorAll('.mobile-menu a').forEach(link => {
         link.addEventListener('click', (event) => {
+            // For anchor links on the same page, use closeMenuAndScroll
             if (link.getAttribute('href').startsWith('#')) {
                 closeMenuAndScroll(event);
-            } else {
+            } else { // For other links (e.g., index.html, agnosia.html)
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                    toggleMenu();
+                    toggleMenu(); // Just close the menu, then let the link navigate
                 }
             }
         });
     });
+
+    // Close mobile menu if clicked outside
     document.addEventListener('click', (e) => {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            elements.hamburger && !elements.hamburger.contains(e.target) &&
-            !elements.mobileMenu.contains(e.target)) {
+            elements.hamburger && !elements.hamburger.contains(e.target) && // Click was not on hamburger
+            !elements.mobileMenu.contains(e.target)) { // Click was not inside menu
             toggleMenu();
         }
     });
-    
+
     function escapeHTML(str) {
+        if (str === null || str === undefined) return '';
         const div = document.createElement('div');
         div.appendChild(document.createTextNode(str));
         return div.innerHTML;
     }
 
+    // Initial load if user is already logged in (e.g., page refresh)
     if (auth.currentUser) {
-        loadPosts();
+        // The onAuthStateChanged listener will handle this,
+        // but explicitly calling here can be useful if onAuthStateChanged
+        // fires after some initial UI setup that depends on posts.
+        // However, the current setup with onAuthStateChanged calling loadPosts is generally sufficient.
+        // loadPosts(); // This might be redundant due to onAuthStateChanged
     }
     </script>
 </body>
