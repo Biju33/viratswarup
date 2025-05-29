@@ -63,30 +63,7 @@
             margin-bottom: 0;
         }
 
-        .hamburger { /* This is the top-right hamburger */
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            cursor: pointer;
-            display: none; /* Hidden by default, shown in media query */
-            z-index: 1001;
-        }
-        .hamburger-line {
-            width: 28px;
-            height: 2px;
-            background: #ffffff;
-            margin: 6px 0;
-            transition: 0.4s;
-        }
-        .hamburger.active .hamburger-line:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-        .hamburger.active .hamburger-line:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.active .hamburger-line:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
+        /* REMOVED .hamburger and .hamburger-line styles as the element is gone */
 
         .mobile-menu {
             position: fixed;
@@ -175,9 +152,9 @@
         }
 
         @media (max-width: 768px) {
-            .hamburger { display: block; } /* Shows the top-right hamburger */
+            /* .hamburger { display: block; } REMOVED - No longer needed */
             .desktop-nav { display: none; }
-            .bottom-nav { display: flex; justify-content: center; align-items: center; } /* MODIFIED: Changed from display: block to display:flex for better control of ul */
+            .bottom-nav { display: flex; justify-content: center; align-items: center; }
 
             .header {
                 justify-content: flex-start;
@@ -520,11 +497,7 @@
     </style>
 </head>
 <body>
-    <div class="hamburger"> <!-- This is the top-right hamburger -->
-        <div class="hamburger-line"></div>
-        <div class="hamburger-line"></div>
-        <div class="hamburger-line"></div>
-    </div>
+    <!-- REMOVED the top-right hamburger div -->
 
     <nav class="mobile-menu">
         <a href="index.html"><i class="fas fa-home"></i>Home</a>
@@ -560,7 +533,7 @@
             <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span>Agnosia</span></a></li>
             <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span>Enigma</span></a></li>
             <li><a href="emulate.html"><i class="fas fa-copy"></i><span>Emulate</span></a></li>
-            <li><a href="#" id="bottomNavMenuBtn"><i class="fas fa-bars"></i><span>Menu</span></a></li> <!-- MODIFIED HERE -->
+            <li><a href="#" id="bottomNavMenuBtn"><i class="fas fa-bars"></i><span>Menu</span></a></li>
         </ul>
     </nav>
 
@@ -581,7 +554,7 @@
                 <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
-                    <button id="logoutBtn">Logout</button> <!-- This is the desktop logout button -->
+                    <button id="logoutBtn">Logout</button>
                 </div>
             </div>
 
@@ -635,21 +608,21 @@
         appSection: document.getElementById('appSection'),
         googleLoginBtn: document.getElementById('googleLoginBtn'),
         facebookLoginBtn: document.getElementById('facebookLoginBtn'),
-        logoutBtn: document.getElementById('logoutBtn'), // Desktop logout
+        logoutBtn: document.getElementById('logoutBtn'),
         userPhoto: document.getElementById('userPhoto'),
         userName: document.getElementById('userName'),
         postBtn: document.getElementById('postBtn'),
         postContent: document.getElementById('postContent'),
         postsContainer: document.getElementById('postsContainer'),
         mobileMenu: document.querySelector('.mobile-menu'),
-        hamburger: document.querySelector('.hamburger'), // Top-right hamburger
+        // hamburger: document.querySelector('.hamburger'), // REMOVED
         postImageFile: document.getElementById('postImageFile'),
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
         uploadProgressText: document.getElementById('uploadProgressText'),
         mobileLoginLink: document.getElementById('mobileLoginLink'),
         mobileLogoutLink: document.getElementById('mobileLogoutLink'),
-        bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn') // ADDED: Bottom nav hamburger
+        bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn')
     };
 
     if (elements.postImageFile) {
@@ -1201,9 +1174,9 @@
     }
 
     function toggleMenu() {
-        if (elements.mobileMenu && elements.hamburger) { // elements.hamburger refers to the top-right one
+        if (elements.mobileMenu) {
             elements.mobileMenu.classList.toggle('active');
-            elements.hamburger.classList.toggle('active'); // Toggles the top-right hamburger's 'X' state
+            // elements.hamburger.classList.toggle('active'); // REMOVED - No top-right hamburger to toggle
         }
     }
 
@@ -1219,14 +1192,11 @@
         }
     }
 
-    if (elements.hamburger) { // Top-right hamburger
-        elements.hamburger.addEventListener('click', toggleMenu);
-    }
+    // if (elements.hamburger) { elements.hamburger.addEventListener('click', toggleMenu); } // REMOVED
 
-    // ADDED: Event listener for the bottom navigation menu button
     if (elements.bottomNavMenuBtn) {
         elements.bottomNavMenuBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent default anchor behavior
+            event.preventDefault();
             toggleMenu();
         });
     }
@@ -1240,16 +1210,15 @@
                 // This is handled by its own dedicated event listener
             } else {
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                    toggleMenu(); // Close menu if navigating to a full page
+                    toggleMenu();
                 }
             }
         });
     });
     document.addEventListener('click', (e) => {
-        // Close menu if clicking outside of it, the top-right hamburger, or the bottom-nav hamburger
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            elements.hamburger && !elements.hamburger.contains(e.target) &&
-            elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) && // Check for bottom nav hamburger
+            // elements.hamburger && !elements.hamburger.contains(e.target) && // REMOVED check for top-right hamburger
+            elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) &&
             !elements.mobileMenu.contains(e.target)) {
             toggleMenu();
         }
