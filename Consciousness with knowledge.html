@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en"> <!-- Default to English -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Georgia", serif;
+      font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
     }
 
     body {
@@ -23,27 +23,7 @@
       color: #2c2c2c;
     }
 
-    /* Header */
-    .header {
-      padding: 95px 20px 45px;
-      text-align: center;
-      border-bottom: 1px solid #e0e0e0;
-      background-color: #8b0000;
-    }
-
-    .header h1 {
-      font-size: 52px;
-      letter-spacing: 3.2px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      color: white;
-    }
-
-    .header h2 {
-      font-size: 22px;
-      color: #fff;
-      font-weight: 300;
-    }
+    /* Header (Using inline styles from your HTML for this page's header) */
 
     /* Hamburger */
     .hamburger {
@@ -51,16 +31,25 @@
       top: 25px;
       right: 25px;
       cursor: pointer;
-      display: none;
-      z-index: 1000;
+      display: none; /* Shown by media query */
+      z-index: 1001;
     }
 
     .hamburger-line {
       width: 28px;
       height: 2px;
-      background: #000000;
+      background: #ffffff; /* White for visibility on dark header */
       margin: 6px 0;
       transition: 0.4s;
+    }
+    .hamburger.active .hamburger-line:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+    .hamburger.active .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active .hamburger-line:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
     }
 
     /* Mobile Menu */
@@ -73,29 +62,48 @@
       background: #8b0000;
       box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
       transition: 0.4s;
-      padding-top: 80px;
-      z-index: 999;
+      padding-top: 60px; /* Adjusted for language options */
+      z-index: 1000;
+      overflow-y: auto;
     }
 
     .mobile-menu.active {
       right: 0;
     }
 
-    .mobile-menu a {
+    .mobile-menu a, .mobile-menu .language-select-label {
       display: flex;
       align-items: center;
       gap: 15px;
-      padding: 18px 30px;
-      color: #fff;
+      padding: 15px 30px;
+      color: #fff !important;
       text-decoration: none;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
     }
 
     .mobile-menu i {
       width: 25px;
       font-size: 20px;
-      color: #fff;
+      color: #fff !important;
     }
+    .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
+      border-bottom: none;
+    }
+    .language-options {
+      padding-left: 30px;
+      display: none;
+      background-color: rgba(0,0,0,0.1);
+    }
+    .language-options a {
+      padding: 12px 30px;
+      font-size: 0.9em;
+    }
+    .language-options a.lang-active {
+        font-weight: bold;
+        background-color: rgba(255,255,255,0.1);
+    }
+
 
     /* Bottom Nav */
     .bottom-nav {
@@ -106,7 +114,7 @@
       background: #8b0000;
       border-top: 1px solid #eee;
       padding: 8px 0;
-      display: none;
+      display: none; /* Shown by media query */
       z-index: 999;
     }
 
@@ -117,17 +125,23 @@
     }
 
     .bottom-nav a {
-      color: #fff;
+      color: #fff !important;
       font-size: 16px;
       text-decoration: none;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 10px 14px;
+      gap: 4px;
+      padding: 8px 10px;
       border-radius: 8px;
       transition: background 0.3s;
     }
-
+    .bottom-nav a i {
+        font-size: 20px;
+    }
+    .bottom-nav a span {
+        font-size: 12px;
+    }
     .bottom-nav a:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
@@ -135,10 +149,11 @@
     /* Desktop Nav */
     .desktop-nav {
       margin: 45px 0;
+      text-align: center;
     }
 
     .desktop-nav ul {
-      display: flex;
+      display: inline-flex;
       justify-content: center;
       gap: 32px;
       list-style: none;
@@ -157,69 +172,74 @@
       .hamburger {
         display: block;
       }
-
       .desktop-nav {
         display: none;
       }
-
       .bottom-nav {
         display: block;
       }
-
+      /* Original .header styles - apply if .header class is used and needs mobile adjustments */
+      /*
       .header {
         padding: 70px 20px 35px;
       }
-
       .header h1 {
         font-size: 42px;
       }
+      */
     }
 
    .grid-view {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
-  padding: 40px 20px;
-  background: #f9f9f9;
-}
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      padding: 40px 20px;
+      background: #f9f9f9;
+    }
 
-.grid-item {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 16px;
-  text-align: center;
-  transition: transform 0.3s ease;
-}
+    .grid-item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 16px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      display: flex; /* For better control of content inside */
+      flex-direction: column; /* Stack image, h3, p */
+      justify-content: space-between; /* If items have varying text length */
+    }
 
-.grid-item:hover {
-  transform: translateY(-5px);
-}
+    .grid-item:hover {
+      transform: translateY(-5px);
+    }
 
-.grid-item img {
-  width: 100%;
-  max-height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-}
+    .grid-item img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 12px; /* Space between image and title */
+    }
 
-.grid-item h3 {
-  margin-top: 12px;
-  font-size: 20px;
-  color: #8b0000;
-}
+    .grid-item h3 {
+      margin-top: 0; /* Reset margin as flex handles spacing */
+      margin-bottom: 8px; /* Space between title and description */
+      font-size: 20px;
+      color: #8b0000;
+    }
 
-.grid-item p {
-  font-size: 14px;
-  color: #555;
-  margin-top: 8px;
-}
+    .grid-item p {
+      font-size: 14px;
+      color: #555;
+      margin-top: 0; /* Reset margin */
+      flex-grow: 1; /* Allow p to take available space if titles are short */
+    }
 
   </style>
 </head>
 <body>
   <!-- हैमबर्गर -->
-  <div class="hamburger" onclick="toggleMenu()">
+  <div class="hamburger"> <!-- onclick removed -->
     <div class="hamburger-line"></div>
     <div class="hamburger-line"></div>
     <div class="hamburger-line"></div>
@@ -227,82 +247,218 @@
 
   <!-- मोबाइल मेन्यू -->
   <nav class="mobile-menu">
-    <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
-    <a href="#share"><i class="fas fa-share"></i>Share</a>
-    <a href="index.html"><i class="fas fa-home"></i>Home</a>
-    <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
-    <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
-    <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-    <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+    <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+    <a href="#share"><i class="fas fa-share"></i><span data-translate-key="share">Share</span></a>
+    <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+    <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+    <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+    <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+    <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
+
+    <div class="language-select-label">
+        <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
+    </div>
+    <div class="language-options">
+        <a href="#" data-lang="en">English</a>
+        <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+        <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+    </div>
   </nav>
 
   <!-- हैडर -->
-  <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-    <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-    <h2 style="color: white; font-size: 13px; margin: 0;">The Supreme Devine of Every Faith</h2>
+  <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
+    <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
+    <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitleGrid">The Supreme Devine of Every Faith</h2>
   </header>
 
   <!-- डेस्कटॉप नेव -->
   <nav class="desktop-nav">
     <ul>
-      <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-      <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-      <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-      <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-      <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+      <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+      <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+      <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+      <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
     </ul>
   </nav>
 
   <!-- बॉटम नेव -->
   <nav class="bottom-nav">
     <ul>
-      <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-      <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-      <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-      <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-      <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+      <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+      <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+      <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+      <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+      <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
     </ul>
   </nav>
 
  <section class="grid-view">
   <div class="grid-item">
-    <img src="https://via.placeholder.com/150" alt="Item 1">
-    <h3>Krishna</h3>
-    <p>भगवद्गीता का उपदेशक और प्रेम का अवतार।</p>
+    <img src="https://via.placeholder.com/150" alt="Placeholder image for Krishna" data-translate-key-alt="altKrishna">
+    <h3 data-translate-key="krishnaTitle">Krishna</h3>
+    <p data-translate-key="krishnaDesc">भगवद्गीता का उपदेशक और प्रेम का अवतार।</p>
   </div>
   <div class="grid-item">
-    <img src="https://via.placeholder.com/150" alt="Item 2">
-    <h3>Buddha</h3>
-    <p>शांति, ध्यान और करुणा के प्रतीक।</p>
+    <img src="https://via.placeholder.com/150" alt="Placeholder image for Buddha" data-translate-key-alt="altBuddha">
+    <h3 data-translate-key="buddhaTitle">Buddha</h3>
+    <p data-translate-key="buddhaDesc">शांति, ध्यान और करुणा के प्रतीक।</p>
   </div>
   <div class="grid-item">
-    <img src="https://via.placeholder.com/150" alt="Item 3">
-    <h3>tartam sagar</h3>
-    <p>प्रेम, बलिदान और क्षमा की मूर्ति।</p>
+    <img src="https://via.placeholder.com/150" alt="Placeholder image for Tartam Sagar" data-translate-key-alt="altTartamSagar">
+    <h3 data-translate-key="tartamSagarTitle">Tartam Sagar</h3>
+    <p data-translate-key="tartamSagarDesc">प्रेम, बलिदान और क्षमा की मूर्ति।</p>
   </div>
-  <!-- और आइटम जोड़ें -->
+  <!-- Add more items here with data-translate-key attributes -->
 </section>
 
-
-  <!-- स्क्रिप्ट -->
   <script>
+    // --- START TRANSLATION DATA & LOGIC ---
+    const translations = {
+        en: {
+            headerSubtitleGrid: "The Supreme Divine of Every Faith",
+            login: "Login",
+            share: "Share",
+            home: "Home",
+            agnosia: "Agnosia",
+            enigma: "Enigma",
+            emulate: "Emulate",
+            post: "Post",
+            language: "Language",
+            // Grid Items
+            krishnaTitle: "Krishna",
+            krishnaDesc: "The preacher of the Bhagavad Gita and the embodiment of love.",
+            altKrishna: "Image of Krishna",
+            buddhaTitle: "Buddha",
+            buddhaDesc: "Symbol of peace, meditation, and compassion.",
+            altBuddha: "Image of Buddha",
+            tartamSagarTitle: "Tartam Sagar",
+            tartamSagarDesc: "Embodiment of love, sacrifice, and forgiveness.",
+            altTartamSagar: "Image of Tartam Sagar"
+            // Add more grid item keys here if you add more items
+        },
+        ne: {
+            headerSubtitleGrid: "हरेक आस्थाका सर्वोच्च परमात्मा",
+            login: "लग - इन",
+            share: "साझा गर्नुहोस्",
+            home: "गृहपृष्ठ",
+            agnosia: "अज्ञानता",
+            enigma: "पहेली",
+            emulate: "अनुकरण",
+            post: "पोस्ट",
+            language: "भाषा",
+            // Grid Items
+            krishnaTitle: "कृष्ण",
+            krishnaDesc: "भगवद्गीताका उपदेशक र प्रेमका अवतार।",
+            altKrishna: "कृष्णको छवि",
+            buddhaTitle: "बुद्ध",
+            buddhaDesc: "शान्ति, ध्यान र करुणाका प्रतीक।",
+            altBuddha: "बुद्धको छवि",
+            tartamSagarTitle: "तारतम सागर",
+            tartamSagarDesc: "प्रेम, बलिदान र क्षमाका मूर्ति।",
+            altTartamSagar: "तारतम सागरको छवि"
+        },
+        hi: {
+            headerSubtitleGrid: "हर आस्था के सर्वोच्च परमात्मा",
+            login: "लॉग इन करें",
+            share: "साझा करें",
+            home: "होम",
+            agnosia: "अज्ञान",
+            enigma: "पहेली",
+            emulate: "अनुकरण",
+            post: "पोस्ट",
+            language: "भाषा",
+            // Grid Items
+            krishnaTitle: "कृष्ण",
+            krishnaDesc: "भगवद्गीता का उपदेशक और प्रेम का अवतार।",
+            altKrishna: "कृष्ण की छवि",
+            buddhaTitle: "बुद्ध",
+            buddhaDesc: "शांति, ध्यान और करुणा के प्रतीक।",
+            altBuddha: "बुद्ध की छवि",
+            tartamSagarTitle: "तारतम सागर",
+            tartamSagarDesc: "प्रेम, बलिदान और क्षमा की मूर्ति।",
+            altTartamSagar: "तारतम सागर की छवि"
+        }
+    };
+
+    let currentLanguage = localStorage.getItem('selectedLanguageGridPage') || 'en'; // Unique key for this page
+
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('selectedLanguageGridPage', lang);
+        applyTranslations();
+        document.querySelectorAll('.language-options a').forEach(a => {
+            a.classList.remove('lang-active');
+            if (a.dataset.lang === lang) {
+                a.classList.add('lang-active');
+            }
+        });
+    }
+
+    function _(key, fallbackLang = 'en') {
+        return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+    }
+
+    function applyTranslations() {
+        document.querySelectorAll('[data-translate-key]').forEach(element => {
+            const key = element.dataset.translateKey;
+            element.textContent = _(key);
+        });
+        document.querySelectorAll('[data-translate-key-alt]').forEach(element => {
+            const key = element.dataset.translateKeyAlt;
+            element.alt = _(key);
+        });
+    }
+    // --- END TRANSLATION LOGIC ---
+
+    const hamburger = document.querySelector(".hamburger");
+    const mobileMenu = document.querySelector(".mobile-menu");
+    const languageSelectLabel = document.querySelector('.language-select-label');
+    const languageOptionsDiv = document.querySelector('.language-options');
+
     function toggleMenu() {
-      document.querySelector(".mobile-menu").classList.toggle("active");
-      document.querySelectorAll(".hamburger-line").forEach((line) => {
-        line.style.transform = line.style.transform ? "" : "rotate(45deg)";
+      mobileMenu.classList.toggle("active");
+      hamburger.classList.toggle("active");
+    }
+
+    if (hamburger) {
+      hamburger.addEventListener('click', toggleMenu);
+    }
+
+    if (languageSelectLabel) {
+      languageSelectLabel.addEventListener('click', () => {
+          if (languageOptionsDiv) {
+              languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
+          }
       });
     }
 
+    document.querySelectorAll('.language-options a').forEach(link => {
+      link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const lang = e.currentTarget.dataset.lang;
+          setLanguage(lang);
+          if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
+      });
+    });
+
     document.addEventListener("click", (e) => {
-      if (
-        !e.target.closest(".hamburger") &&
-        !e.target.closest(".mobile-menu")
-      ) {
-        document.querySelector(".mobile-menu").classList.remove("active");
-        document.querySelectorAll(".hamburger-line").forEach((line) => {
-          line.style.transform = "";
-        });
+      let clickedInsideMenuComponent = false;
+      if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
+      if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
+
+      if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
+        toggleMenu();
+      } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
+                 languageSelectLabel && !languageSelectLabel.contains(e.target) &&
+                 !languageOptionsDiv.contains(e.target) ) {
+          languageOptionsDiv.style.display = 'none';
       }
+    });
+
+    // Apply translations on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLanguage);
     });
   </script>
 </body>
