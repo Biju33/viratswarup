@@ -25,28 +25,30 @@
 
         .header {
             display: flex;
-            align-items: center; 
-            padding: 5px 20px; 
+            justify-content: center; /* Center the .header-text-content */
+            align-items: center;
+            position: relative;      /* For absolute positioning of the logo */
+            padding: 5px 140px;      /* Top/bottom 5px. Left/Right 140px for logo space + symmetry */
             border-bottom: 1px solid #e0e0e0;
             background-color: #8b0000;
-            position: relative; 
         }
 
         .header-logo {
-            height: 100px; /* Increased logo size */
-            width: 100px;  /* Increased logo size */
-            margin-right: 20px; 
-            flex-shrink: 0; 
+            position: absolute;      /* Take logo out of flow */
+            left: 20px;              /* 20px from the very left edge of .header */
+            top: 50%;
+            transform: translateY(-50%);
+            height: 100px; 
+            width: 100px;  
             object-fit: contain; 
         }
 
         .header-text-content {
-            flex-grow: 1; 
-            text-align: center; 
+            text-align: center; /* H1/H2 inside are centered */
         }
         
         .header h1 {
-            font-size: 42px; /* Decreased H1 size */
+            font-size: 42px; 
             letter-spacing: 3.2px;
             text-transform: uppercase;
             margin-bottom: 12px;
@@ -178,16 +180,24 @@
             .bottom-nav { display: block; }
             
             .header { 
-                padding: 5px 15px; 
+                justify-content: flex-start; /* Align items to the start for standard flow */
+                padding: 5px 15px;           /* Revert to original mobile padding */
             }
             .header-logo {
-                height: 80px; /* Increased mobile logo size */
-                width: 80px;  /* Increased mobile logo size */
-                margin-right: 15px;
+                position: static;        /* Put logo back in normal flow */
+                transform: none;         /* Reset transform */
+                height: 80px; 
+                width: 80px;  
+                margin-right: 15px;      /* Space between logo and text */
+                flex-shrink: 0;          /* Prevent logo from shrinking */
+            }
+            .header-text-content {
+                flex-grow: 1;            /* Allow text content to take remaining space */
+                text-align: center;      /* H1/H2 inside will be centered in this grown space */
             }
 
             .header h1 { 
-                font-size: 30px; /* Decreased mobile H1 size */
+                font-size: 30px; 
             }
             .header h2 { 
                 font-size: 18px; 
