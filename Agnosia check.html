@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en"> <!-- Default to English -->
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VIRAT SWARUP</title>
+    <title>VIRAT SWARUP - Agnosia</title> <!-- Page specific title -->
     <!-- Font Awesome Icons -->
     <link
       rel="stylesheet"
@@ -15,7 +15,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif;
+        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
       }
 
       body {
@@ -23,25 +23,8 @@
         color: #2c2c2c;
       }
 
-      /* हैडर सेक्शन */
-      .header {
-        padding: 95px 20px 45px;
-        text-align: center;
-        border-bottom: 1px solid #e0e0e0;
-        background-color: #8b0000;
-      }
-      .header h1 {
-        font-size: 52px;
-        letter-spacing: 3.2px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        color: white;
-      }
-      .header h2 {
-        font-size: 22px;
-        color: #fff;
-        font-weight: 300;
-      }
+      /* हैडर सेक्शन (Using inline styles from your HTML for this page's header) */
+      /* General .header styles might apply if you use the class, but current HTML uses inline */
 
       /* हैमबर्गर मेन्यू */
       .hamburger {
@@ -49,15 +32,24 @@
         top: 25px;
         right: 25px;
         cursor: pointer;
-        display: none;
-        z-index: 1000;
+        display: none; /* Shown by media query */
+        z-index: 1001;
       }
       .hamburger-line {
         width: 28px;
         height: 2px;
-        background: #000000;
+        background: #ffffff; /* White for visibility on dark header */
         margin: 6px 0;
         transition: 0.4s;
+      }
+       .hamburger.active .hamburger-line:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+      .hamburger.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.active .hamburger-line:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
       }
 
       /* मोबाइल मेन्यू */
@@ -70,26 +62,46 @@
         background: #8b0000;
         box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
         transition: 0.4s;
-        padding-top: 80px;
-        z-index: 999;
+        padding-top: 60px; /* Adjusted for language options */
+        z-index: 1000;
+        overflow-y: auto;
       }
       .mobile-menu.active {
         right: 0;
       }
-      .mobile-menu a {
+      .mobile-menu a, .mobile-menu .language-select-label {
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 18px 30px;
-        color: #fff;
+        padding: 15px 30px;
+        color: #fff !important;
         text-decoration: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
       }
       .mobile-menu i {
         width: 25px;
         font-size: 20px;
-        color: #fff;
+        color: #fff !important;
       }
+      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
+        border-bottom: none;
+      }
+
+      .language-options {
+        padding-left: 30px;
+        display: none;
+        background-color: rgba(0,0,0,0.1);
+      }
+      .language-options a {
+        padding: 12px 30px;
+        font-size: 0.9em;
+      }
+      .language-options a.lang-active {
+          font-weight: bold;
+          background-color: rgba(255,255,255,0.1);
+      }
+
 
       /* बॉटम नेविगेशन */
       .bottom-nav {
@@ -100,7 +112,7 @@
         background: #8b0000;
         border-top: 1px solid #eee;
         padding: 8px 0;
-        display: none;
+        display: none; /* Shown by media query */
         z-index: 999;
       }
       .bottom-nav ul {
@@ -109,17 +121,23 @@
         list-style: none;
       }
       .bottom-nav a {
-        color: #fff;
+        color: #fff !important;
         font-size: 16px;
         text-decoration: none;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 6px;
-        padding: 10px 14px;
+        gap: 4px;
+        padding: 8px 10px;
         border-radius: 8px;
         transition: background 0.3s;
       }
-
+       .bottom-nav a i {
+        font-size: 20px;
+      }
+      .bottom-nav a span {
+        font-size: 12px;
+      }
       .bottom-nav a:hover {
         background-color: rgba(255, 255, 255, 0.1);
       }
@@ -127,9 +145,10 @@
       /* डेस्कटॉप नेविगेशन */
       .desktop-nav {
         margin: 45px 0;
+        text-align: center;
       }
       .desktop-nav ul {
-        display: flex;
+        display: inline-flex;
         justify-content: center;
         gap: 32px;
         list-style: none;
@@ -154,18 +173,90 @@
         .bottom-nav {
           display: block;
         }
+        /* Original .header styles from CSS block - if using class .header for this page too */
+        /*
         .header {
           padding: 70px 20px 35px;
         }
         .header h1 {
           font-size: 42px;
         }
+        */
+      }
+
+      /* Styles specific to Agnosia page content */
+      .content-section h1, .content-section h2, .content-section h3, .content-section strong, .content-section th {
+        color: #8B0000;
+        margin-top: 20px; /* Add some top margin to headings */
+        margin-bottom: 10px;
+      }
+      .content-section h1 { font-size: 2.2em; }
+      .content-section h2 { font-size: 1.8em; }
+      .content-section h3 { font-size: 1.5em; }
+
+
+      .content-section { /* Wrapper for the main text content */
+        padding: 20px;
+        max-width: 900px; /* Control content width */
+        margin: 20px auto; /* Center content area */
+        text-align: center; /* Default center for p, h tags will override if needed */
+      }
+
+      .content-section p {
+        font-family: 'Georgia', serif;
+        line-height: 1.8;
+        color: #333;
+        text-align: justify; /* Justify main paragraphs */
+        margin-bottom: 15px; /* Space between paragraphs */
+      }
+
+      .content-section table {
+        margin: 30px auto;
+        border-collapse: collapse;
+        width: 90%; /* Relative to .content-section */
+        max-width: 700px; /* Max table width */
+        font-size: 1rem;
+      }
+
+      .content-section table, .content-section th, .content-section td {
+        border: 1px solid #aaa;
+      }
+
+      .content-section th, .content-section td {
+        padding: 12px;
+        text-align: left; /* Left align table content by default */
+      }
+      .content-section th {
+        text-align: center; /* Center table headers */
+        background-color: #f0f0f0; /* Light background for headers */
+      }
+
+
+      .content-section ul {
+        margin: 20px auto; /* Center the list block */
+        padding-left: 0;
+        list-style-position: inside;
+        display: inline-block;
+        text-align: left; /* Align text within list items to the left */
+      }
+
+      .content-section li {
+        margin-bottom: 10px;
+      }
+
+      .content-section em {
+        display: block;
+        margin-top: 30px;
+        font-style: italic;
+        color: #8B0000;
+        font-weight: bold;
+        font-size: 1.1em;
       }
     </style>
   </head>
   <body>
     <!-- हैमबर्गर आइकन -->
-    <div class="hamburger" onclick="toggleMenu()">
+    <div class="hamburger"> <!-- onclick removed -->
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
@@ -173,179 +264,356 @@
 
     <!-- मोबाइल मेन्यू -->
     <nav class="mobile-menu">
-      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
-      <a href="#share"><i class="fas fa-share"></i>Share</a>
-      <a href="index.html"><i class="fas fa-home"></i>Home</a>
-      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
-      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
-      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+      <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+      <a href="#share"><i class="fas fa-share"></i><span data-translate-key="share">Share</span></a> <!-- Assuming #share for now -->
+      <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+      <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+      <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
+
+      <div class="language-select-label">
+            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
+      </div>
+      <div class="language-options">
+          <a href="#" data-lang="en">English</a>
+          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+      </div>
     </nav>
 
     <!-- हैडर -->
-    <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-
-  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
-
+    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
+        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
+        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitleAgnosia"> The Supreme Devine of Every Faith</h2>
     </header>
 
     <!-- डेस्कटॉप नेविगेशन -->
     <nav class="desktop-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="#agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="#enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="#emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
     <!-- बॉटम नेविगेशन -->
     <nav class="bottom-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
+    <!-- Agnosia Content Section -->
+    <div class="content-section">
+        <h1 data-translate-key="agnosiaPageTitle">Agnosia</h1>
+        <h2 data-translate-key="agnosiaSubtitle">A Journey from Birth to Death</h2>
+        <p data-translate-key="agnosiaIntro">
+          The human brain is not merely a biological organ — it is the gateway to cosmic consciousness.
+          From birth to death, it undergoes constant evolution through experiences, emotions, and decisions.
+          Yet, despite this dynamic journey, the brain often misses attaining true knowledge. Why does this happen? Let us explore.
+        </p>
+
+        <h2 data-translate-key="stagesDevTitle">Stages of Brain Development</h2>
+
+        <h3 data-translate-key="infancyTitle">Infancy: Purity and Receptivity</h3>
+        <p data-translate-key="infancyDesc">The brain is like a blank canvas. Every sight, sound, and touch imprints on it. However, self-awareness remains dormant.</p>
+
+        <h3 data-translate-key="adolescenceTitle">Adolescence: The Birth of Questions</h3>
+        <p data-translate-key="adolescenceDesc">"Who am I?", "What is life?" — such questions arise. Modern education imparts information but often fails to offer inner wisdom.</p>
+
+        <h3 data-translate-key="adulthoodTitle">Adulthood: The Labyrinth of Materialism</h3>
+        <p data-translate-key="adulthoodDesc">Career, relationships, and reputation preoccupy the mind. The brain becomes efficient but forgets to look within.</p>
+
+        <h3 data-translate-key="oldAgeTitle">Old Age: Wisdom or Regret</h3>
+        <p data-translate-key="oldAgeDesc">Experience abounds, but if inner awareness hasn’t developed, the mind is filled with questions like, “Did I truly live?”</p>
+
+        <h2 data-translate-key="knowledgeMissedTitle">Knowledge Often Missed by the Brain</h2>
+        <table>
+          <tr>
+            <th data-translate-key="tableHeaderType">Type of Knowledge</th>
+            <th data-translate-key="tableHeaderReason">Often Missed Because</th>
+          </tr>
+          <tr>
+            <td data-translate-key="selfKnowledge">Self-Knowledge</td>
+            <td data-translate-key="selfKnowledgeReason">Focus remains on external identity</td>
+          </tr>
+          <tr>
+            <td data-translate-key="spiritualInsight">Spiritual Insight</td>
+            <td data-translate-key="spiritualInsightReason">Material goals take priority</td>
+          </tr>
+          <tr>
+            <td data-translate-key="purposeLife">Purpose of Life</td>
+            <td data-translate-key="purposeLifeReason">Lack of inner reflection</td>
+          </tr>
+          <tr>
+            <td data-translate-key="connectionDivine">Connection with the Divine</td>
+            <td data-translate-key="connectionDivineReason">Absence of spiritual practices</td>
+          </tr>
+        </table>
+
+        <h2 data-translate-key="howToAttainTitle">How to Attain True Knowledge</h2>
+        <ul>
+          <li data-translate-key="attainMeditation"><strong>Meditation and Yoga:</strong> Brings inner stillness and awakens consciousness.</li>
+          <li data-translate-key="attainScriptures"><strong>Study of Scriptures:</strong> Bhagavad Gita, Upanishads, Buddhist sutras offer eternal truths.</li>
+          <li data-translate-key="attainGuru"><strong>Guidance of a Guru:</strong> A true guide removes darkness with the torch of wisdom.</li>
+          <li data-translate-key="attainService"><strong>Service and Devotion:</strong> Purifies the ego and deepens the mind's focus.</li>
+        </ul>
+
+        <h2 data-translate-key="conclusionTitle">Conclusion</h2>
+        <p data-translate-key="conclusionDesc1">
+          The human brain is a divine instrument. If it is filled only with information and not with spiritual insight, life remains incomplete.
+          But when the brain is directed towards truth, peace, and God — it becomes the very tool of liberation.
+        </p>
+        <p><em data-translate-key="conclusionMotto">Let us not just think — let us awaken.</em></p>
+    </div>
+
+
     <script>
-      // हैमबर्गर मेन्यू फंक्शन
+      // --- START TRANSLATION DATA & LOGIC ---
+      const translations = {
+          en: {
+              headerSubtitleAgnosia: "The Supreme Divine of Every Faith",
+              login: "Login",
+              share: "Share",
+              home: "Home",
+              agnosia: "Agnosia",
+              enigma: "Enigma",
+              emulate: "Emulate",
+              post: "Post",
+              language: "Language",
+              // Agnosia Page Specific
+              agnosiaPageTitle: "Agnosia",
+              agnosiaSubtitle: "A Journey from Birth to Death",
+              agnosiaIntro: "The human brain is not merely a biological organ — it is the gateway to cosmic consciousness. From birth to death, it undergoes constant evolution through experiences, emotions, and decisions. Yet, despite this dynamic journey, the brain often misses attaining true knowledge. Why does this happen? Let us explore.",
+              stagesDevTitle: "Stages of Brain Development",
+              infancyTitle: "Infancy: Purity and Receptivity",
+              infancyDesc: "The brain is like a blank canvas. Every sight, sound, and touch imprints on it. However, self-awareness remains dormant.",
+              adolescenceTitle: "Adolescence: The Birth of Questions",
+              adolescenceDesc: "\"Who am I?\", \"What is life?\" — such questions arise. Modern education imparts information but often fails to offer inner wisdom.",
+              adulthoodTitle: "Adulthood: The Labyrinth of Materialism",
+              adulthoodDesc: "Career, relationships, and reputation preoccupy the mind. The brain becomes efficient but forgets to look within.",
+              oldAgeTitle: "Old Age: Wisdom or Regret",
+              oldAgeDesc: "Experience abounds, but if inner awareness hasn’t developed, the mind is filled with questions like, “Did I truly live?”",
+              knowledgeMissedTitle: "Knowledge Often Missed by the Brain",
+              tableHeaderType: "Type of Knowledge",
+              tableHeaderReason: "Often Missed Because",
+              selfKnowledge: "Self-Knowledge",
+              selfKnowledgeReason: "Focus remains on external identity",
+              spiritualInsight: "Spiritual Insight",
+              spiritualInsightReason: "Material goals take priority",
+              purposeLife: "Purpose of Life",
+              purposeLifeReason: "Lack of inner reflection",
+              connectionDivine: "Connection with the Divine",
+              connectionDivineReason: "Absence of spiritual practices",
+              howToAttainTitle: "How to Attain True Knowledge",
+              attainMeditation: "Meditation and Yoga: Brings inner stillness and awakens consciousness.",
+              attainScriptures: "Study of Scriptures: Bhagavad Gita, Upanishads, Buddhist sutras offer eternal truths.",
+              attainGuru: "Guidance of a Guru: A true guide removes darkness with the torch of wisdom.",
+              attainService: "Service and Devotion: Purifies the ego and deepens the mind's focus.",
+              conclusionTitle: "Conclusion",
+              conclusionDesc1: "The human brain is a divine instrument. If it is filled only with information and not with spiritual insight, life remains incomplete. But when the brain is directed towards truth, peace, and God — it becomes the very tool of liberation.",
+              conclusionMotto: "Let us not just think — let us awaken."
+          },
+          ne: {
+              headerSubtitleAgnosia: "हरेक आस्थाका सर्वोच्च परमात्मा",
+              login: "लग - इन",
+              share: "साझा गर्नुहोस्",
+              home: "गृहपृष्ठ",
+              agnosia: "अज्ञानता",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              // Agnosia Page Specific
+              agnosiaPageTitle: "अज्ञानता (Agnosia)",
+              agnosiaSubtitle: "जन्मदेखि मृत्युसम्मको यात्रा",
+              agnosiaIntro: "मानव मस्तिष्क केवल एक जैविक अंग होइन - यो ब्रह्माण्डीय चेतनाको प्रवेशद्वार हो। जन्मदेखि मृत्युसम्म, यो अनुभव, भावना र निर्णयहरू मार्फत निरन्तर विकासबाट गुज्रिन्छ। यद्यपि, यो गतिशील यात्राको बावजुद, मस्तिष्कले प्रायः साँचो ज्ञान प्राप्त गर्नबाट वञ्चित हुन्छ। यस्तो किन हुन्छ? आउनुहोस्, अन्वेषण गरौं।",
+              stagesDevTitle: "मस्तिष्क विकासका चरणहरू",
+              infancyTitle: "शैशवावस्था: शुद्धता र ग्रहणशीलता",
+              infancyDesc: "मस्तिष्क खाली क्यानभास जस्तै हुन्छ। हरेक दृश्य, ध्वनि र स्पर्शले यसमा छाप छोड्छ। यद्यपि, आत्म-जागरूकता निष्क्रिय रहन्छ।",
+              adolescenceTitle: "किशोरावस्था: प्रश्नहरूको जन्म",
+              adolescenceDesc: "\"म को हुँ?\", \"जीवन के हो?\" - यस्ता प्रश्नहरू उठ्छन्। आधुनिक शिक्षाले जानकारी दिन्छ तर प्रायः भित्री बुद्धि प्रदान गर्न असफल हुन्छ।",
+              adulthoodTitle: "वयस्कता: भौतिकवादको भ्रमजाल",
+              adulthoodDesc: "करियर, सम्बन्ध र प्रतिष्ठाले मनलाई व्यस्त राख्छ। मस्तिष्क कुशल बन्छ तर भित्र हेर्न बिर्सन्छ।",
+              oldAgeTitle: "वृद्धावस्था: बुद्धि वा पश्चाताप",
+              oldAgeDesc: "अनुभव प्रशस्त हुन्छ, तर यदि भित्री जागरूकता विकसित भएको छैन भने, मन \"के मैले साँच्चै जीवन बिताएँ?\" जस्ता प्रश्नहरूले भरिएको हुन्छ।",
+              knowledgeMissedTitle: "मस्तिष्कले प्रायः गुमाउने ज्ञान",
+              tableHeaderType: "ज्ञानको प्रकार",
+              tableHeaderReason: "प्रायः गुमाउनुको कारण",
+              selfKnowledge: "आत्म-ज्ञान",
+              selfKnowledgeReason: "ध्यान बाह्य पहिचानमा रहन्छ",
+              spiritualInsight: "आध्यात्मिक अन्तरदृष्टि",
+              spiritualInsightReason: "भौतिक लक्ष्यहरू प्राथमिकतामा पर्छन्",
+              purposeLife: "जीवनको उद्देश्य",
+              purposeLifeReason: "भित्री चिन्तनको कमी",
+              connectionDivine: "परमात्मासँगको सम्बन्ध",
+              connectionDivineReason: "आध्यात्मिक अभ्यासको अभाव",
+              howToAttainTitle: "साँचो ज्ञान कसरी प्राप्त गर्ने",
+              attainMeditation: "ध्यान र योग: भित्री शान्ति ल्याउँछ र चेतना जगाउँछ।",
+              attainScriptures: "धर्मग्रन्थहरूको अध्ययन: भगवद् गीता, उपनिषद, बौद्ध सूत्रहरूले शाश्वत सत्यहरू प्रदान गर्छन्।",
+              attainGuru: "गुरुको मार्गदर्शन: एक साँचो मार्गदर्शकले बुद्धिको ज्योतिले अन्धकार हटाउँछ।",
+              attainService: "सेवा र भक्ति: अहंकारलाई शुद्ध पार्छ र मनको ध्यानलाई गहिरो बनाउँछ।",
+              conclusionTitle: "निष्कर्ष",
+              conclusionDesc1: "मानव मस्तिष्क एक दिव्य उपकरण हो। यदि यो केवल जानकारीले भरिएको छ र आध्यात्मिक अन्तरदृष्टिले होइन भने, जीवन अपूर्ण रहन्छ। तर जब मस्तिष्क सत्य, शान्ति र ईश्वरतर्फ निर्देशित हुन्छ - यो मुक्तिको साधन बन्छ।",
+              conclusionMotto: "सोचौं मात्र होइन - जागौं।"
+          },
+          hi: {
+              headerSubtitleAgnosia: "हर आस्था के सर्वोच्च परमात्मा",
+              login: "लॉग इन करें",
+              share: "साझा करें",
+              home: "होम",
+              agnosia: "अज्ञान",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              // Agnosia Page Specific
+              agnosiaPageTitle: "अज्ञान (Agnosia)",
+              agnosiaSubtitle: "जन्म से मृत्यु तक की यात्रा",
+              agnosiaIntro: "मानव मस्तिष्क केवल एक जैविक अंग नहीं है - यह ब्रह्मांडीय चेतना का प्रवेश द्वार है। जन्म से मृत्यु तक, यह अनुभवों, भावनाओं और निर्णयों के माध्यम से निरंतर विकास से गुजरता है। फिर भी, इस गतिशील यात्रा के बावजूद, मस्तिष्क अक्सर सच्चे ज्ञान को प्राप्त करने से चूक जाता है। ऐसा क्यों होता है? आइए जानें।",
+              stagesDevTitle: "मस्तिष्क विकास के चरण",
+              infancyTitle: "शैशवावस्था: पवित्रता और ग्रहणशीलता",
+              infancyDesc: "मस्तिष्क एक खाली कैनवास की तरह होता है। हर दृष्टि, ध्वनि और स्पर्श इस पर अपनी छाप छोड़ता है। हालांकि, आत्म-जागरूकता निष्क्रिय रहती है।",
+              adolescenceTitle: "किशोरावस्था: प्रश्नों का जन्म",
+              adolescenceDesc: "\"मैं कौन हूँ?\", \"जीवन क्या है?\" - ऐसे प्रश्न उठते हैं। आधुनिक शिक्षा जानकारी तो देती है लेकिन अक्सर आंतरिक ज्ञान प्रदान करने में विफल रहती है।",
+              adulthoodTitle: "वयस्कता: भौतिकवाद का भ्रमजाल",
+              adulthoodDesc: "करियर, रिश्ते और प्रतिष्ठा मन पर हावी रहते हैं। मस्तिष्क कुशल हो जाता है लेकिन भीतर देखना भूल जाता है।",
+              oldAgeTitle: "वृद्धावस्था: ज्ञान या पछतावा",
+              oldAgeDesc: "अनुभव प्रचुर मात्रा में होता है, लेकिन अगर आंतरिक जागरूकता विकसित नहीं हुई है, तो मन \"क्या मैंने वास्तव में जीवन जिया?\" जैसे सवालों से भर जाता है।",
+              knowledgeMissedTitle: "ज्ञान जो अक्सर मस्तिष्क द्वारा छूट जाता है",
+              tableHeaderType: "ज्ञान का प्रकार",
+              tableHeaderReason: "अक्सर छूटने का कारण",
+              selfKnowledge: "आत्म-ज्ञान",
+              selfKnowledgeReason: "ध्यान बाहरी पहचान पर रहता है",
+              spiritualInsight: "आध्यात्मिक अंतर्दृष्टि",
+              spiritualInsightReason: "भौतिक लक्ष्य प्राथमिकता बन जाते हैं",
+              purposeLife: "जीवन का उद्देश्य",
+              purposeLifeReason: "आंतरिक चिंतन का अभाव",
+              connectionDivine: " परमात्मा से संबंध",
+              connectionDivineReason: "आध्यात्मिक अभ्यासों का अभाव",
+              howToAttainTitle: "सच्चा ज्ञान कैसे प्राप्त करें",
+              attainMeditation: "ध्यान और योग: आंतरिक शांति लाता है और चेतना को जागृत करता है।",
+              attainScriptures: "शास्त्रों का अध्ययन: भगवद गीता, उपनिषद, बौद्ध सूत्र शाश्वत सत्य प्रदान करते हैं।",
+              attainGuru: "गुरु का मार्गदर्शन: एक सच्चा मार्गदर्शक ज्ञान की मशाल से अंधकार को दूर करता है।",
+              attainService: "सेवा और भक्ति: अहंकार को शुद्ध करता है और मन के ध्यान को गहरा करता है।",
+              conclusionTitle: "निष्कर्ष",
+              conclusionDesc1: "मानव मस्तिष्क एक दिव्य उपकरण है। यदि यह केवल सूचनाओं से भरा हो और आध्यात्मिक अंतर्दृष्टि से नहीं, तो जीवन अधूरा रहता है। लेकिन जब मस्तिष्क सत्य, शांति और ईश्वर की ओर निर्देशित होता है - तो यह मुक्ति का साधन बन जाता है।",
+              conclusionMotto: "केवल सोचें नहीं - जागृत हों।"
+          }
+      };
+
+      let currentLanguage = localStorage.getItem('selectedLanguageAgnosiaPage') || 'en'; // Unique key for this page
+
+      function setLanguage(lang) {
+          currentLanguage = lang;
+          localStorage.setItem('selectedLanguageAgnosiaPage', lang);
+          applyTranslations();
+          // Update active class for language options
+          document.querySelectorAll('.language-options a').forEach(a => {
+              a.classList.remove('lang-active');
+              if (a.dataset.lang === lang) {
+                  a.classList.add('lang-active');
+              }
+          });
+      }
+
+      function _(key, fallbackLang = 'en') { // Helper function to get translation
+          return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+      }
+
+      function applyTranslations() {
+          document.querySelectorAll('[data-translate-key]').forEach(element => {
+              const key = element.dataset.translateKey;
+              // For list items, we might have <strong> tags inside.
+              // A more robust solution might involve innerHTML and careful parsing
+              // or specific keys for parts of the list item.
+              // For simplicity here, just setting textContent.
+              // If <strong> content needs to be different, use nested spans with keys.
+              if (element.tagName === 'LI' && element.querySelector('strong')) {
+                  const strongTextKey = key + "_strong"; // e.g., attainMeditation_strong
+                  const restOfTextKey = key + "_rest";   // e.g., attainMeditation_rest
+                  const strongEl = element.querySelector('strong');
+
+                  // Attempt to translate parts; requires careful key naming in translations object
+                  if (translations[currentLanguage]?.[strongTextKey] && translations[currentLanguage]?.[restOfTextKey]) {
+                      strongEl.textContent = _(strongTextKey) + " "; // Add space after strong
+                      // Find the text node after strong and update it
+                      let nextNode = strongEl.nextSibling;
+                      while(nextNode && nextNode.nodeType !== Node.TEXT_NODE) {
+                          nextNode = nextNode.nextSibling;
+                      }
+                      if(nextNode) {
+                          nextNode.nodeValue = _(restOfTextKey);
+                      } else { // Fallback if text node structure is unexpected
+                           element.innerHTML = `<strong>${_(strongTextKey)}</strong> ${_(restOfTextKey)}`;
+                      }
+                  } else { // Fallback to translating the whole li content
+                     element.innerHTML = _(key); // This will replace the <strong> if key is for full string
+                  }
+              } else {
+                element.textContent = _(key);
+              }
+          });
+      }
+      // --- END TRANSLATION LOGIC ---
+
+      const hamburger = document.querySelector(".hamburger");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const languageSelectLabel = document.querySelector('.language-select-label');
+      const languageOptionsDiv = document.querySelector('.language-options');
+
+
       function toggleMenu() {
-        document.querySelector(".mobile-menu").classList.toggle("active");
-        document.querySelectorAll(".hamburger-line").forEach((line) => {
-          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
+        mobileMenu.classList.toggle("active");
+        hamburger.classList.toggle("active"); // For the X animation
+      }
+
+      if (hamburger) {
+        hamburger.addEventListener('click', toggleMenu);
+      }
+
+      if (languageSelectLabel) {
+        languageSelectLabel.addEventListener('click', () => {
+            if (languageOptionsDiv) {
+                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
+            }
         });
       }
 
-      // क्लिक आउटसाइड करने पर मेन्यू बंद
+      document.querySelectorAll('.language-options a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = e.currentTarget.dataset.lang;
+            setLanguage(lang);
+            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
+        });
+      });
+
       document.addEventListener("click", (e) => {
-        if (
-          !e.target.closest(".hamburger") &&
-          !e.target.closest(".mobile-menu")
-        ) {
-          document.querySelector(".mobile-menu").classList.remove("active");
-          document.querySelectorAll(".hamburger-line").forEach((line) => {
-            line.style.transform = "";
-          });
+        let clickedInsideMenuComponent = false;
+        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
+        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
+
+        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
+          toggleMenu();
+        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
+                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
+                   !languageOptionsDiv.contains(e.target) ) {
+            languageOptionsDiv.style.display = 'none';
         }
       });
+
+      // Apply translations on page load
+      document.addEventListener('DOMContentLoaded', () => {
+          setLanguage(currentLanguage);
+      });
     </script>
-    <!-- विराट स्वरूप का दर्शन कंटेंट सेक्शन -->
-<style>
-  h1, h2, h3, strong, th {
-    color: #8B0000;
-  }
-
-  body {
-    font-family: 'Georgia', serif;
-    line-height: 1.8;
-    color: #333;
-    text-align: center; /* पूरा टेक्स्ट सेंटर */
-  }
-
-  table {
-    margin: 20px auto; /* टेबल को सेंटर में रखने के लिए */
-    border-collapse: collapse;
-    width: 80%; /* थोड़ा चौड़ा लेकिन केंद्रित */
-    font-size: 1rem;
-  }
-
-  table, th, td {
-    border: 1px solid #aaa;
-  }
-
-  th, td {
-    padding: 12px;
-    text-align: center; /* टेबल के टेक्स्ट भी सेंटर */
-  }
-
-  ul {
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 0;
-    list-style-position: inside;
-    display: inline-block; /* लिस्ट को भी केंद्रित करने के लिए */
-    text-align: left; /* लिस्ट आइटम अंदर बाईं ओर */
-  }
-
-  li {
-    margin-bottom: 10px;
-  }
-
-  em {
-    display: block;
-    margin-top: 20px;
-    font-style: italic;
-    color: #8B0000;
-    font-weight: bold;
-  }
-</style>
-
-<h1>Agnosia</h1>
-<h2>A Journey from Birth to Death</h2>
-<p>
-  The human brain is not merely a biological organ — it is the gateway to cosmic consciousness.
-  From birth to death, it undergoes constant evolution through experiences, emotions, and decisions.
-  Yet, despite this dynamic journey, the brain often misses attaining true knowledge. Why does this happen? Let us explore.
-</p>
-
-<h2>Stages of Brain Development</h2>
-
-<h3>Infancy: Purity and Receptivity</h3>
-<p>The brain is like a blank canvas. Every sight, sound, and touch imprints on it. However, self-awareness remains dormant.</p>
-
-<h3>Adolescence: The Birth of Questions</h3>
-<p>"Who am I?", "What is life?" — such questions arise. Modern education imparts information but often fails to offer inner wisdom.</p>
-
-<h3>Adulthood: The Labyrinth of Materialism</h3>
-<p>Career, relationships, and reputation preoccupy the mind. The brain becomes efficient but forgets to look within.</p>
-
-<h3>Old Age: Wisdom or Regret</h3>
-<p>Experience abounds, but if inner awareness hasn’t developed, the mind is filled with questions like, “Did I truly live?”</p>
-
-<h2>Knowledge Often Missed by the Brain</h2>
-<table>
-  <tr>
-    <th>Type of Knowledge</th>
-    <th>Often Missed Because</th>
-  </tr>
-  <tr>
-    <td>Self-Knowledge</td>
-    <td>Focus remains on external identity</td>
-  </tr>
-  <tr>
-    <td>Spiritual Insight</td>
-    <td>Material goals take priority</td>
-  </tr>
-  <tr>
-    <td>Purpose of Life</td>
-    <td>Lack of inner reflection</td>
-  </tr>
-  <tr>
-    <td>Connection with the Divine</td>
-    <td>Absence of spiritual practices</td>
-  </tr>
-</table>
-
-<h2>How to Attain True Knowledge</h2>
-<ul>
-  <li><strong>Meditation and Yoga:</strong> Brings inner stillness and awakens consciousness.</li>
-  <li><strong>Study of Scriptures:</strong> Bhagavad Gita, Upanishads, Buddhist sutras offer eternal truths.</li>
-  <li><strong>Guidance of a Guru:</strong> A true guide removes darkness with the torch of wisdom.</li>
-  <li><strong>Service and Devotion:</strong> Purifies the ego and deepens the mind's focus.</li>
-</ul>
-
-<h2>Conclusion</h2>
-<p>
-  The human brain is a divine instrument. If it is filled only with information and not with spiritual insight, life remains incomplete.
-  But when the brain is directed towards truth, peace, and God — it becomes the very tool of liberation.
-</p>
-<p><em>Let us not just think — let us awaken.</em></p>
-
-
-
+  </body>
 </html>
