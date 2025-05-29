@@ -8,8 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script> 
-    
+
     <style>
         * {
             margin: 0;
@@ -58,6 +57,15 @@
             margin: 6px 0;
             transition: 0.4s;
         }
+        .hamburger.active .hamburger-line:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active .hamburger-line:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
 
         .mobile-menu {
             position: fixed;
@@ -88,7 +96,7 @@
             font-size: 20px;
             color: #fff !important;
         }
-        .mobile-menu a:last-child {
+        .mobile-menu a:last-child { 
             border-bottom: none;
         }
 
@@ -152,6 +160,11 @@
             .header { padding: 70px 20px 35px; }
             .header h1 { font-size: 36px; }
             .header h2 { font-size: 18px; }
+
+            /* HIDE DESKTOP LOGOUT BUTTON ON MOBILE */
+            .user-info #logoutBtn {
+                display: none !important; 
+            }
         }
 
         .container {
@@ -201,7 +214,7 @@
             border: 2px solid #8b0000;
         }
         .user-info div h2 { margin: 0; font-size: 18px; color: #333; }
-        #logoutBtn {
+        #logoutBtn { /* This is the desktop logout button */
             background: #8b0000;
             color: white;
             border: none;
@@ -232,7 +245,7 @@
             font-family: inherit;
             font-size: 16px;
         }
-        .post-form button#postBtn { /* Specific ID for post button styling */
+        .post-form button#postBtn {
             background: #8b0000;
             color: white;
             border: none;
@@ -243,8 +256,13 @@
             font-size: 16px;
         }
         .post-form button#postBtn:hover { background: #6a0000; }
-        .post-form button#postBtn:disabled { background: #cccccc; cursor: not-allowed; }
-
+        .post-form button#postBtn:disabled,
+        .comment-form-actual button.comment-submit-btn:disabled,
+        .reply-form-actual button.reply-submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
 
         .posts-container h3 {
             margin-bottom: 20px;
@@ -295,6 +313,7 @@
             gap: 15px;
             border-top: 1px solid #eee;
             padding-top: 10px;
+            align-items: center;
         }
         .post-actions button {
             background: none;
@@ -322,55 +341,164 @@
         .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
         .comment-header strong { font-size: 13px; color: #333; }
         .comment-header .timestamp { font-size: 11px; color: #888; margin-left: auto; }
-        .comment p { margin: 0; color: #555; white-space: pre-wrap; }
-        .comment-form-actual { display: flex; margin-top: 10px; }
-        .comment-form-actual input {
+        .comment-content p { margin: 0 0 5px 0; color: #555; white-space: pre-wrap; }
+
+        .comment-form-actual {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            gap: 5px;
+        }
+        .comment-form-actual input[type="text"].comment-text-input {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 5px 0 0 5px;
+            border-radius: 5px;
             font-size: 14px;
         }
-        .comment-form-actual button {
+        .comment-image-upload-label {
+            padding: 8px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            box-sizing: border-box;
+        }
+        .comment-image-upload-label:hover { background-color: #e0e0e0; }
+        .comment-image-upload-label i { color: #555; font-size: 16px; }
+        .comment-form-actual button.comment-submit-btn {
             background: #8b0000;
             color: white;
             border: none;
-            padding: 0 15px;
-            border-radius: 0 5px 5px 0;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            height: 40px;
+            box-sizing: border-box;
         }
-        .comment-form-actual button:hover { background: #6a0000; }
-        .comment-form-actual button:disabled { background: #cccccc; cursor: not-allowed; }
+        .comment-form-actual button.comment-submit-btn:hover { background: #6a0000; }
+        .comment-image-preview {
+            max-width: 80px;
+            max-height: 80px;
+            display: none;
+            margin-top: 8px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            object-fit: cover;
+        }
+        .comment-upload-progress {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: #555;
+            display: none;
+            width: 100%;
+            text-align: left;
+            padding-left: 5px;
+        }
+        .comment-content img.comment-image {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 5px;
+            margin-top: 8px;
+            display: block;
+            border: 1px solid #eee;
+        }
 
+        .comment-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .reply-to-comment-btn {
+            font-size: 0.8em !important;
+            color: #555 !important;
+            background: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 2px 5px !important;
+        }
+        .reply-to-comment-btn i {
+            margin-right: 4px !important;
+            font-size: 1em !important;
+            color: #8b0000 !important;
+        }
+         .reply-to-comment-btn:hover, .reply-to-comment-btn:hover i, .reply-to-comment-btn:hover span {
+            color: #6a0000 !important;
+        }
+        .replies-list {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .comment-reply {
+            border-left: 2px solid #ddd;
+            padding-left: 10px;
+            font-size: 0.9em;
+            padding: 8px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .comment-reply .comment-header img {
+            width: 25px;
+            height: 25px;
+        }
+        .reply-form-container {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        .reply-form-actual {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .reply-form-actual input.reply-text-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .reply-form-actual button.reply-submit-btn {
+            padding: 8px 12px;
+            background: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .reply-form-actual button.reply-submit-btn:hover { background: #4cae4c; }
     </style>
 </head>
 <body>
-    <!-- Hamburger Icon -->
     <div class="hamburger">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
     </div>
 
-    <!-- Mobile Menu -->
     <nav class="mobile-menu">
         <a href="index.html"><i class="fas fa-home"></i>Home</a>
         <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
         <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
         <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
         <a href="#post-form-container"><i class="fas fa-pen-to-square"></i>Post</a>
-        <a href="#loginSection"><i class="fas fa-sign-in-alt"></i>Login</a>
+        <a href="#loginSection" id="mobileLoginLink"><i class="fas fa-sign-in-alt"></i>Login</a>
+        <a href="#" id="mobileLogoutLink" style="display: none;"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </nav>
 
-    <!-- Header -->
- <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
+    <header class="header">
+      <h1>VIRAT SWARUP</h1>
+      <h2>The Supreme Devine of Every Faith</h2>
+    </header>
 
-  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
- </header>
-
-    <!-- Desktop Navigation -->
     <nav class="desktop-nav">
         <ul>
             <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
@@ -381,7 +509,6 @@
         </ul>
     </nav>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <ul>
             <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
@@ -403,33 +530,32 @@
                 <i class="fab fa-facebook-f"></i> Sign in with Facebook
             </button>
         </div>
-        
+
         <div class="app-section" id="appSection">
             <div class="user-info">
-                <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo">
+                <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
-                    <button id="logoutBtn">Logout</button>
+                    <button id="logoutBtn">Logout</button> <!-- This is the desktop logout button -->
                 </div>
             </div>
-            
+
             <div class="post-form" id="post-form-container">
                 <h3>Create Post</h3>
                 <textarea id="postContent" placeholder="What's on your mind, Virat Bhakt?"></textarea>
-                
+
                 <label for="postImageFile" style="cursor: pointer; display: inline-block; margin-bottom: 10px; color: #555; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
                     <i class="fas fa-image"></i> Add Image (Optional)
                 </label>
                 <input type="file" id="postImageFile" accept="image/*" style="display: none;">
                 <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee;">
                 <div id="uploadProgressContainer" style="display: none; margin-bottom: 10px;">
-                    <progress id="uploadProgress" value="0" max="100" style="width: 100%; height: 10px;"></progress>
-                    <span id="uploadProgressText" style="font-size: 0.8em; display: block; text-align: center;"></span>
+                    <p id="uploadProgressText" style="font-size: 0.9em; text-align: center;"></p>
                 </div>
 
                 <button id="postBtn">Post</button>
             </div>
-            
+
             <div class="posts-container" id="postsContainer">
                 <h3>Feed</h3>
                 <!-- Posts will be loaded here -->
@@ -438,28 +564,33 @@
     </div>
 
     <script>
+    // --- START CLOUDINARY CONFIGURATION ---
+    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f"; 
+    const CLOUDINARY_UPLOAD_PRESET = "public_uploader"; 
+    const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+    // --- END CLOUDINARY CONFIGURATION ---
+
+    // --- START FIREBASE CONFIGURATION ---
     const firebaseConfig = {
-      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Replace with your actual API key
+      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", 
       authDomain: "viratsawarup.firebaseapp.com",
-      // databaseURL: "https://viratsawarup-default-rtdb.asia-southeast1.firebasedatabase.app", // Not needed for Firestore
       projectId: "viratsawarup",
-      storageBucket: "viratsawarup.appspot.com", // CRITICAL: Use your-project-id.appspot.com
       messagingSenderId: "264071748020",
       appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-      measurementId: "G-7GJQPJCR1L" // Optional
+      measurementId: "G-7GJQPJCR1L"
     };
+    // --- END FIREBASE CONFIGURATION ---
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
     const elements = {
         loginSection: document.getElementById('loginSection'),
         appSection: document.getElementById('appSection'),
         googleLoginBtn: document.getElementById('googleLoginBtn'),
         facebookLoginBtn: document.getElementById('facebookLoginBtn'),
-        logoutBtn: document.getElementById('logoutBtn'),
+        logoutBtn: document.getElementById('logoutBtn'), // Desktop logout
         userPhoto: document.getElementById('userPhoto'),
         userName: document.getElementById('userName'),
         postBtn: document.getElementById('postBtn'),
@@ -470,8 +601,9 @@
         postImageFile: document.getElementById('postImageFile'),
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
-        uploadProgress: document.getElementById('uploadProgress'),
-        uploadProgressText: document.getElementById('uploadProgressText')
+        uploadProgressText: document.getElementById('uploadProgressText'),
+        mobileLoginLink: document.getElementById('mobileLoginLink'), 
+        mobileLogoutLink: document.getElementById('mobileLogoutLink') 
     };
 
     if (elements.postImageFile) {
@@ -480,13 +612,17 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    elements.imagePreview.src = event.target.result;
-                    elements.imagePreview.style.display = 'block';
+                    if (elements.imagePreview) {
+                        elements.imagePreview.src = event.target.result;
+                        elements.imagePreview.style.display = 'block';
+                    }
                 }
                 reader.readAsDataURL(file);
             } else {
-                elements.imagePreview.src = '#';
-                elements.imagePreview.style.display = 'none';
+                if (elements.imagePreview) {
+                    elements.imagePreview.src = '#';
+                    elements.imagePreview.style.display = 'none';
+                }
             }
         });
     }
@@ -497,11 +633,23 @@
             if(elements.appSection) elements.appSection.style.display = 'block';
             if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
             if(elements.userName) elements.userName.textContent = user.displayName || 'User';
+            
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none';
+            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
+
             loadPosts();
         } else {
             if(elements.loginSection) elements.loginSection.style.display = 'block';
             if(elements.appSection) elements.appSection.style.display = 'none';
             if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
+            
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex';
+            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
+
+            if (postsUnsubscribe) {
+                postsUnsubscribe();
+                postsUnsubscribe = null;
+            }
         }
     });
 
@@ -510,17 +658,29 @@
             await auth.signInWithPopup(provider);
         } catch (error) {
             console.error("Login Error:", error);
-            if (error.code === 'auth/popup-closed-by-user') return; // User closed popup
-            if (error.code === 'auth/cancelled-popup-request') return; // User closed popup
+            if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+                return;
+            }
             alert(`Login Error: ${error.message}`);
         }
     }
 
     if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
     if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires developer setup. Please use Google Sign-In for now.");
+        alert("Facebook login requires additional developer setup. Please use Google Sign-In.");
     });
+    
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
+    
+    if (elements.mobileLogoutLink) {
+        elements.mobileLogoutLink.addEventListener('click', (event) => {
+            event.preventDefault(); 
+            auth.signOut();
+            if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+    }
 
     if (elements.postBtn) {
         elements.postBtn.addEventListener('click', async () => {
@@ -542,41 +702,25 @@
             if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
 
-
             try {
                 let imageUrl = null;
+                let imagePublicId = null;
 
                 if (imageFile) {
                     if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
-                    if(elements.uploadProgress) elements.uploadProgress.value = 0;
-
-                    const imageName = `post_images/${currentUser.uid}_${Date.now()}_${imageFile.name}`;
-                    const storageRef = storage.ref(imageName);
-                    const uploadTask = storageRef.put(imageFile);
-
-                    await new Promise((resolve, reject) => {
-                        uploadTask.on('state_changed',
-                            (snapshot) => {
-                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                                if(elements.uploadProgress) elements.uploadProgress.value = progress;
-                                if(elements.uploadProgressText) elements.uploadProgressText.textContent = `Uploading: ${Math.round(progress)}%`;
-                            },
-                            (error) => {
-                                console.error("Upload failed:", error);
-                                reject(error);
-                            },
-                            async () => {
-                                try {
-                                    imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
-                                    resolve();
-                                } catch (error) {
-                                    reject(error);
-                                }
-                            }
-                        );
-                    });
-                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
-                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Uploading image...';
+                    const formData = new FormData();
+                    formData.append('file', imageFile);
+                    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`Cloudinary upload failed: ${errorData.error.message || 'Unknown error'}`);
+                    }
+                    const data = await response.json();
+                    imageUrl = data.secure_url;
+                    imagePublicId = data.public_id;
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Image uploaded!';
                 }
 
                 const postData = {
@@ -584,115 +728,150 @@
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
                     likes: [],
                     comments: []
                 };
-
                 if (imageUrl) {
                     postData.imageUrl = imageUrl;
+                    if (imagePublicId) postData.imagePublicId = imagePublicId;
                 }
 
-                await db.collection('posts').add(postData);
+                await db.collection('posts').add(postData); 
 
                 if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null;
+                if(elements.postImageFile) elements.postImageFile.value = null; 
                 if(elements.imagePreview) {
                     elements.imagePreview.src = '#';
                     elements.imagePreview.style.display = 'none';
                 }
-
             } catch (error) {
                 console.error("Post Error:", error);
                 alert(`Post Error: ${error.message}`);
+                if(elements.uploadProgressText && elements.uploadProgressContainer && elements.uploadProgressContainer.style.display === 'block') {
+                     elements.uploadProgressText.textContent = `Upload failed.`;
+                }
             } finally {
                 if(elements.postBtn) {
                     elements.postBtn.disabled = false;
                     elements.postBtn.textContent = "Post";
                 }
-                if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
-                if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
-
+                setTimeout(() => {
+                    if(elements.uploadProgressContainer && elements.uploadProgressText) {
+                        if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
+                            elements.uploadProgressContainer.style.display = 'none';
+                            elements.uploadProgressText.textContent = '';
+                        }
+                    }
+                }, 3000);
             }
         });
     }
+
     let postsUnsubscribe = null;
     function loadPosts() {
-        if (postsUnsubscribe) {
-            postsUnsubscribe(); // Unsubscribe from previous listener
-        }
+        if (postsUnsubscribe) postsUnsubscribe();
         postsUnsubscribe = db.collection('posts')
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3>';
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3>'; 
                   if (snapshot.empty) {
                       elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
                       return;
                   }
-                  snapshot.forEach(doc => {
-                      createPostElement(doc.id, doc.data());
-                  });
+                  snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
               }
           }, error => {
               console.error("Error loading posts: ", error);
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts. Please try again later.</p>';
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts.</p>';
               }
           });
     }
-    
+
     function createPostElement(postId, post) {
         const currentUser = auth.currentUser;
         const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-        
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
         postDiv.setAttribute('data-post-id', postId);
-
-        const formattedTimestamp = post.timestamp ? post.timestamp.toDate().toLocaleString() : 'Just now';
-
-        let contentHTML = `<p>${post.content ? escapeHTML(post.content).replace(/\n/g, '<br>') : ''}</p>`;
-        if (post.imageUrl) {
-            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image">`;
+        
+        const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
+                                ? post.timestamp.toDate().toLocaleString()
+                                : (post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Recently');
+                                
+        let contentHTML = '';
+        if (post.content) {
+            contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
         }
-
+        if (post.imageUrl) {
+            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none';">`;
+        }
         postDiv.innerHTML = `
             <div class="post-header">
-                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${post.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
-                <div>
-                    <strong>${escapeHTML(post.userName)}</strong>
-                </div>
+                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <div><strong>${escapeHTML(post.userName)}</strong></div>
                 <span class="timestamp">${formattedTimestamp}</span>
             </div>
-            <div class="post-content">
-                ${contentHTML}
-            </div>
+            <div class="post-content">${contentHTML || '<p> </p>'}</div>
             <div class="post-actions">
                 <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
-                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart" ${isLiked ? 'style="color:red;"' : ''}></i>
+                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
                     <span>${post.likes ? post.likes.length : 0} Likes</span>
                 </button>
                 <button class="comment-toggle-btn" data-post-id="${postId}">
                     <i class="far fa-comment"></i>
                     <span>${post.comments ? post.comments.length : 0} Comments</span>
                 </button>
+                ${currentUser && post.userId === currentUser.uid ?
+                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}" style="margin-left: auto; color: #cc0000;">
+                        <i class="fas fa-trash"></i> Delete
+                     </button>` : ''}
             </div>
             <div class="comments-area" id="comments-area-${postId}" style="display: none;">
                 <div class="comments-list" id="comments-list-${postId}"></div>
                 <form class="comment-form-actual" data-post-id="${postId}">
-                    <input type="text" name="commentText" placeholder="Add a comment..." required>
-                    <button type="submit">Post</button>
+                    <input type="text" name="commentText" class="comment-text-input" placeholder="Add a comment..." autocomplete="off">
+                    <label class="comment-image-upload-label" title="Add image to comment">
+                        <i class="fas fa-paperclip"></i>
+                        <input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;">
+                    </label>
+                    <button type="submit" class="comment-submit-btn">Post</button>
                 </form>
-            </div>
-        `;
-        
+                <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;">
+                <div class="comment-upload-progress" style="display: none;"></div>
+            </div>`;
         if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
+
+        const commentImageInput = postDiv.querySelector('.comment-image-input');
+        const commentImagePreview = postDiv.querySelector('.comment-image-preview');
+        if (commentImageInput && commentImagePreview) {
+            commentImageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        commentImagePreview.src = event.target.result;
+                        commentImagePreview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    commentImagePreview.src = '#';
+                    commentImagePreview.style.display = 'none';
+                }
+            });
+        }
 
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
         if (commentsList) {
             if (post.comments && post.comments.length > 0) {
-                post.comments.forEach(comment => renderComment(comment, commentsList));
+                const sortedComments = [...post.comments].sort((a,b) => {
+                    const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
+                    const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
+                    return timeA - timeB; 
+                });
+                sortedComments.forEach(comment => renderComment(comment, commentsList, postId));
             } else {
                 commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
             }
@@ -704,51 +883,261 @@
         if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
         const commentForm = postDiv.querySelector('.comment-form-actual');
         if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
+        const deleteBtn = postDiv.querySelector('.delete-post-btn');
+        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl, deleteBtn.dataset.imagePublicId));
     }
 
-    function renderComment(comment, commentsListElement) {
+    async function handleDeletePost(postId, imageUrl, imagePublicId) {
+        const currentUser = auth.currentUser;
+        if (!currentUser) { alert("You must be logged in."); return; }
+        if (!confirm("Are you sure you want to delete this post?")) return;
+        const postRef = db.collection('posts').doc(postId);
+        try {
+            const doc = await postRef.get();
+            if (doc.exists && doc.data().userId === currentUser.uid) {
+                await postRef.delete();
+                if (imageUrl) console.warn(`Image at ${escapeHTML(imageUrl)} (public_id: ${escapeHTML(imagePublicId) || 'N/A'}) needs server-side deletion.`);
+            } else { alert("Permission denied or post not found."); }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("Failed to delete post: " + error.message);
+        }
+    }
+
+    async function handleCommentSubmit(event, postId) {
+        event.preventDefault();
+        const currentUser = auth.currentUser;
+        if (!currentUser) { alert("Please log in to comment."); return; }
+
+        const form = event.target;
+        const commentTextInput = form.querySelector('.comment-text-input');
+        const commentImageInput = form.querySelector('.comment-image-input');
+        const commentsArea = form.closest('.comments-area');
+        const commentImagePreview = commentsArea ? commentsArea.querySelector('.comment-image-preview') : null;
+        const commentUploadProgress = commentsArea ? commentsArea.querySelector('.comment-upload-progress') : null;
+
+        const commentText = commentTextInput ? commentTextInput.value.trim() : "";
+        const imageFile = commentImageInput ? commentImageInput.files[0] : null;
+
+        if (!commentText && !imageFile) { alert("Comment text or an image is required."); return; }
+
+        const submitButton = form.querySelector('.comment-submit-btn');
+        if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Posting..."; }
+        if(commentUploadProgress) { commentUploadProgress.textContent = ''; commentUploadProgress.style.display = 'none';}
+
+        let commentImageUrl = null;
+        let commentImagePublicId = null;
+
+        try {
+            if (imageFile) {
+                if(commentUploadProgress) { commentUploadProgress.textContent = 'Uploading image...'; commentUploadProgress.style.display = 'block'; }
+                const formData = new FormData();
+                formData.append('file', imageFile);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Cloudinary comment image upload failed: ${errorData.error.message || 'Unknown error'}`);
+                }
+                const data = await response.json();
+                commentImageUrl = data.secure_url;
+                commentImagePublicId = data.public_id;
+                if(commentUploadProgress) commentUploadProgress.textContent = 'Image uploaded!';
+            }
+
+            const commentId = db.collection('posts').doc().id; 
+
+            const newComment = {
+                id: commentId,
+                userId: currentUser.uid,
+                userName: currentUser.displayName || 'User',
+                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+                text: commentText || "",
+                timestamp: new Date(), 
+                replies: [], 
+                imageUrl: commentImageUrl || null,
+                imagePublicId: commentImagePublicId || null
+            };
+
+            const postRef = db.collection('posts').doc(postId);
+            await postRef.update({
+                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
+            });
+
+            if (commentTextInput) commentTextInput.value = '';
+            if (commentImageInput) commentImageInput.value = null;
+            if (commentImagePreview) { commentImagePreview.src = '#'; commentImagePreview.style.display = 'none';}
+        } catch (error) {
+            console.error("Error adding comment:", error);
+            alert("Failed to add comment: " + error.message);
+            if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
+                commentUploadProgress.textContent = 'Upload failed.';
+            }
+        } finally {
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Post"; }
+            setTimeout(() => {
+                if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
+                    if (commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
+                        commentUploadProgress.style.display = 'none';
+                        commentUploadProgress.textContent = '';
+                    }
+                }
+            }, 3000);
+        }
+    }
+    
+    function toggleReplyForm(commentId) {
+        const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
+        if (replyFormContainer) {
+            const isHidden = replyFormContainer.style.display === 'none' || replyFormContainer.style.display === '';
+            replyFormContainer.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) {
+                const inputField = replyFormContainer.querySelector('.reply-text-input');
+                if (inputField) inputField.focus();
+            }
+        }
+    }
+
+    async function handleReplySubmit(event, postId, parentCommentId) {
+        event.preventDefault();
+        const currentUser = auth.currentUser;
+        if (!currentUser) { alert("Please log in to reply."); return; }
+
+        const form = event.target;
+        const replyTextInput = form.querySelector('.reply-text-input');
+        const replyText = replyTextInput ? replyTextInput.value.trim() : "";
+
+        if (!replyText) { alert("Reply text cannot be empty."); return; }
+
+        const submitButton = form.querySelector('.reply-submit-btn');
+        if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Posting...";}
+
+        const postRef = db.collection('posts').doc(postId);
+        try {
+             const newReply = {
+                userId: currentUser.uid,
+                userName: currentUser.displayName || 'User',
+                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+                text: replyText,
+                timestamp: new Date() 
+            };
+
+            await db.runTransaction(async (transaction) => {
+                const postDoc = await transaction.get(postRef);
+                if (!postDoc.exists) throw "Post document does not exist!";
+                const postData = postDoc.data();
+                const comments = postData.comments || [];
+                const updatedComments = comments.map(comment => {
+                    if (comment.id === parentCommentId) {
+                        const existingReplies = comment.replies || [];
+                        return { ...comment, replies: [...existingReplies, newReply] };
+                    }
+                    return comment;
+                });
+                transaction.update(postRef, { comments: updatedComments });
+            });
+            if (replyTextInput) replyTextInput.value = '';
+            toggleReplyForm(parentCommentId); 
+        } catch (error) {
+            console.error("Error adding reply:", error);
+            alert("Failed to add reply: " + error.message);
+        } finally {
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Post Reply";}
+        }
+    }
+
+    function renderReply(reply, repliesListDiv) {
+        const replyDiv = document.createElement('div');
+        replyDiv.className = 'comment-reply';
+        
+        const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
+                                ? reply.timestamp.toDate().toLocaleString()
+                                : (reply.timestamp ? new Date(reply.timestamp).toLocaleString() : 'Recently');
+        
+        let replyContentHTML = '';
+        if (reply.text) {
+            replyContentHTML = `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>`;
+        }
+        replyDiv.innerHTML = `
+            <div class="comment-header">
+                <img src="${reply.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <strong>${escapeHTML(reply.userName) || 'User'}</strong>
+                <span class="timestamp">${replyTimestamp}</span>
+            </div>
+            <div class="comment-content">${replyContentHTML || '<p> </p>'}</div>`;
+        repliesListDiv.appendChild(replyDiv);
+    }
+
+    function renderComment(comment, commentsListElement, postId) {
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
-        const commentTimestamp = comment.timestamp ? (typeof comment.timestamp.toDate === 'function' ? comment.timestamp.toDate().toLocaleString() : new Date(comment.timestamp).toLocaleString()) : 'Recently';
+        commentDiv.setAttribute('data-comment-id', comment.id);
+
+        const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
+                                ? comment.timestamp.toDate().toLocaleString()
+                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
         
-        const noCommentP = commentsListElement.querySelector('p');
-        if(noCommentP && noCommentP.textContent.includes('No comments yet')) {
-            noCommentP.remove();
-        }
+        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
+        if(noCommentP) noCommentP.remove();
+
+        let commentContentHTML = '';
+        if (comment.text) commentContentHTML += `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>`;
+        if (comment.imageUrl) commentContentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none';">`;
 
         commentDiv.innerHTML = `
             <div class="comment-header">
-                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${comment.userName}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <strong>${escapeHTML(comment.userName) || 'User'}</strong>
                 <span class="timestamp">${commentTimestamp}</span>
             </div>
-            <p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>
-        `;
+            <div class="comment-content">${commentContentHTML || '<p> </p>'}</div>
+            <div class="comment-actions">
+                <button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}">
+                    <i class="fas fa-reply"></i> Reply
+                </button>
+            </div>
+            <div class="replies-list" id="replies-list-${comment.id}"></div>
+            <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
+                <form class="reply-form-actual" data-post-id="${postId}" data-parent-comment-id="${comment.id}">
+                    <input type="text" name="replyText" class="reply-text-input" placeholder="Write a reply..." autocomplete="off">
+                    <button type="submit" class="reply-submit-btn">Post Reply</button>
+                </form>
+            </div>`;
         commentsListElement.appendChild(commentDiv);
+
+        const repliesListDiv = commentDiv.querySelector(`#replies-list-${comment.id}`);
+        if (comment.replies && comment.replies.length > 0) {
+            const sortedReplies = [...comment.replies].sort((a,b) => {
+                const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
+                const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
+                return timeA - timeB;
+            });
+            sortedReplies.forEach(reply => renderReply(reply, repliesListDiv));
+        }
+
+        const replyButton = commentDiv.querySelector('.reply-to-comment-btn');
+        if (replyButton) replyButton.addEventListener('click', () => toggleReplyForm(comment.id));
+        const replyForm = commentDiv.querySelector('.reply-form-actual');
+        if (replyForm) replyForm.addEventListener('submit', (e) => handleReplySubmit(e, postId, comment.id));
     }
 
     async function handleLike(postId) {
         const currentUser = auth.currentUser;
         if (!currentUser) { alert("Please log in to like posts."); return; }
-
         const postRef = db.collection('posts').doc(postId);
         try {
             await db.runTransaction(async (transaction) => {
                 const doc = await transaction.get(postRef);
                 if (!doc.exists) throw "Document does not exist!";
-                
-                let currentLikes = doc.data().likes || [];
-                let newLikesArray = [...currentLikes]; 
-
-                if (newLikesArray.includes(currentUser.uid)) {
-                    newLikesArray = newLikesArray.filter(uid => uid !== currentUser.uid);
-                } else {
-                    newLikesArray.push(currentUser.uid);
-                }
+                const postData = doc.data();
+                let currentLikes = postData.likes || [];
+                let newLikesArray = currentLikes.includes(currentUser.uid)
+                                   ? currentLikes.filter(uid => uid !== currentUser.uid)
+                                   : [...currentLikes, currentUser.uid];
                 transaction.update(postRef, { likes: newLikesArray });
             });
         } catch (error) {
-            console.error("Like transaction failed: ", error);
+            console.error("Like transaction failed:", error);
             alert("Failed to update like: " + error.message);
         }
     }
@@ -765,77 +1154,32 @@
         }
     }
 
-    async function handleCommentSubmit(event, postId) {
-        event.preventDefault();
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert("Please log in to comment."); return; }
-
-        const form = event.target;
-        const commentTextInput = form.elements.commentText;
-        const commentText = commentTextInput.value.trim();
-        if (!commentText) { alert("Comment cannot be empty."); return; }
-
-        const submitButton = form.querySelector('button[type="submit"]');
-        if (submitButton) {
-             submitButton.disabled = true;
-             submitButton.textContent = "Posting...";
-        }
-
-        const newComment = {
-            userId: currentUser.uid,
-            userName: currentUser.displayName || 'User',
-            userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-            text: commentText,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        };
-
-        const postRef = db.collection('posts').doc(postId);
-        try {
-            await postRef.update({
-                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
-            });
-            commentTextInput.value = '';
-        } catch (error) {
-            console.error("Error adding comment: ", error);
-            alert("Failed to add comment: " + error.message);
-        } finally {
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = "Post";
-            }
-        }
-    }
-
     function toggleMenu() {
-        if (elements.mobileMenu) {
+        if (elements.mobileMenu && elements.hamburger) {
             elements.mobileMenu.classList.toggle('active');
-            if (elements.hamburger) { // Check if hamburger exists
-                document.querySelectorAll('.hamburger-line').forEach(line => {
-                    line.style.background = elements.mobileMenu.classList.contains('active') ? '#8b0000' : '#ffffff';
-                });
-            }
+            elements.hamburger.classList.toggle('active');
         }
     }
     function closeMenuAndScroll(event) {
-        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-            toggleMenu();
-        }
+        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) toggleMenu();
         const targetId = event.currentTarget.getAttribute('href');
-        if (targetId && targetId.startsWith('#')) {
+        if (targetId && targetId.startsWith('#') && targetId.length > 1) {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                event.preventDefault();
-                targetElement.scrollIntoView({ behavior: "smooth" });
+                event.preventDefault(); 
+                targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
             }
         }
     }
-
     if (elements.hamburger) elements.hamburger.addEventListener('click', toggleMenu);
     document.querySelectorAll('.mobile-menu a').forEach(link => {
         link.addEventListener('click', (event) => {
-            if (link.getAttribute('href').startsWith('#')) {
+            const href = link.getAttribute('href');
+            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink') { 
                 closeMenuAndScroll(event);
-            } else {
+            } else if (link.id === 'mobileLogoutLink') {
+                // This is handled by its own dedicated event listener
+            } else { 
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
                     toggleMenu();
                 }
@@ -849,15 +1193,13 @@
             toggleMenu();
         }
     });
-    
-    function escapeHTML(str) {
-        const div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
-        return div.innerHTML;
-    }
 
-    if (auth.currentUser) {
-        loadPosts();
+    function escapeHTML(str) {
+        if (str === null || str === undefined) return '';
+        const s = String(str);
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(s));
+        return div.innerHTML;
     }
     </script>
 </body>
