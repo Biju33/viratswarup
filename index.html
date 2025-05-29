@@ -24,22 +24,45 @@
         }
 
         .header {
-            padding: 5px 20px 5px; /* MODIFIED: Was 95px 20px 45px */
-            text-align: center;
+            /* MODIFIED for flex layout */
+            display: flex;
+            align-items: center; /* Vertically center logo and text block */
+            
+            padding: 5px 20px; /* MODIFIED: Was 95px 20px 45px, then 5px 20px 5px. This is effectively 5px top/bottom, 20px left/right */
+            /* text-align: center; Removed, handled by .header-text-content */
             border-bottom: 1px solid #e0e0e0;
             background-color: #8b0000;
+            position: relative; /* Good practice for headers, e.g., if absolute positioning needed for other elements later */
         }
+
+        /* NEW: Styles for the header logo */
+        .header-logo {
+            height: 86px; /* Matches calculated desktop text content height (52+12+22) */
+            width: 86px;  /* Assuming a square logo, adjust if aspect ratio is different */
+            margin-right: 20px; /* Space between logo and text */
+            flex-shrink: 0; /* Prevent logo from shrinking if header is narrow */
+        }
+
+        /* NEW: Styles for the text content wrapper in the header */
+        .header-text-content {
+            flex-grow: 1; /* Allows this div to take up remaining space */
+            text-align: center; /* Centers the H1 and H2 text */
+        }
+        
         .header h1 {
             font-size: 52px;
             letter-spacing: 3.2px;
             text-transform: uppercase;
             margin-bottom: 12px;
             color: white;
+            margin-top: 0; /* Ensure consistent spacing */
         }
         .header h2 {
             font-size: 22px;
             color: white;
             font-weight: 300;
+            margin-top: 0; /* Ensure consistent spacing */
+            margin-bottom: 0; /* Ensure consistent spacing */
         }
 
         .hamburger {
@@ -157,7 +180,17 @@
             .hamburger { display: block; }
             .desktop-nav { display: none; }
             .bottom-nav { display: block; }
-            .header { padding: 5px 20px 5px; } /* MODIFIED: Was 70px 20px 35px */
+            
+            .header { 
+                padding: 5px 15px; /* Adjusted padding for mobile to give a bit more space if needed */
+            }
+            /* NEW: Responsive styles for header logo */
+            .header-logo {
+                height: 66px; /* Matches calculated mobile text content height (36+12+18) */
+                width: 66px;  /* Assuming a square logo */
+                margin-right: 15px;
+            }
+
             .header h1 { font-size: 36px; }
             .header h2 { font-size: 18px; }
 
@@ -495,8 +528,12 @@
     </nav>
 
     <header class="header">
-      <h1>VIRAT SWARUP</h1>
-      <h2>The Supreme Divine of Every Faith</h2>
+      <!-- ADDED image and text wrapper -->
+      <img src="image.png" alt="Virat Swarup Logo" class="header-logo">
+      <div class="header-text-content">
+        <h1>VIRAT SWARUP</h1>
+        <h2>The Supreme Divine of Every Faith</h2>
+      </div>
     </header>
 
     <nav class="desktop-nav">
