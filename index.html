@@ -24,20 +24,20 @@
         }
 
         .header {
-            padding: 95px 20px 45px; /* Default large padding for desktop */
+            padding: 95px 20px 45px;
             text-align: center;
             border-bottom: 1px solid #e0e0e0;
             background-color: #8b0000;
         }
         .header h1 {
-            font-size: 52px; /* Default large font for desktop */
+            font-size: 52px;
             letter-spacing: 3.2px;
             text-transform: uppercase;
             margin-bottom: 12px;
             color: white;
         }
         .header h2 {
-            font-size: 22px; /* Default large font for desktop */
+            font-size: 22px;
             color: white;
             font-weight: 300;
         }
@@ -66,7 +66,6 @@
         .hamburger.active .hamburger-line:nth-child(3) {
             transform: rotate(45deg) translate(-5px, -6px);
         }
-
 
         .mobile-menu {
             position: fixed;
@@ -97,7 +96,7 @@
             font-size: 20px;
             color: #fff !important;
         }
-        .mobile-menu a:last-child { /* This will now apply to the logout link when it's visible and last */
+        .mobile-menu a:last-child { 
             border-bottom: none;
         }
 
@@ -161,6 +160,11 @@
             .header { padding: 70px 20px 35px; }
             .header h1 { font-size: 36px; }
             .header h2 { font-size: 18px; }
+
+            /* HIDE DESKTOP LOGOUT BUTTON ON MOBILE */
+            .user-info #logoutBtn {
+                display: none !important; 
+            }
         }
 
         .container {
@@ -210,7 +214,7 @@
             border: 2px solid #8b0000;
         }
         .user-info div h2 { margin: 0; font-size: 18px; color: #333; }
-        #logoutBtn {
+        #logoutBtn { /* This is the desktop logout button */
             background: #8b0000;
             color: white;
             border: none;
@@ -532,7 +536,7 @@
                 <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
-                    <button id="logoutBtn">Logout</button>
+                    <button id="logoutBtn">Logout</button> <!-- This is the desktop logout button -->
                 </div>
             </div>
 
@@ -567,16 +571,6 @@
     // --- END CLOUDINARY CONFIGURATION ---
 
     // --- START FIREBASE CONFIGURATION ---
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // !!! CRITICAL SECURITY WARNING !!!
-    // !!! YOUR API KEY IS VISIBLE IN THIS CLIENT-SIDE CODE.                 !!!
-    // !!! YOU MUST RESTRICT THIS API KEY IN THE GOOGLE CLOUD CONSOLE:       !!!
-    // !!! 1. Restrict by HTTP referrers (your website domain(s)).           !!!
-    // !!! 2. Restrict by API (only allow Firebase Auth, Firestore, etc.     !!!
-    // !!!    that you actually use client-side).                            !!!
-    // !!! YOU MUST ALSO SET UP SECURE FIRESTORE SECURITY RULES TO PROTECT   !!!
-    // !!! YOUR DATA. https://firebase.google.com/docs/firestore/security  !!!
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const firebaseConfig = {
       apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", 
       authDomain: "viratsawarup.firebaseapp.com",
@@ -596,7 +590,7 @@
         appSection: document.getElementById('appSection'),
         googleLoginBtn: document.getElementById('googleLoginBtn'),
         facebookLoginBtn: document.getElementById('facebookLoginBtn'),
-        logoutBtn: document.getElementById('logoutBtn'),
+        logoutBtn: document.getElementById('logoutBtn'), // Desktop logout
         userPhoto: document.getElementById('userPhoto'),
         userName: document.getElementById('userName'),
         postBtn: document.getElementById('postBtn'),
@@ -676,10 +670,8 @@
         alert("Facebook login requires additional developer setup. Please use Google Sign-In.");
     });
     
-    // Desktop logout
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
     
-    // Mobile logout
     if (elements.mobileLogoutLink) {
         elements.mobileLogoutLink.addEventListener('click', (event) => {
             event.preventDefault(); 
@@ -689,7 +681,6 @@
             }
         });
     }
-
 
     if (elements.postBtn) {
         elements.postBtn.addEventListener('click', async () => {
@@ -1184,12 +1175,11 @@
     document.querySelectorAll('.mobile-menu a').forEach(link => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
-            // For specific anchor links that are not just "#" for logout
             if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink') { 
                 closeMenuAndScroll(event);
             } else if (link.id === 'mobileLogoutLink') {
-                // Handled by its own event listener
-            } else { // For regular page links or if menu needs closing for other reasons
+                // This is handled by its own dedicated event listener
+            } else { 
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
                     toggleMenu();
                 }
