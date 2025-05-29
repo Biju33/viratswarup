@@ -257,7 +257,8 @@
         }
         .post-form button#postBtn:hover { background: #6a0000; }
         .post-form button#postBtn:disabled,
-        .comment-form-actual button.comment-submit-btn:disabled { /* Shared disabled style */
+        .comment-form-actual button.comment-submit-btn:disabled,
+        .reply-form-actual button.reply-submit-btn:disabled { /* Shared disabled style */
             background: #cccccc;
             cursor: not-allowed;
             opacity: 0.7;
@@ -313,6 +314,7 @@
             gap: 15px;
             border-top: 1px solid #eee;
             padding-top: 10px;
+            align-items: center;
         }
         .post-actions button {
             background: none;
@@ -391,7 +393,6 @@
         .comment-form-actual button.comment-submit-btn:hover {
             background: #6a0000;
         }
-        /* :disabled style is now shared */
 
         .comment-image-preview {
             max-width: 80px; /* Smaller preview for comments */
@@ -419,6 +420,83 @@
             display: block;
             border: 1px solid #eee;
         }
+
+        /* --- STYLES FOR REPLIES --- */
+        .comment-actions { /* Already existed, ensure it's styled for reply button */
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 5px; /* Added */
+        }
+        .reply-to-comment-btn { /* Style for the reply button itself */
+            font-size: 0.8em !important; /* Override general button styles if needed */
+            color: #555 !important;
+            background: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 2px 5px !important; /* Smaller padding */
+        }
+        .reply-to-comment-btn i {
+            margin-right: 4px !important;
+            font-size: 1em !important; /* Relative to button font size */
+            color: #8b0000 !important;
+        }
+         .reply-to-comment-btn:hover, .reply-to-comment-btn:hover i, .reply-to-comment-btn:hover span {
+            color: #6a0000 !important;
+        }
+
+
+        .replies-list {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .comment-reply { /* Style for each individual reply container */
+            border-left: 2px solid #ddd;
+            padding-left: 10px;
+            font-size: 0.9em;
+            padding: 8px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .comment-reply .comment-header img { /* Smaller image for replies */
+            width: 25px;
+            height: 25px;
+        }
+
+
+        .reply-form-container {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        .reply-form-actual { /* Style for the form that contains reply input and button */
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .reply-form-actual input.reply-text-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .reply-form-actual button.reply-submit-btn {
+            padding: 8px 12px;
+            background: #5cb85c; /* Green for post */
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .reply-form-actual button.reply-submit-btn:hover {
+            background: #4cae4c;
+        }
+        /* Disabled state is already handled by the shared selector */
+
     </style>
 </head>
 <body>
@@ -513,13 +591,10 @@
 
     <script>
     // --- START CLOUDINARY CONFIGURATION ---
-    // IMPORTANT: Replace with your actual Cloudinary cloud name and upload preset.
-    // Ensure your upload preset is "Unsigned" for client-side uploads if not using a backend.
-    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f"; // REPLACE with your Cloudinary cloud name
-    const CLOUDINARY_UPLOAD_PRESET = "public_uploader"; // REPLACE with your Cloudinary upload preset
+    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f"; 
+    const CLOUDINARY_UPLOAD_PRESET = "public_uploader"; 
     const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
     // --- END CLOUDINARY CONFIGURATION ---
-
 
     // --- START FIREBASE CONFIGURATION ---
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -536,10 +611,9 @@
       apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // YOUR API KEY IS HERE
       authDomain: "viratsawarup.firebaseapp.com",
       projectId: "viratsawarup",
-      // storageBucket: "viratsawarup.appspot.com", // Only if using Firebase Storage
       messagingSenderId: "264071748020",
       appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-      measurementId: "G-7GJQPJCR1L" // Optional, for Google Analytics
+      measurementId: "G-7GJQPJCR1L"
     };
     // --- END FIREBASE CONFIGURATION ---
 
@@ -611,7 +685,6 @@
         } catch (error) {
             console.error("Login Error:", error);
             if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-                // User intentionally closed the popup, no need for an alert.
                 return;
             }
             alert(`Login Error: ${error.message}`);
@@ -620,7 +693,7 @@
 
     if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
     if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires additional developer setup and app configuration on Facebook's platform. Please use Google Sign-In for now or implement Facebook Login fully.");
+        alert("Facebook login requires additional developer setup. Please use Google Sign-In.");
     });
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
 
@@ -645,79 +718,60 @@
             if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
 
-
             try {
                 let imageUrl = null;
                 let imagePublicId = null;
 
                 if (imageFile) {
                     if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
-                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Uploading image (0%)...';
-
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Uploading image...';
                     const formData = new FormData();
                     formData.append('file', imageFile);
                     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-                    console.log("Uploading post image to Cloudinary...");
-                    // Note: For actual progress, you'd need XHR and listen to `progress` events.
-                    // This is a simplified version.
-                    const response = await fetch(CLOUDINARY_UPLOAD_URL, {
-                        method: 'POST',
-                        body: formData
-                    });
-
+                    const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
                     if (!response.ok) {
                         const errorData = await response.json();
-                        console.error("Cloudinary Error Response (post image):", errorData);
                         throw new Error(`Cloudinary upload failed: ${errorData.error.message || 'Unknown error'}`);
                     }
-
                     const data = await response.json();
                     imageUrl = data.secure_url;
                     imagePublicId = data.public_id;
-                    console.log("Post image uploaded to Cloudinary:", imageUrl);
                     if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Image uploaded!';
                 }
 
                 const postData = {
-                    content: content || "", // Ensure content is at least an empty string
+                    content: content || "",
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: [],      // Initialize as empty array
-                    comments: []    // Initialize as empty array
+                    likes: [],
+                    comments: []
                 };
-
                 if (imageUrl) {
                     postData.imageUrl = imageUrl;
-                    if (imagePublicId) {
-                        postData.imagePublicId = imagePublicId;
-                    }
+                    if (imagePublicId) postData.imagePublicId = imagePublicId;
                 }
 
                 await db.collection('posts').add(postData);
-                console.log("Post created successfully in Firestore.");
 
                 if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null; // Clear file input
+                if(elements.postImageFile) elements.postImageFile.value = null; 
                 if(elements.imagePreview) {
                     elements.imagePreview.src = '#';
                     elements.imagePreview.style.display = 'none';
                 }
-
             } catch (error) {
-                console.error("Post Error (Cloudinary or Firestore):", error);
+                console.error("Post Error:", error);
                 alert(`Post Error: ${error.message}`);
                 if(elements.uploadProgressText && elements.uploadProgressContainer && elements.uploadProgressContainer.style.display === 'block') {
-                     elements.uploadProgressText.textContent = `Upload failed. Please try again.`;
+                     elements.uploadProgressText.textContent = `Upload failed.`;
                 }
             } finally {
                 if(elements.postBtn) {
                     elements.postBtn.disabled = false;
                     elements.postBtn.textContent = "Post";
                 }
-                // Hide progress after a delay only if successful
                 setTimeout(() => {
                     if(elements.uploadProgressContainer && elements.uploadProgressText) {
                         if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
@@ -730,29 +784,24 @@
         });
     }
 
-
     let postsUnsubscribe = null;
     function loadPosts() {
-        if (postsUnsubscribe) {
-            postsUnsubscribe(); // Unsubscribe from previous listener
-        }
+        if (postsUnsubscribe) postsUnsubscribe();
         postsUnsubscribe = db.collection('posts')
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3>'; // Clear previous posts
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3>'; 
                   if (snapshot.empty) {
                       elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
                       return;
                   }
-                  snapshot.forEach(doc => {
-                      createPostElement(doc.id, doc.data());
-                  });
+                  snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
               }
           }, error => {
               console.error("Error loading posts: ", error);
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts. Please try again later.</p>';
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts.</p>';
               }
           });
     }
@@ -760,36 +809,26 @@
     function createPostElement(postId, post) {
         const currentUser = auth.currentUser;
         const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
         postDiv.setAttribute('data-post-id', postId);
-
-        // Gracefully handle missing timestamp or non-Date objects
         const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
                                 ? post.timestamp.toDate().toLocaleString()
                                 : (post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Recently');
-
         let contentHTML = '';
         if (post.content) {
-            // Replace newlines with <br> tags for display, after escaping
             contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
         }
         if (post.imageUrl) {
-            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.error('Failed to load post image: ${escapeHTML(post.imageUrl)}')">`;
+            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none';">`;
         }
-
         postDiv.innerHTML = `
             <div class="post-header">
                 <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
-                <div>
-                    <strong>${escapeHTML(post.userName)}</strong>
-                </div>
+                <div><strong>${escapeHTML(post.userName)}</strong></div>
                 <span class="timestamp">${formattedTimestamp}</span>
             </div>
-            <div class="post-content">
-                ${contentHTML || '<p> </p>'} <!-- Ensure div isn't empty if no content/image -->
-            </div>
+            <div class="post-content">${contentHTML || '<p> </p>'}</div>
             <div class="post-actions">
                 <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
                     <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
@@ -802,8 +841,7 @@
                 ${currentUser && post.userId === currentUser.uid ?
                     `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}" style="margin-left: auto; color: #cc0000;">
                         <i class="fas fa-trash"></i> Delete
-                     </button>` : ''
-                }
+                     </button>` : ''}
             </div>
             <div class="comments-area" id="comments-area-${postId}" style="display: none;">
                 <div class="comments-list" id="comments-list-${postId}"></div>
@@ -817,9 +855,7 @@
                 </form>
                 <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;">
                 <div class="comment-upload-progress" style="display: none;"></div>
-            </div>
-        `;
-
+            </div>`;
         if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
 
         const commentImageInput = postDiv.querySelector('.comment-image-input');
@@ -841,16 +877,15 @@
             });
         }
 
-
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
         if (commentsList) {
             if (post.comments && post.comments.length > 0) {
                 const sortedComments = [...post.comments].sort((a,b) => {
                     const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
                     const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                    return timeA - timeB; // Ascending order (older comments first)
+                    return timeA - timeB; 
                 });
-                sortedComments.forEach(comment => renderComment(comment, commentsList));
+                sortedComments.forEach(comment => renderComment(comment, commentsList, postId)); // Pass postId
             } else {
                 commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
             }
@@ -858,70 +893,206 @@
 
         const likeBtn = postDiv.querySelector('.like-btn');
         if (likeBtn) likeBtn.addEventListener('click', () => handleLike(postId));
-
         const commentToggleBtn = postDiv.querySelector('.comment-toggle-btn');
         if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
-
         const commentForm = postDiv.querySelector('.comment-form-actual');
         if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
-
         const deleteBtn = postDiv.querySelector('.delete-post-btn');
         if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl, deleteBtn.dataset.imagePublicId));
     }
 
     async function handleDeletePost(postId, imageUrl, imagePublicId) {
         const currentUser = auth.currentUser;
-        if (!currentUser) {
-            alert("You must be logged in to delete posts.");
-            return;
-        }
-
-        if (!confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
-            return;
-        }
-
+        if (!currentUser) { alert("You must be logged in."); return; }
+        if (!confirm("Are you sure you want to delete this post?")) return;
         const postRef = db.collection('posts').doc(postId);
-
         try {
             const doc = await postRef.get();
             if (doc.exists && doc.data().userId === currentUser.uid) {
                 await postRef.delete();
-                console.log("Post deleted from Firestore.");
-                // IMPORTANT: Deleting from Cloudinary requires a backend (e.g., Firebase Cloud Function)
-                // with your Cloudinary API secret for secure authenticated requests.
-                // Client-side deletion is not secure.
-                if (imageUrl) {
-                     console.warn(`Image at ${escapeHTML(imageUrl)} (public_id: ${escapeHTML(imagePublicId) || 'not available'}) was associated with the deleted post. Implement server-side deletion to remove it from Cloudinary.`);
-                }
-            } else {
-                alert("You do not have permission to delete this post or it no longer exists.");
-            }
+                if (imageUrl) console.warn(`Image at ${escapeHTML(imageUrl)} (public_id: ${escapeHTML(imagePublicId) || 'N/A'}) needs server-side deletion.`);
+            } else { alert("Permission denied or post not found."); }
         } catch (error) {
             console.error("Error deleting post:", error);
             alert("Failed to delete post: " + error.message);
         }
     }
 
+    // --- MODIFIED AND NEW FUNCTIONS FOR COMMENTS AND REPLIES ---
+    async function handleCommentSubmit(event, postId) {
+        event.preventDefault();
+        const currentUser = auth.currentUser;
+        if (!currentUser) { alert("Please log in to comment."); return; }
 
-    function renderComment(comment, commentsListElement) {
+        const form = event.target;
+        const commentTextInput = form.querySelector('.comment-text-input');
+        const commentImageInput = form.querySelector('.comment-image-input');
+        const commentsArea = form.closest('.comments-area');
+        const commentImagePreview = commentsArea ? commentsArea.querySelector('.comment-image-preview') : null;
+        const commentUploadProgress = commentsArea ? commentsArea.querySelector('.comment-upload-progress') : null;
+
+        const commentText = commentTextInput ? commentTextInput.value.trim() : "";
+        const imageFile = commentImageInput ? commentImageInput.files[0] : null;
+
+        if (!commentText && !imageFile) { alert("Comment text or an image is required."); return; }
+
+        const submitButton = form.querySelector('.comment-submit-btn');
+        if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Posting..."; }
+        if(commentUploadProgress) { commentUploadProgress.textContent = ''; commentUploadProgress.style.display = 'none';}
+
+        let commentImageUrl = null;
+        let commentImagePublicId = null;
+
+        try {
+            if (imageFile) {
+                if(commentUploadProgress) { commentUploadProgress.textContent = 'Uploading image...'; commentUploadProgress.style.display = 'block'; }
+                const formData = new FormData();
+                formData.append('file', imageFile);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Cloudinary comment image upload failed: ${errorData.error.message || 'Unknown error'}`);
+                }
+                const data = await response.json();
+                commentImageUrl = data.secure_url;
+                commentImagePublicId = data.public_id;
+                if(commentUploadProgress) commentUploadProgress.textContent = 'Image uploaded!';
+            }
+
+            const commentId = db.collection('posts').doc().id; // Generate unique ID for comment
+
+            const newComment = {
+                id: commentId,
+                userId: currentUser.uid,
+                userName: currentUser.displayName || 'User',
+                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+                text: commentText || "",
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                replies: [], // Initialize replies array
+                imageUrl: commentImageUrl || null,
+                imagePublicId: commentImagePublicId || null
+            };
+
+            const postRef = db.collection('posts').doc(postId);
+            await postRef.update({
+                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
+            });
+
+            if (commentTextInput) commentTextInput.value = '';
+            if (commentImageInput) commentImageInput.value = null;
+            if (commentImagePreview) { commentImagePreview.src = '#'; commentImagePreview.style.display = 'none';}
+        } catch (error) {
+            console.error("Error adding comment:", error);
+            alert("Failed to add comment: " + error.message);
+            if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
+                commentUploadProgress.textContent = 'Upload failed.';
+            }
+        } finally {
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Post"; }
+            setTimeout(() => {
+                if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
+                    if (commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
+                        commentUploadProgress.style.display = 'none';
+                    }
+                }
+            }, 3000);
+        }
+    }
+    
+    function toggleReplyForm(commentId) {
+        const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
+        if (replyFormContainer) {
+            const isHidden = replyFormContainer.style.display === 'none' || replyFormContainer.style.display === '';
+            replyFormContainer.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) {
+                const inputField = replyFormContainer.querySelector('.reply-text-input');
+                if (inputField) inputField.focus();
+            }
+        }
+    }
+
+    async function handleReplySubmit(event, postId, parentCommentId) {
+        event.preventDefault();
+        const currentUser = auth.currentUser;
+        if (!currentUser) { alert("Please log in to reply."); return; }
+
+        const form = event.target;
+        const replyTextInput = form.querySelector('.reply-text-input');
+        const replyText = replyTextInput ? replyTextInput.value.trim() : "";
+
+        if (!replyText) { alert("Reply text cannot be empty."); return; }
+
+        const submitButton = form.querySelector('.reply-submit-btn');
+        if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Posting...";}
+
+        const newReply = {
+            userId: currentUser.uid,
+            userName: currentUser.displayName || 'User',
+            userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+            text: replyText,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        const postRef = db.collection('posts').doc(postId);
+        try {
+            await db.runTransaction(async (transaction) => {
+                const postDoc = await transaction.get(postRef);
+                if (!postDoc.exists) throw "Post document does not exist!";
+                const postData = postDoc.data();
+                const comments = postData.comments || [];
+                const updatedComments = comments.map(comment => {
+                    if (comment.id === parentCommentId) {
+                        const existingReplies = comment.replies || [];
+                        return { ...comment, replies: [...existingReplies, newReply] };
+                    }
+                    return comment;
+                });
+                transaction.update(postRef, { comments: updatedComments });
+            });
+            if (replyTextInput) replyTextInput.value = '';
+            toggleReplyForm(parentCommentId); 
+        } catch (error) {
+            console.error("Error adding reply:", error);
+            alert("Failed to add reply: " + error.message);
+        } finally {
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Post Reply";}
+        }
+    }
+
+    function renderReply(reply, repliesListDiv) {
+        const replyDiv = document.createElement('div');
+        replyDiv.className = 'comment-reply';
+        const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
+                                ? reply.timestamp.toDate().toLocaleString()
+                                : (reply.timestamp ? new Date(reply.timestamp).toLocaleString() : 'Recently');
+        let replyContentHTML = '';
+        if (reply.text) {
+            replyContentHTML = `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>`;
+        }
+        replyDiv.innerHTML = `
+            <div class="comment-header">
+                <img src="${reply.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <strong>${escapeHTML(reply.userName) || 'User'}</strong>
+                <span class="timestamp">${replyTimestamp}</span>
+            </div>
+            <div class="comment-content">${replyContentHTML || '<p> </p>'}</div>`;
+        repliesListDiv.appendChild(replyDiv);
+    }
+
+    function renderComment(comment, commentsListElement, postId) { // postId is passed
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
+        commentDiv.setAttribute('data-comment-id', comment.id);
         const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
                                 ? comment.timestamp.toDate().toLocaleString()
                                 : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
-
         const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
-        if(noCommentP) {
-            noCommentP.remove();
-        }
+        if(noCommentP) noCommentP.remove();
 
         let commentContentHTML = '';
-        if (comment.text) {
-            commentContentHTML += `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>`;
-        }
-        if (comment.imageUrl) {
-            commentContentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none'; console.error('Failed to load comment image: ${escapeHTML(comment.imageUrl)}')">`;
-        }
+        if (comment.text) commentContentHTML += `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>`;
+        if (comment.imageUrl) commentContentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none';">`;
 
         commentDiv.innerHTML = `
             <div class="comment-header">
@@ -929,42 +1100,56 @@
                 <strong>${escapeHTML(comment.userName) || 'User'}</strong>
                 <span class="timestamp">${commentTimestamp}</span>
             </div>
-            <div class="comment-content">
-                ${commentContentHTML || '<p> </p>'} <!-- Ensure div isn't empty -->
+            <div class="comment-content">${commentContentHTML || '<p> </p>'}</div>
+            <div class="comment-actions">
+                <button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}">
+                    <i class="fas fa-reply"></i> Reply
+                </button>
             </div>
-        `;
+            <div class="replies-list" id="replies-list-${comment.id}"></div>
+            <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
+                <form class="reply-form-actual" data-post-id="${postId}" data-parent-comment-id="${comment.id}">
+                    <input type="text" name="replyText" class="reply-text-input" placeholder="Write a reply..." autocomplete="off">
+                    <button type="submit" class="reply-submit-btn">Post Reply</button>
+                </form>
+            </div>`;
         commentsListElement.appendChild(commentDiv);
+
+        const repliesListDiv = commentDiv.querySelector(`#replies-list-${comment.id}`);
+        if (comment.replies && comment.replies.length > 0) {
+            const sortedReplies = [...comment.replies].sort((a,b) => {
+                const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
+                const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
+                return timeA - timeB;
+            });
+            sortedReplies.forEach(reply => renderReply(reply, repliesListDiv));
+        }
+
+        const replyButton = commentDiv.querySelector('.reply-to-comment-btn');
+        if (replyButton) replyButton.addEventListener('click', () => toggleReplyForm(comment.id));
+        const replyForm = commentDiv.querySelector('.reply-form-actual');
+        if (replyForm) replyForm.addEventListener('submit', (e) => handleReplySubmit(e, postId, comment.id));
     }
+    // --- END OF MODIFIED/NEW COMMENT/REPLY FUNCTIONS ---
+
 
     async function handleLike(postId) {
         const currentUser = auth.currentUser;
-        if (!currentUser) {
-            alert("Please log in to like posts.");
-            return;
-        }
-
+        if (!currentUser) { alert("Please log in to like posts."); return; }
         const postRef = db.collection('posts').doc(postId);
         try {
             await db.runTransaction(async (transaction) => {
                 const doc = await transaction.get(postRef);
-                if (!doc.exists) { throw "Document does not exist!"; }
-
+                if (!doc.exists) throw "Document does not exist!";
                 const postData = doc.data();
                 let currentLikes = postData.likes || [];
-                let newLikesArray;
-
-                if (currentLikes.includes(currentUser.uid)) {
-                    // User already liked, so unlike
-                    newLikesArray = currentLikes.filter(uid => uid !== currentUser.uid);
-                } else {
-                    // User has not liked, so add like
-                    newLikesArray = [...currentLikes, currentUser.uid];
-                }
+                let newLikesArray = currentLikes.includes(currentUser.uid)
+                                   ? currentLikes.filter(uid => uid !== currentUser.uid)
+                                   : [...currentLikes, currentUser.uid];
                 transaction.update(postRef, { likes: newLikesArray });
             });
-            // console.log("Like transaction successful for post ID:", postId);
         } catch (error) {
-            console.error("Like transaction failed for post ID:", postId, "Error:", error);
+            console.error("Like transaction failed:", error);
             alert("Failed to update like: " + error.message);
         }
     }
@@ -981,161 +1166,32 @@
         }
     }
 
-    async function handleCommentSubmit(event, postId) {
-        event.preventDefault();
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-            alert("Please log in to comment.");
-            return;
-        }
-
-        const form = event.target;
-        const commentTextInput = form.querySelector('.comment-text-input');
-        const commentImageInput = form.querySelector('.comment-image-input');
-        
-        // Correctly target elements relative to the comment form's specific comments-area
-        const commentsArea = form.closest('.comments-area');
-        const commentImagePreview = commentsArea ? commentsArea.querySelector('.comment-image-preview') : null;
-        const commentUploadProgress = commentsArea ? commentsArea.querySelector('.comment-upload-progress') : null;
-
-        const commentText = commentTextInput ? commentTextInput.value.trim() : "";
-        const imageFile = commentImageInput ? commentImageInput.files[0] : null;
-
-        if (!commentText && !imageFile) {
-            alert("Comment text or an image is required.");
-            return;
-        }
-
-        const submitButton = form.querySelector('.comment-submit-btn');
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.textContent = "Posting...";
-        }
-        if(commentUploadProgress) {
-            commentUploadProgress.textContent = ''; // Clear previous messages
-            commentUploadProgress.style.display = 'none';
-        }
-
-        let commentImageUrl = null;
-        let commentImagePublicId = null;
-
-        try {
-            if (imageFile) {
-                if(commentUploadProgress) {
-                    commentUploadProgress.textContent = 'Uploading image...';
-                    commentUploadProgress.style.display = 'block';
-                }
-
-                const formData = new FormData();
-                formData.append('file', imageFile);
-                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-                const response = await fetch(CLOUDINARY_UPLOAD_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("Cloudinary Error Response (comment image):", errorData);
-                    throw new Error(`Cloudinary comment image upload failed: ${errorData.error.message || 'Unknown error'}`);
-                }
-
-                const data = await response.json();
-                commentImageUrl = data.secure_url;
-                commentImagePublicId = data.public_id;
-                if(commentUploadProgress) commentUploadProgress.textContent = 'Image uploaded!';
-            }
-
-            const newComment = {
-                userId: currentUser.uid,
-                userName: currentUser.displayName || 'User',
-                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                text: commentText || "", // Ensure text is at least an empty string
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            if (commentImageUrl) {
-                newComment.imageUrl = commentImageUrl;
-                if (commentImagePublicId) {
-                    newComment.imagePublicId = commentImagePublicId; // Store for potential server-side deletion
-                }
-            }
-
-            const postRef = db.collection('posts').doc(postId);
-            await postRef.update({
-                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
-            });
-
-            if (commentTextInput) commentTextInput.value = '';
-            if (commentImageInput) commentImageInput.value = null; // Clear file input
-            if (commentImagePreview) {
-                commentImagePreview.src = '#';
-                commentImagePreview.style.display = 'none';
-            }
-            // Note: The onSnapshot listener for posts will automatically re-render comments including the new one.
-
-        } catch (error) {
-            console.error("Error adding comment for post ID:", postId, "Full Error:", error);
-            alert("Failed to add comment: " + error.message);
-            if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
-                commentUploadProgress.textContent = 'Upload failed. Please try again.';
-            }
-        } finally {
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = "Post";
-            }
-            setTimeout(() => {
-                if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
-                    if (commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
-                        commentUploadProgress.style.display = 'none';
-                        commentUploadProgress.textContent = '';
-                    }
-                }
-            }, 3000);
-        }
-    }
-
+    // --- MENU TOGGLE FUNCTIONS ---
     function toggleMenu() {
         if (elements.mobileMenu && elements.hamburger) {
             elements.mobileMenu.classList.toggle('active');
             elements.hamburger.classList.toggle('active');
         }
     }
-
     function closeMenuAndScroll(event) {
-        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-            toggleMenu();
-        }
+        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) toggleMenu();
         const targetId = event.currentTarget.getAttribute('href');
-        // Check if it's an internal anchor link
         if (targetId && targetId.startsWith('#') && targetId.length > 1) {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                event.preventDefault(); // Prevent default jump
+                event.preventDefault(); 
                 targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
             }
         }
-        // If it's not an internal anchor (or just '#'), let default behavior or simple menu close handle it
     }
-
     if (elements.hamburger) elements.hamburger.addEventListener('click', toggleMenu);
-
     document.querySelectorAll('.mobile-menu a').forEach(link => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
-            if (href && href.startsWith('#') && href.length > 1) { // For specific anchor links
-                closeMenuAndScroll(event);
-            } else { // For regular links or placeholder "#"
-                if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                    toggleMenu();
-                }
-            }
+            if (href && href.startsWith('#') && href.length > 1) closeMenuAndScroll(event);
+            else if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) toggleMenu();
         });
     });
-
-    // Close mobile menu if clicked outside
     document.addEventListener('click', (e) => {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
             elements.hamburger && !elements.hamburger.contains(e.target) &&
@@ -1144,15 +1200,14 @@
         }
     });
 
-    // Utility function to escape HTML to prevent XSS
+    // --- UTILITY FUNCTION ---
     function escapeHTML(str) {
-        if (str === null || str === undefined) return ''; // Handle null/undefined
-        const s = String(str); // Ensure it's a string
+        if (str === null || str === undefined) return '';
+        const s = String(str);
         const div = document.createElement('div');
         div.appendChild(document.createTextNode(s));
         return div.innerHTML;
     }
-
     </script>
 </body>
 </html>
