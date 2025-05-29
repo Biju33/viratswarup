@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en"> <!-- Default to English, JS will handle actual language -->
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VIRAT SWARUP - Cell to Cosmos</title> <!-- Combined title -->
-    <!-- Font Awesome Icons -->
+    <title>VIRAT SWARUP - Cell to Cosmos</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -15,7 +14,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif;
+        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
       }
 
       body {
@@ -23,25 +22,8 @@
         color: #2c2c2c;
       }
 
-      /* हैडर सेक्शन */
-      .header {
-        padding: 10px 10px 10px;
-        text-align: center;
-        border-bottom: 1px solid #e0e0e0;
-        background-color: #8b0000;
-      }
-      .header h1 {
-        font-size: 52px;
-        letter-spacing: 3.2px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        color: white;
-      }
-      .header h2 {
-        font-size: 22px;
-        color: #fff;
-        font-weight: 300;
-      }
+      /* हैडर सेक्शन (Using inline styles from your HTML for this specific page) */
+      /* .header class styles from CSS block are mostly for the main index page */
 
       /* हैमबर्गर मेन्यू */
       .hamburger {
@@ -49,18 +31,15 @@
         top: 25px;
         right: 25px;
         cursor: pointer;
-        display: none;
-        z-index: 1000;
+        display: none; /* Shown by media query */
+        z-index: 1001;
       }
       .hamburger-line {
         width: 28px;
         height: 2px;
-        background: #000000;
+        background: #ffffff; /* Assuming it's on a dark header */
         margin: 6px 0;
         transition: 0.4s;
-      }
-      .hamburger.active .hamburger-line { /* For 'X' icon lines */
-        background: #ffffff; /* White lines on active for contrast with menu */
       }
       .hamburger.active .hamburger-line:nth-child(1) {
         transform: rotate(-45deg) translate(-5px, 6px);
@@ -72,7 +51,6 @@
         transform: rotate(45deg) translate(-5px, -6px);
       }
 
-
       /* मोबाइल मेन्यू */
       .mobile-menu {
         position: fixed;
@@ -83,26 +61,46 @@
         background: #8b0000;
         box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
         transition: 0.4s;
-        padding-top: 80px;
-        z-index: 999;
+        padding-top: 60px; /* Adjusted for language options */
+        z-index: 1000;
+        overflow-y: auto;
       }
       .mobile-menu.active {
         right: 0;
       }
-      .mobile-menu a {
+      .mobile-menu a, .mobile-menu .language-select-label { /* Shared style for links and lang label */
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 18px 30px;
-        color: #fff;
+        padding: 15px 30px;
+        color: #fff !important;
         text-decoration: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
       }
       .mobile-menu i {
         width: 25px;
         font-size: 20px;
-        color: #fff;
+        color: #fff !important;
       }
+       .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
+        border-bottom: none;
+      }
+
+      .language-options {
+        padding-left: 30px;
+        display: none;
+        background-color: rgba(0,0,0,0.1);
+      }
+      .language-options a {
+        padding: 12px 30px;
+        font-size: 0.9em;
+      }
+      .language-options a.lang-active {
+          font-weight: bold;
+          background-color: rgba(255,255,255,0.1);
+      }
+
 
       /* बॉटम नेविगेशन */
       .bottom-nav {
@@ -113,7 +111,7 @@
         background: #8b0000;
         border-top: 1px solid #eee;
         padding: 8px 0;
-        display: none;
+        display: none; /* Shown by media query */
         z-index: 999;
       }
       .bottom-nav ul {
@@ -122,17 +120,23 @@
         list-style: none;
       }
       .bottom-nav a {
-        color: #fff;
+        color: #fff !important;
         font-size: 16px;
         text-decoration: none;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 6px;
-        padding: 10px 14px;
+        gap: 4px;
+        padding: 8px 10px;
         border-radius: 8px;
         transition: background 0.3s;
       }
-
+      .bottom-nav a i {
+        font-size: 20px;
+      }
+      .bottom-nav a span {
+        font-size: 12px;
+      }
       .bottom-nav a:hover {
         background-color: rgba(255, 255, 255, 0.1);
       }
@@ -140,10 +144,10 @@
       /* डेस्कटॉप नेविगेशन */
       .desktop-nav {
         margin: 45px 0;
-        text-align: center; /* Center the ul */
+        text-align: center;
       }
       .desktop-nav ul {
-        display: inline-flex; /* Allows centering of the flex container itself */
+        display: inline-flex;
         justify-content: center;
         gap: 32px;
         list-style: none;
@@ -168,25 +172,19 @@
         .bottom-nav {
           display: block;
         }
-        .header { /* This style will now apply */
-          padding: 70px 20px 35px;
-        }
-        .header h1 { /* This style will now apply (unless overridden by inline) */
-          font-size: 42px;
-        }
+        /* Header style block from general CSS might override inline for mobile if specific selectors are used */
+        /* For example, if there was .header h1 in the general CSS block for responsive, it might apply */
       }
     </style>
     <style>
         /* Styles for EvoRun Game - Applied to gameAreaWrapper and its children */
         #gameAreaWrapper {
             font-family: Arial, sans-serif;
-            /* background-color: #fff; /* Body background is already white */
-            /* color: #fff; Game UI elements set their own colors, this could be a default for text within this wrapper */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* Vertically centers the game block if there's space */
-            padding: 20px 0; /* Some spacing around the game area */
+            justify-content: center;
+            padding: 20px 0;
             width: 100%;
         }
 
@@ -194,11 +192,10 @@
             position: relative;
             border: 2px solid #555;
             box-shadow: 0 0 15px rgba(0, 200, 255, 0.5);
-            /* overflow: hidden; /* To contain canvas if it ever tries to exceed bounds */
         }
         canvas {
             display: block;
-            background-color: #000; /* Fallback, will be drawn over */
+            background-color: #000;
         }
         #uiOverlay {
             position: absolute;
@@ -208,25 +205,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            pointer-events: none; /* Allow clicks to pass through to canvas */
-            color: #fff; /* Explicitly set color for score/stage text */
+            pointer-events: none;
+            color: #fff;
         }
         #score, #stageName {
-            font-size: 9px; /* Adjusted to be more readable perhaps */
+            font-size: 14px; /* Slightly larger for better readability */
             background-color: rgba(0,0,0,0.5);
             padding: 5px 10px;
             border-radius: 5px;
         }
         #progressBarContainer {
             width: 100%;
-            max-width: 800px; /* Match max game width for consistency */
-            box-sizing: border-box; /* Include padding/border in width */
-            background-color: #ddd; /* Changed for better visibility */
+            max-width: 800px;
+            box-sizing: border-box;
+            background-color: #ddd;
             border-radius: 5px;
             overflow: hidden;
             height: 20px;
             margin: 10px 0;
-            border: 1px solid #ccc; /* Changed for better visibility */
+            border: 1px solid #ccc;
         }
         #progressBar {
             width: 0%;
@@ -238,8 +235,11 @@
             margin-top: 15px;
             display: flex;
             gap: 10px;
+            flex-wrap: wrap; /* Allow controls to wrap on small screens */
+            justify-content: center; /* Center controls when they wrap */
         }
-        button { /* Generic button style for game controls */
+        /* General button style in gameAreaWrapper */
+        #gameAreaWrapper button {
             padding: 10px 15px;
             font-size: 16px;
             background-color: #8b0000;
@@ -249,28 +249,29 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        button:hover {
-            background-color: #a52a2a; /* Darken on hover slightly */
+        #gameAreaWrapper button:hover {
+            background-color: #a52a2a;
         }
         #startScreen, #stageCompleteScreen {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background-color: rgba(0,0,0,0.85);
-            color: #fff; /* Ensure text is white */
+            color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            z-index: 10; /* Above canvas, below mobile menu */
+            z-index: 10;
+            padding: 20px; /* Add some padding */
         }
-        #startScreen h2, #stageCompleteScreen h2 { margin-top: 0; }
-        #startScreen p, #stageCompleteScreen p { margin-bottom: 20px; }
+        #startScreen h2, #stageCompleteScreen h2 { margin-top: 0; margin-bottom: 15px; }
+        #startScreen p, #stageCompleteScreen p { margin-bottom: 20px; line-height: 1.5; }
     </style>
 </head>
 <body>
     <!-- हैमबर्गर आइकन -->
-    <div class="hamburger" onclick="toggleMenu()">
+    <div class="hamburger"> <!-- onclick removed, JS will handle -->
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
@@ -278,80 +279,284 @@
 
     <!-- मोबाइल मेन्यू -->
     <nav class="mobile-menu">
-      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
-      <a href="#share"><i class="fas fa-share"></i>Share</a>
-      <a href="index.html"><i class="fas fa-home"></i>Home</a>
-      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
-      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
-      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-      <a href="index.html"><i class="fas fa-comment"></i>Post</a> <!-- Assuming index.html for Post -->
+      <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+      <a href="#"><i class="fas fa-share"></i><span data-translate-key="share">Share</span></a>
+      <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+      <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+      <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
+
+      <div class="language-select-label">
+            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
+      </div>
+      <div class="language-options">
+          <a href="#" data-lang="en">English</a>
+          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+      </div>
     </nav>
 
     <!-- हैडर -->
-    <header class="header" style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-        <h1 style="color: white; font-size: 24px; margin: 0;">VIRAT SWARUP</h1> <!-- Corrected font-size -->
-        <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
+    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
+        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
+        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight: 300; font-style: italic;" data-translate-key="headerSubtitleGame">The Supreme Devine of Every Faith</h2>
     </header>
 
     <!-- डेस्कटॉप नेविगेशन -->
     <nav class="desktop-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li> <!-- Corrected href -->
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li> <!-- Corrected href -->
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li> <!-- Corrected href -->
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li> <!-- Assuming index.html for Post -->
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
     <!-- बॉटम नेविगेशन (visible on mobile) -->
     <nav class="bottom-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
-      
+
     <!-- Wrapper for Game Elements -->
     <div id="gameAreaWrapper">
         <div id="gameContainer">
             <canvas id="gameCanvas"></canvas>
             <div id="uiOverlay">
-                <div id="stageName">Cell</div>
-                <div id="score">Score: 0</div>
+                <div id="stageName" data-translate-key-prefix="stagePrefix">Stage: Cell</div> <!-- Prefix for dynamic stage name -->
+                <div id="score" data-translate-key-prefix="scorePrefix">Score: 0</div>
             </div>
             <div id="startScreen">
-                <h2>Cell to Cosmos</h2>     
-                <p>The final stage is endless. Reach for the highest score!</p>
-                <button id="startButton">Start Game</button>
+                <h2 data-translate-key="gameTitle">Cell to Cosmos</h2>
+                <p data-translate-key="gameDescription">The final stage is endless. Reach for the highest score!</p>
+                <button id="startButton" data-translate-key="startGame">Start Game</button>
             </div>
             <div id="stageCompleteScreen" style="display: none;">
-                <h2 id="stageCompleteTitle">Stage Complete!</h2>
-                <p id="stageCompleteMessage">Preparing for the next phase of evolution...</p>
-                <button id="nextStageButton">Next Stage</button>
+                <h2 id="stageCompleteTitle" data-translate-key="stageComplete">Stage Complete!</h2>
+                <p id="stageCompleteMessage" data-translate-key="nextPhaseMessage">Preparing for the next phase of evolution...</p>
+                <button id="nextStageButton" data-translate-key="nextStage">Next Stage</button>
             </div>
         </div>
         <div id="progressBarContainer">
             <div id="progressBar"></div>
         </div>
         <div id="controls">
-            <button id="musicToggle">Music: OFF</button>
-            <button id="sfxToggle">SFX: ON</button>
-            <button id="restartGameButton" title="Restart Game">Restart</button>
+            <button id="musicToggle" data-translate-key-prefix="musicTogglePrefix">Music: OFF</button>
+            <button id="sfxToggle" data-translate-key-prefix="sfxTogglePrefix">SFX: ON</button>
+            <button id="restartGameButton" title="Restart Game" data-translate-key="restartGame">Restart</button>
         </div>
     </div>
 
     <script>
-        // Hamburger Menu Toggle Function
-        function toggleMenu() {
-          const mobileMenu = document.querySelector('.mobile-menu');
-          const hamburger = document.querySelector('.hamburger');
-          mobileMenu.classList.toggle('active');
-          hamburger.classList.toggle('active');
+      // --- START TRANSLATION DATA & LOGIC ---
+      const translations = {
+          en: {
+              headerSubtitleGame: "The Supreme Divine of Every Faith", // Can be same or different
+              login: "Login",
+              share: "Share",
+              home: "Home",
+              agnosia: "Agnosia",
+              enigma: "Enigma",
+              emulate: "Emulate",
+              post: "Post",
+              language: "Language",
+              // Game specific
+              stagePrefix: "Stage: ",
+              scorePrefix: "Score: ",
+              gameTitle: "Cell to Cosmos",
+              gameDescription: "The final stage is endless. Reach for the highest score!",
+              startGame: "Start Game",
+              stageComplete: "Stage Complete!",
+              nextPhaseMessage: "Preparing for the next phase of evolution...",
+              nextStage: "Next Stage",
+              musicTogglePrefix_on: "Music: ON",
+              musicTogglePrefix_off: "Music: OFF",
+              sfxTogglePrefix_on: "SFX: ON",
+              sfxTogglePrefix_off: "SFX: OFF",
+              sfxTogglePrefix_na: "SFX: N/A",
+              restartGame: "Restart",
+              // Stage Names (used by JS)
+              stage_cell: "Cell",
+              stage_heart: "Heart",
+              stage_earth: "Earth",
+              stage_universe: "Universe",
+              stage_universe_endless: "Universe (Endless)"
+          },
+          ne: {
+              headerSubtitleGame: "हरेक आस्थाका सर्वोच्च परमात्मा",
+              login: "लग - इन",
+              share: "साझा गर्नुहोस्",
+              home: "गृहपृष्ठ",
+              agnosia: "अज्ञानता",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              // Game specific
+              stagePrefix: "चरण: ",
+              scorePrefix: "अङ्क: ",
+              gameTitle: "कोशिका देखि ब्रह्माण्ड",
+              gameDescription: "अन्तिम चरण अनन्त छ। उच्चतम अङ्कको लागि प्रयास गर्नुहोस्!",
+              startGame: "खेल सुरु गर्नुहोस्",
+              stageComplete: "चरण सम्पन्न!",
+              nextPhaseMessage: "विकासको अर्को चरणको लागि तयारी गर्दै...",
+              nextStage: "अर्को चरण",
+              musicTogglePrefix_on: "संगीत: सक्रिय",
+              musicTogglePrefix_off: "संगीत: निष्क्रिय",
+              sfxTogglePrefix_on: "ध्वनि: सक्रिय",
+              sfxTogglePrefix_off: "ध्वनि: निष्क्रिय",
+              sfxTogglePrefix_na: "ध्वनि: उपलब्ध छैन",
+              restartGame: "पुनः सुरु गर्नुहोस्",
+              // Stage Names
+              stage_cell: "कोशिका",
+              stage_heart: "मुटु",
+              stage_earth: "पृथ्वी",
+              stage_universe: "ब्रह्माण्ड",
+              stage_universe_endless: "ब्रह्माण्ड (अनन्त)"
+          },
+          hi: {
+              headerSubtitleGame: "हर आस्था के सर्वोच्च परमात्मा",
+              login: "लॉग इन करें",
+              share: "साझा करें",
+              home: "होम",
+              agnosia: "अज्ञान",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              // Game specific
+              stagePrefix: "चरण: ",
+              scorePrefix: "स्कोर: ",
+              gameTitle: "कोशिका से ब्रह्मांड",
+              gameDescription: "अंतिम चरण अंतहीन है। उच्चतम स्कोर के लिए पहुंचें!",
+              startGame: "खेल शुरू करें",
+              stageComplete: "चरण पूर्ण!",
+              nextPhaseMessage: "विकास के अगले चरण की तैयारी...",
+              nextStage: "अगला चरण",
+              musicTogglePrefix_on: "संगीत: चालू",
+              musicTogglePrefix_off: "संगीत: बंद",
+              sfxTogglePrefix_on: "SFX: चालू",
+              sfxTogglePrefix_off: "SFX: बंद",
+              sfxTogglePrefix_na: "SFX: अनुपलब्ध",
+              restartGame: "पुनः आरंभ करें",
+              // Stage Names
+              stage_cell: "कोशिका",
+              stage_heart: "हृदय",
+              stage_earth: "पृथ्वी",
+              stage_universe: "ब्रह्मांड",
+              stage_universe_endless: "ब्रह्मांड (अंतहीन)"
+          }
+      };
+
+      let currentLanguage = localStorage.getItem('selectedLanguageGamePage') || 'en';
+
+      function setLanguage(lang) {
+          currentLanguage = lang;
+          localStorage.setItem('selectedLanguageGamePage', lang);
+          applyTranslations();
+          document.querySelectorAll('.language-options a').forEach(a => {
+              a.classList.remove('lang-active');
+              if (a.dataset.lang === lang) {
+                  a.classList.add('lang-active');
+              }
+          });
+           // Update game UI text dynamically if game elements exist
+          if (typeof updateScoreDisplay === 'function') updateScoreDisplay(); // score is updated within this
+          if (typeof updateStageNameDisplay === 'function') updateStageNameDisplay(); // stage name is updated within this
+          if (typeof updateControlButtonsText === 'function') updateControlButtonsText();
+      }
+
+      function _(key, fallbackLang = 'en') {
+          return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+      }
+
+      function applyTranslations() {
+          document.querySelectorAll('[data-translate-key]').forEach(element => {
+              const key = element.dataset.translateKey;
+              element.textContent = _(key);
+          });
+          // For elements where text is dynamically constructed with a prefix
+          document.querySelectorAll('[data-translate-key-prefix]').forEach(element => {
+              const prefixKey = element.dataset.translateKeyPrefix;
+              const originalText = element.textContent; // Assuming original text contains the value after prefix
+              const parts = originalText.split(':'); // Simple split, adjust if format is different
+              if (parts.length > 1) {
+                  element.textContent = _(prefixKey) + parts[1].trim();
+              } else {
+                   element.textContent = _(prefixKey); // If only prefix is there, e.g. button might get full text from key
+              }
+          });
+          // Special handling for buttons that toggle their text
+          updateControlButtonsText();
+      }
+
+      function updateControlButtonsText() {
+        if (musicToggleButton) {
+            musicToggleButton.textContent = musicOn ? _('musicTogglePrefix_on') : _('musicTogglePrefix_off');
         }
+        if (sfxToggleButton) {
+            if (!audioCtx && sfxToggleButton) { // SFX not available
+                 sfxToggleButton.textContent = _('sfxTogglePrefix_na');
+            } else {
+                 sfxToggleButton.textContent = sfxOn ? _('sfxTogglePrefix_on') : _('sfxTogglePrefix_off');
+            }
+        }
+      }
+      // --- END TRANSLATION LOGIC ---
+
+      const hamburger = document.querySelector(".hamburger");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const languageSelectLabel = document.querySelector('.language-select-label');
+      const languageOptionsDiv = document.querySelector('.language-options');
+
+      function toggleMenu() {
+        mobileMenu.classList.toggle("active");
+        hamburger.classList.toggle("active");
+      }
+
+      if (hamburger) {
+        hamburger.addEventListener('click', toggleMenu);
+      }
+
+      if (languageSelectLabel) {
+        languageSelectLabel.addEventListener('click', () => {
+            if (languageOptionsDiv) {
+                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
+            }
+        });
+      }
+
+      document.querySelectorAll('.language-options a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = e.currentTarget.dataset.lang;
+            setLanguage(lang);
+            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
+        });
+      });
+
+      document.addEventListener("click", (e) => {
+        let clickedInsideMenuComponent = false;
+        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
+        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
+        // Note: languageSelectLabel and languageOptionsDiv are INSIDE mobileMenu, so covered by mobileMenu.contains
+
+        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
+          toggleMenu();
+        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
+                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
+                   !languageOptionsDiv.contains(e.target)) {
+            languageOptionsDiv.style.display = 'none';
+        }
+      });
+
 
         // Game Script (EvoRun: Cell to Cosmos)
         const canvas = document.getElementById('gameCanvas');
@@ -365,7 +570,7 @@
         const stageCompleteScreen = document.getElementById('stageCompleteScreen');
         const stageCompleteTitle = document.getElementById('stageCompleteTitle');
         const stageCompleteMessage = document.getElementById('stageCompleteMessage');
-        
+
         const startButton = document.getElementById('startButton');
         const nextStageButton = document.getElementById('nextStageButton');
         const restartGameButton = document.getElementById('restartGameButton');
@@ -375,15 +580,14 @@
         let gameWidth, gameHeight;
         let player;
         let collectibles = [];
-        let obstacles = []; // Declared but not used in provided code, kept for consistency
+        let obstacles = [];
         let score = 0;
         let currentStageIndex = 0;
         let stageProgress = 0;
         let gameSpeed = 2;
         let animationFrameId;
         let isGameRunning = false;
-        // let isJumping = false; // Declared but not directly used for logic, jump mechanics don't rely on it
-        let isInEndlessMode = false; 
+        let isInEndlessMode = false;
 
         let sfxOn = true;
         let musicOn = false;
@@ -394,8 +598,10 @@
         } catch (e) {
             console.warn("Web Audio API is not supported. SFX disabled.");
             sfxOn = false;
-            sfxToggleButton.textContent = "SFX: N/A";
-            sfxToggleButton.disabled = true;
+            if (sfxToggleButton) { // Check if element exists before trying to update
+                sfxToggleButton.textContent = _('sfxTogglePrefix_na'); // Translate "N/A"
+                sfxToggleButton.disabled = true;
+            }
         }
 
         function playSound(type = 'collect') {
@@ -412,108 +618,115 @@
                 gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
             } else if (type === 'stage_complete') {
                 oscillator.type = 'sawtooth';
-                oscillator.frequency.setValueAtTime(261.63, audioCtx.currentTime); // C4
+                oscillator.frequency.setValueAtTime(261.63, audioCtx.currentTime);
                 gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
             }
             oscillator.start();
             oscillator.stop(audioCtx.currentTime + (type === 'collect' ? 0.2 : 0.8));
         }
-        
-        const STAGES = [
+
+        // STAGES definition needs to be accessible to translation for stage names
+        // We will translate the names when they are displayed
+        const STAGES_DATA = [ // Renamed to avoid conflict with a global 'STAGES' if any
             {
-                name: "Cell",
+                key: "stage_cell", // Key for translation
                 bgColor: "#001f3f", playerColor: "#7FDBFF", playerRadius: 15,
                 collectibleColor: "#FFDC00", collectibleRadius: 8, collectibleValue: 10,
                 goal: 100, itemSpawnRate: 100,
-                playerRepresentation: (p) => {
-                    ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
-                    const pulse = Math.sin(Date.now() * 0.01) * 2;
-                    ctx.strokeStyle = `rgba(127, 219, 255, ${0.5 + Math.sin(Date.now() * 0.01)*0.5})`;
-                    ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius + pulse, 0, Math.PI * 2); ctx.stroke();
-                },
-                collectibleRepresentation: (c) => {
-                    ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2); ctx.fill();
-                }
+                playerRepresentation: (p) => { /* ... as before ... */ },
+                collectibleRepresentation: (c) => { /* ... as before ... */ }
             },
             {
-                name: "Heart",
+                key: "stage_heart",
                 bgColor: "#600000", playerColor: "#FF4136", playerRadius: 20,
                 collectibleColor: "#FF851B", collectibleRadius: 10, collectibleValue: 15,
                 goal: 150, itemSpawnRate: 80,
-                playerRepresentation: (p) => {
-                    ctx.fillStyle = p.color; const pulse = Math.sin(Date.now() * 0.02) * 5;
-                    const w = (p.radius + pulse) * 2; const h = w * 0.9;
-                    ctx.beginPath(); ctx.moveTo(p.x, p.y + h / 4);
-                    ctx.bezierCurveTo(p.x, p.y, p.x - w / 2, p.y, p.x - w / 2, p.y + h / 4);
-                    ctx.bezierCurveTo(p.x - w / 2, p.y + h / 2, p.x, p.y + h / 1.5, p.x, p.y + h);
-                    ctx.bezierCurveTo(p.x, p.y + h / 1.5, p.x + w / 2, p.y + h / 2, p.x + w / 2, p.y + h / 4);
-                    ctx.bezierCurveTo(p.x + w / 2, p.y, p.x, p.y, p.x, p.y + h / 4); ctx.fill();
-                },
-                collectibleRepresentation: (c) => {
-                    ctx.fillStyle = c.color; const pulse = Math.sin(Date.now() * 0.015 + c.x) * 2;
-                    ctx.beginPath(); ctx.arc(c.x, c.y, c.radius + pulse, 0, Math.PI * 2); ctx.fill();
-                }
+                playerRepresentation: (p) => { /* ... as before ... */ },
+                collectibleRepresentation: (c) => { /* ... as before ... */ }
             },
             {
-                name: "Earth",
+                key: "stage_earth",
                 bgColor: "#003366", playerColor: "#3D9970", playerRadius: 25,
                 collectibleColor: "#0074D9", collectibleRadius: 12, collectibleValue: 20,
                 goal: 200, itemSpawnRate: 120,
-                playerRepresentation: (p) => {
-                    ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
-                    ctx.fillStyle = "#7FDBFF"; ctx.beginPath();
-                    ctx.arc(p.x + p.radius*0.2, p.y - p.radius*0.3, p.radius*0.7, Math.PI*0.3, Math.PI*1.2); ctx.fill();
-                    ctx.beginPath(); ctx.arc(p.x - p.radius*0.3, p.y + p.radius*0.1, p.radius*0.5, Math.PI*1.5, Math.PI*0.5); ctx.fill();
-                },
-                collectibleRepresentation: (c) => {
-                    ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2); ctx.fill();
-                    ctx.fillStyle = "rgba(173, 216, 230, 0.5)"; ctx.beginPath();
-                    ctx.moveTo(c.x + c.radius, c.y); ctx.lineTo(c.x + c.radius + 20, c.y - 5);
-                    ctx.lineTo(c.x + c.radius + 20, c.y + 5); ctx.closePath(); ctx.fill();
-                }
+                playerRepresentation: (p) => { /* ... as before ... */ },
+                collectibleRepresentation: (c) => { /* ... as before ... */ }
             },
-            { 
-                name: "Universe",
-                bgColor: "#0c0014", 
-                playerColor: "#f0f0f0", 
-                playerRadius: 10, 
-                collectibleColor: "#dda0dd", 
-                collectibleRadius: 7,
-                collectibleValue: 25,
-                goal: 250, 
-                itemSpawnRate: 90,
-                playerRepresentation: (p) => { 
-                    ctx.fillStyle = p.color;
-                    const corePulse = Math.sin(Date.now() * 0.03) * (p.radius * 0.3);
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius * 0.7 + corePulse, 0, Math.PI * 2);
-                    ctx.fill();
-                    const glowPulse = Math.sin(Date.now() * 0.02) * 5;
-                    const gradient = ctx.createRadialGradient(p.x, p.y, p.radius * 0.5, p.x, p.y, p.radius + glowPulse + 5);
-                    gradient.addColorStop(0, `rgba(255, 255, 255, ${0.3 + Math.sin(Date.now() * 0.025) * 0.2})`);
-                    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-                    ctx.fillStyle = gradient;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius + glowPulse + 5, 0, Math.PI * 2);
-                    ctx.fill();
-                },
-                collectibleRepresentation: (c) => { 
-                    ctx.strokeStyle = c.color;
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.moveTo(c.x - c.radius, c.y - c.radius/2 + Math.sin(c.x*0.1)*3);
-                    ctx.quadraticCurveTo(c.x, c.y + Math.cos(c.x*0.1)*5, c.x + c.radius, c.y + c.radius/2 + Math.sin(c.x*0.1)*3);
-                    ctx.stroke();
-                }
+            {
+                key: "stage_universe",
+                bgColor: "#0c0014", playerColor: "#f0f0f0", playerRadius: 10,
+                collectibleColor: "#dda0dd", collectibleRadius: 7, collectibleValue: 25,
+                goal: 250, itemSpawnRate: 90,
+                playerRepresentation: (p) => { /* ... as before, ensure no hardcoded text ... */ },
+                collectibleRepresentation: (c) => { /* ... as before, ensure no hardcoded text ... */ }
             }
         ];
+        // Player and Collectible representations (removed for brevity, assume they are the same and don't contain translatable text)
+        STAGES_DATA[0].playerRepresentation = (p) => {
+            ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+            const pulse = Math.sin(Date.now() * 0.01) * 2;
+            ctx.strokeStyle = `rgba(127, 219, 255, ${0.5 + Math.sin(Date.now() * 0.01)*0.5})`;
+            ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius + pulse, 0, Math.PI * 2); ctx.stroke();
+        };
+        STAGES_DATA[0].collectibleRepresentation = (c) => {
+            ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2); ctx.fill();
+        };
+         STAGES_DATA[1].playerRepresentation = (p) => {
+            ctx.fillStyle = p.color; const pulse = Math.sin(Date.now() * 0.02) * 5;
+            const w = (p.radius + pulse) * 2; const h = w * 0.9;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y + h / 4);
+            ctx.bezierCurveTo(p.x, p.y, p.x - w / 2, p.y, p.x - w / 2, p.y + h / 4);
+            ctx.bezierCurveTo(p.x - w / 2, p.y + h / 2, p.x, p.y + h / 1.5, p.x, p.y + h);
+            ctx.bezierCurveTo(p.x, p.y + h / 1.5, p.x + w / 2, p.y + h / 2, p.x + w / 2, p.y + h / 4);
+            ctx.bezierCurveTo(p.x + w / 2, p.y, p.x, p.y, p.x, p.y + h / 4); ctx.fill();
+        };
+        STAGES_DATA[1].collectibleRepresentation = (c) => {
+            ctx.fillStyle = c.color; const pulse = Math.sin(Date.now() * 0.015 + c.x) * 2;
+            ctx.beginPath(); ctx.arc(c.x, c.y, c.radius + pulse, 0, Math.PI * 2); ctx.fill();
+        };
+        STAGES_DATA[2].playerRepresentation = (p) => {
+            ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "#7FDBFF"; ctx.beginPath();
+            ctx.arc(p.x + p.radius*0.2, p.y - p.radius*0.3, p.radius*0.7, Math.PI*0.3, Math.PI*1.2); ctx.fill();
+            ctx.beginPath(); ctx.arc(p.x - p.radius*0.3, p.y + p.radius*0.1, p.radius*0.5, Math.PI*1.5, Math.PI*0.5); ctx.fill();
+        };
+        STAGES_DATA[2].collectibleRepresentation = (c) => {
+            ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "rgba(173, 216, 230, 0.5)"; ctx.beginPath();
+            ctx.moveTo(c.x + c.radius, c.y); ctx.lineTo(c.x + c.radius + 20, c.y - 5);
+            ctx.lineTo(c.x + c.radius + 20, c.y + 5); ctx.closePath(); ctx.fill();
+        };
+        STAGES_DATA[3].playerRepresentation = (p) => {
+            ctx.fillStyle = p.color;
+            const corePulse = Math.sin(Date.now() * 0.03) * (p.radius * 0.3);
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius * 0.7 + corePulse, 0, Math.PI * 2);
+            ctx.fill();
+            const glowPulse = Math.sin(Date.now() * 0.02) * 5;
+            const gradient = ctx.createRadialGradient(p.x, p.y, p.radius * 0.5, p.x, p.y, p.radius + glowPulse + 5);
+            gradient.addColorStop(0, `rgba(255, 255, 255, ${0.3 + Math.sin(Date.now() * 0.025) * 0.2})`);
+            gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius + glowPulse + 5, 0, Math.PI * 2);
+            ctx.fill();
+        };
+        STAGES_DATA[3].collectibleRepresentation = (c) => {
+            ctx.strokeStyle = c.color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(c.x - c.radius, c.y - c.radius/2 + Math.sin(c.x*0.1)*3);
+            ctx.quadraticCurveTo(c.x, c.y + Math.cos(c.x*0.1)*5, c.x + c.radius, c.y + c.radius/2 + Math.sin(c.x*0.1)*3);
+            ctx.stroke();
+        };
+
 
         class Player {
             constructor(x, y, radius, color) {
                 this.x = x; this.y = y; this.baseY = y; this.radius = radius; this.color = color;
                 this.velocityY = 0; this.gravity = 0.3; this.lift = -7;
-                this.stageConfig = STAGES[currentStageIndex];
+                this.stageConfig = STAGES_DATA[currentStageIndex];
             }
             update() {
                 this.velocityY += this.gravity; this.y += this.velocityY;
@@ -536,7 +749,7 @@
             constructor(x, y, radius, color, value, speed) {
                 this.x = x; this.y = y; this.radius = radius; this.color = color;
                 this.value = value; this.speed = speed;
-                this.stageConfig = STAGES[currentStageIndex];
+                this.stageConfig = STAGES_DATA[currentStageIndex];
             }
             update() { this.x -= this.speed; }
             draw() { this.stageConfig.collectibleRepresentation(this); }
@@ -551,22 +764,22 @@
             stageProgress = 0;
             gameSpeed = 2;
             collectibles = [];
-            // obstacles = []; // Already empty or reset
-            loadStage(0); 
+            loadStage(0);
             updateScoreDisplay();
+            updateStageNameDisplay(); // Added
             updateProgressBar();
             startScreen.style.display = 'flex';
             stageCompleteScreen.style.display = 'none';
+            applyTranslations(); // Re-apply if any text changed
         }
 
 
         function initGame() {
-            resizeCanvas(); // Ensure dimensions are set first
+            resizeCanvas();
             currentStageIndex = 0;
             score = 0;
             gameSpeed = 2;
-            isInEndlessMode = false; 
-            // Player is initialized/reset in loadStage
+            isInEndlessMode = false;
             loadStage(currentStageIndex);
             startScreen.style.display = 'none';
             stageCompleteScreen.style.display = 'none';
@@ -576,37 +789,39 @@
 
         function loadStage(stageIndex) {
             currentStageIndex = stageIndex;
-            const stage = STAGES[stageIndex];
-            stageProgress = 0; 
+            const stage = STAGES_DATA[stageIndex];
+            stageProgress = 0;
             collectibles = [];
-            // obstacles = [];
 
             if (player) {
                 player.resetForStage(stage);
             } else {
                  player = new Player(gameWidth / 4, gameHeight / 2, stage.playerRadius, stage.playerColor);
             }
-
-            const originalStageName = STAGES[stageIndex].originalName || STAGES[stageIndex].name;
-            stageNameDisplay.textContent = `Stage: ${originalStageName}`;
-            if(STAGES[stageIndex].originalName && STAGES[stageIndex].name !== originalStageName) {
-                 STAGES[stageIndex].name = originalStageName; 
-            }
-
+            updateStageNameDisplay(); // Handles translation of stage name
             updateScoreDisplay();
             updateProgressBar();
-            gameSpeed = 2 + stageIndex * 0.5; 
+            gameSpeed = 2 + stageIndex * 0.5;
+        }
+
+        function updateStageNameDisplay() {
+            const stageKey = STAGES_DATA[currentStageIndex].key;
+            let translatedStageName = _(stageKey);
+            if (isInEndlessMode && currentStageIndex === STAGES_DATA.length - 1) {
+                translatedStageName = _(stageKey + "_endless"); // Assumes a key like "stage_universe_endless"
+            }
+            stageNameDisplay.textContent = _('stagePrefix') + translatedStageName;
         }
 
         function updateScoreDisplay() {
-            scoreDisplay.textContent = `Score: ${score}`;
+            scoreDisplay.textContent = _('scorePrefix') + score;
         }
 
         function updateProgressBar() {
-            const stage = STAGES[currentStageIndex];
+            const stage = STAGES_DATA[currentStageIndex];
             let progressPercent = 0;
-            if (isInEndlessMode && currentStageIndex === STAGES.length -1) {
-                progressPercent = 100; 
+            if (isInEndlessMode && currentStageIndex === STAGES_DATA.length -1) {
+                progressPercent = 100;
             } else if (stage.goal > 0) {
                 progressPercent = Math.min((stageProgress / stage.goal) * 100, 100);
             }
@@ -616,22 +831,20 @@
         let frameCount = 0;
         function gameLoop() {
             if (!isGameRunning) return;
-
             frameCount++;
             ctx.clearRect(0, 0, gameWidth, gameHeight);
-
-            const currentStageData = STAGES[currentStageIndex];
+            const currentStageData = STAGES_DATA[currentStageIndex];
             ctx.fillStyle = currentStageData.bgColor;
             ctx.fillRect(0, 0, gameWidth, gameHeight);
 
-            if (frameCount % currentStageData.itemSpawnRate === 0 && collectibles.length < 15) { 
+            if (frameCount % currentStageData.itemSpawnRate === 0 && collectibles.length < 15) {
                 const y = Math.random() * (gameHeight - currentStageData.collectibleRadius * 2) + currentStageData.collectibleRadius;
                 collectibles.push(new Collectible(
                     gameWidth, y,
                     currentStageData.collectibleRadius,
                     currentStageData.collectibleColor,
                     currentStageData.collectibleValue,
-                    gameSpeed + Math.random() * 0.5 
+                    gameSpeed + Math.random() * 0.5
                 ));
             }
 
@@ -639,54 +852,48 @@
                 const collectible = collectibles[i];
                 collectible.update();
                 collectible.draw();
-
                 const dist = Math.hypot(player.x - collectible.x, player.y - collectible.y);
                 if (dist < player.radius + collectible.radius) {
                     score += collectible.value;
-                    if (!isInEndlessMode || currentStageIndex < STAGES.length -1) { 
+                    if (!isInEndlessMode || currentStageIndex < STAGES_DATA.length -1) {
                         stageProgress += collectible.value;
                     }
                     playSound('collect');
                     updateScoreDisplay();
                     updateProgressBar();
-                    collectibles.splice(i, 1); 
-
+                    collectibles.splice(i, 1);
                     if (!isInEndlessMode && stageProgress >= currentStageData.goal) {
                         completeStage();
                     }
                 } else if (collectible.x + collectible.radius < 0) {
-                    collectibles.splice(i, 1); 
+                    collectibles.splice(i, 1);
                 }
             }
-            
+
             player.update();
             player.draw();
 
-            if (isInEndlessMode && currentStageIndex === STAGES.length - 1) { // Only increase speed if in endless mode on the FINAL stage
-                gameSpeed += 0.0003; 
+            if (isInEndlessMode && currentStageIndex === STAGES_DATA.length - 1) {
+                gameSpeed += 0.0003;
             }
-
             animationFrameId = requestAnimationFrame(gameLoop);
         }
-        
+
         function completeStage() {
             playSound('stage_complete');
-
-            if (currentStageIndex < STAGES.length - 1) { 
-                isGameRunning = false; 
+            if (currentStageIndex < STAGES_DATA.length - 1) {
+                isGameRunning = false;
                 cancelAnimationFrame(animationFrameId);
-                stageCompleteTitle.textContent = `Stage ${STAGES[currentStageIndex].name} Complete!`;
-                stageCompleteMessage.textContent = `Preparing for the ${STAGES[currentStageIndex + 1].name} stage.`;
+                stageCompleteTitle.textContent = _('stageComplete'); // Uses translation key
+                const nextStageKey = STAGES_DATA[currentStageIndex + 1].key;
+                // More complex message construction might be needed if you want to insert stage names
+                stageCompleteMessage.textContent = _('nextPhaseMessage'); // Generic for now
                 stageCompleteScreen.style.display = 'flex';
-            } else { 
+            } else {
                 isInEndlessMode = true;
-                if (!STAGES[currentStageIndex].originalName) {
-                    STAGES[currentStageIndex].originalName = STAGES[currentStageIndex].name;
-                }
-                STAGES[currentStageIndex].name = `${STAGES[currentStageIndex].originalName} (Endless)`;
-                stageNameDisplay.textContent = `Stage: ${STAGES[currentStageIndex].name}`;
-                stageProgress = STAGES[currentStageIndex].goal; 
-                updateProgressBar(); 
+                updateStageNameDisplay(); // This will append (Endless)
+                stageProgress = STAGES_DATA[currentStageIndex].goal;
+                updateProgressBar();
             }
         }
 
@@ -694,73 +901,57 @@
             stageCompleteScreen.style.display = 'none';
             currentStageIndex++;
             loadStage(currentStageIndex);
-            isGameRunning = true; 
+            isGameRunning = true;
             gameLoop();
         }
 
         function resizeCanvas() {
             const gameArea = document.getElementById('gameAreaWrapper');
-            const maxWidth = 800; 
-            const maxHeight = 600; 
+            const maxWidth = 800;
+            const maxHeight = 600;
             const aspectRatio = 4 / 3;
-            
-            // Calculate available width for game based on parent, minus some padding perhaps
-            let availableWidth = gameArea.clientWidth * 0.95; // Use 95% of wrapper width
-            if (window.innerWidth < 768) availableWidth = gameArea.clientWidth * 0.9; // Smaller screens, use more width
-
+            let availableWidth = gameArea.clientWidth * 0.95;
+            if (window.innerWidth < 768) availableWidth = gameArea.clientWidth * 0.9;
             let newWidth = Math.min(availableWidth, maxWidth);
             let newHeight = newWidth / aspectRatio;
-
             if (newHeight > maxHeight) {
                 newHeight = maxHeight;
                 newWidth = newHeight * aspectRatio;
             }
-            
-            // Ensure it doesn't exceed window height significantly
             const windowHeightThreshold = window.innerHeight * 0.7;
             if (newHeight > windowHeightThreshold) {
                 newHeight = windowHeightThreshold;
                 newWidth = newHeight * aspectRatio;
             }
-
-
-            canvas.width = newWidth; 
+            canvas.width = newWidth;
             canvas.height = newHeight;
-            gameWidth = canvas.width; 
+            gameWidth = canvas.width;
             gameHeight = canvas.height;
-
-            // Make progress bar and controls responsive to canvas width
             const progressBarContainer = document.getElementById('progressBarContainer');
             const controlsDiv = document.getElementById('controls');
             if (progressBarContainer) progressBarContainer.style.width = `${newWidth}px`;
-            if (controlsDiv) controlsDiv.style.width = `${newWidth}px`;
-
-
-            if (player) { 
+            if (controlsDiv) controlsDiv.style.maxWidth = `${newWidth}px`; // Use maxWidth for controls
+            if (player) {
                 player.x = gameWidth / 4;
-                // If game is running, player's Y might need adjustment if height changed drastically
                 if (isGameRunning) {
                      player.y = Math.max(player.radius, Math.min(player.y, gameHeight - player.radius));
                 } else {
-                    player.y = gameHeight / 2; // Reset to middle if game not running
+                    player.y = gameHeight / 2;
                 }
             }
         }
 
         window.addEventListener('resize', () => {
             resizeCanvas();
-            if(isGameRunning) { 
-                updateProgressBar(); 
-                // Potentially redraw canvas or elements if not in gameLoop
-                // but gameLoop will handle redraw if active
-            } else if (player) { // If game not running (e.g. on start screen)
-                // Clear and redraw player placeholder if needed, or simply update dimensions
+            if(isGameRunning) {
+                updateProgressBar();
+            } else if (player) {
                 ctx.clearRect(0,0, gameWidth, gameHeight);
-                const stage = STAGES[currentStageIndex];
+                const stage = STAGES_DATA[currentStageIndex];
                 ctx.fillStyle = stage.bgColor;
                 ctx.fillRect(0,0, gameWidth, gameHeight);
                 if(startScreen.style.display === 'none' && stageCompleteScreen.style.display === 'none') {
-                    player.draw(); // Redraw player if on canvas but not actively looping
+                    player.draw();
                 }
             }
         });
@@ -775,23 +966,27 @@
 
         startButton.addEventListener('click', initGame);
         nextStageButton.addEventListener('click', advanceToNextStage);
-        restartGameButton.addEventListener('click', fullyResetGame); 
-        
+        restartGameButton.addEventListener('click', fullyResetGame);
+
         musicToggleButton.addEventListener('click', () => {
             musicOn = !musicOn;
-            musicToggleButton.textContent = `Music: ${musicOn ? 'ON' : 'OFF'}`;
+            musicToggleButton.textContent = musicOn ? _('musicTogglePrefix_on') : _('musicTogglePrefix_off');
             console.log("Music toggled:", musicOn ? "ON" : "OFF", "(Music playback not implemented)");
         });
 
         sfxToggleButton.addEventListener('click', () => {
             if (!audioCtx) return;
             sfxOn = !sfxOn;
-            sfxToggleButton.textContent = `SFX: ${sfxOn ? 'ON' : 'OFF'}`;
+            sfxToggleButton.textContent = sfxOn ? _('sfxTogglePrefix_on') : _('sfxTogglePrefix_off');
         });
 
         // Initial setup
-        resizeCanvas(); // Call resize at start to set initial dimensions
-        startScreen.style.display = 'flex';
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLanguage); // Apply initial language for static and game UI texts
+            resizeCanvas(); // Call resize at start to set initial dimensions
+            startScreen.style.display = 'flex'; // Show start screen initially
+            updateControlButtonsText(); // Ensure buttons have correct initial text based on flags and lang
+        });
 
     </script>
 </body>
