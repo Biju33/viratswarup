@@ -25,17 +25,18 @@
 
         .header {
             display: flex;
-            justify-content: center; /* Center the .header-text-content */
+            justify-content: center;
             align-items: center;
-            position: relative;      /* For absolute positioning of the logo */
-            padding: 5px 140px;
-            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+            padding: 15px 140px;      /* MODIFIED: Increased top/bottom padding */
+            border-bottom: 1px solid #7a0000; /* MODIFIED: Darker border */
             background-color: #8b0000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* MODIFIED: Subtle shadow */
         }
 
         .header-logo {
-            position: absolute;      /* Take logo out of flow */
-            left: 20px;
+            position: absolute;
+            left: 30px;              /* MODIFIED: Slightly more inset */
             top: 50%;
             transform: translateY(-50%);
             height: 100px;
@@ -44,26 +45,28 @@
         }
 
         .header-text-content {
-            text-align: center; /* H1/H2 inside are centered */
+            text-align: center;
         }
 
         .header h1 {
             font-size: 42px;
-            letter-spacing: 3.2px;
+            letter-spacing: 4px;    /* MODIFIED: Increased letter spacing */
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 8px;     /* MODIFIED: Adjusted margin */
             color: white;
             margin-top: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* MODIFIED: Added text shadow */
+            font-weight: 600; /* Ensuring boldness */
         }
         .header h2 {
             font-size: 22px;
-            color: white;
+            color: #f5f5f5;         /* MODIFIED: Softer white */
             font-weight: 300;
             margin-top: 0;
             margin-bottom: 0;
+            letter-spacing: 1px;    /* MODIFIED: Added letter spacing */
+            font-style: italic;     /* MODIFIED: Added italic style */
         }
-
-        /* REMOVED .hamburger and .hamburger-line styles as the element is gone */
 
         .mobile-menu {
             position: fixed;
@@ -106,7 +109,7 @@
             background: #8b0000;
             border-top: 1px solid #eee;
             padding: 8px 0;
-            display: none; /* Hidden by default, shown in media query */
+            display: none;
             z-index: 999;
         }
         .bottom-nav ul {
@@ -152,21 +155,21 @@
         }
 
         @media (max-width: 768px) {
-            /* .hamburger { display: block; } REMOVED - No longer needed */
             .desktop-nav { display: none; }
             .bottom-nav { display: flex; justify-content: center; align-items: center; }
 
             .header {
                 justify-content: flex-start;
-                padding: 5px 15px;
+                padding: 10px 15px;       /* MODIFIED: Mobile padding */
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Lighter shadow for mobile */
             }
             .header-logo {
                 position: static;
                 transform: none;
                 left: auto;
-                height: 80px;
-                width: 80px;
-                margin-right: 15px;
+                height: 70px;             /* MODIFIED: Mobile logo size */
+                width: 70px;              /* MODIFIED: Mobile logo size */
+                margin-right: 10px;       /* Adjusted margin */
                 flex-shrink: 0;
             }
             .header-text-content {
@@ -175,10 +178,15 @@
             }
 
             .header h1 {
-                font-size: 30px;
+                font-size: 28px;          /* MODIFIED: Mobile font size */
+                letter-spacing: 2.5px;    /* MODIFIED: Mobile letter spacing */
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* MODIFIED: Mobile text shadow */
+                margin-bottom: 5px;       /* MODIFIED: Mobile margin */
             }
             .header h2 {
-                font-size: 18px;
+                font-size: 16px;          /* MODIFIED: Mobile font size */
+                letter-spacing: 0.5px;    /* MODIFIED: Mobile letter spacing */
+                color: #f0f0f0;           /* MODIFIED: Mobile color */
             }
 
             .user-info #logoutBtn {
@@ -497,8 +505,6 @@
     </style>
 </head>
 <body>
-    <!-- REMOVED the top-right hamburger div -->
-
     <nav class="mobile-menu">
         <a href="index.html"><i class="fas fa-home"></i>Home</a>
         <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
@@ -615,7 +621,6 @@
         postContent: document.getElementById('postContent'),
         postsContainer: document.getElementById('postsContainer'),
         mobileMenu: document.querySelector('.mobile-menu'),
-        // hamburger: document.querySelector('.hamburger'), // REMOVED
         postImageFile: document.getElementById('postImageFile'),
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
@@ -1176,7 +1181,6 @@
     function toggleMenu() {
         if (elements.mobileMenu) {
             elements.mobileMenu.classList.toggle('active');
-            // elements.hamburger.classList.toggle('active'); // REMOVED - No top-right hamburger to toggle
         }
     }
 
@@ -1191,8 +1195,6 @@
             }
         }
     }
-
-    // if (elements.hamburger) { elements.hamburger.addEventListener('click', toggleMenu); } // REMOVED
 
     if (elements.bottomNavMenuBtn) {
         elements.bottomNavMenuBtn.addEventListener('click', (event) => {
@@ -1217,7 +1219,6 @@
     });
     document.addEventListener('click', (e) => {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            // elements.hamburger && !elements.hamburger.contains(e.target) && // REMOVED check for top-right hamburger
             elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) &&
             !elements.mobileMenu.contains(e.target)) {
             toggleMenu();
