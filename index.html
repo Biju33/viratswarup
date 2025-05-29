@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIRAT SWARUP</title>
+    <title>VIRAT SWARUP</title> <!-- This title tag itself is not easily translatable with this method -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -14,7 +14,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Georgia", serif;
+            font-family: "Georgia", serif; /* May need fallback for Devanagari script */
         }
 
         body {
@@ -28,15 +28,15 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            padding: 15px 140px;      /* MODIFIED: Increased top/bottom padding */
-            border-bottom: 1px solid #7a0000; /* MODIFIED: Darker border */
+            padding: 15px 140px;
+            border-bottom: 1px solid #7a0000;
             background-color: #8b0000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* MODIFIED: Subtle shadow */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
 
         .header-logo {
             position: absolute;
-            left: 30px;              /* MODIFIED: Slightly more inset */
+            left: 30px;
             top: 50%;
             transform: translateY(-50%);
             height: 100px;
@@ -50,22 +50,24 @@
 
         .header h1 {
             font-size: 42px;
-            letter-spacing: 4px;    /* MODIFIED: Increased letter spacing */
+            letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 8px;     /* MODIFIED: Adjusted margin */
+            margin-bottom: 8px;
             color: white;
             margin-top: 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* MODIFIED: Added text shadow */
-            font-weight: 600; /* Ensuring boldness */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            font-weight: 600;
+            /* data-translate-key="headerTitle" will be handled by JS if needed, but it's a proper noun */
         }
         .header h2 {
             font-size: 22px;
-            color: #f5f5f5;         /* MODIFIED: Softer white */
+            color: #f5f5f5;
             font-weight: 300;
             margin-top: 0;
             margin-bottom: 0;
-            letter-spacing: 1px;    /* MODIFIED: Added letter spacing */
-            font-style: italic;     /* MODIFIED: Added italic style */
+            letter-spacing: 1px;
+            font-style: italic;
+            data-translate-key="headerSubtitle"
         }
 
         .mobile-menu {
@@ -77,29 +79,45 @@
             background: #8b0000;
             box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
             transition: 0.4s;
-            padding-top: 80px;
+            padding-top: 60px; /* Adjusted for language options */
             z-index: 1000;
+            overflow-y: auto; /* For scrollability if menu gets long */
         }
         .mobile-menu.active {
             right: 0;
         }
-        .mobile-menu a {
+        .mobile-menu a, .mobile-menu .language-select-label {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 18px 30px;
+            padding: 15px 30px; /* Adjusted padding */
             color: #fff !important;
             text-decoration: none;
             border-bottom: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
         }
         .mobile-menu i {
             width: 25px;
             font-size: 20px;
             color: #fff !important;
         }
-        .mobile-menu a:last-child {
+        .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
             border-bottom: none;
         }
+        .language-options {
+            padding-left: 30px; /* Indent language options */
+            display: none; /* Hidden by default */
+            background-color: rgba(0,0,0,0.1);
+        }
+        .language-options a {
+            padding: 12px 30px;
+            font-size: 0.9em;
+        }
+        .language-options a.lang-active {
+            font-weight: bold;
+            background-color: rgba(255,255,255,0.1);
+        }
+
 
         .bottom-nav {
             position: fixed;
@@ -135,6 +153,10 @@
         .bottom-nav a:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+        .bottom-nav a span { /* To target the text for translation */
+            /* data-translate-key will be applied to span */
+        }
+
 
         .desktop-nav {
             margin: 45px 0;
@@ -152,7 +174,12 @@
             align-items: center;
             gap: 8px;
             font-size: 18px;
+            /* data-translate-key will be on the text part of the link if not just icon */
         }
+        .desktop-nav a span { /* If text is in a span */
+            /* data-translate-key will be applied here */
+        }
+
 
         @media (max-width: 768px) {
             .desktop-nav { display: none; }
@@ -160,16 +187,16 @@
 
             .header {
                 justify-content: flex-start;
-                padding: 10px 15px;       /* MODIFIED: Mobile padding */
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Lighter shadow for mobile */
+                padding: 10px 15px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             }
             .header-logo {
                 position: static;
                 transform: none;
                 left: auto;
-                height: 70px;             /* MODIFIED: Mobile logo size */
-                width: 70px;              /* MODIFIED: Mobile logo size */
-                margin-right: 10px;       /* Adjusted margin */
+                height: 70px;
+                width: 70px;
+                margin-right: 10px;
                 flex-shrink: 0;
             }
             .header-text-content {
@@ -178,15 +205,15 @@
             }
 
             .header h1 {
-                font-size: 28px;          /* MODIFIED: Mobile font size */
-                letter-spacing: 2.5px;    /* MODIFIED: Mobile letter spacing */
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* MODIFIED: Mobile text shadow */
-                margin-bottom: 5px;       /* MODIFIED: Mobile margin */
+                font-size: 28px;
+                letter-spacing: 2.5px;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                margin-bottom: 5px;
             }
             .header h2 {
-                font-size: 16px;          /* MODIFIED: Mobile font size */
-                letter-spacing: 0.5px;    /* MODIFIED: Mobile letter spacing */
-                color: #f0f0f0;           /* MODIFIED: Mobile color */
+                font-size: 16px;
+                letter-spacing: 0.5px;
+                color: #f0f0f0;
             }
 
             .user-info #logoutBtn {
@@ -207,22 +234,11 @@
             text-align: center;
             margin-top: 50px;
         }
-        .login-section h1 { color: #333; margin-bottom: 20px; }
-        .login-btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            font-size: 16px;
+        .login-section h1 { color: #333; margin-bottom: 20px; data-translate-key="welcomeTitle"; }
+        .login-section p { data-translate-key="signInToConnect"; }
+        .login-btn span { /* Target text part of button */
+            /* data-translate-key will be applied here */
         }
-        .google-btn { background: #4285F4; color: white; border: none; }
-        .facebook-btn { background: #3b5998; color: white; border: none; }
-        .login-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .login-btn i { margin-right: 10px; font-size: 18px; }
 
         .app-section { display: none; }
         .user-info {
@@ -250,6 +266,7 @@
             cursor: pointer;
             font-size: 14px;
             margin-top: 5px;
+            data-translate-key="logout"
         }
         #logoutBtn:hover { background: #6a0000; }
 
@@ -260,36 +277,12 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
-        .post-form h3 { margin-bottom: 15px; color: #333; }
-        .post-form textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: vertical;
-            min-height: 80px;
-            margin-bottom: 10px;
-            font-family: inherit;
-            font-size: 16px;
-        }
-        .post-form button#postBtn {
-            background: #8b0000;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .post-form button#postBtn:hover { background: #6a0000; }
-        .post-form button#postBtn:disabled,
-        .comment-form-actual button.comment-submit-btn:disabled,
-        .reply-form-actual button.reply-submit-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
+        .post-form h3 { margin-bottom: 15px; color: #333; data-translate-key="createPostTitle"; }
+        /* postContent placeholder handled by JS */
+        /* postImageFile label text handled by JS if needed, or give span inside label a key */
+        .post-form label[for="postImageFile"] span { data-translate-key="addImageOptional"; }
+        /* postBtn text handled by JS */
+
 
         .posts-container h3 {
             margin-bottom: 20px;
@@ -297,7 +290,9 @@
             font-size: 24px;
             border-bottom: 2px solid #8b0000;
             padding-bottom: 10px;
+            data-translate-key="feedTitle";
         }
+        /* Dynamic messages like "No posts yet..." handled in JS loadPosts */
         .post {
             background: white;
             padding: 15px;
@@ -355,6 +350,10 @@
         .post-actions button i { font-size: 18px; margin-right: 8px; color: #8b0000; }
         .post-actions button:hover i, .post-actions button:hover span { color: #6a0000; }
         .like-btn.liked i { color: red !important; }
+        .post-actions button span.like-text { /* data-translate-key="likes" - handled in createPostElement */ }
+        .post-actions button span.comment-text { /* data-translate-key="comments" - handled in createPostElement */ }
+        .post-actions button.delete-post-btn span { data-translate-key="deleteAction"; }
+
 
         .comments-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
         .comments-list .comment {
@@ -364,6 +363,13 @@
             border-radius: 5px;
             font-size: 14px;
         }
+        /* commentText placeholder handled by JS */
+        /* comment submit button text handled by JS */
+        .comment-actions button.reply-to-comment-btn span { data-translate-key="replyAction"; }
+        /* reply text placeholder handled by JS */
+        /* reply submit button text handled by JS */
+
+
         .comment-header { display: flex; align-items: center; margin-bottom: 5px; }
         .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
         .comment-header strong { font-size: 13px; color: #333; }
@@ -502,56 +508,74 @@
             font-weight: bold;
         }
         .reply-form-actual button.reply-submit-btn:hover { background: #4cae4c; }
+
+        .post-form button#postBtn:disabled,
+        .comment-form-actual button.comment-submit-btn:disabled,
+        .reply-form-actual button.reply-submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
     <nav class="mobile-menu">
-        <a href="index.html"><i class="fas fa-home"></i>Home</a>
-        <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
-        <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
-        <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-        <a href="#post-form-container"><i class="fas fa-pen-to-square"></i>Post</a>
-        <a href="#loginSection" id="mobileLoginLink"><i class="fas fa-sign-in-alt"></i>Login</a>
-        <a href="#" id="mobileLogoutLink" style="display: none;"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+        <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+        <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+        <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+        <a href="#post-form-container" class="nav-post-link"><i class="fas fa-pen-to-square"></i><span data-translate-key="post">Post</span></a>
+
+        <div class="language-select-label">
+            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
+        </div>
+        <div class="language-options">
+            <a href="#" data-lang="en">English</a>
+            <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+            <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+        </div>
+
+        <a href="#loginSection" id="mobileLoginLink"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+        <a href="#" id="mobileLogoutLink" style="display: none;"><i class="fas fa-sign-out-alt"></i><span data-translate-key="logout">Logout</span></a>
     </nav>
 
     <header class="header">
       <img src="images/logo.png" alt="Virat Swarup Logo" class="header-logo">
       <div class="header-text-content">
         <h1>VIRAT SWARUP</h1>
-        <h2>The Supreme Divine of Every Faith</h2>
+        <h2 data-translate-key="headerSubtitle">The Supreme Divine of Every Faith</h2>
       </div>
     </header>
 
     <nav class="desktop-nav">
         <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-            <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-            <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-            <li><a href="#post-form-container"><i class="fas fa-pen-to-square"></i>Post</a></li>
+            <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+            <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+            <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+            <li><a href="#post-form-container" class="nav-post-link"><i class="fas fa-pen-to-square"></i><span data-translate-key="post">Post</span></a></li>
         </ul>
     </nav>
 
     <nav class="bottom-nav">
         <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
-            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span>Agnosia</span></a></li>
-            <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span>Enigma</span></a></li>
-            <li><a href="emulate.html"><i class="fas fa-copy"></i><span>Emulate</span></a></li>
-            <li><a href="#" id="bottomNavMenuBtn"><i class="fas fa-bars"></i><span>Menu</span></a></li>
+            <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+            <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+            <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+            <li><a href="#" id="bottomNavMenuBtn"><i class="fas fa-bars"></i><span data-translate-key="menu">Menu</span></a></li>
         </ul>
     </nav>
 
     <div class="container">
         <div class="login-section" id="loginSection">
-            <h1>Welcome</h1>
-            <p style="margin-bottom: 20px; color: #555;">Sign in to share and connect.</p>
+            <h1 data-translate-key="welcomeTitle">Welcome</h1>
+            <p style="margin-bottom: 20px; color: #555;" data-translate-key="signInToConnect">Sign in to share and connect.</p>
             <button class="login-btn google-btn" id="googleLoginBtn">
-                <i class="fab fa-google"></i> Sign in with Google
+                <i class="fab fa-google"></i> <span data-translate-key="signInWithGoogle">Sign in with Google</span>
             </button>
             <button class="login-btn facebook-btn" id="facebookLoginBtn">
-                <i class="fab fa-facebook-f"></i> Sign in with Facebook
+                <i class="fab fa-facebook-f"></i> <span data-translate-key="signInWithFacebook">Sign in with Facebook</span>
             </button>
         </div>
 
@@ -560,16 +584,16 @@
                 <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
-                    <button id="logoutBtn">Logout</button>
+                    <button id="logoutBtn" data-translate-key="logout">Logout</button>
                 </div>
             </div>
 
             <div class="post-form" id="post-form-container">
-                <h3>Create Post</h3>
-                <textarea id="postContent" placeholder="What's on your mind, Virat Bhakt?"></textarea>
+                <h3 data-translate-key="createPostTitle">Create Post</h3>
+                <textarea id="postContent" data-translate-key-placeholder="postPlaceholder"></textarea>
 
                 <label for="postImageFile" style="cursor: pointer; display: inline-block; margin-bottom: 10px; color: #555; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
-                    <i class="fas fa-image"></i> Add Image (Optional)
+                    <i class="fas fa-image"></i> <span data-translate-key="addImageOptional">Add Image (Optional)</span>
                 </label>
                 <input type="file" id="postImageFile" accept="image/*" style="display: none;">
                 <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee;">
@@ -577,11 +601,11 @@
                     <p id="uploadProgressText" style="font-size: 0.9em; text-align: center;"></p>
                 </div>
 
-                <button id="postBtn">Post</button>
+                <button id="postBtn" data-translate-key="postButton">Post</button>
             </div>
 
             <div class="posts-container" id="postsContainer">
-                <h3>Feed</h3>
+                <h3 data-translate-key="feedTitle">Feed</h3>
                 <!-- Posts will be loaded here -->
             </div>
         </div>
@@ -609,6 +633,196 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // --- START TRANSLATION DATA & LOGIC ---
+    const translations = {
+        en: {
+            headerSubtitle: "The Supreme Divine of Every Faith",
+            home: "Home",
+            agnosia: "Agnosia",
+            enigma: "Enigma",
+            emulate: "Emulate",
+            post: "Post",
+            language: "Language",
+            login: "Login",
+            logout: "Logout",
+            menu: "Menu",
+            welcomeTitle: "Welcome",
+            signInToConnect: "Sign in to share and connect.",
+            signInWithGoogle: "Sign in with Google",
+            signInWithFacebook: "Sign in with Facebook",
+            createPostTitle: "Create Post",
+            postPlaceholder: "What's on your mind, Virat Bhakt?",
+            addImageOptional: "Add Image (Optional)",
+            postButton: "Post",
+            postingButton: "Posting...",
+            feedTitle: "Feed",
+            noPosts: "No posts yet. Be the first to share!",
+            errorLoadingPosts: "Error loading posts.",
+            loginToSeeFeed: "Please log in to see the feed.",
+            likes: "Likes",
+            comments: "Comments",
+            deleteAction: "Delete",
+            replyAction: "Reply",
+            addCommentPlaceholder: "Add a comment...",
+            commentPostButton: "Post", // For comment form
+            noCommentsYet: "No comments yet.",
+            writeReplyPlaceholder: "Write a reply...",
+            replyPostButton: "Post Reply",
+            uploadingImage: "Uploading image...",
+            imageUploaded: "Image uploaded!",
+            uploadFailed: "Upload failed.",
+            deletePostConfirm: "Are you sure you want to delete this post?",
+            postContentRequired: "Post content or an image is required!",
+            loginRequiredToPost: "You must be logged in to post!",
+            loginRequiredToComment: "Please log in to comment.",
+            commentContentRequired: "Comment text or an image is required.",
+            loginRequiredToReply: "Please log in to reply.",
+            replyTextRequired: "Reply text cannot be empty.",
+            loginRequiredToLike: "Please log in to like posts."
+        },
+        ne: {
+            headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा",
+            home: "गृहपृष्ठ",
+            agnosia: "अज्ञानता",
+            enigma: "पहेली",
+            emulate: "अनुकरण",
+            post: "पोस्ट",
+            language: "भाषा",
+            login: "लग - इन",
+            logout: "लग - आउट",
+            menu: "मेनु",
+            welcomeTitle: "स्वागत छ",
+            signInToConnect: "साझा गर्न र जडान गर्न साइन इन गर्नुहोस्।",
+            signInWithGoogle: "Google बाट साइन इन गर्नुहोस्",
+            signInWithFacebook: "Facebook बाट साइन इन गर्नुहोस्",
+            createPostTitle: "पोस्ट सिर्जना गर्नुहोस्",
+            postPlaceholder: "मनमा के छ, विराट भक्त?",
+            addImageOptional: "फोटो थप्नुहोस् (ऐच्छिक)",
+            postButton: "पोस्ट गर्नुहोस्",
+            postingButton: "पोस्ट गर्दै...",
+            feedTitle: "फिड",
+            noPosts: "अहिलेसम्म कुनै पोस्ट छैन। साझा गर्ने पहिलो व्यक्ति बन्नुहोस्!",
+            errorLoadingPosts: "पोस्टहरू लोड गर्दा त्रुटि भयो।",
+            loginToSeeFeed: "फिड हेर्न कृपया लग इन गर्नुहोस्।",
+            likes: "लाइकहरू",
+            comments: "टिप्पणीहरू",
+            deleteAction: "मेटाउनुहोस्",
+            replyAction: "जवाफ दिनुहोस्",
+            addCommentPlaceholder: "टिप्पणी थप्नुहोस्...",
+            commentPostButton: "पोस्ट",
+            noCommentsYet: "अहिलेसम्म कुनै टिप्पणी छैन।",
+            writeReplyPlaceholder: "जवाफ लेख्नुहोस्...",
+            replyPostButton: "जवाफ पोस्ट गर्नुहोस्",
+            uploadingImage: "फोटो अपलोड हुँदैछ...",
+            imageUploaded: "फोटो अपलोड भयो!",
+            uploadFailed: "अपलोड असफल भयो।",
+            deletePostConfirm: "के तपाई साँच्चै यो पोस्ट मेटाउन चाहनुहुन्छ?",
+            postContentRequired: "पोस्ट सामग्री वा फोटो आवश्यक छ!",
+            loginRequiredToPost: "पोस्ट गर्न तपाईं लग इन हुनुपर्छ!",
+            loginRequiredToComment: "कृपया टिप्पणी गर्न लग इन गर्नुहोस्।",
+            commentContentRequired: "टिप्पणी पाठ वा फोटो आवश्यक छ।",
+            loginRequiredToReply: "कृपया जवाफ दिन लग इन गर्नुहोस्।",
+            replyTextRequired: "जवाफ खाली हुन सक्दैन।",
+            loginRequiredToLike: "पोस्ट लाइक गर्न कृपया लग इन गर्नुहोस्।"
+        },
+        hi: {
+            headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा",
+            home: "होम",
+            agnosia: "अज्ञान",
+            enigma: "पहेली",
+            emulate: "अनुकरण",
+            post: "पोस्ट",
+            language: "भाषा",
+            login: "लॉग इन करें",
+            logout: "लॉग आउट करें",
+            menu: "मेन्यू",
+            welcomeTitle: "स्वागत है",
+            signInToConnect: "साझा करने और जुड़ने के लिए साइन इन करें।",
+            signInWithGoogle: "Google से साइन इन करें",
+            signInWithFacebook: "Facebook से साइन इन करें",
+            createPostTitle: "पोस्ट बनाएं",
+            postPlaceholder: "आपके मन में क्या है, विराट भक्त?",
+            addImageOptional: "छवि जोड़ें (वैकल्पिक)",
+            postButton: "पोस्ट करें",
+            postingButton: "पोस्ट कर रहा है...",
+            feedTitle: "फ़ीड",
+            noPosts: "अभी तक कोई पोस्ट नहीं है। साझा करने वाले पहले व्यक्ति बनें!",
+            errorLoadingPosts: "पोस्ट लोड करने में त्रुटि।",
+            loginToSeeFeed: "फ़ीड देखने के लिए कृपया लॉग इन करें।",
+            likes: "लाइक",
+            comments: "टिप्पणियाँ",
+            deleteAction: "हटाएं",
+            replyAction: "उत्तर दें",
+            addCommentPlaceholder: "एक टिप्पणी जोड़ें...",
+            commentPostButton: "पोस्ट",
+            noCommentsYet: "अभी तक कोई टिप्पणी नहीं है।",
+            writeReplyPlaceholder: "एक उत्तर लिखें...",
+            replyPostButton: "उत्तर पोस्ट करें",
+            uploadingImage: "छवि अपलोड हो रही है...",
+            imageUploaded: "छवि अपलोड हो गई!",
+            uploadFailed: "अपलोड विफल रहा।",
+            deletePostConfirm: "क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?",
+            postContentRequired: "पोस्ट सामग्री या एक छवि आवश्यक है!",
+            loginRequiredToPost: "पोस्ट करने के लिए आपको लॉग इन होना चाहिए!",
+            loginRequiredToComment: "टिप्पणी करने के लिए कृपया लॉग इन करें।",
+            commentContentRequired: "टिप्पणी पाठ या एक छवि आवश्यक है।",
+            loginRequiredToReply: "उत्तर देने के लिए कृपया लॉग इन करें।",
+            replyTextRequired: "उत्तर पाठ खाली नहीं हो सकता।",
+            loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।"
+        }
+    };
+
+    let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
+
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('selectedLanguage', lang);
+        applyTranslations();
+        // Update active class for language options
+        document.querySelectorAll('.language-options a').forEach(a => {
+            a.classList.remove('lang-active');
+            if (a.dataset.lang === lang) {
+                a.classList.add('lang-active');
+            }
+        });
+        // Reload posts to apply translations to dynamic parts like "Likes", "Comments" text
+        if (auth.currentUser) { // Only if user is logged in and posts are visible
+            loadPosts();
+        } else { // If user is logged out, still apply translations to static messages like "Please log in to see feed"
+            const loginMessageKey = 'loginToSeeFeed';
+            const translatedLoginMessage = translations[currentLanguage]?.[loginMessageKey] || translations.en[loginMessageKey];
+             if(elements.postsContainer && elements.appSection.style.display === 'none') {
+                elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${translations[currentLanguage]?.feedTitle || translations.en.feedTitle}</h3><p>${translatedLoginMessage}</p>`;
+            }
+        }
+    }
+
+    function _(key, fallbackLang = 'en') { // Helper function to get translation
+        return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+    }
+
+    function applyTranslations() {
+        document.querySelectorAll('[data-translate-key]').forEach(element => {
+            const key = element.dataset.translateKey;
+            element.textContent = _(key);
+        });
+        document.querySelectorAll('[data-translate-key-placeholder]').forEach(element => {
+            const key = element.dataset.translateKeyPlaceholder;
+            element.placeholder = _(key);
+        });
+         // For buttons that might have their text changed programmatically (like Post button)
+        if (elements.postBtn && !elements.postBtn.disabled) {
+            elements.postBtn.textContent = _('postButton');
+        }
+        // Translate titles set by JS that don't have data-translate-key
+        if(document.title && !document.head.querySelector('title[data-translate-key]')) {
+             // Title tag is tricky, better to set it once or handle server-side for SEO
+        }
+
+    }
+    // --- END TRANSLATION LOGIC ---
+
+
     const elements = {
         loginSection: document.getElementById('loginSection'),
         appSection: document.getElementById('appSection'),
@@ -627,8 +841,32 @@
         uploadProgressText: document.getElementById('uploadProgressText'),
         mobileLoginLink: document.getElementById('mobileLoginLink'),
         mobileLogoutLink: document.getElementById('mobileLogoutLink'),
-        bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn')
+        bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn'),
+        languageSelectLabel: document.querySelector('.language-select-label'),
+        languageOptionsDiv: document.querySelector('.language-options')
     };
+
+    if (elements.languageSelectLabel) {
+        elements.languageSelectLabel.addEventListener('click', () => {
+            const optionsDiv = elements.languageOptionsDiv;
+            if (optionsDiv) {
+                optionsDiv.style.display = optionsDiv.style.display === 'none' || optionsDiv.style.display === '' ? 'block' : 'none';
+            }
+        });
+    }
+
+    document.querySelectorAll('.language-options a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = e.currentTarget.dataset.lang;
+            setLanguage(lang);
+            if (elements.languageOptionsDiv) elements.languageOptionsDiv.style.display = 'none'; // Hide options after selection
+            if (elements.mobileMenu.classList.contains('active')) { // Optionally close menu
+                 // toggleMenu(); // Uncomment to close menu after language selection
+            }
+        });
+    });
+
 
     if (elements.postImageFile) {
         elements.postImageFile.addEventListener('change', (e) => {
@@ -661,11 +899,13 @@
             if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none';
             if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
 
-            loadPosts();
+            loadPosts(); // This will now use translated strings
         } else {
             if(elements.loginSection) elements.loginSection.style.display = 'block';
             if(elements.appSection) elements.appSection.style.display = 'none';
-            if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
+            if(elements.postsContainer) {
+                 elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_('feedTitle')}</h3><p>${_('loginToSeeFeed')}</p>`;
+            }
 
             if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex';
             if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
@@ -675,6 +915,7 @@
                 postsUnsubscribe = null;
             }
         }
+        applyTranslations(); // Apply translations after auth state change
     });
 
     async function handleAuth(provider) {
@@ -685,13 +926,13 @@
             if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
                 return;
             }
-            alert(`Login Error: ${error.message}`);
+            alert(_('signInError', 'en') + `: ${error.message}`); // Basic translation for generic error
         }
     }
 
     if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
     if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires additional developer setup. Please use Google Sign-In.");
+        alert("Facebook login requires additional developer setup. Please use Google Sign-In."); // Kept simple for now
     });
 
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
@@ -713,16 +954,16 @@
             const currentUser = auth.currentUser;
 
             if (!content && !imageFile) {
-                alert("Post content or an image is required!");
+                alert(_('postContentRequired'));
                 return;
             }
             if (!currentUser) {
-                alert("You must be logged in to post!");
+                alert(_('loginRequiredToPost'));
                 return;
             }
 
             elements.postBtn.disabled = true;
-            elements.postBtn.textContent = "Posting...";
+            elements.postBtn.textContent = _('postingButton');
             if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
 
@@ -732,7 +973,7 @@
 
                 if (imageFile) {
                     if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
-                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Uploading image...';
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('uploadingImage');
                     const formData = new FormData();
                     formData.append('file', imageFile);
                     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -744,7 +985,7 @@
                     const data = await response.json();
                     imageUrl = data.secure_url;
                     imagePublicId = data.public_id;
-                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = 'Image uploaded!';
+                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('imageUploaded');
                 }
 
                 const postData = {
@@ -771,18 +1012,18 @@
                 }
             } catch (error) {
                 console.error("Post Error:", error);
-                alert(`Post Error: ${error.message}`);
+                alert(_('postError', 'en') + `: ${error.message}`);
                 if(elements.uploadProgressText && elements.uploadProgressContainer && elements.uploadProgressContainer.style.display === 'block') {
-                     elements.uploadProgressText.textContent = `Upload failed.`;
+                     elements.uploadProgressText.textContent = _('uploadFailed');
                 }
             } finally {
                 if(elements.postBtn) {
                     elements.postBtn.disabled = false;
-                    elements.postBtn.textContent = "Post";
+                    elements.postBtn.textContent = _('postButton');
                 }
                 setTimeout(() => {
                     if(elements.uploadProgressContainer && elements.uploadProgressText) {
-                        if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
+                        if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) { // Check for generic fail
                             elements.uploadProgressContainer.style.display = 'none';
                             elements.uploadProgressText.textContent = '';
                         }
@@ -795,13 +1036,29 @@
     let postsUnsubscribe = null;
     function loadPosts() {
         if (postsUnsubscribe) postsUnsubscribe();
+        const feedTitleElement = elements.postsContainer.querySelector('h3') || document.createElement('h3');
+        feedTitleElement.setAttribute('data-translate-key', 'feedTitle');
+        feedTitleElement.textContent = _('feedTitle');
+
+
         postsUnsubscribe = db.collection('posts')
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3>';
+                  // Clear only posts, keep the title
+                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .no-posts-message, .error-loading-message');
+                  existingPosts.forEach(el => el.remove());
+
+                  if (!elements.postsContainer.querySelector('h3')) { // Ensure title is there
+                     elements.postsContainer.prepend(feedTitleElement);
+                  }
+
+
                   if (snapshot.empty) {
-                      elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
+                      const p = document.createElement('p');
+                      p.className = 'no-posts-message';
+                      p.textContent = _('noPosts');
+                      elements.postsContainer.appendChild(p);
                       return;
                   }
                   snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
@@ -809,7 +1066,15 @@
           }, error => {
               console.error("Error loading posts: ", error);
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Error loading posts.</p>';
+                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .no-posts-message, .error-loading-message');
+                  existingPosts.forEach(el => el.remove());
+                  if (!elements.postsContainer.querySelector('h3')) {
+                     elements.postsContainer.prepend(feedTitleElement);
+                  }
+                  const p = document.createElement('p');
+                  p.className = 'error-loading-message';
+                  p.textContent = _('errorLoadingPosts');
+                  elements.postsContainer.appendChild(p);
               }
           });
     }
@@ -822,8 +1087,8 @@
         postDiv.setAttribute('data-post-id', postId);
 
         const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
-                                ? post.timestamp.toDate().toLocaleString()
-                                : (post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Recently');
+                                ? post.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0]) // Use language for date formatting
+                                : (post.timestamp ? new Date(post.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
 
         let contentHTML = '';
         if (post.content) {
@@ -842,26 +1107,26 @@
             <div class="post-actions">
                 <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
                     <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
-                    <span>${post.likes ? post.likes.length : 0} Likes</span>
+                    <span class="like-text">${post.likes ? post.likes.length : 0} ${_('likes')}</span>
                 </button>
                 <button class="comment-toggle-btn" data-post-id="${postId}">
                     <i class="far fa-comment"></i>
-                    <span>${post.comments ? post.comments.length : 0} Comments</span>
+                    <span class="comment-text">${post.comments ? post.comments.length : 0} ${_('comments')}</span>
                 </button>
                 ${currentUser && post.userId === currentUser.uid ?
                     `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}" style="margin-left: auto; color: #cc0000;">
-                        <i class="fas fa-trash"></i> Delete
+                        <i class="fas fa-trash"></i> <span data-translate-key="deleteAction">${_('deleteAction')}</span>
                      </button>` : ''}
             </div>
             <div class="comments-area" id="comments-area-${postId}" style="display: none;">
                 <div class="comments-list" id="comments-list-${postId}"></div>
                 <form class="comment-form-actual" data-post-id="${postId}">
-                    <input type="text" name="commentText" class="comment-text-input" placeholder="Add a comment..." autocomplete="off">
-                    <label class="comment-image-upload-label" title="Add image to comment">
+                    <input type="text" name="commentText" class="comment-text-input" placeholder="${_('addCommentPlaceholder')}" autocomplete="off">
+                    <label class="comment-image-upload-label" title="${_('addImageOptional')}">
                         <i class="fas fa-paperclip"></i>
                         <input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;">
                     </label>
-                    <button type="submit" class="comment-submit-btn">Post</button>
+                    <button type="submit" class="comment-submit-btn">${_('commentPostButton')}</button>
                 </form>
                 <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;">
                 <div class="comment-upload-progress" style="display: none;"></div>
@@ -897,7 +1162,7 @@
                 });
                 sortedComments.forEach(comment => renderComment(comment, commentsList, postId));
             } else {
-                commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
+                commentsList.innerHTML = `<p style="font-size:0.9em; color:#777; padding:5px 0;">${_('noCommentsYet')}</p>`;
             }
         }
 
@@ -913,15 +1178,15 @@
 
     async function handleDeletePost(postId, imageUrl, imagePublicId) {
         const currentUser = auth.currentUser;
-        if (!currentUser) { alert("You must be logged in."); return; }
-        if (!confirm("Are you sure you want to delete this post?")) return;
+        if (!currentUser) { alert(_('loginRequiredToPost')); return; } // Re-using a similar message
+        if (!confirm(_('deletePostConfirm'))) return;
         const postRef = db.collection('posts').doc(postId);
         try {
             const doc = await postRef.get();
             if (doc.exists && doc.data().userId === currentUser.uid) {
                 await postRef.delete();
                 if (imageUrl) console.warn(`Image at ${escapeHTML(imageUrl)} (public_id: ${escapeHTML(imagePublicId) || 'N/A'}) needs server-side deletion.`);
-            } else { alert("Permission denied or post not found."); }
+            } else { alert("Permission denied or post not found."); } // Keep specific errors in English for now
         } catch (error) {
             console.error("Error deleting post:", error);
             alert("Failed to delete post: " + error.message);
@@ -931,7 +1196,7 @@
     async function handleCommentSubmit(event, postId) {
         event.preventDefault();
         const currentUser = auth.currentUser;
-        if (!currentUser) { alert("Please log in to comment."); return; }
+        if (!currentUser) { alert(_('loginRequiredToComment')); return; }
 
         const form = event.target;
         const commentTextInput = form.querySelector('.comment-text-input');
@@ -943,10 +1208,10 @@
         const commentText = commentTextInput ? commentTextInput.value.trim() : "";
         const imageFile = commentImageInput ? commentImageInput.files[0] : null;
 
-        if (!commentText && !imageFile) { alert("Comment text or an image is required."); return; }
+        if (!commentText && !imageFile) { alert(_('commentContentRequired')); return; }
 
         const submitButton = form.querySelector('.comment-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Posting..."; }
+        if (submitButton) { submitButton.disabled = true; submitButton.textContent = _('postingButton'); }
         if(commentUploadProgress) { commentUploadProgress.textContent = ''; commentUploadProgress.style.display = 'none';}
 
         let commentImageUrl = null;
@@ -954,7 +1219,7 @@
 
         try {
             if (imageFile) {
-                if(commentUploadProgress) { commentUploadProgress.textContent = 'Uploading image...'; commentUploadProgress.style.display = 'block'; }
+                if(commentUploadProgress) { commentUploadProgress.textContent = _('uploadingImage'); commentUploadProgress.style.display = 'block'; }
                 const formData = new FormData();
                 formData.append('file', imageFile);
                 formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -966,7 +1231,7 @@
                 const data = await response.json();
                 commentImageUrl = data.secure_url;
                 commentImagePublicId = data.public_id;
-                if(commentUploadProgress) commentUploadProgress.textContent = 'Image uploaded!';
+                if(commentUploadProgress) commentUploadProgress.textContent = _('imageUploaded');
             }
 
             const commentId = db.collection('posts').doc().id;
@@ -995,10 +1260,10 @@
             console.error("Error adding comment:", error);
             alert("Failed to add comment: " + error.message);
             if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
-                commentUploadProgress.textContent = 'Upload failed.';
+                commentUploadProgress.textContent = _('uploadFailed');
             }
         } finally {
-            if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Post"; }
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = _('commentPostButton'); }
             setTimeout(() => {
                 if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
                     if (commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
@@ -1025,16 +1290,16 @@
     async function handleReplySubmit(event, postId, parentCommentId) {
         event.preventDefault();
         const currentUser = auth.currentUser;
-        if (!currentUser) { alert("Please log in to reply."); return; }
+        if (!currentUser) { alert(_('loginRequiredToReply')); return; }
 
         const form = event.target;
         const replyTextInput = form.querySelector('.reply-text-input');
         const replyText = replyTextInput ? replyTextInput.value.trim() : "";
 
-        if (!replyText) { alert("Reply text cannot be empty."); return; }
+        if (!replyText) { alert(_('replyTextRequired')); return; }
 
         const submitButton = form.querySelector('.reply-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Posting...";}
+        if (submitButton) { submitButton.disabled = true; submitButton.textContent = _('postingButton');}
 
         const postRef = db.collection('posts').doc(postId);
         try {
@@ -1061,12 +1326,12 @@
                 transaction.update(postRef, { comments: updatedComments });
             });
             if (replyTextInput) replyTextInput.value = '';
-            toggleReplyForm(parentCommentId);
+            toggleReplyForm(parentCommentId); // This might need to re-render if the form is closed
         } catch (error) {
             console.error("Error adding reply:", error);
             alert("Failed to add reply: " + error.message);
         } finally {
-            if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Post Reply";}
+            if (submitButton) { submitButton.disabled = false; submitButton.textContent = _('replyPostButton');}
         }
     }
 
@@ -1075,8 +1340,8 @@
         replyDiv.className = 'comment-reply';
 
         const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
-                                ? reply.timestamp.toDate().toLocaleString()
-                                : (reply.timestamp ? new Date(reply.timestamp).toLocaleString() : 'Recently');
+                                ? reply.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0])
+                                : (reply.timestamp ? new Date(reply.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
 
         let replyContentHTML = '';
         if (reply.text) {
@@ -1098,10 +1363,10 @@
         commentDiv.setAttribute('data-comment-id', comment.id);
 
         const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
-                                ? comment.timestamp.toDate().toLocaleString()
-                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
+                                ? comment.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0])
+                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
 
-        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
+        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]'); // Might need a class for easier targeting
         if(noCommentP) noCommentP.remove();
 
         let commentContentHTML = '';
@@ -1117,14 +1382,14 @@
             <div class="comment-content">${commentContentHTML || '<p> </p>'}</div>
             <div class="comment-actions">
                 <button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}">
-                    <i class="fas fa-reply"></i> Reply
+                    <i class="fas fa-reply"></i> <span data-translate-key="replyAction">${_('replyAction')}</span>
                 </button>
             </div>
             <div class="replies-list" id="replies-list-${comment.id}"></div>
             <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
                 <form class="reply-form-actual" data-post-id="${postId}" data-parent-comment-id="${comment.id}">
-                    <input type="text" name="replyText" class="reply-text-input" placeholder="Write a reply..." autocomplete="off">
-                    <button type="submit" class="reply-submit-btn">Post Reply</button>
+                    <input type="text" name="replyText" class="reply-text-input" placeholder="${_('writeReplyPlaceholder')}" autocomplete="off">
+                    <button type="submit" class="reply-submit-btn">${_('replyPostButton')}</button>
                 </form>
             </div>`;
         commentsListElement.appendChild(commentDiv);
@@ -1147,7 +1412,7 @@
 
     async function handleLike(postId) {
         const currentUser = auth.currentUser;
-        if (!currentUser) { alert("Please log in to like posts."); return; }
+        if (!currentUser) { alert(_('loginRequiredToLike')); return; }
         const postRef = db.collection('posts').doc(postId);
         try {
             await db.runTransaction(async (transaction) => {
@@ -1185,9 +1450,19 @@
     }
 
     function closeMenuAndScroll(event) {
-        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) toggleMenu();
-        const targetId = event.currentTarget.getAttribute('href');
-        if (targetId && targetId.startsWith('#') && targetId.length > 1) {
+        const link = event.currentTarget;
+        const isLanguageOption = link.closest('.language-options');
+
+        if (!isLanguageOption && elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
+             // Don't close menu if a language option itself is clicked, allow its own handler.
+             // Only close if it's a main navigation link.
+            if (!link.closest('.language-select-label') && !link.dataset.lang) {
+                 toggleMenu();
+            }
+        }
+
+        const targetId = link.getAttribute('href');
+        if (targetId && targetId.startsWith('#') && targetId.length > 1 && link.classList.contains('nav-post-link')) { // only for specific scroll links
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 event.preventDefault();
@@ -1196,6 +1471,7 @@
         }
     }
 
+
     if (elements.bottomNavMenuBtn) {
         elements.bottomNavMenuBtn.addEventListener('click', (event) => {
             event.preventDefault();
@@ -1203,24 +1479,28 @@
         });
     }
 
-    document.querySelectorAll('.mobile-menu a').forEach(link => {
+    document.querySelectorAll('.mobile-menu a:not(.language-options a)').forEach(link => { // Exclude language options from this generic handler
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
-            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink') {
-                closeMenuAndScroll(event);
+            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink' && !link.closest('.language-select-label')) {
+                 // Only close if it's a direct scroll link within main menu items
+                if(link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink') {
+                    closeMenuAndScroll(event);
+                }
             } else if (link.id === 'mobileLogoutLink') {
                 // This is handled by its own dedicated event listener
-            } else {
+            } else if (!link.closest('.language-select-label')) { // Standard page navigation
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
                     toggleMenu();
                 }
             }
         });
     });
+
     document.addEventListener('click', (e) => {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
             elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) &&
-            !elements.mobileMenu.contains(e.target)) {
+            !elements.mobileMenu.contains(e.target)) { // Ensure click is not on menu itself or its toggle button
             toggleMenu();
         }
     });
@@ -1232,6 +1512,12 @@
         div.appendChild(document.createTextNode(s));
         return div.innerHTML;
     }
+
+    // Initial setup
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLanguage); // Apply initial language
+    });
+
     </script>
 </body>
 </html>
