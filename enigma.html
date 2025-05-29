@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> <!-- Default to English, JS will handle actual language -->
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +15,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif;
+        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
       }
 
       body {
@@ -23,25 +23,8 @@
         color: #2c2c2c;
       }
 
-      /* हैडर सेक्शन */
-      .header {
-        padding: 95px 20px 45px;
-        text-align: center;
-        border-bottom: 1px solid #e0e0e0;
-        background-color: #8b0000;
-      }
-      .header h1 {
-        font-size: 52px;
-        letter-spacing: 3.2px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        color: white;
-      }
-      .header h2 {
-        font-size: 22px;
-        color: #fff;
-        font-weight: 300;
-      }
+      /* हैडर सेक्शन (Using inline styles from your HTML) */
+      /* .header class styles from CSS block are mainly for the main index page structure */
 
       /* हैमबर्गर मेन्यू */
       .hamburger {
@@ -49,16 +32,26 @@
         top: 25px;
         right: 25px;
         cursor: pointer;
-        display: none;
-        z-index: 1000;
+        display: none; /* Shown by media query */
+        z-index: 1001; /* Above mobile menu when closed */
       }
       .hamburger-line {
         width: 28px;
         height: 2px;
-        background: #000000;
+        background: #ffffff; /* To be visible on dark header */
         margin: 6px 0;
         transition: 0.4s;
       }
+       .hamburger.active .hamburger-line:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+      .hamburger.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.active .hamburger-line:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+
 
       /* मोबाइल मेन्यू */
       .mobile-menu {
@@ -70,26 +63,46 @@
         background: #8b0000;
         box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
         transition: 0.4s;
-        padding-top: 80px;
-        z-index: 999;
+        padding-top: 60px; /* Adjusted for language options */
+        z-index: 1000; /* Below hamburger when closed, above content when open */
+        overflow-y: auto;
       }
       .mobile-menu.active {
         right: 0;
       }
-      .mobile-menu a {
+      .mobile-menu a, .mobile-menu .language-select-label {
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 18px 30px;
-        color: #fff;
+        padding: 15px 30px;
+        color: #fff !important;
         text-decoration: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
       }
       .mobile-menu i {
         width: 25px;
         font-size: 20px;
-        color: #fff;
+        color: #fff !important;
       }
+      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
+        border-bottom: none;
+      }
+
+      .language-options {
+        padding-left: 30px;
+        display: none;
+        background-color: rgba(0,0,0,0.1);
+      }
+      .language-options a {
+        padding: 12px 30px;
+        font-size: 0.9em;
+      }
+       .language-options a.lang-active {
+          font-weight: bold;
+          background-color: rgba(255,255,255,0.1);
+      }
+
 
       /* बॉटम नेविगेशन */
       .bottom-nav {
@@ -100,7 +113,7 @@
         background: #8b0000;
         border-top: 1px solid #eee;
         padding: 8px 0;
-        display: none;
+        display: none; /* Shown by media query */
         z-index: 999;
       }
       .bottom-nav ul {
@@ -109,17 +122,23 @@
         list-style: none;
       }
       .bottom-nav a {
-        color: #fff;
+        color: #fff !important;
         font-size: 16px;
         text-decoration: none;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 6px;
-        padding: 10px 14px;
+        gap: 4px;
+        padding: 8px 10px;
         border-radius: 8px;
         transition: background 0.3s;
       }
-
+      .bottom-nav a i {
+        font-size: 20px;
+      }
+      .bottom-nav a span {
+        font-size: 12px;
+      }
       .bottom-nav a:hover {
         background-color: rgba(255, 255, 255, 0.1);
       }
@@ -127,9 +146,10 @@
       /* डेस्कटॉप नेविगेशन */
       .desktop-nav {
         margin: 45px 0;
+        text-align: center;
       }
       .desktop-nav ul {
-        display: flex;
+        display: inline-flex;
         justify-content: center;
         gap: 32px;
         list-style: none;
@@ -154,18 +174,21 @@
         .bottom-nav {
           display: block;
         }
-        .header {
+        /* Original .header styles for responsive, if needed for consistent mobile header */
+        /* Example:
+        .header.responsive-style {
           padding: 70px 20px 35px;
         }
-        .header h1 {
+        .header.responsive-style h1 {
           font-size: 42px;
         }
+        */
       }
     </style>
   </head>
   <body>
     <!-- हैमबर्गर आइकन -->
-    <div class="hamburger" onclick="toggleMenu()">
+    <div class="hamburger"> <!-- onclick removed, JS will handle -->
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
@@ -173,151 +196,275 @@
 
     <!-- मोबाइल मेन्यू -->
     <nav class="mobile-menu">
-      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
-      <a href="share.html"><i class="fas fa-share"></i>Share</a>
-      <a href="index.html"><i class="fas fa-home"></i>Home</a>
-      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
-      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
-      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+      <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+      <a href="share.html"><i class="fas fa-share"></i><span data-translate-key="share">Share</span></a>
+      <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+      <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+      <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
+
+      <div class="language-select-label">
+            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
+      </div>
+      <div class="language-options">
+          <a href="#" data-lang="en">English</a>
+          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+      </div>
     </nav>
 
     <!-- हैडर -->
-   <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-
-  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
-
+    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
+        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
+        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitlePage"> The Supreme Devine of Every Faith</h2>
     </header>
 
     <!-- डेस्कटॉप नेविगेशन -->
     <nav class="desktop-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
     <!-- बॉटम नेविगेशन -->
     <nav class="bottom-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
+    <!-- बटन कार्ड सेक्शन -->
+    <section style="padding: 40px 20px; background: #fff;">
+      <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+        <h3 style="color: #8b0000; font-size: 24px; margin: 0 0 10px;" data-translate-key="whoAreWeTitle">
+          Who Are We?
+        </h3>
+        <img src="images/who_are_we.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px; margin-bottom:15px;" />
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;" data-translate-key="whoAreWeDesc">
+         Exploring our existence beyond physical form and material identity...
+        </p>
+        <a href="Who are we.html">
+          <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;" data-translate-key="seeMore">
+            see more
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <section style="padding: 40px 20px; background: #fff;">
+      <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+        <h3 style="color: #8b0000; font-size: 24px; margin: 0 0 10px;" data-translate-key="ourGoalTitle">
+          What Is Our Goal?
+        </h3>
+        <img src="images/what_is_our_goal.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px; margin-bottom:15px;" />
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;" data-translate-key="ourGoalDesc">
+          Understanding life's ultimate purpose and spiritual objectives...
+        </p>
+        <a href="What is our goal.html">
+          <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;" data-translate-key="seeMore">
+            see more
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <section style="padding: 40px 20px; background: #fff;">
+      <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+        <h3 style="color: #8b0000; font-size: 24px; margin: 0 0 10px;" data-translate-key="consciousnessTitle">
+          Consciousness with Knowledge
+        </h3>
+         <img src="images/conciusness_with_kowledge.jpg" alt="विराटस्वरूप" style="width: 100%; border-radius: 12px; margin-bottom:15px;" />
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;" data-translate-key="consciousnessDesc">
+          Integration of awareness and understanding for true enlightenment...
+        </p>
+        <a href="Consciousness with knowledge.html">
+          <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;" data-translate-key="seeMore">
+            see more
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <section style="padding: 40px 20px; background: #fff;">
+      <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+        <h3 style="color: #8b0000; font-size: 24px; margin: 0 0 10px;" data-translate-key="ancestorsTitle">
+          Our Ancestors
+        </h3>
+        <img src="images/our_ancectors.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px; margin-bottom:15px;" />
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;" data-translate-key="ancestorsDesc">
+          Learning from ancient wisdom and spiritual legacy...
+        </p>
+        <a href="Our Ancestors.html">
+          <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;" data-translate-key="seeMore">
+            see more
+          </button>
+        </a>
+      </div>
+    </section>
+
     <script>
-      // हैमबर्गर मेन्यू फंक्शन
+      // --- START TRANSLATION DATA & LOGIC ---
+      const translations = {
+          en: {
+              headerSubtitlePage: "The Supreme Divine of Every Faith",
+              login: "Login",
+              share: "Share",
+              home: "Home",
+              agnosia: "Agnosia",
+              enigma: "Enigma",
+              emulate: "Emulate",
+              post: "Post",
+              language: "Language",
+              whoAreWeTitle: "Who Are We?",
+              whoAreWeDesc: "Exploring our existence beyond physical form and material identity...",
+              ourGoalTitle: "What Is Our Goal?",
+              ourGoalDesc: "Understanding life's ultimate purpose and spiritual objectives...",
+              consciousnessTitle: "Consciousness with Knowledge",
+              consciousnessDesc: "Integration of awareness and understanding for true enlightenment...",
+              ancestorsTitle: "Our Ancestors",
+              ancestorsDesc: "Learning from ancient wisdom and spiritual legacy...",
+              seeMore: "see more"
+          },
+          ne: {
+              headerSubtitlePage: "हरेक आस्थाका सर्वोच्च परमात्मा",
+              login: "लग - इन",
+              share: "साझा गर्नुहोस्",
+              home: "गृहपृष्ठ",
+              agnosia: "अज्ञानता",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              whoAreWeTitle: "हामी को हौं?",
+              whoAreWeDesc: "भौतिक स्वरूप र भौतिक पहिचानभन्दा पर हाम्रो अस्तित्वको खोजी...",
+              ourGoalTitle: "हाम्रो लक्ष्य के हो?",
+              ourGoalDesc: "जीवनको अन्तिम उद्देश्य र आध्यात्मिक लक्ष्यहरू बुझ्दै...",
+              consciousnessTitle: "ज्ञान सहित चेतना",
+              consciousnessDesc: "सच्चा ज्ञान प्राप्तिका लागि जागरूकता र समझको एकीकरण...",
+              ancestorsTitle: " हाम्रा पूर्वजहरू",
+              ancestorsDesc: "प्राचीन ज्ञान र आध्यात्मिक विरासतबाट सिक्दै...",
+              seeMore: "थप हेर्नुहोस्"
+          },
+          hi: {
+              headerSubtitlePage: "हर आस्था के सर्वोच्च परमात्मा",
+              login: "लॉग इन करें",
+              share: "साझा करें",
+              home: "होम",
+              agnosia: "अज्ञान",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              whoAreWeTitle: "हम कौन हैं?",
+              whoAreWeDesc: "भौतिक रूप और भौतिक पहचान से परे हमारे अस्तित्व की खोज...",
+              ourGoalTitle: "हमारा लक्ष्य क्या है?",
+              ourGoalDesc: "जीवन के अंतिम उद्देश्य और आध्यात्मिक लक्ष्यों को समझना...",
+              consciousnessTitle: "ज्ञान के साथ चेतना",
+              consciousnessDesc: "सच्चे ज्ञानोदय के लिए जागरूकता और समझ का एकीकरण...",
+              ancestorsTitle: "हमारे पूर्वज",
+              ancestorsDesc: "प्राचीन ज्ञान और आध्यात्मिक विरासत से सीखना...",
+              seeMore: " और देखें"
+          }
+      };
+
+      let currentLanguage = localStorage.getItem('selectedLanguageStaticPage') || 'en'; // Unique key for this page type
+
+      function setLanguage(lang) {
+          currentLanguage = lang;
+          localStorage.setItem('selectedLanguageStaticPage', lang);
+          applyTranslations();
+          // Update active class for language options
+          document.querySelectorAll('.language-options a').forEach(a => {
+              a.classList.remove('lang-active');
+              if (a.dataset.lang === lang) {
+                  a.classList.add('lang-active');
+              }
+          });
+      }
+
+      function _(key, fallbackLang = 'en') { // Helper function to get translation
+          return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+      }
+
+      function applyTranslations() {
+          document.querySelectorAll('[data-translate-key]').forEach(element => {
+              const key = element.dataset.translateKey;
+              element.textContent = _(key);
+          });
+          // Placeholder translation if needed for this page (none apparent currently)
+          // document.querySelectorAll('[data-translate-key-placeholder]').forEach(element => {
+          //     const key = element.dataset.translateKeyPlaceholder;
+          //     element.placeholder = _(key);
+          // });
+      }
+      // --- END TRANSLATION LOGIC ---
+
+
+      const hamburger = document.querySelector(".hamburger");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const languageSelectLabel = document.querySelector('.language-select-label');
+      const languageOptionsDiv = document.querySelector('.language-options');
+
       function toggleMenu() {
-        document.querySelector(".mobile-menu").classList.toggle("active");
-        document.querySelectorAll(".hamburger-line").forEach((line) => {
-          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
+        mobileMenu.classList.toggle("active");
+        hamburger.classList.toggle("active"); // For the X animation
+      }
+
+      if (hamburger) {
+        hamburger.addEventListener('click', toggleMenu);
+      }
+
+      if (languageSelectLabel) {
+        languageSelectLabel.addEventListener('click', () => {
+            if (languageOptionsDiv) {
+                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
+            }
         });
       }
 
-      // क्लिक आउटसाइड करने पर मेन्यू बंद
+      document.querySelectorAll('.language-options a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = e.currentTarget.dataset.lang;
+            setLanguage(lang);
+            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
+            // Optionally close main mobile menu after selection
+            // if (mobileMenu.classList.contains('active')) {
+            //    toggleMenu();
+            // }
+        });
+      });
+
+      // Click outside to close menu / language options
       document.addEventListener("click", (e) => {
-        if (
-          !e.target.closest(".hamburger") &&
-          !e.target.closest(".mobile-menu")
-        ) {
-          document.querySelector(".mobile-menu").classList.remove("active");
-          document.querySelectorAll(".hamburger-line").forEach((line) => {
-            line.style.transform = "";
-          });
+        let clickedInsideMenuComponent = false;
+        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
+        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
+        // Note: languageSelectLabel and languageOptionsDiv are INSIDE mobileMenu
+
+        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
+          toggleMenu(); // Close main menu if click is outside and not on hamburger
+        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
+                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
+                   !languageOptionsDiv.contains(e.target) ) {
+            // If language options are open and click is outside them (and not on the label that opens them)
+            languageOptionsDiv.style.display = 'none';
         }
       });
+
+      // Apply translations on page load
+      document.addEventListener('DOMContentLoaded', () => {
+          setLanguage(currentLanguage);
+      });
     </script>
-
-	  <!-- बटन कार्ड सेक्शन -->
-<section style="padding: 40px 20px; background: #fff;">
-  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
-    
-    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
-      Who Are We?
-    </h3>
-	
-    <img src="images/who_are_we.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px;" />
-
-    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-     Exploring our existence beyond physical form and material identity...
-    </p>
-
-    <a href="Who are we.html">
-  <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
-    see more
-  </button>
-</a>
-  </div>
-</section>
-<section style="padding: 40px 20px; background: #fff;">
-  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
-    
-    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
-      What Is Our Goal?
-    </h3>
-	
-    <img src="images/what_is_our_goal.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px;" />
-
-    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-      Understanding life's ultimate purpose and spiritual objectives...
-    </p>
-
-    <a href="What is our goal.html">
-  <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
-    see more
-  </button>
-</a>
-
-  </div>
-</section>	  
-<section style="padding: 40px 20px; background: #fff;">
-  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
-    
-    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
-      Consciousness with Knowledge
-    </h3>
-
-     <img src="images/conciusness_with_kowledge.jpg" alt="विराटस्वरूप" style="width: 100%; border-radius: 12px;" />
-
-    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-      Integration of awareness and understanding for true enlightenment...
-    </p>
-
-    <a href="Consciousness with knowledge.html">
-  <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
-    see more
-  </button>
-</a>
-
-  </div>
-</section>
-<section style="padding: 40px 20px; background: #fff;">
-  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
-    
-    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
-      Our Ancestors
-    </h3>
-	
-    <img src="images/our_ancectors.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px;" />
-
-    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-      Learning from ancient wisdom and spiritual legacy...
-    </p>
-
-    <a href="Our Ancestors.html">
-  <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
-    see more
-  </button>
-</a>
-
-  </div>
-</section>   	
-</body>
+  </body>
 </html>
