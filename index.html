@@ -8,8 +8,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <!-- Firebase Storage SDK is NOT needed as Cloudinary is used for images -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script> -->
 
     <style>
         * {
@@ -59,7 +57,6 @@
             margin: 6px 0;
             transition: 0.4s;
         }
-        /* Hamburger active state (X icon) */
         .hamburger.active .hamburger-line:nth-child(1) {
             transform: rotate(-45deg) translate(-5px, 6px);
         }
@@ -161,9 +158,9 @@
             .hamburger { display: block; }
             .desktop-nav { display: none; }
             .bottom-nav { display: block; }
-            .header { padding: 70px 20px 35px; } /* Adjusted padding for mobile */
-            .header h1 { font-size: 36px; } /* Adjusted font size for mobile */
-            .header h2 { font-size: 18px; } /* Adjusted font size for mobile */
+            .header { padding: 70px 20px 35px; }
+            .header h1 { font-size: 36px; }
+            .header h2 { font-size: 18px; }
         }
 
         .container {
@@ -244,7 +241,6 @@
             font-family: inherit;
             font-size: 16px;
         }
-        /* Specific ID for post button styling */
         .post-form button#postBtn {
             background: #8b0000;
             color: white;
@@ -258,12 +254,11 @@
         .post-form button#postBtn:hover { background: #6a0000; }
         .post-form button#postBtn:disabled,
         .comment-form-actual button.comment-submit-btn:disabled,
-        .reply-form-actual button.reply-submit-btn:disabled { /* Shared disabled style */
+        .reply-form-actual button.reply-submit-btn:disabled {
             background: #cccccc;
             cursor: not-allowed;
             opacity: 0.7;
         }
-
 
         .posts-container h3 {
             margin-bottom: 20px;
@@ -298,7 +293,7 @@
             line-height: 1.6;
             color: #444;
             margin-bottom: 10px;
-            white-space: pre-wrap; /* Preserves user-entered newlines and spaces */
+            white-space: pre-wrap;
         }
         .post-content img.post-image {
             max-width: 100%;
@@ -328,7 +323,7 @@
         }
         .post-actions button i { font-size: 18px; margin-right: 8px; color: #8b0000; }
         .post-actions button:hover i, .post-actions button:hover span { color: #6a0000; }
-        .like-btn.liked i { color: red !important; } /* Ensure liked icon is red */
+        .like-btn.liked i { color: red !important; }
 
         .comments-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
         .comments-list .comment {
@@ -342,23 +337,21 @@
         .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
         .comment-header strong { font-size: 13px; color: #333; }
         .comment-header .timestamp { font-size: 11px; color: #888; margin-left: auto; }
-        .comment-content p { margin: 0 0 5px 0; color: #555; white-space: pre-wrap; } /* Preserves newlines in comments */
+        .comment-content p { margin: 0 0 5px 0; color: #555; white-space: pre-wrap; }
 
         .comment-form-actual {
             display: flex;
-            align-items: center; /* Align items vertically */
+            align-items: center;
             margin-top: 10px;
-            gap: 5px; /* Add some gap between elements */
+            gap: 5px;
         }
-
-        .comment-form-actual input[type="text"].comment-text-input { /* Be more specific */
+        .comment-form-actual input[type="text"].comment-text-input {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
         }
-
         .comment-image-upload-label {
             padding: 8px 10px;
             background-color: #f0f0f0;
@@ -368,34 +361,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 40px; /* Match input height approx */
+            height: 40px;
             box-sizing: border-box;
         }
-        .comment-image-upload-label:hover {
-            background-color: #e0e0e0;
-        }
-        .comment-image-upload-label i {
-            color: #555;
-            font-size: 16px;
-        }
-
-        .comment-form-actual button.comment-submit-btn { /* Be more specific */
+        .comment-image-upload-label:hover { background-color: #e0e0e0; }
+        .comment-image-upload-label i { color: #555; font-size: 16px; }
+        .comment-form-actual button.comment-submit-btn {
             background: #8b0000;
             color: white;
             border: none;
-            padding: 10px 15px; /* Consistent padding */
+            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            height: 40px; /* Match input height approx */
+            height: 40px;
             box-sizing: border-box;
         }
-        .comment-form-actual button.comment-submit-btn:hover {
-            background: #6a0000;
-        }
-
+        .comment-form-actual button.comment-submit-btn:hover { background: #6a0000; }
         .comment-image-preview {
-            max-width: 80px; /* Smaller preview for comments */
+            max-width: 80px;
             max-height: 80px;
             display: none;
             margin-top: 8px;
@@ -408,12 +392,12 @@
             margin-top: 5px;
             color: #555;
             display: none;
-            width: 100%; /* Make it span below the form */
-            text-align: left; /* Align with form */
-            padding-left: 5px; /* Small indent */
+            width: 100%;
+            text-align: left;
+            padding-left: 5px;
         }
-        .comment-content img.comment-image { /* For displaying image in a rendered comment */
-            max-width: 200px; /* Or your preferred max size */
+        .comment-content img.comment-image {
+            max-width: 200px;
             max-height: 150px;
             border-radius: 5px;
             margin-top: 8px;
@@ -421,37 +405,33 @@
             border: 1px solid #eee;
         }
 
-        /* --- STYLES FOR REPLIES --- */
-        .comment-actions { /* Already existed, ensure it's styled for reply button */
+        .comment-actions {
             display: flex;
             gap: 10px;
             align-items: center;
-            margin-top: 5px; /* Added */
+            margin-top: 5px;
         }
-        .reply-to-comment-btn { /* Style for the reply button itself */
-            font-size: 0.8em !important; /* Override general button styles if needed */
+        .reply-to-comment-btn {
+            font-size: 0.8em !important;
             color: #555 !important;
             background: none !important;
             border: none !important;
             cursor: pointer !important;
-            padding: 2px 5px !important; /* Smaller padding */
+            padding: 2px 5px !important;
         }
         .reply-to-comment-btn i {
             margin-right: 4px !important;
-            font-size: 1em !important; /* Relative to button font size */
+            font-size: 1em !important;
             color: #8b0000 !important;
         }
          .reply-to-comment-btn:hover, .reply-to-comment-btn:hover i, .reply-to-comment-btn:hover span {
             color: #6a0000 !important;
         }
-
-
         .replies-list {
             margin-left: 20px;
             margin-top: 10px;
         }
-
-        .comment-reply { /* Style for each individual reply container */
+        .comment-reply {
             border-left: 2px solid #ddd;
             padding-left: 10px;
             font-size: 0.9em;
@@ -460,17 +440,15 @@
             border-radius: 4px;
             margin-bottom: 8px;
         }
-        .comment-reply .comment-header img { /* Smaller image for replies */
+        .comment-reply .comment-header img {
             width: 25px;
             height: 25px;
         }
-
-
         .reply-form-container {
             margin-left: 20px;
             margin-top: 5px;
         }
-        .reply-form-actual { /* Style for the form that contains reply input and button */
+        .reply-form-actual {
             display: flex;
             gap: 5px;
             align-items: center;
@@ -484,7 +462,7 @@
         }
         .reply-form-actual button.reply-submit-btn {
             padding: 8px 12px;
-            background: #5cb85c; /* Green for post */
+            background: #5cb85c;
             color: white;
             border: none;
             border-radius: 3px;
@@ -492,22 +470,16 @@
             font-size: 0.9em;
             font-weight: bold;
         }
-        .reply-form-actual button.reply-submit-btn:hover {
-            background: #4cae4c;
-        }
-        /* Disabled state is already handled by the shared selector */
-
+        .reply-form-actual button.reply-submit-btn:hover { background: #4cae4c; }
     </style>
 </head>
 <body>
-    <!-- Hamburger Icon -->
     <div class="hamburger">
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
         <div class="hamburger-line"></div>
     </div>
 
-    <!-- Mobile Menu -->
     <nav class="mobile-menu">
         <a href="index.html"><i class="fas fa-home"></i>Home</a>
         <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
@@ -517,13 +489,11 @@
         <a href="#loginSection"><i class="fas fa-sign-in-alt"></i>Login</a>
     </nav>
 
-    <!-- Header -->
     <header class="header">
       <h1>VIRAT SWARUP</h1>
       <h2>The Supreme Devine of Every Faith</h2>
     </header>
 
-    <!-- Desktop Navigation -->
     <nav class="desktop-nav">
         <ul>
             <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
@@ -534,7 +504,6 @@
         </ul>
     </nav>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <ul>
             <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
@@ -608,7 +577,7 @@
     // !!! YOUR DATA. https://firebase.google.com/docs/firestore/security  !!!
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     const firebaseConfig = {
-      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // YOUR API KEY IS HERE
+      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", 
       authDomain: "viratsawarup.firebaseapp.com",
       projectId: "viratsawarup",
       messagingSenderId: "264071748020",
@@ -744,7 +713,7 @@
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    timestamp: new Date(), 
                     likes: [],
                     comments: []
                 };
@@ -753,7 +722,7 @@
                     if (imagePublicId) postData.imagePublicId = imagePublicId;
                 }
 
-                await db.collection('posts').add(postData);
+                await db.collection('posts').add(postData); 
 
                 if(elements.postContent) elements.postContent.value = '';
                 if(elements.postImageFile) elements.postImageFile.value = null; 
@@ -812,9 +781,11 @@
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
         postDiv.setAttribute('data-post-id', postId);
+        
         const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
                                 ? post.timestamp.toDate().toLocaleString()
                                 : (post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Recently');
+                                
         let contentHTML = '';
         if (post.content) {
             contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
@@ -885,7 +856,7 @@
                     const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
                     return timeA - timeB; 
                 });
-                sortedComments.forEach(comment => renderComment(comment, commentsList, postId)); // Pass postId
+                sortedComments.forEach(comment => renderComment(comment, commentsList, postId));
             } else {
                 commentsList.innerHTML = '<p style="font-size:0.9em; color:#777; padding:5px 0;">No comments yet.</p>';
             }
@@ -918,7 +889,6 @@
         }
     }
 
-    // --- MODIFIED AND NEW FUNCTIONS FOR COMMENTS AND REPLIES ---
     async function handleCommentSubmit(event, postId) {
         event.preventDefault();
         const currentUser = auth.currentUser;
@@ -960,7 +930,7 @@
                 if(commentUploadProgress) commentUploadProgress.textContent = 'Image uploaded!';
             }
 
-            const commentId = db.collection('posts').doc().id; // Generate unique ID for comment
+            const commentId = db.collection('posts').doc().id; 
 
             const newComment = {
                 id: commentId,
@@ -968,8 +938,8 @@
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: commentText || "",
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                replies: [], // Initialize replies array
+                timestamp: new Date(), // USE CLIENT-SIDE DATE
+                replies: [], 
                 imageUrl: commentImageUrl || null,
                 imagePublicId: commentImagePublicId || null
             };
@@ -994,6 +964,7 @@
                 if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
                     if (commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
                         commentUploadProgress.style.display = 'none';
+                        commentUploadProgress.textContent = '';
                     }
                 }
             }, 3000);
@@ -1026,16 +997,16 @@
         const submitButton = form.querySelector('.reply-submit-btn');
         if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Posting...";}
 
-        const newReply = {
-            userId: currentUser.uid,
-            userName: currentUser.displayName || 'User',
-            userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-            text: replyText,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        };
-
         const postRef = db.collection('posts').doc(postId);
         try {
+             const newReply = {
+                userId: currentUser.uid,
+                userName: currentUser.displayName || 'User',
+                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+                text: replyText,
+                timestamp: new Date() // USE CLIENT-SIDE DATE
+            };
+
             await db.runTransaction(async (transaction) => {
                 const postDoc = await transaction.get(postRef);
                 if (!postDoc.exists) throw "Post document does not exist!";
@@ -1063,9 +1034,11 @@
     function renderReply(reply, repliesListDiv) {
         const replyDiv = document.createElement('div');
         replyDiv.className = 'comment-reply';
+        
         const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
                                 ? reply.timestamp.toDate().toLocaleString()
                                 : (reply.timestamp ? new Date(reply.timestamp).toLocaleString() : 'Recently');
+        
         let replyContentHTML = '';
         if (reply.text) {
             replyContentHTML = `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>`;
@@ -1080,13 +1053,15 @@
         repliesListDiv.appendChild(replyDiv);
     }
 
-    function renderComment(comment, commentsListElement, postId) { // postId is passed
+    function renderComment(comment, commentsListElement, postId) {
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
         commentDiv.setAttribute('data-comment-id', comment.id);
+
         const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
                                 ? comment.timestamp.toDate().toLocaleString()
                                 : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
+        
         const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
         if(noCommentP) noCommentP.remove();
 
@@ -1130,8 +1105,6 @@
         const replyForm = commentDiv.querySelector('.reply-form-actual');
         if (replyForm) replyForm.addEventListener('submit', (e) => handleReplySubmit(e, postId, comment.id));
     }
-    // --- END OF MODIFIED/NEW COMMENT/REPLY FUNCTIONS ---
-
 
     async function handleLike(postId) {
         const currentUser = auth.currentUser;
@@ -1166,7 +1139,6 @@
         }
     }
 
-    // --- MENU TOGGLE FUNCTIONS ---
     function toggleMenu() {
         if (elements.mobileMenu && elements.hamburger) {
             elements.mobileMenu.classList.toggle('active');
@@ -1200,7 +1172,6 @@
         }
     });
 
-    // --- UTILITY FUNCTION ---
     function escapeHTML(str) {
         if (str === null || str === undefined) return '';
         const s = String(str);
