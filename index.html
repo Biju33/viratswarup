@@ -24,7 +24,7 @@
         }
 
         .header {
-            padding: 95px 20px 45px;
+            padding: 5px 20px 5px; /* MODIFIED: Was 95px 20px 45px */
             text-align: center;
             border-bottom: 1px solid #e0e0e0;
             background-color: #8b0000;
@@ -96,7 +96,7 @@
             font-size: 20px;
             color: #fff !important;
         }
-        .mobile-menu a:last-child { 
+        .mobile-menu a:last-child {
             border-bottom: none;
         }
 
@@ -157,13 +157,13 @@
             .hamburger { display: block; }
             .desktop-nav { display: none; }
             .bottom-nav { display: block; }
-            .header { padding: 70px 20px 35px; }
+            .header { padding: 5px 20px 5px; } /* MODIFIED: Was 70px 20px 35px */
             .header h1 { font-size: 36px; }
             .header h2 { font-size: 18px; }
 
             /* HIDE DESKTOP LOGOUT BUTTON ON MOBILE */
             .user-info #logoutBtn {
-                display: none !important; 
+                display: none !important;
             }
         }
 
@@ -565,14 +565,14 @@
 
     <script>
     // --- START CLOUDINARY CONFIGURATION ---
-    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f"; 
-    const CLOUDINARY_UPLOAD_PRESET = "public_uploader"; 
+    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f";
+    const CLOUDINARY_UPLOAD_PRESET = "public_uploader";
     const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
     // --- END CLOUDINARY CONFIGURATION ---
 
     // --- START FIREBASE CONFIGURATION ---
     const firebaseConfig = {
-      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", 
+      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
       authDomain: "viratsawarup.firebaseapp.com",
       projectId: "viratsawarup",
       messagingSenderId: "264071748020",
@@ -602,8 +602,8 @@
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
         uploadProgressText: document.getElementById('uploadProgressText'),
-        mobileLoginLink: document.getElementById('mobileLoginLink'), 
-        mobileLogoutLink: document.getElementById('mobileLogoutLink') 
+        mobileLoginLink: document.getElementById('mobileLoginLink'),
+        mobileLogoutLink: document.getElementById('mobileLogoutLink')
     };
 
     if (elements.postImageFile) {
@@ -633,7 +633,7 @@
             if(elements.appSection) elements.appSection.style.display = 'block';
             if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
             if(elements.userName) elements.userName.textContent = user.displayName || 'User';
-            
+
             if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none';
             if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
 
@@ -642,7 +642,7 @@
             if(elements.loginSection) elements.loginSection.style.display = 'block';
             if(elements.appSection) elements.appSection.style.display = 'none';
             if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
-            
+
             if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex';
             if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
 
@@ -669,12 +669,12 @@
     if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
         alert("Facebook login requires additional developer setup. Please use Google Sign-In.");
     });
-    
+
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
-    
+
     if (elements.mobileLogoutLink) {
         elements.mobileLogoutLink.addEventListener('click', (event) => {
-            event.preventDefault(); 
+            event.preventDefault();
             auth.signOut();
             if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
                 toggleMenu();
@@ -728,7 +728,7 @@
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     likes: [],
                     comments: []
                 };
@@ -737,10 +737,10 @@
                     if (imagePublicId) postData.imagePublicId = imagePublicId;
                 }
 
-                await db.collection('posts').add(postData); 
+                await db.collection('posts').add(postData);
 
                 if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null; 
+                if(elements.postImageFile) elements.postImageFile.value = null;
                 if(elements.imagePreview) {
                     elements.imagePreview.src = '#';
                     elements.imagePreview.style.display = 'none';
@@ -775,7 +775,7 @@
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
               if (elements.postsContainer) {
-                  elements.postsContainer.innerHTML = '<h3>Feed</h3>'; 
+                  elements.postsContainer.innerHTML = '<h3>Feed</h3>';
                   if (snapshot.empty) {
                       elements.postsContainer.innerHTML += '<p>No posts yet. Be the first to share!</p>';
                       return;
@@ -796,11 +796,11 @@
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
         postDiv.setAttribute('data-post-id', postId);
-        
+
         const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
                                 ? post.timestamp.toDate().toLocaleString()
                                 : (post.timestamp ? new Date(post.timestamp).toLocaleString() : 'Recently');
-                                
+
         let contentHTML = '';
         if (post.content) {
             contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
@@ -869,7 +869,7 @@
                 const sortedComments = [...post.comments].sort((a,b) => {
                     const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
                     const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                    return timeA - timeB; 
+                    return timeA - timeB;
                 });
                 sortedComments.forEach(comment => renderComment(comment, commentsList, postId));
             } else {
@@ -945,7 +945,7 @@
                 if(commentUploadProgress) commentUploadProgress.textContent = 'Image uploaded!';
             }
 
-            const commentId = db.collection('posts').doc().id; 
+            const commentId = db.collection('posts').doc().id;
 
             const newComment = {
                 id: commentId,
@@ -953,8 +953,8 @@
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: commentText || "",
-                timestamp: new Date(), 
-                replies: [], 
+                timestamp: new Date(),
+                replies: [],
                 imageUrl: commentImageUrl || null,
                 imagePublicId: commentImagePublicId || null
             };
@@ -985,7 +985,7 @@
             }, 3000);
         }
     }
-    
+
     function toggleReplyForm(commentId) {
         const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
         if (replyFormContainer) {
@@ -1019,7 +1019,7 @@
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: replyText,
-                timestamp: new Date() 
+                timestamp: new Date()
             };
 
             await db.runTransaction(async (transaction) => {
@@ -1037,7 +1037,7 @@
                 transaction.update(postRef, { comments: updatedComments });
             });
             if (replyTextInput) replyTextInput.value = '';
-            toggleReplyForm(parentCommentId); 
+            toggleReplyForm(parentCommentId);
         } catch (error) {
             console.error("Error adding reply:", error);
             alert("Failed to add reply: " + error.message);
@@ -1049,11 +1049,11 @@
     function renderReply(reply, repliesListDiv) {
         const replyDiv = document.createElement('div');
         replyDiv.className = 'comment-reply';
-        
+
         const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
                                 ? reply.timestamp.toDate().toLocaleString()
                                 : (reply.timestamp ? new Date(reply.timestamp).toLocaleString() : 'Recently');
-        
+
         let replyContentHTML = '';
         if (reply.text) {
             replyContentHTML = `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>`;
@@ -1076,7 +1076,7 @@
         const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
                                 ? comment.timestamp.toDate().toLocaleString()
                                 : (comment.timestamp ? new Date(comment.timestamp).toLocaleString() : 'Recently');
-        
+
         const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
         if(noCommentP) noCommentP.remove();
 
@@ -1166,7 +1166,7 @@
         if (targetId && targetId.startsWith('#') && targetId.length > 1) {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                event.preventDefault(); 
+                event.preventDefault();
                 targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
             }
         }
@@ -1175,11 +1175,11 @@
     document.querySelectorAll('.mobile-menu a').forEach(link => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
-            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink') { 
+            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink') {
                 closeMenuAndScroll(event);
             } else if (link.id === 'mobileLogoutLink') {
                 // This is handled by its own dedicated event listener
-            } else { 
+            } else {
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
                     toggleMenu();
                 }
