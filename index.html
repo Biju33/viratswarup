@@ -97,7 +97,7 @@
             font-size: 20px;
             color: #fff !important;
         }
-        .mobile-menu a:last-child {
+        .mobile-menu a:last-child { /* This will now apply to the logout link when it's visible and last */
             border-bottom: none;
         }
 
@@ -486,7 +486,8 @@
         <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
         <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
         <a href="#post-form-container"><i class="fas fa-pen-to-square"></i>Post</a>
-        <a href="#loginSection"><i class="fas fa-sign-in-alt"></i>Login</a>
+        <a href="#loginSection" id="mobileLoginLink"><i class="fas fa-sign-in-alt"></i>Login</a>
+        <a href="#" id="mobileLogoutLink" style="display: none;"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </nav>
 
     <header class="header">
@@ -606,7 +607,9 @@
         postImageFile: document.getElementById('postImageFile'),
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
-        uploadProgressText: document.getElementById('uploadProgressText')
+        uploadProgressText: document.getElementById('uploadProgressText'),
+        mobileLoginLink: document.getElementById('mobileLoginLink'), 
+        mobileLogoutLink: document.getElementById('mobileLogoutLink') 
     };
 
     if (elements.postImageFile) {
@@ -636,11 +639,19 @@
             if(elements.appSection) elements.appSection.style.display = 'block';
             if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
             if(elements.userName) elements.userName.textContent = user.displayName || 'User';
+            
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none';
+            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
+
             loadPosts();
         } else {
             if(elements.loginSection) elements.loginSection.style.display = 'block';
             if(elements.appSection) elements.appSection.style.display = 'none';
             if(elements.postsContainer) elements.postsContainer.innerHTML = '<h3>Feed</h3><p>Please log in to see the feed.</p>';
+            
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex';
+            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
+
             if (postsUnsubscribe) {
                 postsUnsubscribe();
                 postsUnsubscribe = null;
@@ -664,7 +675,20 @@
     if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
         alert("Facebook login requires additional developer setup. Please use Google Sign-In.");
     });
+    
+    // Desktop logout
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
+    
+    // Mobile logout
+    if (elements.mobileLogoutLink) {
+        elements.mobileLogoutLink.addEventListener('click', (event) => {
+            event.preventDefault(); 
+            auth.signOut();
+            if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+    }
 
 
     if (elements.postBtn) {
@@ -713,7 +737,6 @@
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                    // For a new post using .add(), FieldValue.serverTimestamp() is allowed
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
                     likes: [],
                     comments: []
@@ -939,7 +962,7 @@
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: commentText || "",
-                timestamp: new Date(), // CRITICAL FIX: Use client-side Date for arrayUnion
+                timestamp: new Date(), 
                 replies: [], 
                 imageUrl: commentImageUrl || null,
                 imagePublicId: commentImagePublicId || null
@@ -1005,7 +1028,7 @@
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: replyText,
-                timestamp: new Date() // CRITICAL FIX: Use client-side Date for array manipulation
+                timestamp: new Date() 
             };
 
             await db.runTransaction(async (transaction) => {
@@ -1161,8 +1184,16 @@
     document.querySelectorAll('.mobile-menu a').forEach(link => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
-            if (href && href.startsWith('#') && href.length > 1) closeMenuAndScroll(event);
-            else if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) toggleMenu();
+            // For specific anchor links that are not just "#" for logout
+            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink') { 
+                closeMenuAndScroll(event);
+            } else if (link.id === 'mobileLogoutLink') {
+                // Handled by its own event listener
+            } else { // For regular page links or if menu needs closing for other reasons
+                if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
         });
     });
     document.addEventListener('click', (e) => {
