@@ -24,46 +24,41 @@
         }
 
         .header {
-            /* MODIFIED for flex layout */
             display: flex;
-            align-items: center; /* Vertically center logo and text block */
-            
-            padding: 5px 20px; /* MODIFIED: Was 95px 20px 45px, then 5px 20px 5px. This is effectively 5px top/bottom, 20px left/right */
-            /* text-align: center; Removed, handled by .header-text-content */
+            align-items: center; 
+            padding: 5px 20px; 
             border-bottom: 1px solid #e0e0e0;
             background-color: #8b0000;
-            position: relative; /* Good practice for headers, e.g., if absolute positioning needed for other elements later */
+            position: relative; 
         }
 
-        /* NEW: Styles for the header logo */
         .header-logo {
-            height: 86px; /* Matches calculated desktop text content height (52+12+22) */
-            width: 86px;  /* Assuming a square logo, adjust if aspect ratio is different */
-            margin-right: 20px; /* Space between logo and text */
-            flex-shrink: 0; /* Prevent logo from shrinking if header is narrow */
-            object-fit: contain; /* Ensures image fits without distortion if aspect ratio isn't perfectly square */
+            height: 100px; /* Increased logo size */
+            width: 100px;  /* Increased logo size */
+            margin-right: 20px; 
+            flex-shrink: 0; 
+            object-fit: contain; 
         }
 
-        /* NEW: Styles for the text content wrapper in the header */
         .header-text-content {
-            flex-grow: 1; /* Allows this div to take up remaining space */
-            text-align: center; /* Centers the H1 and H2 text */
+            flex-grow: 1; 
+            text-align: center; 
         }
         
         .header h1 {
-            font-size: 52px;
+            font-size: 42px; /* Decreased H1 size */
             letter-spacing: 3.2px;
             text-transform: uppercase;
             margin-bottom: 12px;
             color: white;
-            margin-top: 0; /* Ensure consistent spacing */
+            margin-top: 0; 
         }
         .header h2 {
             font-size: 22px;
             color: white;
             font-weight: 300;
-            margin-top: 0; /* Ensure consistent spacing */
-            margin-bottom: 0; /* Ensure consistent spacing */
+            margin-top: 0; 
+            margin-bottom: 0; 
         }
 
         .hamburger {
@@ -183,20 +178,21 @@
             .bottom-nav { display: block; }
             
             .header { 
-                padding: 5px 15px; /* Adjusted padding for mobile to give a bit more space if needed */
+                padding: 5px 15px; 
             }
-            /* NEW: Responsive styles for header logo */
             .header-logo {
-                height: 66px; /* Matches calculated mobile text content height (36+12+18) */
-                width: 66px;  /* Assuming a square logo */
+                height: 80px; /* Increased mobile logo size */
+                width: 80px;  /* Increased mobile logo size */
                 margin-right: 15px;
-                /* object-fit: contain; is inherited or can be re-declared if needed */
             }
 
-            .header h1 { font-size: 36px; }
-            .header h2 { font-size: 18px; }
+            .header h1 { 
+                font-size: 30px; /* Decreased mobile H1 size */
+            }
+            .header h2 { 
+                font-size: 18px; 
+            }
 
-            /* HIDE DESKTOP LOGOUT BUTTON ON MOBILE */
             .user-info #logoutBtn {
                 display: none !important;
             }
@@ -249,7 +245,7 @@
             border: 2px solid #8b0000;
         }
         .user-info div h2 { margin: 0; font-size: 18px; color: #333; }
-        #logoutBtn { /* This is the desktop logout button */
+        #logoutBtn { 
             background: #8b0000;
             color: white;
             border: none;
@@ -530,7 +526,6 @@
     </nav>
 
     <header class="header">
-      <!-- UPDATED image source to new path -->
       <img src="images/logo.png" alt="Virat Swarup Logo" class="header-logo">
       <div class="header-text-content">
         <h1>VIRAT SWARUP</h1>
