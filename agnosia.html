@@ -15,7 +15,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif;
+        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
       }
 
       body {
@@ -23,25 +23,7 @@
         color: #2c2c2c;
       }
 
-      /* हैडर सेक्शन */
-      .header {
-        padding: 95px 20px 45px;
-        text-align: center;
-        border-bottom: 1px solid #e0e0e0;
-        background-color: #8b0000;
-      }
-      .header h1 {
-        font-size: 52px;
-        letter-spacing: 3.2px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        color: white;
-      }
-      .header h2 {
-        font-size: 22px;
-        color: #fff;
-        font-weight: 300;
-      }
+      /* हैडर सेक्शन - Original style block removed, using inline for now as per new HTML */
 
       /* हैमबर्गर मेन्यू */
       .hamburger {
@@ -49,16 +31,26 @@
         top: 25px;
         right: 25px;
         cursor: pointer;
-        display: none;
-        z-index: 1000;
+        display: none; /* Shown by media query */
+        z-index: 1001; /* Ensure it's above mobile menu when closed */
       }
       .hamburger-line {
         width: 28px;
         height: 2px;
-        background: #000000;
+        background: #ffffff; /* Changed to white to be visible on dark red header */
         margin: 6px 0;
         transition: 0.4s;
       }
+      .hamburger.active .hamburger-line:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+      .hamburger.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.active .hamburger-line:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+
 
       /* मोबाइल मेन्यू */
       .mobile-menu {
@@ -70,25 +62,44 @@
         background: #8b0000;
         box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
         transition: 0.4s;
-        padding-top: 80px;
-        z-index: 999;
+        padding-top: 60px; /* Adjusted for language options */
+        z-index: 1000; /* Ensure it's below hamburger when closed, above content when open */
+        overflow-y: auto;
       }
       .mobile-menu.active {
         right: 0;
       }
-      .mobile-menu a {
+      .mobile-menu a, .mobile-menu .language-select-label {
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 18px 30px;
-        color: #fff;
+        padding: 15px 30px;
+        color: #fff !important;
         text-decoration: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
       }
-      .mobile-menu i {
+      .mobile-menu i { /* General icon styling */
         width: 25px;
         font-size: 20px;
-        color: #fff;
+        color: #fff !important;
+      }
+      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
+        border-bottom: none;
+      }
+
+      .language-options {
+        padding-left: 30px; /* Indent language options */
+        display: none; /* Hidden by default */
+        background-color: rgba(0,0,0,0.1);
+      }
+      .language-options a {
+        padding: 12px 30px;
+        font-size: 0.9em;
+      }
+      .language-options a.lang-active {
+          font-weight: bold;
+          background-color: rgba(255,255,255,0.1);
       }
 
       /* बॉटम नेविगेशन */
@@ -100,7 +111,7 @@
         background: #8b0000;
         border-top: 1px solid #eee;
         padding: 8px 0;
-        display: none;
+        display: none; /* Shown by media query */
         z-index: 999;
       }
       .bottom-nav ul {
@@ -109,15 +120,22 @@
         list-style: none;
       }
       .bottom-nav a {
-        color: #fff;
+        color: #fff !important;
         font-size: 16px;
         text-decoration: none;
         display: flex;
+        flex-direction: column; /* Make icon and text stack */
         align-items: center;
-        gap: 6px;
-        padding: 10px 14px;
+        gap: 4px; /* Space between icon and text */
+        padding: 8px 10px; /* Adjusted padding */
         border-radius: 8px;
         transition: background 0.3s;
+      }
+      .bottom-nav a i {
+        font-size: 20px; /* Icon size */
+      }
+      .bottom-nav a span {
+        font-size: 12px; /* Text size smaller */
       }
 
       .bottom-nav a:hover {
@@ -152,20 +170,23 @@
           display: none;
         }
         .bottom-nav {
-          display: block;
+          display: block; /* Changed back to block, ul will handle flex */
         }
+        /* Header styles from original block if needed for mobile adjustments */
+        /* Example:
         .header {
           padding: 70px 20px 35px;
         }
         .header h1 {
           font-size: 42px;
         }
+        */
       }
     </style>
   </head>
   <body>
     <!-- हैमबर्गर आइकन -->
-    <div class="hamburger" onclick="toggleMenu()">
+    <div class="hamburger"> <!-- onclick removed, will be handled by JS event listener -->
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
@@ -173,108 +194,227 @@
 
     <!-- मोबाइल मेन्यू -->
     <nav class="mobile-menu">
-      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
-      <a href="#share"><i class="fas fa-share"></i>Share</a>
-      <a href="index.html"><i class="fas fa-home"></i>Home</a>
-      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
-      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
-      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+      <!-- Login and Share are not standard pages, so keeping href simple for now -->
+      <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+      <a href="#"><i class="fas fa-share"></i><span data-translate-key="share">Share</span></a>
+      <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+      <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+      <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
+
+      <div class="language-select-label">
+            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
+      </div>
+      <div class="language-options">
+          <a href="#" data-lang="en">English</a>
+          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+      </div>
     </nav>
 
     <!-- हैडर -->
-    <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-
-  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
-
+    <header style="background-color: #8b0000; padding: 20px 10px; text-align: center; position: relative;">
+        <!-- Hamburger is fixed, so it will appear over this header -->
+        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
+        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight: 300; font-style: italic;" data-translate-key="headerSubtitle"> The Supreme Devine of Every Faith</h2>
     </header>
+
 
     <!-- डेस्कटॉप नेविगेशन -->
     <nav class="desktop-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
     <!-- बॉटम नेविगेशन -->
     <nav class="bottom-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
+    <!-- बटन कार्ड सेक्शन -->
+    <section style="padding: 40px 20px; background: #fff;">
+      <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+        <h3 style="color: #8b0000; font-size: 24px; margin: 0 0 10px;" data-translate-key="realityCheckTitle">
+          Reality check
+        </h3>
+        <img src="images/Reality_check.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px; margin-bottom:15px;" />
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;" data-translate-key="realityCheckDesc">
+        Reality check is the practice of questioning whether your current experience is real or a dream.It is often used in lucid dreaming and mindfulness to become more aware of the present moment.</p>
+        <a href="Reality check.html">
+          <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;" data-translate-key="seeMore">
+            see more
+          </button>
+        </a>
+      </div>
+    </section>
+
+    <section style="padding: 40px 20px; background: #fff;">
+      <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
+        <h3 style="color: #8b0000; font-size: 24px; margin: 0 0 10px;" data-translate-key="agnosiaCheckTitle">
+          Agnosia check
+        </h3>
+        <img src="images/agnosia_check.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px; margin-bottom:15px;" />
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;" data-translate-key="agnosiaCheckDesc">
+        Agnosia is a condition where a person cannot recognize objects, sounds, or people even though their senses are working normally. It happens due to a disconnect between perception and understanding, not because of any problem with the eyes or ears.
+        </p>
+        <a href="Agnosia check.html">
+          <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;" data-translate-key="seeMore">
+            see more
+          </button>
+        </a>
+      </div>
+    </section>
+
     <script>
-      // हैमबर्गर मेन्यू फंक्शन
+      // --- START TRANSLATION DATA & LOGIC ---
+      const translations = {
+          en: {
+              headerSubtitle: "The Supreme Divine of Every Faith",
+              login: "Login",
+              share: "Share",
+              home: "Home",
+              agnosia: "Agnosia",
+              enigma: "Enigma",
+              emulate: "Emulate",
+              post: "Post",
+              language: "Language",
+              realityCheckTitle: "Reality check",
+              realityCheckDesc: "Reality check is the practice of questioning whether your current experience is real or a dream. It is often used in lucid dreaming and mindfulness to become more aware of the present moment.",
+              agnosiaCheckTitle: "Agnosia check",
+              agnosiaCheckDesc: "Agnosia is a condition where a person cannot recognize objects, sounds, or people even though their senses are working normally. It happens due to a disconnect between perception and understanding, not because of any problem with the eyes or ears.",
+              seeMore: "see more"
+          },
+          ne: {
+              headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा",
+              login: "लग - इन",
+              share: "साझा गर्नुहोस्",
+              home: "गृहपृष्ठ",
+              agnosia: "अज्ञानता",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              realityCheckTitle: "वास्तविकता जाँच",
+              realityCheckDesc: "वास्तविकता जाँच भनेको तपाईंको वर्तमान अनुभव वास्तविक हो वा सपना हो भनी प्रश्न गर्ने अभ्यास हो। यो प्रायः स्पष्ट सपना देख्ने र सजगतामा वर्तमान क्षणको बारेमा थप सचेत हुन प्रयोग गरिन्छ।",
+              agnosiaCheckTitle: "अज्ञानता जाँच",
+              agnosiaCheckDesc: "अज्ञानता एक अवस्था हो जहाँ एक व्यक्तिले वस्तु, ध्वनि, वा मानिसहरूलाई चिन्न सक्दैन यद्यपि उसको इन्द्रियहरू सामान्य रूपमा काम गरिरहेका छन्। यो आँखा वा कानमा कुनै समस्याको कारणले होइन, धारणा र समझ बीचको सम्बन्ध विच्छेदको कारणले हुन्छ।",
+              seeMore: "थप हेर्नुहोस्"
+          },
+          hi: {
+              headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा",
+              login: "लॉग इन करें",
+              share: "साझा करें",
+              home: "होम",
+              agnosia: "अज्ञान",
+              enigma: "पहेली",
+              emulate: "अनुकरण",
+              post: "पोस्ट",
+              language: "भाषा",
+              realityCheckTitle: "वास्तविकता जांच",
+              realityCheckDesc: "वास्तविकता जांच यह सवाल करने का अभ्यास है कि आपका वर्तमान अनुभव वास्तविक है या सपना। इसका उपयोग अक्सर स्पष्ट सपने देखने और सचेतनता में वर्तमान क्षण के प्रति अधिक जागरूक होने के लिए किया जाता है।",
+              agnosiaCheckTitle: "अज्ञान जांच",
+              agnosiaCheckDesc: "अज्ञान एक ऐसी स्थिति है जहां कोई व्यक्ति वस्तुओं, ध्वनियों या लोगों को नहीं पहचान पाता, भले ही उसकी इंद्रियां सामान्य रूप से काम कर रही हों। यह धारणा और समझ के बीच संबंध टूट जाने के कारण होता है, न कि आंखों या कानों में किसी समस्या के कारण।",
+              seeMore: "और देखें"
+          }
+      };
+
+      let currentLanguage = localStorage.getItem('selectedLanguageNew') || 'en'; // Use a new localStorage key if needed
+
+      function setLanguage(lang) {
+          currentLanguage = lang;
+          localStorage.setItem('selectedLanguageNew', lang);
+          applyTranslations();
+          document.querySelectorAll('.language-options a').forEach(a => {
+              a.classList.remove('lang-active');
+              if (a.dataset.lang === lang) {
+                  a.classList.add('lang-active');
+              }
+          });
+      }
+
+      function _(key, fallbackLang = 'en') {
+          return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+      }
+
+      function applyTranslations() {
+          document.querySelectorAll('[data-translate-key]').forEach(element => {
+              const key = element.dataset.translateKey;
+              element.textContent = _(key);
+          });
+          // Add placeholder translation if needed for this version
+      }
+      // --- END TRANSLATION LOGIC ---
+
+      const hamburger = document.querySelector(".hamburger");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const languageSelectLabel = document.querySelector('.language-select-label');
+      const languageOptionsDiv = document.querySelector('.language-options');
+
+
       function toggleMenu() {
-        document.querySelector(".mobile-menu").classList.toggle("active");
-        document.querySelectorAll(".hamburger-line").forEach((line) => {
-          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
+        mobileMenu.classList.toggle("active");
+        hamburger.classList.toggle("active"); // For the X animation
+      }
+
+      if (hamburger) {
+        hamburger.addEventListener('click', toggleMenu);
+      }
+
+      if (languageSelectLabel) {
+        languageSelectLabel.addEventListener('click', () => {
+            if (languageOptionsDiv) {
+                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
+            }
         });
       }
 
-      // क्लिक आउटसाइड करने पर मेन्यू बंद
+      document.querySelectorAll('.language-options a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = e.currentTarget.dataset.lang;
+            setLanguage(lang);
+            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
+            // Optionally close the main mobile menu after language selection
+            // if (mobileMenu.classList.contains('active')) {
+            //     toggleMenu();
+            // }
+        });
+      });
+
+      // Close menu on click outside, EXCLUDING language options toggle and selection
       document.addEventListener("click", (e) => {
         if (
-          !e.target.closest(".hamburger") &&
-          !e.target.closest(".mobile-menu")
+          mobileMenu.classList.contains("active") &&
+          !hamburger.contains(e.target) && // Not clicking the hamburger itself
+          !mobileMenu.contains(e.target) // Not clicking inside the mobile menu
         ) {
-          document.querySelector(".mobile-menu").classList.remove("active");
-          document.querySelectorAll(".hamburger-line").forEach((line) => {
-            line.style.transform = "";
-          });
+          toggleMenu();
+        } else if ( languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
+                    !languageSelectLabel.contains(e.target) &&
+                    !languageOptionsDiv.contains(e.target)
+        ) {
+            // If language options are open and click is outside them (and not on the label that opens them)
+            languageOptionsDiv.style.display = 'none';
         }
       });
+
+      // Apply translations on page load
+      document.addEventListener('DOMContentLoaded', () => {
+          setLanguage(currentLanguage);
+      });
+
     </script>
-
-	  <!-- बटन कार्ड सेक्शन -->
-<section style="padding: 40px 20px; background: #fff;">
-  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
-    
-    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
-      Reality check
-    </h3>
-	
-    <img src="images/Reality_check.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px;" />
-
-    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-Reality check is the practice of questioning whether your current experience is real or a dream.It is often used in lucid dreaming and mindfulness to become more aware of the present moment.</p>
-
-    <a href="Reality check.html">
-  <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
-    see more
-  </button>
-</a>
-  </div>
-</section>
-<section style="padding: 40px 20px; background: #fff;">
-  <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
-    
-    <h3 style="color: #8b0000; font-size: 24px; margin: 20px 0 10px;">
-      Agnosia check
-    </h3>
-
-     <img src="images/agnosia_check.jpg" alt="विराट स्वरूप" style="width: 100%; border-radius: 12px;" />
-
-    <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-Agnosia is a condition where a person cannot recognize objects, sounds, or people even though their senses are working normally. It happens due to a disconnect between perception and understanding, not because of any problem with the eyes or ears. 
- </p>
-
-    <a href="Agnosia check.html">
-  <button style="background-color: #8b0000; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
-    see more
-  </button>
-</a>
-  </div>
-</section>
-	     	
-</body>
+  </body>
 </html>
