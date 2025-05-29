@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en"> <!-- Default to English -->
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VIRAT SWARUP</title>
+    <title>VIRAT SWARUP - What is Reality?</title> <!-- Page specific title -->
     <!-- Font Awesome Icons -->
     <link
       rel="stylesheet"
@@ -15,7 +15,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif;
+        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
       }
 
       body {
@@ -23,44 +23,26 @@
         color: #2c2c2c;
       }
 
-      /* हैडर सेक्शन */
-      .header {
-        padding: 95px 20px 45px;
-        text-align: center;
-        border-bottom: 1px solid #e0e0e0;
-        background-color: #8b0000;
-      }
-      .header h1 {
-        font-size: 52px;
-        letter-spacing: 3.2px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        color: white;
-      }
-      .header h2 {
-        font-size: 22px;
-        color: #fff;
-        font-weight: 300;
-      }
-
-      /* हैमबर्गर मेन्यू */
+      /* Hamburger & Menu Styles (same as previous) */
       .hamburger {
         position: fixed;
         top: 25px;
         right: 25px;
         cursor: pointer;
         display: none;
-        z-index: 1000;
+        z-index: 1001;
       }
       .hamburger-line {
         width: 28px;
         height: 2px;
-        background: #000000;
+        background: #ffffff; /* White for visibility on dark header */
         margin: 6px 0;
         transition: 0.4s;
       }
+      .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+      .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; }
+      .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
 
-      /* मोबाइल मेन्यू */
       .mobile-menu {
         position: fixed;
         top: 0;
@@ -70,322 +52,339 @@
         background: #8b0000;
         box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
         transition: 0.4s;
-        padding-top: 80px;
-        z-index: 999;
+        padding-top: 60px;
+        z-index: 1000;
+        overflow-y: auto;
       }
-      .mobile-menu.active {
-        right: 0;
-      }
-      .mobile-menu a {
+      .mobile-menu.active { right: 0; }
+      .mobile-menu a, .mobile-menu .language-select-label {
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 18px 30px;
-        color: #fff;
+        padding: 15px 30px;
+        color: #fff !important;
         text-decoration: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
       }
-      .mobile-menu i {
-        width: 25px;
-        font-size: 20px;
-        color: #fff;
-      }
+      .mobile-menu i { width: 25px; font-size: 20px; color: #fff !important; }
+      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child { border-bottom: none; }
 
-      /* बॉटम नेविगेशन */
+      .language-options { padding-left: 30px; display: none; background-color: rgba(0,0,0,0.1); }
+      .language-options a { padding: 12px 30px; font-size: 0.9em; }
+      .language-options a.lang-active { font-weight: bold; background-color: rgba(255,255,255,0.1); }
+
+      /* Navigations (same as previous) */
       .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: #8b0000;
-        border-top: 1px solid #eee;
-        padding: 8px 0;
-        display: none;
-        z-index: 999;
+        position: fixed; bottom: 0; left: 0; width: 100%; background: #8b0000;
+        border-top: 1px solid #eee; padding: 8px 0; display: none; z-index: 999;
       }
-      .bottom-nav ul {
-        display: flex;
-        justify-content: space-around;
-        list-style: none;
-      }
+      .bottom-nav ul { display: flex; justify-content: space-around; list-style: none; }
       .bottom-nav a {
-        color: #fff;
-        font-size: 16px;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 10px 14px;
-        border-radius: 8px;
-        transition: background 0.3s;
+        color: #fff !important; font-size: 16px; text-decoration: none; display: flex;
+        flex-direction: column; align-items: center; gap: 4px; padding: 8px 10px;
+        border-radius: 8px; transition: background 0.3s;
       }
+      .bottom-nav a i { font-size: 20px; }
+      .bottom-nav a span { font-size: 12px; }
+      .bottom-nav a:hover { background-color: rgba(255, 255, 255, 0.1); }
 
-      .bottom-nav a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-
-      /* डेस्कटॉप नेविगेशन */
-      .desktop-nav {
-        margin: 45px 0;
-      }
-      .desktop-nav ul {
-        display: flex;
-        justify-content: center;
-        gap: 32px;
-        list-style: none;
-      }
+      .desktop-nav { margin: 45px 0; text-align: center; }
+      .desktop-nav ul { display: inline-flex; justify-content: center; gap: 32px; list-style: none; }
       .desktop-nav a {
-        color: #8b0000;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 18px;
+        color: #8b0000; text-decoration: none; display: flex; align-items: center;
+        gap: 8px; font-size: 18px;
       }
 
-      /* रिस्पॉन्सिव डिज़ाइन */
       @media (max-width: 768px) {
-        .hamburger {
-          display: block;
-        }
-        .desktop-nav {
-          display: none;
-        }
-        .bottom-nav {
-          display: block;
-        }
-        .header {
-          padding: 70px 20px 35px;
-        }
-        .header h1 {
-          font-size: 42px;
-        }
+        .hamburger { display: block; }
+        .desktop-nav { display: none; }
+        .bottom-nav { display: block; }
       }
+
+      /* Styles for "What is Reality?" page content sections */
+      .content-section {
+        padding: 30px 20px; /* Adjusted padding */
+        text-align: center; 
+        background: #fff; 
+        max-width: 800px; /* Increased max-width for better readability */
+        margin: 30px auto; /* Adjusted margin */
+        border-radius: 12px; /* Softer radius */
+        box-shadow: 0 6px 15px rgba(139, 0, 0, 0.15); /* Adjusted shadow */
+        color: #333;
+      }
+      .content-section h2 {
+        font-size: 28px; /* Slightly adjusted size */
+        color: #8b0000; 
+        margin-bottom: 20px;
+      }
+      .content-section p {
+        font-size: 17px; /* Slightly adjusted size */
+        line-height: 1.7; /* Adjusted line-height */
+        text-align: justify; /* Justify paragraphs for better block reading */
+      }
+
     </style>
   </head>
   <body>
-    <!-- हैमबर्गर आइकन -->
-    <div class="hamburger" onclick="toggleMenu()">
+    <!-- Hamburger Icon -->
+    <div class="hamburger"> <!-- onclick removed -->
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
     </div>
 
-    <!-- मोबाइल मेन्यू -->
+    <!-- Mobile Menu -->
     <nav class="mobile-menu">
-      <a href="#login"><i class="fas fa-sign-in-alt"></i>Login</a>
-      <a href="#share"><i class="fas fa-share"></i>Share</a>
-      <a href="index.html"><i class="fas fa-home"></i>Home</a>
-      <a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a>
-      <a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a>
-      <a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a>
-      <a href="index.html"><i class="fas fa-comment"></i>Post</a>
+      <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+      <a href="#share"><i class="fas fa-share"></i><span data-translate-key="share">Share</span></a>
+      <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+      <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+      <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+      <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+      <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
+
+      <div class="language-select-label">
+            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
+      </div>
+      <div class="language-options">
+          <a href="#" data-lang="en">English</a>
+          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+      </div>
     </nav>
 
-    <!-- हैडर -->
-    <header style="background-color: #8b0000; padding: 10px 10px 10px; text-align: center;">
-
-  <h1 style="color: white; font-size: 24px 16; margin: 0;">VIRAT SWARUP</h1>
-  <h2 style="color: white; font-size: 13px; margin: 0;"> The Supreme Devine of Every Faith</h2>
-
+    <!-- Header -->
+    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
+        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
+        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitleReality"> The Supreme Devine of Every Faith</h2>
     </header>
 
-    <!-- डेस्कटॉप नेविगेशन -->
+    <!-- Desktop Navigation -->
     <nav class="desktop-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="#agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="#enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="#emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
-    <!-- बॉटम नेविगेशन -->
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i>Agnosia</a></li>
-        <li><a href="enigma.html"><i class="fas fa-question-circle"></i>Enigma</a></li>
-        <li><a href="emulate.html"><i class="fas fa-copy"></i>Emulate</a></li>
-        <li><a href="index.html"><i class="fas fa-comment"></i>Post</a></li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a></li>
       </ul>
     </nav>
 
+    <!-- Content Sections for "What is Reality?" -->
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle1">What is Reality?</h2>
+      <p data-translate-key="realityDesc1">
+        Reality is the true and permanent truth, something that is constant and unchanging. The things we see, hear, and feel are not actually reality. What we experience through our senses—like sight, hearing, and touch—is just an impression or a perception, and it changes all the time. For example, when we look at the sun, we see a bright, glowing object in the sky. But in reality, the sun is a massive ball of gas. What we see with our eyes is not the full truth. Our senses can only perceive a small part of the whole reality, and what we see is just a tiny fraction of what exists. Reality is Unchanging: True reality is something that stays the same, no matter the time, place, or situation. Whether or not we understand it, reality remains constant. Things like the universe, stars, and planets are all part of this deeper, unchanging reality, but we can't fully grasp their true form with our senses alone. Why Can't We See Reality? What we perceive through our senses is just a filtered version of reality. Our eyes, for example, can only see three primary colors, but there are many more colors beyond what we can detect. This shows us that everything we experience is a limited version of what’s truly out there. The real essence of reality can only be understood by going beyond the limitations of our senses—through deep meditation, self-awareness, and spiritual understanding. When we break free from the illusions created by our mind and senses, we begin to connect with the true nature of reality.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle2">The Illusion of Non-Reality:</h2>
+      <p data-translate-key="realityDesc2">
+        Non-reality is the world as we experience it through our senses. The objects, phenomena, and events we encounter daily are not the true essence of existence but mere representations of a deeper, unseen reality. This world of appearances is fleeting, ever-changing, and filled with illusions. From the nature of life to the form of matter, everything we interact with is subject to time and decay. In essence, the world we experience is a projection of the mind and senses. The objects we see, the sounds we hear, the tastes and smells we encounter — all of these are merely interpretations created by our brain based on the sensory data it receives. Thus, they are not ultimate truths but a filtered, incomplete version of the real world.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle3">The Limitation of Human Perception:</h2>
+      <p data-translate-key="realityDesc3">
+        Human perception is inherently limited. Our senses are designed to interact with the world in specific ways, yet they fail to offer us a complete understanding of reality. One of the clearest examples is our limited range of vision. Humans can only perceive three colors — red, green, and blue — and all other colors are simply a blend of these. The vast spectrum of light, including ultraviolet and infrared, is invisible to us. Similarly, our hearing is restricted to a narrow band of frequencies, and our sense of touch only allows us to perceive a small portion of the textures and temperatures around us. We rely on our senses to navigate the world, but these senses are not capable of capturing the totality of existence. Even time itself is an illusion created by our perception. We perceive time as linear, moving forward from the past to the present and into the future. Yet, in the grand scheme of the universe, time is not so straightforward. It is merely a construct of our limited mind and senses, providing us with a framework through which we can make sense of our lives.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle4">Searching for Reality in Non-Reality:</h2>
+      <p data-translate-key="realityDesc4">
+        Despite the limitations of our senses, humans have an innate desire to seek truth, to uncover the nature of existence beyond the veil of illusion. This search for reality, for what is truly real, is an ongoing pursuit in human consciousness. We constantly search for answers to questions like "What is the nature of life?" "What is the purpose of our existence?" and "What lies beyond this world?" Philosophers, scientists, and spiritual seekers alike have embarked on this quest for understanding. Yet, while science explores the material world and its physical laws, it often fails to address the deeper questions of existence. Spiritual traditions, on the other hand, teach that the path to reality lies not through the senses but through inner contemplation and transcendence. We search for reality within the world of non-reality, but the true nature of existence can only be known when we transcend the limitations of our senses. Spiritual practices such as meditation, yoga, and self-inquiry offer a pathway to experience a deeper reality that exists beyond the physical world.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle5">The Interplay Between Reality and Non-Reality:</h2>
+      <p data-translate-key="realityDesc5">
+        Reality and non-reality are not two separate entities; they are two aspects of the same existence. Non-reality is not something to be dismissed or rejected, but rather understood as a part of the whole. It is through the non-reality — through our physical world, our experiences, and our perceptions — that we are able to begin the search for the ultimate reality. Non-reality is the canvas upon which reality is painted. It is the field of play in which the divine unfolds, where the human soul seeks to understand its true nature. As we grow in awareness, we come to realize that the line between reality and non-reality is not always so clear-cut. The more we explore and question the world around us, the closer we come to understanding the deeper truths that lie hidden beneath the surface.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle6">The Role of the Mind in Shaping Reality:</h2>
+      <p data-translate-key="realityDesc6">
+        The mind plays a central role in how we experience both reality and non-reality. Our thoughts, beliefs, and perceptions create the lens through which we view the world. The mind filters and interprets sensory information, creating a version of reality that is unique to each individual. In this way, the mind is both a tool for understanding and a barrier to true understanding. While it allows us to navigate the world and make sense of our experiences, it also distorts and limits our perception. The mind is bound by the limitations of the senses and is often caught in the web of illusion. To experience reality in its purest form, we must transcend the mind's conditioning and ego. This can only be achieved through practices that quiet the mind and open us to higher states of consciousness. Meditation, mindfulness, and spiritual discipline offer a means of transcending the mind and experiencing a deeper reality that lies beyond the senses.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle7">The Search for Ultimate Reality:</h2>
+      <p data-translate-key="realityDesc7">
+        The ultimate reality, or "Sat," as described in Vedantic philosophy, is not something that can be seen or touched. It is the unchanging, eternal essence of existence. It is pure consciousness, beyond form and beyond time. To experience this reality, one must look beyond the transient world of non-reality and turn inward. The search for ultimate reality is a spiritual journey, one that requires dedication, introspection, and the shedding of illusions. It is a journey that can only be undertaken by those who are willing to question everything they have been taught and see the world through a new lens. The true reality is within us, and it is through self-realization and awakening that we come to know it.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2 data-translate-key="realityTitle8">Conclusion:</h2>
+      <p data-translate-key="realityDesc8">
+        Reality and non-reality are two sides of the same coin. While non-reality offers us the material world and the sensory experiences we rely on daily, it is through transcending these illusions that we come closer to understanding the true nature of existence. The search for reality is not a search for something external, but a journey inward, where we seek to uncover the eternal truth that lies beyond the limitations of the senses and the mind. By understanding the relationship between reality and non-reality, we can begin to see through the illusions that govern our perception and move closer to the ultimate truth that is present within us all. It is only through this inner awakening that we can experience reality in its purest form — a reality that is beyond time, space, and the material world.
+      </p>
+    </section>
+
     <script>
-      // हैमबर्गर मेन्यू फंक्शन
+      // --- START TRANSLATION DATA & LOGIC ---
+      const translations = {
+          en: {
+              headerSubtitleReality: "The Supreme Divine of Every Faith",
+              login: "Login", share: "Share", home: "Home", agnosia: "Agnosia", enigma: "Enigma",
+              emulate: "Emulate", post: "Post", language: "Language",
+              // "What is Reality?" Page Specific
+              realityTitle1: "What is Reality?",
+              realityDesc1: "Reality is the true and permanent truth, something that is constant and unchanging. The things we see, hear, and feel are not actually reality. What we experience through our senses—like sight, hearing, and touch—is just an impression or a perception, and it changes all the time. For example, when we look at the sun, we see a bright, glowing object in the sky. But in reality, the sun is a massive ball of gas. What we see with our eyes is not the full truth. Our senses can only perceive a small part of the whole reality, and what we see is just a tiny fraction of what exists. Reality is Unchanging: True reality is something that stays the same, no matter the time, place, or situation. Whether or not we understand it, reality remains constant. Things like the universe, stars, and planets are all part of this deeper, unchanging reality, but we can't fully grasp their true form with our senses alone. Why Can't We See Reality? What we perceive through our senses is just a filtered version of reality. Our eyes, for example, can only see three primary colors, but there are many more colors beyond what we can detect. This shows us that everything we experience is a limited version of what’s truly out there. The real essence of reality can only be understood by going beyond the limitations of our senses—through deep meditation, self-awareness, and spiritual understanding. When we break free from the illusions created by our mind and senses, we begin to connect with the true nature of reality.",
+              realityTitle2: "The Illusion of Non-Reality:",
+              realityDesc2: "Non-reality is the world as we experience it through our senses. The objects, phenomena, and events we encounter daily are not the true essence of existence but mere representations of a deeper, unseen reality. This world of appearances is fleeting, ever-changing, and filled with illusions. From the nature of life to the form of matter, everything we interact with is subject to time and decay. In essence, the world we experience is a projection of the mind and senses. The objects we see, the sounds we hear, the tastes and smells we encounter — all of these are merely interpretations created by our brain based on the sensory data it receives. Thus, they are not ultimate truths but a filtered, incomplete version of the real world.",
+              realityTitle3: "The Limitation of Human Perception:",
+              realityDesc3: "Human perception is inherently limited. Our senses are designed to interact with the world in specific ways, yet they fail to offer us a complete understanding of reality. One of the clearest examples is our limited range of vision. Humans can only perceive three colors — red, green, and blue — and all other colors are simply a blend of these. The vast spectrum of light, including ultraviolet and infrared, is invisible to us. Similarly, our hearing is restricted to a narrow band of frequencies, and our sense of touch only allows us to perceive a small portion of the textures and temperatures around us. We rely on our senses to navigate the world, but these senses are not capable of capturing the totality of existence. Even time itself is an illusion created by our perception. We perceive time as linear, moving forward from the past to the present and into the future. Yet, in the grand scheme of the universe, time is not so straightforward. It is merely a construct of our limited mind and senses, providing us with a framework through which we can make sense of our lives.",
+              realityTitle4: "Searching for Reality in Non-Reality:",
+              realityDesc4: "Despite the limitations of our senses, humans have an innate desire to seek truth, to uncover the nature of existence beyond the veil of illusion. This search for reality, for what is truly real, is an ongoing pursuit in human consciousness. We constantly search for answers to questions like \"What is the nature of life?\" \"What is the purpose of our existence?\" and \"What lies beyond this world?\" Philosophers, scientists, and spiritual seekers alike have embarked on this quest for understanding. Yet, while science explores the material world and its physical laws, it often fails to address the deeper questions of existence. Spiritual traditions, on the other hand, teach that the path to reality lies not through the senses but through inner contemplation and transcendence. We search for reality within the world of non-reality, but the true nature of existence can only be known when we transcend the limitations of our senses. Spiritual practices such as meditation, yoga, and self-inquiry offer a pathway to experience a deeper reality that exists beyond the physical world.",
+              realityTitle5: "The Interplay Between Reality and Non-Reality:",
+              realityDesc5: "Reality and non-reality are not two separate entities; they are two aspects of the same existence. Non-reality is not something to be dismissed or rejected, but rather understood as a part of the whole. It is through the non-reality — through our physical world, our experiences, and our perceptions — that we are able to begin the search for the ultimate reality. Non-reality is the canvas upon which reality is painted. It is the field of play in which the divine unfolds, where the human soul seeks to understand its true nature. As we grow in awareness, we come to realize that the line between reality and non-reality is not always so clear-cut. The more we explore and question the world around us, the closer we come to understanding the deeper truths that lie hidden beneath the surface.",
+              realityTitle6: "The Role of the Mind in Shaping Reality:",
+              realityDesc6: "The mind plays a central role in how we experience both reality and non-reality. Our thoughts, beliefs, and perceptions create the lens through which we view the world. The mind filters and interprets sensory information, creating a version of reality that is unique to each individual. In this way, the mind is both a tool for understanding and a barrier to true understanding. While it allows us to navigate the world and make sense of our experiences, it also distorts and limits our perception. The mind is bound by the limitations of the senses and is often caught in the web of illusion. To experience reality in its purest form, we must transcend the mind's conditioning and ego. This can only be achieved through practices that quiet the mind and open us to higher states of consciousness. Meditation, mindfulness, and spiritual discipline offer a means of transcending the mind and experiencing a deeper reality that lies beyond the senses.",
+              realityTitle7: "The Search for Ultimate Reality:",
+              realityDesc7: "The ultimate reality, or \"Sat,\" as described in Vedantic philosophy, is not something that can be seen or touched. It is the unchanging, eternal essence of existence. It is pure consciousness, beyond form and beyond time. To experience this reality, one must look beyond the transient world of non-reality and turn inward. The search for ultimate reality is a spiritual journey, one that requires dedication, introspection, and the shedding of illusions. It is a journey that can only be undertaken by those who are willing to question everything they have been taught and see the world through a new lens. The true reality is within us, and it is through self-realization and awakening that we come to know it.",
+              realityTitle8: "Conclusion:",
+              realityDesc8: "Reality and non-reality are two sides of the same coin. While non-reality offers us the material world and the sensory experiences we rely on daily, it is through transcending these illusions that we come closer to understanding the true nature of existence. The search for reality is not a search for something external, but a journey inward, where we seek to uncover the eternal truth that lies beyond the limitations of the senses and the mind. By understanding the relationship between reality and non-reality, we can begin to see through the illusions that govern our perception and move closer to the ultimate truth that is present within us all. It is only through this inner awakening that we can experience reality in its purest form — a reality that is beyond time, space, and the material world."
+          },
+          ne: {
+              headerSubtitleReality: "हरेक आस्थाका सर्वोच्च परमात्मा",
+              login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली",
+              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              // "What is Reality?" Page Specific - NEPALI TRANSLATIONS NEEDED
+              realityTitle1: "वास्तविकता के हो?",
+              realityDesc1: "वास्तविकता सत्य र स्थायी सत्य हो, जुन स्थिर र अपरिवर्तनीय छ। हामीले देख्ने, सुन्ने र महसुस गर्ने कुराहरू वास्तवमा वास्तविकता होइनन्। हामीले हाम्रा इन्द्रियहरू—जस्तै दृष्टि, श्रवण, र स्पर्श—मार्फत अनुभव गर्ने कुराहरू केवल एक छाप वा धारणा हो, र यो सधैं परिवर्तन भइरहन्छ। उदाहरणका लागि, जब हामी सूर्यलाई हेर्छौं, हामी आकाशमा चम्किलो, चम्किलो वस्तु देख्छौं। तर वास्तविकतामा, सूर्य ग्यासको एक विशाल गोला हो। हामीले आँखाले देखेको कुरा पूर्ण सत्य होइन। हाम्रा इन्द्रियहरूले सम्पूर्ण वास्तविकताको सानो अंश मात्र बुझ्न सक्छन्, र हामीले देखेको कुरा अस्तित्वको एक सानो अंश मात्र हो। वास्तविकता अपरिवर्तनीय छ: साँचो वास्तविकता त्यो हो जुन समय, स्थान वा परिस्थिति जस्तोसुकै भए पनि उस्तै रहन्छ। हामीले बुझे पनि नबुझे पनि, वास्तविकता स्थिर रहन्छ। ब्रह्माण्ड, तारा र ग्रहहरू जस्ता चीजहरू सबै यो गहिरो, अपरिवर्तनीय वास्तविकताका अंश हुन्, तर हामीले हाम्रा इन्द्रियहरूले मात्र तिनीहरूको वास्तविक रूप पूर्ण रूपमा बुझ्न सक्दैनौं। हामी वास्तविकता किन देख्न सक्दैनौं? हामीले हाम्रा इन्द्रियहरू मार्फत बुझेको कुरा वास्तविकताको फिल्टर गरिएको संस्करण मात्र हो। उदाहरणका लागि, हाम्रा आँखाहरूले केवल तीन प्राथमिक रंगहरू देख्न सक्छन्, तर हामीले पत्ता लगाउन सक्नेभन्दा धेरै रंगहरू छन्। यसले हामीलाई देखाउँछ कि हामीले अनुभव गर्ने हरेक कुरा वास्तवमा त्यहाँ बाहिर के छ भन्ने सीमित संस्करण हो। वास्तविकताको वास्तविक सार हाम्रा इन्द्रियहरूको सीमितताभन्दा पर गएर मात्र बुझ्न सकिन्छ—गहिरो ध्यान, आत्म-जागरूकता, र आध्यात्मिक समझ मार्फत। जब हामी हाम्रो मन र इन्द्रियहरूद्वारा सिर्जित भ्रमहरूबाट मुक्त हुन्छौं, हामी वास्तविकताको वास्तविक प्रकृतिसँग जोडिन थाल्छौं।",
+              realityTitle2: "अवास्तविकताको भ्रम:",
+              realityDesc2: "अवास्तविकता भनेको संसार हो जसलाई हामीले हाम्रा इन्द्रियहरू मार्फत अनुभव गर्छौं। हामीले दैनिक सामना गर्ने वस्तुहरू, घटनाहरू, र घटनाहरू अस्तित्वको वास्तविक सार होइनन् तर गहिरो, नदेखिने वास्तविकताका केवल प्रतिनिधित्वहरू हुन्। यो देखावटी संसार क्षणिक, सधैं परिवर्तनशील, र भ्रमहरूले भरिएको छ। जीवनको प्रकृतिदेखि लिएर पदार्थको रूपसम्म, हामीले अन्तरक्रिया गर्ने हरेक कुरा समय र क्षयको अधीनमा छ। सारमा, हामीले अनुभव गर्ने संसार मन र इन्द्रियहरूको प्रक्षेपण हो। हामीले देख्ने वस्तुहरू, सुन्ने ध्वनिहरू, स्वाद र गन्धहरू—यी सबै हाम्रो मस्तिष्कले प्राप्त गरेको संवेदी डेटाको आधारमा सिर्जना गरिएका व्याख्याहरू मात्र हुन्। तसर्थ, तिनीहरू परम सत्य होइनन् तर वास्तविक संसारको फिल्टर गरिएको, अपूर्ण संस्करण हुन्।",
+              realityTitle3: "मानव धारणाको सीमितता:",
+              realityDesc3: "मानव धारणा स्वाभाविक रूपमा सीमित छ। हाम्रा इन्द्रियहरू विशेष तरिकामा संसारसँग अन्तरक्रिया गर्न डिजाइन गरिएका छन्, तैपनि तिनीहरूले हामीलाई वास्तविकताको पूर्ण समझ प्रदान गर्न असफल हुन्छन्। सबैभन्दा स्पष्ट उदाहरणहरू मध्ये एक हाम्रो दृष्टिको सीमित दायरा हो। मानिसले केवल तीन रंगहरू—रातो, हरियो, र नीलो— बुझ्न सक्छ, र अन्य सबै रंगहरू केवल यिनीहरूको मिश्रण हुन्। पराबैजनी र इन्फ्रारेड सहित प्रकाशको विशाल स्पेक्ट्रम हाम्रो लागि अदृश्य छ। त्यसैगरी, हाम्रो श्रवणशक्ति फ्रिक्वेन्सीहरूको साँघुरो ब्यान्डमा सीमित छ, र हाम्रो स्पर्शको भावनाले हामीलाई हाम्रो वरपरका बनावट र तापक्रमहरूको सानो अंश मात्र बुझ्न अनुमति दिन्छ। हामी संसारमा नेभिगेट गर्न हाम्रा इन्द्रियहरूमा भर पर्छौं, तर यी इन्द्रियहरू अस्तित्वको समग्रतालाई कैद गर्न सक्षम छैनन्। समय आफैं पनि हाम्रो धारणाद्वारा सिर्जित भ्रम हो। हामी समयलाई रैखिक रूपमा बुझ्छौं, विगतबाट वर्तमान र भविष्यतिर अघि बढिरहेको। यद्यपि, ब्रह्माण्डको बृहत् योजनामा, समय त्यति सीधा छैन। यो केवल हाम्रो सीमित मन र इन्द्रियहरूको निर्माण हो, जसले हामीलाई हाम्रो जीवनलाई अर्थ दिन सक्ने ढाँचा प्रदान गर्दछ।",
+              realityTitle4: "अवास्तविकतामा वास्तविकताको खोजी:",
+              realityDesc4: "हाम्रा इन्द्रियहरूको सीमितताको बावजुद, मानिसमा सत्य खोज्ने, भ्रमको पर्दाभन्दा पर अस्तित्वको प्रकृति उजागर गर्ने जन्मजात इच्छा हुन्छ। वास्तविकताको यो खोजी, वास्तवमा के वास्तविक छ भन्ने खोजी, मानव चेतनामा चलिरहेको प्रयास हो। हामी निरन्तर प्रश्नहरूको उत्तर खोज्छौं जस्तै \"जीवनको प्रकृति के हो?\" \"हाम्रो अस्तित्वको उद्देश्य के हो?\" र \"यो संसारभन्दा पर के छ?\" दार्शनिकहरू, वैज्ञानिकहरू, र आध्यात्मिक साधकहरू सबैले यो समझको खोजीमा लागेका छन्। यद्यपि, विज्ञानले भौतिक संसार र यसका भौतिक नियमहरूको अन्वेषण गर्दा, यसले प्रायः अस्तित्वका गहिरो प्रश्नहरूलाई सम्बोधन गर्न असफल हुन्छ। अर्कोतर्फ, आध्यात्मिक परम्पराहरूले सिकाउँछन् कि वास्तविकताको मार्ग इन्द्रियहरू मार्फत होइन तर भित्री चिन्तन र अतिक्रमण मार्फत निहित छ। हामी अवास्तविकताको संसारभित्र वास्तविकता खोज्छौं, तर अस्तित्वको वास्तविक प्रकृति हाम्रा इन्द्रियहरूको सीमिततालाई पार गरेपछि मात्र थाहा पाउन सकिन्छ। ध्यान, योग, र आत्म-जिज्ञासा जस्ता आध्यात्मिक अभ्यासहरूले भौतिक संसारभन्दा पर रहेको गहिरो वास्तविकता अनुभव गर्ने मार्ग प्रदान गर्दछ।",
+              realityTitle5: "वास्तविकता र अवास्तविकता बीचको अन्तरक्रिया:",
+              realityDesc5: "वास्तविकता र अवास्तविकता दुई अलग संस्थाहरू होइनन्; तिनीहरू एउटै अस्तित्वका दुई पक्ष हुन्। अवास्तविकता खारेज वा अस्वीकार गरिने कुरा होइन, बरु समग्रको एक भागको रूपमा बुझ्नुपर्छ। यो अवास्तविकता मार्फत हो—हाम्रो भौतिक संसार, हाम्रा अनुभवहरू, र हाम्रा धारणाहरू मार्फत—कि हामी परम वास्तविकताको खोजी सुरु गर्न सक्षम छौं। अवास्तविकता त्यो क्यानभास हो जसमा वास्तविकता चित्रित छ। यो खेलको क्षेत्र हो जसमा परमात्मा प्रकट हुन्छ, जहाँ मानव आत्माले आफ्नो वास्तविक प्रकृति बुझ्न खोज्छ। जब हामी जागरूकतामा बढ्छौं, हामीले वास्तविकता र अवास्तविकता बीचको रेखा सधैं त्यति स्पष्ट हुँदैन भन्ने महसुस गर्न थाल्छौं। हामीले हाम्रो वरपरको संसारको जति धेरै अन्वेषण र प्रश्न गर्छौं, हामी सतहमुनि लुकेका गहिरो सत्यहरू बुझ्न त्यति नै नजिक पुग्छौं।",
+              realityTitle6: "वास्तविकतालाई आकार दिन मनको भूमिका:",
+              realityDesc6: "हामीले वास्तविकता र अवास्तविकता दुवैलाई कसरी अनुभव गर्छौं भन्नेमा मनले केन्द्रीय भूमिका खेल्छ। हाम्रा विचारहरू, विश्वासहरू, र धारणाहरूले त्यो लेन्स सिर्जना गर्दछ जसको माध्यमबाट हामी संसारलाई हेर्छौं। मनले संवेदी जानकारी फिल्टर र व्याख्या गर्दछ, प्रत्येक व्यक्तिको लागि अद्वितीय वास्तविकताको संस्करण सिर्जना गर्दछ। यसरी, मन समझको लागि एक उपकरण र साँचो समझको लागि बाधा दुवै हो। जब यसले हामीलाई संसारमा नेभिगेट गर्न र हाम्रा अनुभवहरूलाई अर्थ दिन अनुमति दिन्छ, यसले हाम्रो धारणालाई विकृत र सीमित पनि गर्दछ। मन इन्द्रियहरूको सीमितताले बाँधिएको छ र प्रायः भ्रमको जालमा फसेको हुन्छ। वास्तविकतालाई यसको शुद्ध रूपमा अनुभव गर्न, हामीले मनको कन्डिसनिङ र अहंकारलाई पार गर्नुपर्छ। यो केवल मनलाई शान्त पार्ने र हामीलाई चेतनाको उच्च अवस्थाहरूमा खोल्ने अभ्यासहरू मार्फत मात्र प्राप्त गर्न सकिन्छ। ध्यान, सजगता, र आध्यात्मिक अनुशासनले मनलाई पार गर्ने र इन्द्रियहरूभन्दा पर रहेको गहिरो वास्तविकता अनुभव गर्ने माध्यम प्रदान गर्दछ।",
+              realityTitle7: "परम वास्तविकताको खोजी:",
+              realityDesc7: "परम वास्तविकता, वा वेदान्तिक दर्शनमा वर्णन गरिए अनुसार \"सत्\", देख्न वा छुन सकिने कुरा होइन। यो अस्तित्वको अपरिवर्तनीय, शाश्वत सार हो। यो शुद्ध चेतना हो, रूपभन्दा पर र समयभन्दा पर। यो वास्तविकता अनुभव गर्न, व्यक्तिले क्षणिक अवास्तविकताको संसारभन्दा पर हेर्नुपर्छ र भित्र फर्कनुपर्छ। परम वास्तविकताको खोजी एक आध्यात्मिक यात्रा हो, जसलाई समर्पण, आत्मनिरीक्षण, र भ्रमहरूको त्याग आवश्यक पर्दछ। यो यस्तो यात्रा हो जुन केवल ती व्यक्तिहरूले मात्र गर्न सक्छन् जो आफूले सिकाइएका सबै कुराहरूमा प्रश्न गर्न र संसारलाई नयाँ लेन्सबाट हेर्न इच्छुक छन्। साँचो वास्तविकता हामीभित्र छ, र यो आत्म-साक्षात्कार र जागरण मार्फत हो कि हामीले यसलाई थाहा पाउँछौं।",
+              realityTitle8: "निष्कर्ष:",
+              realityDesc8: "वास्तविकता र अवास्तविकता एउटै सिक्काका दुई पाटा हुन्। जब अवास्तविकताले हामीलाई भौतिक संसार र हामीले दैनिक रूपमा भर पर्ने संवेदी अनुभवहरू प्रदान गर्दछ, यी भ्रमहरूलाई पार गरेर नै हामी अस्तित्वको वास्तविक प्रकृति बुझ्न नजिक पुग्छौं। वास्तविकताको खोजी बाहिरी कुराको खोजी होइन, तर भित्री यात्रा हो, जहाँ हामी इन्द्रिय र मनको सीमितताभन्दा पर रहेको शाश्वत सत्य उजागर गर्न खोज्छौं। वास्तविकता र अवास्तविकता बीचको सम्बन्ध बुझेर, हामी हाम्रो धारणालाई नियन्त्रण गर्ने भ्रमहरू मार्फत हेर्न र हामी सबैमा उपस्थित परम सत्यको नजिक पुग्न थाल्न सक्छौं। यो भित्री जागरण मार्फत मात्र हो कि हामीले वास्तविकतालाई यसको शुद्ध रूपमा अनुभव गर्न सक्छौं—एक वास्तविकता जुन समय, स्थान, र भौतिक संसारभन्दा पर छ।"
+          },
+          hi: {
+              headerSubtitleReality: "हर आस्था के सर्वोच्च परमात्मा",
+              login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली",
+              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              // "What is Reality?" Page Specific - HINDI TRANSLATIONS NEEDED
+              realityTitle1: "वास्तविकता क्या है?",
+              realityDesc1: "वास्तविकता सच्चा और स्थायी सत्य है, जो स्थिर और अपरिवर्तनीय है। जो चीजें हम देखते, सुनते और महसूस करते हैं, वे वास्तव में वास्तविकता नहीं हैं। जो हम अपनी इंद्रियों—जैसे दृष्टि, श्रवण और स्पर्श—के माध्यम से अनुभव करते हैं, वह केवल एक प्रभाव या धारणा है, और यह हर समय बदलता रहता है। उदाहरण के लिए, जब हम सूर्य को देखते हैं, तो हम आकाश में एक उज्ज्वल, चमकता हुआ पिंड देखते हैं। लेकिन वास्तविकता में, सूर्य गैस का एक विशाल गोला है। जो हम अपनी आँखों से देखते हैं, वह पूर्ण सत्य नहीं है। हमारी इंद्रियाँ समग्र वास्तविकता का केवल एक छोटा सा हिस्सा ही समझ सकती हैं, और जो हम देखते हैं वह अस्तित्व का एक छोटा सा अंश मात्र है। वास्तविकता अपरिवर्तनीय है: सच्ची वास्तविकता वह है जो समय, स्थान या स्थिति कुछ भी हो, वैसी ही रहती है। चाहे हम इसे समझें या न समझें, वास्तविकता स्थिर रहती है। ब्रह्मांड, तारे और ग्रह जैसी चीजें सभी इस गहरी, अपरिवर्तनीय वास्तविकता का हिस्सा हैं, लेकिन हम केवल अपनी इंद्रियों से उनके वास्तविक रूप को पूरी तरह से नहीं समझ सकते। हम वास्तविकता क्यों नहीं देख सकते? जो हम अपनी इंद्रियों के माध्यम से समझते हैं, वह वास्तविकता का केवल एक फ़िल्टर्ड संस्करण है। उदाहरण के लिए, हमारी आँखें केवल तीन प्राथमिक रंग देख सकती हैं, लेकिन कई और रंग हैं जिन्हें हम पहचान नहीं सकते। यह हमें दिखाता है कि हम जो कुछ भी अनुभव करते हैं, वह वास्तव में जो कुछ भी है उसका एक सीमित संस्करण है। वास्तविकता का वास्तविक सार केवल हमारी इंद्रियों की सीमाओं से परे जाकर ही समझा जा सकता है—गहन ध्यान, आत्म-जागरूकता और आध्यात्मिक समझ के माध्यम से। जब हम अपने मन और इंद्रियों द्वारा बनाए गए भ्रमों से मुक्त हो जाते हैं, तो हम वास्तविकता की वास्तविक प्रकृति से जुड़ने लगते हैं।",
+              realityTitle2: "अवास्तविकता का भ्रम:",
+              realityDesc2: "अवास्तविकता वह दुनिया है जिसे हम अपनी इंद्रियों के माध्यम से अनुभव करते हैं। जिन वस्तुओं, घटनाओं और घटनाओं का हम प्रतिदिन सामना करते हैं, वे अस्तित्व का वास्तविक सार नहीं हैं, बल्कि एक गहरी, अनदेखी वास्तविकता के मात्र प्रतिनिधित्व हैं। यह दिखावटी दुनिया क्षणभंगुर, निरंतर परिवर्तनशील और भ्रमों से भरी है। जीवन की प्रकृति से लेकर पदार्थ के रूप तक, हम जिस भी चीज़ के साथ बातचीत करते हैं, वह समय और क्षय के अधीन है। संक्षेप में, जिस दुनिया का हम अनुभव करते हैं, वह मन और इंद्रियों का एक प्रक्षेपण है। जो वस्तुएं हम देखते हैं, जो ध्वनियाँ हम सुनते हैं, जो स्वाद और गंध हम अनुभव करते हैं - ये सभी हमारे मस्तिष्क द्वारा प्राप्त संवेदी डेटा के आधार पर बनाई गई व्याख्याएँ मात्र हैं। इस प्रकार, वे परम सत्य नहीं हैं, बल्कि वास्तविक दुनिया का एक फ़िल्टर्ड, अपूर्ण संस्करण हैं।",
+              realityTitle3: "मानव धारणा की सीमा:",
+              realityDesc3: "मानव धारणा स्वाभाविक रूप से सीमित है। हमारी इंद्रियाँ दुनिया के साथ विशिष्ट तरीकों से बातचीत करने के लिए डिज़ाइन की गई हैं, फिर भी वे हमें वास्तविकता की पूरी समझ प्रदान करने में विफल रहती हैं। सबसे स्पष्ट उदाहरणों में से एक हमारी दृष्टि की सीमित सीमा है। मनुष्य केवल तीन रंगों - लाल, हरा और नीला - को समझ सकता है, और अन्य सभी रंग केवल इन्हीं का मिश्रण हैं। पराबैंगनी और अवरक्त सहित प्रकाश का विशाल स्पेक्ट्रम हमारे लिए अदृश्य है। इसी तरह, हमारी श्रवण शक्ति आवृत्तियों के एक संकीर्ण बैंड तक सीमित है, और हमारी स्पर्श की भावना हमें केवल हमारे आस-पास की बनावटों और तापमानों के एक छोटे से हिस्से को समझने की अनुमति देती है। हम दुनिया में नेविगेट करने के लिए अपनी इंद्रियों पर भरोसा करते हैं, लेकिन ये इंद्रियाँ अस्तित्व की समग्रता को पकड़ने में सक्षम नहीं हैं। समय भी स्वयं हमारी धारणा द्वारा बनाया गया एक भ्रम है। हम समय को रैखिक रूप में समझते हैं, जो अतीत से वर्तमान और भविष्य की ओर बढ़ रहा है। फिर भी, ब्रह्मांड की भव्य योजना में, समय इतना सीधा नहीं है। यह केवल हमारे सीमित मन और इंद्रियों का एक निर्माण है, जो हमें एक ऐसा ढाँचा प्रदान करता है जिसके माध्यम से हम अपने जीवन को समझ सकते हैं।",
+              realityTitle4: "अवास्तविकता में वास्तविकता की खोज:",
+              realityDesc4: "हमारी इंद्रियों की सीमाओं के बावजूद, मनुष्यों में सत्य की खोज करने, भ्रम के पर्दे से परे अस्तित्व की प्रकृति को उजागर करने की एक जन्मजात इच्छा होती है। वास्तविकता की यह खोज, जो वास्तव में वास्तविक है, मानव चेतना में एक सतत खोज है। हम लगातार सवालों के जवाब खोजते हैं जैसे \"जीवन की प्रकृति क्या है?\" \"हमारे अस्तित्व का उद्देश्य क्या है?\" और \"इस दुनिया से परे क्या है?\" दार्शनिक, वैज्ञानिक और आध्यात्मिक साधक सभी ने इस समझ की खोज शुरू की है। फिर भी, जहाँ विज्ञान भौतिक दुनिया और उसके भौतिक नियमों की पड़ताल करता है, वहीं यह अक्सर अस्तित्व के गहरे सवालों को संबोधित करने में विफल रहता है। दूसरी ओर, आध्यात्मिक परंपराएँ सिखाती हैं कि वास्तविकता का मार्ग इंद्रियों के माध्यम से नहीं, बल्कि आंतरिक चिंतन और अतिक्रमण के माध्यम से निहित है। हम अवास्तविकता की दुनिया के भीतर वास्तविकता की खोज करते हैं, लेकिन अस्तित्व की वास्तविक प्रकृति तभी जानी जा सकती है जब हम अपनी इंद्रियों की सीमाओं को पार कर लें। ध्यान, योग और आत्म-जिज्ञासा जैसे आध्यात्मिक अभ्यास भौतिक दुनिया से परे मौजूद एक गहरी वास्तविकता का अनुभव करने का मार्ग प्रदान करते हैं।",
+              realityTitle5: "वास्तविकता और अवास्तविकता के बीच परस्पर क्रिया:",
+              realityDesc5: "वास्तविकता और अवास्तविकता दो अलग-अलग सत्ताएँ नहीं हैं; वे एक ही अस्तित्व के दो पहलू हैं। अवास्तविकता को खारिज या अस्वीकार करने वाली कोई चीज़ नहीं है, बल्कि इसे समग्र के एक भाग के रूप में समझा जाना चाहिए। यह अवास्तविकता के माध्यम से है - हमारे भौतिक दुनिया, हमारे अनुभवों और हमारी धारणाओं के माध्यम से - कि हम परम वास्तविकता की खोज शुरू करने में सक्षम हैं। अवास्तविकता वह कैनवास है जिस पर वास्तविकता चित्रित है। यह वह खेल का मैदान है जिसमें परमात्मा प्रकट होता है, जहाँ मानव आत्मा अपनी वास्तविक प्रकृति को समझने का प्रयास करती है। जैसे-जैसे हम जागरूकता में बढ़ते हैं, हम यह महसूस करने लगते हैं कि वास्तविकता और अवास्तविकता के बीच की रेखा हमेशा इतनी स्पष्ट नहीं होती है। हम अपने आस-पास की दुनिया का जितना अधिक अन्वेषण और प्रश्न करते हैं, हम सतह के नीचे छिपे गहरे सत्यों को समझने के उतने ही करीब आते जाते हैं।",
+              realityTitle6: "वास्तविकता को आकार देने में मन की भूमिका:",
+              realityDesc6: "हम वास्तविकता और अवास्तविकता दोनों का अनुभव कैसे करते हैं, इसमें मन एक केंद्रीय भूमिका निभाता है। हमारे विचार, विश्वास और धारणाएँ वह लेंस बनाती हैं जिसके माध्यम से हम दुनिया को देखते हैं। मन संवेदी सूचनाओं को फ़िल्टर और व्याख्या करता है, जिससे वास्तविकता का एक ऐसा संस्करण बनता है जो प्रत्येक व्यक्ति के लिए अद्वितीय होता है। इस तरह, मन समझने का एक उपकरण भी है और सच्ची समझ में बाधा भी। जहाँ यह हमें दुनिया में नेविगेट करने और अपने अनुभवों को समझने की अनुमति देता है, वहीं यह हमारी धारणा को विकृत और सीमित भी करता है। मन इंद्रियों की सीमाओं से बंधा होता है और अक्सर भ्रम के जाल में फंसा रहता है। वास्तविकता को उसके शुद्धतम रूप में अनुभव करने के लिए, हमें मन की कंडीशनिंग और अहंकार को पार करना होगा। यह केवल उन अभ्यासों के माध्यम से प्राप्त किया जा सकता है जो मन को शांत करते हैं और हमें चेतना की उच्च अवस्थाओं के प्रति खोलते हैं। ध्यान, सचेतनता और आध्यात्मिक अनुशासन मन को पार करने और इंद्रियों से परे मौजूद एक गहरी वास्तविकता का अनुभव करने का एक साधन प्रदान करते हैं।",
+              realityTitle7: "परम वास्तविकता की खोज:",
+              realityDesc7: "परम वास्तविकता, या \"सत्\", जैसा कि वेदांत दर्शन में वर्णित है, ऐसी कोई चीज़ नहीं है जिसे देखा या छुआ जा सके। यह अस्तित्व का अपरिवर्तनीय, शाश्वत सार है। यह शुद्ध चेतना है, रूप से परे और समय से परे। इस वास्तविकता का अनुभव करने के लिए, व्यक्ति को क्षणभंगुर अवास्तविकता की दुनिया से परे देखना होगा और भीतर की ओर मुड़ना होगा। परम वास्तविकता की खोज एक आध्यात्मिक यात्रा है, जिसके लिए समर्पण, आत्मनिरीक्षण और भ्रमों को त्यागने की आवश्यकता होती है। यह एक ऐसी यात्रा है जिसे केवल वही लोग कर सकते हैं जो उन सभी चीजों पर सवाल उठाने को तैयार हैं जो उन्हें सिखाई गई हैं और दुनिया को एक नए लेंस से देखने को तैयार हैं। सच्ची वास्तविकता हमारे भीतर है, और यह आत्म-साक्षात्कार और जागरण के माध्यम से है कि हम इसे जानते हैं।",
+              realityTitle8: "निष्कर्ष:",
+              realityDesc8: "वास्तविकता और अवास्तविकता एक ही सिक्के के दो पहलू हैं। जहाँ अवास्तविकता हमें भौतिक दुनिया और उन संवेदी अनुभवों की पेशकश करती है जिन पर हम प्रतिदिन भरोसा करते हैं, वहीं इन भ्रमों को पार करके ही हम अस्तित्व की वास्तविक प्रकृति को समझने के करीब आते हैं। वास्तविकता की खोज किसी बाहरी चीज़ की खोज नहीं है, बल्कि एक आंतरिक यात्रा है, जहाँ हम इंद्रियों और मन की सीमाओं से परे मौजूद शाश्वत सत्य को उजागर करने का प्रयास करते हैं। वास्तविकता और अवास्तविकता के बीच संबंध को समझकर, हम उन भ्रमों को देखना शुरू कर सकते हैं जो हमारी धारणा को नियंत्रित करते हैं और उस परम सत्य के करीब पहुँच सकते हैं जो हम सभी में मौजूद है। यह केवल इस आंतरिक जागरण के माध्यम से है कि हम वास्तविकता को उसके शुद्धतम रूप में अनुभव कर सकते हैं - एक ऐसी वास्तविकता जो समय, स्थान और भौतिक दुनिया से परे है।"
+          }
+      };
+
+      let currentLanguage = localStorage.getItem('selectedLanguageRealityPage') || 'en'; // Unique key for this page
+
+      function setLanguage(lang) {
+          currentLanguage = lang;
+          localStorage.setItem('selectedLanguageRealityPage', lang);
+          applyTranslations();
+          document.querySelectorAll('.language-options a').forEach(a => {
+              a.classList.remove('lang-active');
+              if (a.dataset.lang === lang) {
+                  a.classList.add('lang-active');
+              }
+          });
+      }
+
+      function _(key, fallbackLang = 'en') {
+          return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+      }
+
+      function applyTranslations() {
+          document.querySelectorAll('[data-translate-key]').forEach(element => {
+              const key = element.dataset.translateKey;
+              element.textContent = _(key);
+          });
+      }
+      // --- END TRANSLATION LOGIC ---
+
+      const hamburger = document.querySelector(".hamburger");
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const languageSelectLabel = document.querySelector('.language-select-label');
+      const languageOptionsDiv = document.querySelector('.language-options');
+
       function toggleMenu() {
-        document.querySelector(".mobile-menu").classList.toggle("active");
-        document.querySelectorAll(".hamburger-line").forEach((line) => {
-          line.style.transform = line.style.transform ? "" : "rotate(45deg)";
+        mobileMenu.classList.toggle("active");
+        hamburger.classList.toggle("active");
+      }
+
+      if (hamburger) {
+        hamburger.addEventListener('click', toggleMenu);
+      }
+
+      if (languageSelectLabel) {
+        languageSelectLabel.addEventListener('click', () => {
+            if (languageOptionsDiv) {
+                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
+            }
         });
       }
 
-      // क्लिक आउटसाइड करने पर मेन्यू बंद
+      document.querySelectorAll('.language-options a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = e.currentTarget.dataset.lang;
+            setLanguage(lang);
+            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
+        });
+      });
+
       document.addEventListener("click", (e) => {
-        if (
-          !e.target.closest(".hamburger") &&
-          !e.target.closest(".mobile-menu")
-        ) {
-          document.querySelector(".mobile-menu").classList.remove("active");
-          document.querySelectorAll(".hamburger-line").forEach((line) => {
-            line.style.transform = "";
-          });
+        let clickedInsideMenuComponent = false;
+        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
+        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
+
+        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
+          toggleMenu();
+        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
+                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
+                   !languageOptionsDiv.contains(e.target) ) {
+            languageOptionsDiv.style.display = 'none';
         }
       });
+
+      // Apply translations on page load
+      document.addEventListener('DOMContentLoaded', () => {
+          setLanguage(currentLanguage);
+      });
     </script>
-    <!-- विराट स्वरूप का दर्शन कंटेंट सेक्शन -->
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   What is Reality?
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    Reality is the true and permanent truth, something that is constant and unchanging. The things we see, hear, and feel are not actually reality. What we experience through our senses—like sight, hearing, and touch—is just an impression or a perception, and it changes all the time. For example, when we look at the sun, we see a bright, glowing object in the sky. But in reality, the sun is a massive ball of gas. What we see with our eyes is not the full truth. Our senses can only perceive a small part of the whole reality, and what we see is just a tiny fraction of what exists. Reality is Unchanging: True reality is something that stays the same, no matter the time, place, or situation. Whether or not we understand it, reality remains constant. Things like the universe, stars, and planets are all part of this deeper, unchanging reality, but we can't fully grasp their true form with our senses alone. Why Can't We See Reality? What we perceive through our senses is just a filtered version of reality. Our eyes, for example, can only see three primary colors, but there are many more colors beyond what we can detect. This shows us that everything we experience is a limited version of what’s truly out there. The real essence of reality can only be understood by going beyond the limitations of our senses—through deep meditation, self-awareness, and spiritual understanding. When we break free from the illusions created by our mind and senses, we begin to connect with the true nature of reality.
-	</p>
-</section>
-
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   The Illusion of Non-Reality:
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    Non-reality is the world as we experience it through our senses. The objects, phenomena, and events we encounter daily are not the true essence of existence but mere representations of a deeper, unseen reality. This world of appearances is fleeting, ever-changing, and filled with illusions. From the nature of life to the form of matter, everything we interact with is subject to time and decay. In essence, the world we experience is a projection of the mind and senses. The objects we see, the sounds we hear, the tastes and smells we encounter — all of these are merely interpretations created by our brain based on the sensory data it receives. Thus, they are not ultimate truths but a filtered, incomplete version of the real world.
-	</p>
-</section>
-
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   The Limitation of Human Perception:
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    Human perception is inherently limited. Our senses are designed to interact with the world in specific ways, yet they fail to offer us a complete understanding of reality. One of the clearest examples is our limited range of vision. Humans can only perceive three colors — red, green, and blue — and all other colors are simply a blend of these. The vast spectrum of light, including ultraviolet and infrared, is invisible to us. Similarly, our hearing is restricted to a narrow band of frequencies, and our sense of touch only allows us to perceive a small portion of the textures and temperatures around us. We rely on our senses to navigate the world, but these senses are not capable of capturing the totality of existence. Even time itself is an illusion created by our perception. We perceive time as linear, moving forward from the past to the present and into the future. Yet, in the grand scheme of the universe, time is not so straightforward. It is merely a construct of our limited mind and senses, providing us with a framework through which we can make sense of our lives.
-	</p>
-</section>
-
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   Searching for Reality in Non-Reality:
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    Despite the limitations of our senses, humans have an innate desire to seek truth, to uncover the nature of existence beyond the veil of illusion. This search for reality, for what is truly real, is an ongoing pursuit in human consciousness. We constantly search for answers to questions like "What is the nature of life?" "What is the purpose of our existence?" and "What lies beyond this world?" Philosophers, scientists, and spiritual seekers alike have embarked on this quest for understanding. Yet, while science explores the material world and its physical laws, it often fails to address the deeper questions of existence. Spiritual traditions, on the other hand, teach that the path to reality lies not through the senses but through inner contemplation and transcendence. We search for reality within the world of non-reality, but the true nature of existence can only be known when we transcend the limitations of our senses. Spiritual practices such as meditation, yoga, and self-inquiry offer a pathway to experience a deeper reality that exists beyond the physical world.
-	</p>
-</section>
-
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   The Interplay Between Reality and Non-Reality:
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    Reality and non-reality are not two separate entities; they are two aspects of the same existence. Non-reality is not something to be dismissed or rejected, but rather understood as a part of the whole. It is through the non-reality — through our physical world, our experiences, and our perceptions — that we are able to begin the search for the ultimate reality. Non-reality is the canvas upon which reality is painted. It is the field of play in which the divine unfolds, where the human soul seeks to understand its true nature. As we grow in awareness, we come to realize that the line between reality and non-reality is not always so clear-cut. The more we explore and question the world around us, the closer we come to understanding the deeper truths that lie hidden beneath the surface.
-	</p>
-</section>
-
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   The Role of the Mind in Shaping Reality:
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    The mind plays a central role in how we experience both reality and non-reality. Our thoughts, beliefs, and perceptions create the lens through which we view the world. The mind filters and interprets sensory information, creating a version of reality that is unique to each individual. In this way, the mind is both a tool for understanding and a barrier to true understanding. While it allows us to navigate the world and make sense of our experiences, it also distorts and limits our perception. The mind is bound by the limitations of the senses and is often caught in the web of illusion. To experience reality in its purest form, we must transcend the mind's conditioning and ego. This can only be achieved through practices that quiet the mind and open us to higher states of consciousness. Meditation, mindfulness, and spiritual discipline offer a means of transcending the mind and experiencing a deeper reality that lies beyond the senses.
-	</p>
-</section>
-
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   The Search for Ultimate Reality:
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    The ultimate reality, or "Sat," as described in Vedantic philosophy, is not something that can be seen or touched. It is the unchanging, eternal essence of existence. It is pure consciousness, beyond form and beyond time. To experience this reality, one must look beyond the transient world of non-reality and turn inward. The search for ultimate reality is a spiritual journey, one that requires dedication, introspection, and the shedding of illusions. It is a journey that can only be undertaken by those who are willing to question everything they have been taught and see the world through a new lens. The true reality is within us, and it is through self-realization and awakening that we come to know it.
-	</p>
-</section>
-
-<section style="
-    padding: 40px 20px; 
-    text-align: center; 
-    background: #fff; 
-    max-width: 700px; 
-    margin: 40px auto; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 20px rgba(139, 0, 0, 0.2);
-    color: #333;
-">
-  <h2 style="font-size: 32px; color: #8b0000; margin-bottom: 20px;">
-   Conclusion:
-  </h2>
- 
-  <p style="font-size: 18px; line-height: 1.8;">
-    Reality and non-reality are two sides of the same coin. While non-reality offers us the material world and the sensory experiences we rely on daily, it is through transcending these illusions that we come closer to understanding the true nature of existence. The search for reality is not a search for something external, but a journey inward, where we seek to uncover the eternal truth that lies beyond the limitations of the senses and the mind. By understanding the relationship between reality and non-reality, we can begin to see through the illusions that govern our perception and move closer to the ultimate truth that is present within us all. It is only through this inner awakening that we can experience reality in its purest form — a reality that is beyond time, space, and the material world.
-	</p>
-</section>
-
-
+  </body>
 </html>
