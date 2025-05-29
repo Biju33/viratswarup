@@ -713,7 +713,8 @@
                     userId: currentUser.uid,
                     userName: currentUser.displayName || 'Anonymous User',
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                    timestamp: new Date(), 
+                    // For a new post using .add(), FieldValue.serverTimestamp() is allowed
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
                     likes: [],
                     comments: []
                 };
@@ -938,7 +939,7 @@
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: commentText || "",
-                timestamp: new Date(), // USE CLIENT-SIDE DATE
+                timestamp: new Date(), // CRITICAL FIX: Use client-side Date for arrayUnion
                 replies: [], 
                 imageUrl: commentImageUrl || null,
                 imagePublicId: commentImagePublicId || null
@@ -1004,7 +1005,7 @@
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: replyText,
-                timestamp: new Date() // USE CLIENT-SIDE DATE
+                timestamp: new Date() // CRITICAL FIX: Use client-side Date for array manipulation
             };
 
             await db.runTransaction(async (transaction) => {
