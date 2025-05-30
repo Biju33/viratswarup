@@ -19,7 +19,7 @@
 
         html {
             scroll-behavior: smooth;
-            font-size: 16px; /* Base font size */
+            font-size: 16px; /* Base font size for rem calculations */
         }
 
         body {
@@ -27,16 +27,18 @@
             color: #333;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Modern sans-serif stack */
             line-height: 1.6;
-            padding-bottom: 80px; /* Space for bottom nav, increased */
-            overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+            padding-bottom: 70px; /* Space for bottom nav, ensure it's enough */
+            overflow-x: hidden;
         }
 
-        /* Headings and Thematic Font */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: "Georgia", serif; /* Keep Georgia for headings */
+        /* Headings use Georgia, body text uses sans-serif */
+        h1, h2, .header h2, h3, h4, h5, h6 { /* Specificity for header h2 if needed */
+            font-family: "Georgia", serif;
             color: #2c2c2c;
             line-height: 1.3;
         }
+        .header h1 { font-weight: 700; } /* Ensure header H1 is bold */
+
 
         a {
             color: #8b0000;
@@ -48,18 +50,19 @@
         }
 
         /* Buttons General Styling */
-        button, .button-like { /* .button-like for a tags styled as buttons */
-            padding: 10px 18px;
+        button, .button-like {
+            padding: 10px 15px; /* Adjusted padding */
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
             border: none;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Slightly smaller base for buttons */
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            line-height: 1.5; /* Ensure text within button is spaced */
         }
         button:active, .button-like:active {
             transform: translateY(1px);
@@ -70,13 +73,16 @@
             cursor: not-allowed !important;
             opacity: 0.7 !important;
         }
+        button:disabled i.fa-spinner {
+            color: #666666 !important;
+        }
 
         /* Primary Button Style */
         .btn-primary {
             background-color: #8b0000;
             color: white;
         }
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background-color: #6a0000;
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
@@ -87,12 +93,12 @@
         input[type="password"],
         textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px; /* Adjusted padding */
             border: 1px solid #ced4da;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Consistent with buttons */
             line-height: 1.5;
-            font-family: inherit;
+            font-family: inherit; /* Inherit from body (sans-serif) */
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
             margin-bottom: 15px;
         }
@@ -105,71 +111,73 @@
             outline: none;
         }
         textarea {
-            min-height: 100px;
+            min-height: 90px; /* Adjusted for mobile */
             resize: vertical;
         }
-
 
         /* Header */
         .header {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* Align items to start for mobile */
             align-items: center;
-            position: relative;
-            padding: 20px clamp(15px, 4vw, 60px); /* Responsive padding */
-            border-bottom: 1px solid #d9a7a7; /* Softer border */
+            position: relative; /* Keep relative for absolute logo on desktop */
+            padding: 12px 15px; /* Mobile-first padding */
+            border-bottom: 1px solid #d9a7a7;
             background-color: #8b0000;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .header-logo {
-            position: absolute;
-            left: clamp(15px, 4vw, 30px);
-            top: 50%;
-            transform: translateY(-50%);
-            height: 70px; /* Adjusted */
-            width: 70px;  /* Adjusted */
+            height: 50px; /* Mobile logo size */
+            width: 50px;  /* Mobile logo size */
+            margin-right: 10px; /* Space between logo and text */
+            flex-shrink: 0; /* Prevent logo from shrinking */
+            /* Desktop specific styles will be in media query */
+            position: static; /* For mobile flow */
+            transform: none;  /* For mobile flow */
+        }
+        .header-logo svg {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
 
         .header-text-content {
             text-align: center;
-            margin-left: 90px; /* Space for logo on left */
-            margin-right: 90px; /* Space for potential menu icon on right if not fixed */
+            flex-grow: 1; /* Allow text to take remaining space */
+            /* Remove fixed margins that might conflict with flex-grow */
         }
 
         .header h1 {
-            font-size: clamp(1.8rem, 5vw, 2.6rem); /* Fluid font size */
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
+            font-size: clamp(1.4rem, 4.5vw, 1.8rem); /* Mobile-friendly fluid size */
+            letter-spacing: 1.5px; /* Reduced for mobile */
+            margin-bottom: 3px;
             color: white;
-            font-weight: 700; /* Bolder */
             text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
         }
-        .header h2 {
-            font-size: clamp(1rem, 3vw, 1.3rem); /* Fluid font size */
-            color: #f5f5f5;
+        .header h2 { /* This targets the .header h2 directly */
+            font-size: clamp(0.8rem, 2.5vw, 1rem); /* Mobile-friendly fluid size */
+            color: #f0f0f0;
             font-weight: 300;
             margin-top: 0;
             margin-bottom: 0;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px; /* Reduced for mobile */
             font-style: italic;
         }
 
-        /* Mobile Menu */
+        /* Mobile Menu (Side Menu) */
         .mobile-menu {
             position: fixed;
             top: 0;
-            right: -300px; /* Start off-screen */
-            width: 300px;
-            max-width: 80%; /* Ensure it doesn't take full screen on small devices */
+            right: -280px; /* Start off-screen, slightly smaller width */
+            width: 280px;
+            max-width: 80%;
             height: 100%;
-            background: #7a0000; /* Slightly darker maroon for depth */
+            background: #7a0000;
             box-shadow: -3px 0 15px rgba(0, 0, 0, 0.2);
-            transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
-            padding-top: 20px; /* Space from top */
-            z-index: 1001; /* Above header if header is also fixed/sticky */
+            transition: right 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding-top: 20px;
+            z-index: 1001;
             overflow-y: auto;
         }
         .mobile-menu.active {
@@ -178,40 +186,36 @@
         .mobile-menu a, .mobile-menu .language-select-label {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 16px 25px; /* Generous padding for touch */
+            gap: 12px; /* Slightly reduced gap */
+            padding: 14px 20px; /* Adjusted padding */
             color: #fff !important;
             text-decoration: none;
             border-bottom: 1px solid rgba(255,255,255,0.15);
-            font-size: 1.05rem;
+            font-size: 1rem; /* Good touch size */
         }
          .mobile-menu .language-select-label { cursor: pointer; }
         .mobile-menu i {
-            width: 25px;
-            font-size: 1.2rem;
+            width: 22px; /* Adjusted icon width */
+            font-size: 1.1rem; /* Adjusted icon size */
             color: #fff !important;
             text-align: center;
         }
         .mobile-menu a:hover, .mobile-menu .language-select-label:hover {
             background-color: rgba(255,255,255,0.1);
         }
-        .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
-            border-bottom: none;
-        }
         .language-options {
-            padding-left: 0; /* Full width for lang options */
+            padding-left: 0;
             display: none;
             background-color: rgba(0,0,0,0.2);
         }
         .language-options a {
-            padding: 14px 25px 14px 55px; /* Indent text */
-            font-size: 0.95em;
+            padding: 12px 20px 12px 50px; /* Indent text more */
+            font-size: 0.9rem;
         }
         .language-options a.lang-active {
             font-weight: bold;
             background-color: rgba(255,255,255,0.15);
         }
-
 
         /* Bottom Navigation */
         .bottom-nav {
@@ -221,8 +225,8 @@
             width: 100%;
             background: #8b0000;
             border-top: 1px solid #7a0000;
-            padding: 5px 0; /* Reduced top/bottom padding for compactness */
-            display: none; /* Shown via media query */
+            padding: 5px 0;
+            display: flex; /* Default to flex for mobile-first */
             z-index: 999;
             box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
         }
@@ -230,23 +234,24 @@
             display: flex;
             justify-content: space-around;
             list-style: none;
+            width: 100%; /* Ensure ul takes full width */
         }
         .bottom-nav a {
             color: #fff !important;
-            font-size: 0.8rem; /* Slightly smaller text */
+            font-size: 0.75rem; /* Smaller text for mobile */
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
-            padding: 8px 10px;
-            border-radius: 8px;
+            gap: 2px; /* Reduced gap */
+            padding: 6px 8px; /* Compact padding */
+            border-radius: 6px;
             transition: background-color 0.3s, transform 0.2s;
-            flex-grow: 1;
+            flex: 1; /* Distribute space equally */
             text-align: center;
         }
         .bottom-nav a i {
-            font-size: 1.3rem; /* Larger icons */
+            font-size: 1.25rem; /* Good size for touch */
         }
         .bottom-nav a:hover {
             background-color: rgba(255, 255, 255, 0.1);
@@ -255,33 +260,34 @@
             transform: scale(0.95);
         }
 
-        /* Desktop Navigation */
+        /* Desktop Navigation (Hidden by default, shown via media query) */
         .desktop-nav {
-            margin: 35px 0; /* Reduced margin */
+            display: none;
+            margin: 30px 0;
             padding: 0 15px;
         }
         .desktop-nav ul {
             display: flex;
             justify-content: center;
-            gap: 15px; /* Reduced gap */
+            gap: 15px;
             list-style: none;
-            flex-wrap: wrap; /* Allow wrapping on smaller desktop screens */
+            flex-wrap: wrap;
         }
         .desktop-nav a {
-            color: #7a0000; /* Slightly muted maroon */
+            color: #7a0000;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 1.1rem;
-            padding: 10px 18px;
+            font-size: 1.05rem;
+            padding: 10px 15px;
             border-radius: 8px;
             transition: background-color 0.3s, color 0.3s;
             font-weight: 500;
         }
         .desktop-nav a:hover {
-            background-color: #f0e0e0; /* Light maroon/pinkish hover */
-            color: #5a0000; /* Darker maroon on hover */
+            background-color: #f0e0e0;
+            color: #5a0000;
         }
         .desktop-nav a i {
            font-size: 1.1em;
@@ -289,446 +295,356 @@
 
         /* Main Container */
         .container {
-            max-width: 850px;
+            max-width: 850px; /* Max width for larger screens */
             margin: 0 auto;
-            padding: 25px 15px; /* Responsive padding */
+            padding: 20px 10px; /* Mobile-first padding */
         }
 
         /* Card Styling (General) */
         .card {
             background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.07);
-            padding: 25px;
-            margin-bottom: 30px;
+            border-radius: 10px; /* Slightly smaller radius for mobile */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06); /* Softer shadow */
+            padding: 20px; /* Mobile-first padding */
+            margin-bottom: 20px; /* Mobile-first margin */
         }
-        .card-header { /* This class can be added to H3s or divs if needed */
-            font-size: 1.5rem;
+        .card-header {
+            font-size: 1.4rem; /* Mobile-friendly */
             color: #8b0000;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0; /* Softer border */
         }
-
 
         /* Login Section */
-        .login-section { /* Inherits .card */
+        .login-section {
             text-align: center;
         }
-        .login-section h1 { /* from .card-header if used, or style separately */
-            font-size: 1.8rem; color: #8b0000; margin-bottom: 15px;
+        .login-section h1 {
+            font-size: 1.6rem; color: #8b0000; margin-bottom: 12px;
         }
-        .login-section p { margin-bottom: 25px; color: #555; font-size: 1.05rem; }
+        .login-section p { margin-bottom: 20px; color: #555; font-size: 1rem; }
         .login-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             width: 100%;
-            max-width: 320px; /* Max width for login buttons */
-            margin: 0 auto 15px auto; /* Centering */
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background-color 0.3s, box-shadow 0.3s;
-            border: 1px solid transparent;
-            color: white;
+            max-width: 280px;
+            margin: 0 auto 12px auto;
+            padding: 10px 15px;
+            font-size: 0.95rem;
         }
-        .login-btn i { margin-right: 12px; font-size: 1.25rem; }
-        .google-btn { background-color: #db4437; }
-        .google-btn:hover { background-color: #c33d2e; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .facebook-btn { background-color: #3b5998; }
-        .facebook-btn:hover { background-color: #324d84; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .login-btn i { margin-right: 10px; font-size: 1.15rem; }
 
         /* App Section - User Info */
-        .user-info { /* Inherits .card styling */
+        .user-info {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column; /* Stack on mobile */
+            align-items: center; /* Center content when stacked */
+            text-align: center;
+            gap: 10px; /* Gap when stacked */
         }
-        .user-info img#userPhoto { /* More specific selector */
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid #8b0000;
-            object-fit: cover;
+        .user-info img#userPhoto {
+            width: 50px; /* Mobile size */
+            height: 50px;
+            border: 2px solid #8b0000; /* Thinner border for mobile */
         }
-        .user-info div h2 { margin: 0 0 5px 0; font-size: 1.3rem; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; } /* Explicitly use sans-serif */
-        #logoutBtn { /* Uses .btn-primary class implicitly through JS or apply here */
-            background: #8b0000; color: white; padding: 8px 15px; font-size: 0.9rem;
+        .user-info div h2 { margin: 0 0 8px 0; font-size: 1.1rem; } /* Mobile size */
+        #logoutBtn { /* Logout button is part of user-info, ensure it's visible */
+            padding: 8px 12px; font-size: 0.9rem;
+            /* display: inline-flex !important; Remove the important display none */
         }
-        #logoutBtn:hover { background: #6a0000; }
 
 
         /* Post Form */
-        .post-form { /* Inherits .card styling */
+        .post-form h3 {
+           font-size: 1.3rem; color: #8b0000; margin-bottom: 15px;
         }
-        .post-form h3 { /* from .card-header if used, or style here */
-           font-size: 1.5rem; color: #8b0000; margin-bottom: 20px;
-        }
-        /* textarea#postContent uses global textarea styles */
-
         label[for="postImageFile"] {
-            display: inline-flex; /* Changed from inline-block for align-items */
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background-color: #e9ecef;
-            border: 1px dashed #ced4da; /* Dashed border for upload area */
-            padding: 10px 15px;
-            border-radius: 8px;
+            border: 1px dashed #ced4da;
+            padding: 8px 12px; /* Compact for mobile */
+            border-radius: 6px;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: #495057;
-            transition: background-color 0.3s, border-color 0.3s;
+            font-size: 0.9rem;
         }
-        label[for="postImageFile"]:hover {
-            background-color: #dde2e6;
-            border-color: #adb5bd;
-        }
-        label[for="postImageFile"] i { color: #8b0000; }
+        label[for="postImageFile"] i { color: #8b0000; font-size: 1em; }
         #imagePreview {
             max-width: 100%;
-            max-height: 250px; /* Increased max height */
-            display: none;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            object-fit: cover;
+            max-height: 200px; /* Mobile-friendly max height */
+            margin-bottom: 12px;
         }
-        #uploadProgressContainer { margin-bottom: 15px; }
-        #uploadProgressText { font-size: 0.9em; text-align: center; color: #555; }
-        #postBtn { /* Uses .btn-primary */
+        #uploadProgressText { font-size: 0.85em; }
+        #postBtn {
            width: 100%;
-           padding: 12px 20px;
+           padding: 10px 15px;
         }
-
 
         /* Posts Container & Individual Post */
         .posts-container h3 {
-            font-size: 1.8rem; /* Adjusted size */
-            color: #8b0000;
-            border-bottom: 2px solid #e0e0e0; /* Lighter border */
-            padding-bottom: 12px;
-            margin-bottom: 25px;
-        }
-        .post { /* Inherits .card styling */
+            font-size: 1.5rem;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
         .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px; /* Increased margin */
-            gap: 12px;
+            margin-bottom: 12px;
+            gap: 10px;
         }
         .post-header img {
-            width: 48px; /* Slightly larger */
-            height: 48px;
-            border-radius: 50%;
-            border: 2px solid #f0f0f0; /* Light border, could be user-specific color */
-            object-fit: cover;
+            width: 40px;
+            height: 40px;
         }
-        .post-header strong { font-size: 1.1rem; color: #2c3e50; font-weight: 600; font-family: inherit; } /* Sans-serif for username */
-        .post-header span.timestamp { font-size: 0.85rem; color: #7f8c8d; margin-left: auto; }
+        .post-header strong { font-size: 1rem; }
+        .post-header span.timestamp { font-size: 0.8rem; }
 
         .post-content p {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #4a4a4a; /* Softer black */
-            margin-bottom: 12px;
-            white-space: pre-wrap; /* Keep for newlines */
+            font-size: 0.95rem; /* Good readability on mobile */
+            line-height: 1.65;
+            margin-bottom: 10px;
         }
         .post-content img.post-image {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: block;
-            border: 1px solid #e9ecef;
+            margin-top: 12px;
         }
 
         .post-actions {
-            display: flex;
-            margin-top: 15px;
-            gap: 10px; /* Reduced gap */
-            border-top: 1px solid #f0f0f0; /* Lighter separator */
-            padding-top: 15px;
-            align-items: center;
-            flex-wrap: wrap; /* Allow actions to wrap */
+            margin-top: 12px;
+            gap: 8px;
+            padding-top: 12px;
         }
         .post-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #555e64; /* Cool gray for action text */
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-            padding: 8px 10px; /* Consistent padding */
-            border-radius: 6px;
-            transition: background-color 0.2s, color 0.2s;
+            font-size: 0.85rem;
+            padding: 6px 8px;
         }
-        .post-actions button i { font-size: 1.2rem; margin-right: 8px; color: #8b0000; transition: color 0.2s; }
-        .post-actions button:hover { background-color: #f0f0f0; }
-        .post-actions button:hover i, .post-actions button:hover span { color: #6a0000; }
-        .like-btn.liked i { color: #e74c3c !important; /* Brighter, distinct red for liked */ }
-        .delete-post-btn { margin-left: auto !important; } /* Ensure it stays right */
-        .delete-post-btn i { color: #c0392b !important; } /* Specific delete icon color */
-        .delete-post-btn:hover i, .delete-post-btn:hover span { color: #a52f23 !important; }
-
+        .post-actions button i { font-size: 1.1rem; margin-right: 6px; }
 
         /* Comments Area */
         .comments-area {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px dashed #dde2e6; /* Dashed line for comments section */
+            margin-top: 15px;
+            padding-top: 15px;
         }
         .comments-list .comment {
-            margin-bottom: 15px;
-            padding: 15px;
-            background-color: #f8f9fa; /* Slightly off-white for comments */
-            border-radius: 8px;
-            border: 1px solid #e9ecef; /* Subtle border */
-            font-size: 0.95rem;
+            margin-bottom: 12px;
+            padding: 12px; /* Mobile padding */
+            font-size: 0.9rem;
         }
-        .comment-header { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
-        .comment-header img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
-        .comment-header strong { font-size: 0.9rem; color: #333; font-weight: 600; font-family: inherit; } /* Sans-serif for username */
-        .comment-header .timestamp { font-size: 0.8rem; color: #888; margin-left: auto; }
-        .comment-content p { margin: 0 0 8px 0; color: #555; white-space: pre-wrap; line-height: 1.6; }
+        .comment-header { margin-bottom: 6px; gap: 8px; }
+        .comment-header img { width: 30px; height: 30px; }
+        .comment-header strong { font-size: 0.85rem; }
+        .comment-header .timestamp { font-size: 0.75rem; }
+        .comment-content p { margin: 0 0 6px 0; font-size: 0.9rem; }
         .comment-content img.comment-image {
-            max-width: 220px; /* Adjusted */
-            max-height: 160px; /* Adjusted */
-            border-radius: 6px;
-            margin-top: 8px;
-            display: block;
-            border: 1px solid #eee;
+            max-width: 180px;
+            max-height: 130px;
         }
 
         .comment-form-actual {
-            display: flex;
-            align-items: stretch; /* Align items to stretch vertically */
-            margin-top: 10px;
-            gap: 8px;
+            gap: 6px;
         }
         .comment-form-actual input[type="text"].comment-text-input {
-            flex: 1;
-            /* padding: 10px 12px; Inherits global */
-            /* border: 1px solid #ddd; Inherits global */
-            /* border-radius: 6px; Inherits global */
-            font-size: 0.9rem;
-            height: 42px; /* Explicit height */
-            margin-bottom: 0; /* Override global margin */
-        }
-        .comment-image-upload-label {
-            padding: 0 12px; /* Horizontal padding only */
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 42px; /* Match input height */
-            transition: background-color 0.3s;
-            margin-bottom: 0;
-        }
-        .comment-image-upload-label:hover { background-color: #e0e0e0; }
-        .comment-image-upload-label i { color: #555; font-size: 1.1rem; }
-        .comment-form-actual button.comment-submit-btn {
-            /* background: #8b0000; Inherits .btn-primary */
-            /* color: white; Inherits .btn-primary */
-            /* border: none; Inherits .btn-primary */
-            padding: 0 18px; /* Horizontal padding only */
-            /* border-radius: 6px; Inherits global button */
-            cursor: pointer;
-            font-weight: bold;
-            height: 42px; /* Match input height */
-            font-size: 0.9rem;
-        }
-        /* .comment-form-actual button.comment-submit-btn:hover { background: #6a0000; } Inherits .btn-primary hover */
-        .comment-image-preview {
-            max-width: 100px;
-            max-height: 100px;
-            display: none;
-            margin-top: 10px;
-            border-radius: 4px;
-            border: 1px solid #eee;
-            object-fit: cover;
-        }
-        .comment-upload-progress {
-            font-size: 0.85em;
-            margin-top: 8px;
-            color: #555;
-            display: none;
-            width: 100%;
-            text-align: left;
-            padding-left: 5px;
-        }
-
-        .comment-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 8px;
-        }
-        .reply-to-comment-btn { /* This is a button element */
-            font-size: 0.85rem !important; /* Keep specificity */
-            color: #555e64 !important;
-            background: none !important;
-            border: none !important;
-            cursor: pointer !important;
-            padding: 4px 6px !important; /* Smaller padding */
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .reply-to-comment-btn i {
-            margin-right: 0 !important; /* Reset margin */
-            font-size: 0.9em !important;
-            color: #8b0000 !important;
-        }
-         .reply-to-comment-btn:hover, .reply-to-comment-btn:hover i, .reply-to-comment-btn:hover span {
-            color: #6a0000 !important;
-            text-decoration: underline;
-        }
-        .replies-list {
-            margin-left: 20px; /* Indent replies */
-            margin-top: 12px;
-            padding-left: 15px;
-            border-left: 2px solid #e9ecef; /* Visual cue for reply thread */
-        }
-        .comment-reply { /* A single reply item */
-            border: 1px solid #f0f0f0;
-            padding: 10px;
-            background-color: #fff; /* Replies on white background for contrast */
-            border-radius: 6px;
-            margin-bottom: 10px;
-            font-size: 0.9em; /* Slightly smaller than main comment */
-        }
-        .comment-reply .comment-header img {
-            width: 30px;
-            height: 30px;
-        }
-        .reply-form-container {
-            margin-left: 0; /* Align with parent comment's action */
-            margin-top: 10px;
-        }
-        .reply-form-actual {
-            display: flex;
-            gap: 8px;
-            align-items: stretch; /* Stretch for consistent height */
-        }
-        .reply-form-actual input.reply-text-input {
-            flex: 1;
             padding: 8px 10px;
-            /* border: 1px solid #ccc; Inherits global */
-            /* border-radius: 6px; Inherits global */
-            font-size: 0.9em;
-            height: 40px; /* Explicit height */
-             margin-bottom: 0;
-        }
-        .reply-form-actual button.reply-submit-btn {
-            padding: 0 15px;
-            background: #28a745; /* Green for reply confirm */
-            color: white;
-            /* border: none; Inherits global */
-            /* border-radius: 6px; Inherits global */
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
+            font-size: 0.9rem;
             height: 40px;
         }
-        .reply-form-actual button.reply-submit-btn:hover { background: #218838; }
+        .comment-image-upload-label {
+            padding: 0 10px;
+            height: 40px;
+        }
+        .comment-image-upload-label i { font-size: 1rem; }
+        .comment-form-actual button.comment-submit-btn {
+            padding: 0 15px;
+            height: 40px;
+            font-size: 0.9rem;
+        }
+        .comment-image-preview {
+            max-width: 80px;
+            max-height: 80px;
+            margin-top: 8px;
+        }
+        .comment-upload-progress { font-size: 0.8rem; margin-top: 6px; }
 
-        /* Disabled button states are handled by global button style */
-
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            html { font-size: 15px; } /* Slightly smaller base on mobile */
-
-            .desktop-nav { display: none; }
-            .bottom-nav { display: flex; } /* Show bottom nav */
-
-            .header {
-                justify-content: space-between; /* Align items to sides */
-                padding: 15px;
-            }
-            .header-logo {
-                position: static; /* No longer absolute */
-                transform: none;
-                height: 50px; /* Smaller logo */
-                width: 50px;
-                margin-right: 10px;
-            }
-            .header-text-content {
-                flex-grow: 1;
-                text-align: center;
-                margin-left: 0;
-                margin-right: 40px; /* Space for a potential menu toggle on the right */
-            }
-             /* Add a menu toggle button for mobile header if not using bottom nav for menu */
-            /* This seems to be handled by bottomNavMenuBtn for the side menu */
-
-
-            .header h1 {
-                font-size: 1.5rem; /* Adjusted for mobile */
-                letter-spacing: 1.5px;
-                margin-bottom: 3px;
-            }
-            .header h2 {
-                font-size: 0.85rem; /* Adjusted for mobile */
-                letter-spacing: 0.2px;
-                color: #f0f0f0;
-            }
-
-            .user-info { flex-direction: column; text-align: center; }
-            .user-info #logoutBtn {
-                /* display: none !important; This was in original, but seems like it should be visible */
-                margin-top: 10px;
-            }
-
-            .container { padding: 20px 10px; }
-            .card { padding: 20px; margin-bottom: 20px; }
-            /* .card-header class is available for use if needed */
-            .posts-container h3 { font-size: 1.5rem; margin-bottom: 20px; padding-bottom: 10px; }
-
-            .post-header img { width: 40px; height: 40px; }
-            .post-header strong { font-size: 1rem; }
-            .post-header span.timestamp { font-size: 0.8rem; }
-            .post-content p { font-size: 0.95rem; }
-
-            .login-section h1 {font-size: 1.6rem;}
-            .login-section p {font-size: 1rem;}
-            .login-btn {max-width: 100%;}
-
-            .post-form h3 {font-size: 1.3rem;}
-
-            .comments-list .comment { padding: 12px; font-size: 0.9rem; }
-            .comment-header img {width: 30px; height: 30px;}
-            .comment-header strong {font-size: 0.85rem;}
-
-            .replies-list { margin-left: 15px; padding-left: 10px; }
-            .comment-reply { padding: 8px; font-size: 0.85em; }
+        .comment-actions {
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .reply-to-comment-btn {
+            font-size: 0.8rem !important;
+            padding: 3px 5px !important;
+        }
+        .reply-to-comment-btn i { font-size: 0.85em !important; }
+        .replies-list {
+            margin-left: 15px;
+            margin-top: 10px;
+            padding-left: 10px;
+        }
+        .comment-reply {
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+        }
+        .comment-reply .comment-header img { width: 25px; height: 25px; }
+        .reply-form-container { margin-top: 8px; }
+        .reply-form-actual { gap: 6px; }
+        .reply-form-actual input.reply-text-input {
+            padding: 6px 8px;
+            font-size: 0.85em;
+            height: 38px;
+        }
+        .reply-form-actual button.reply-submit-btn {
+            padding: 0 12px;
+            font-size: 0.85em;
+            height: 38px;
         }
 
-        @media (max-width: 480px) {
-            .header h1 { font-size: 1.3rem; }
-            .header h2 { font-size: 0.75rem; }
-            .bottom-nav a span { font-size: 0.7rem; } /* Even smaller text if needed */
-            .bottom-nav a i { font-size: 1.2rem; }
+        /* Responsive Adjustments - DESKTOP */
+        @media (min-width: 769px) {
+            body { padding-bottom: 0; /* No fixed bottom nav on desktop */ }
+            .desktop-nav { display: block; } /* Show desktop nav */
+            .bottom-nav { display: none; } /* Hide bottom nav */
 
-            .post-actions button { font-size: 0.85rem; padding: 6px 8px; }
-            .post-actions button i { font-size: 1.1rem; }
+            .header {
+                justify-content: center; /* Center content on desktop */
+                padding: 15px 140px; /* Original desktop padding */
+            }
+            .header-logo {
+                position: absolute; /* Absolute for desktop */
+                left: 30px;
+                top: 50%;
+                transform: translateY(-50%);
+                height: 70px; /* Desktop logo size */
+                width: 70px;
+                margin-right: 0; /* Reset margin */
+            }
+            .header-text-content {
+                text-align: center; /* Ensure it's centered */
+                margin-left: 90px; /* Space for logo */
+                margin-right: 90px; /* Balance */
+                flex-grow: 0; /* Don't grow, let margins define space */
+            }
+            .header h1 {
+                font-size: 42px; /* Desktop size */
+                letter-spacing: 4px;
+            }
+            .header h2 {
+                font-size: 22px; /* Desktop size */
+                letter-spacing: 1px;
+            }
+
+            .container { padding: 25px 15px; }
+            .card { padding: 25px; margin-bottom: 30px; border-radius: 12px; }
+            .card-header { font-size: 1.5rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom-width: 2px; }
+
+            .login-section { margin-top: 50px; }
+            .login-section h1 { font-size: 1.8rem; margin-bottom: 20px;}
+            .login-section p { font-size: 1.05rem; margin-bottom: 25px; }
+            .login-btn { max-width: 320px; padding: 12px 20px; font-size: 1rem; margin-bottom: 15px;}
+            .login-btn i { font-size: 1.25rem; }
+            
+            .user-info {
+                flex-direction: row; /* Row layout on desktop */
+                align-items: center;
+                text-align: left; /* Align text left */
+                gap: 15px;
+            }
+            .user-info img#userPhoto { width: 60px; height: 60px; border-width: 3px; }
+            .user-info div h2 { font-size: 1.3rem; margin-bottom: 5px; }
+            #logoutBtn { padding: 8px 15px; font-size: 0.9rem; margin-top: 0; }
+
+            .post-form h3 { font-size: 1.5rem; margin-bottom: 20px; }
+            textarea { min-height: 100px; }
+            input[type="text"], textarea { padding: 12px 15px; font-size: 1rem; }
+            label[for="postImageFile"] { padding: 10px 15px; font-size: 1rem; gap: 8px; margin-bottom: 15px; border-radius: 8px; }
+            #imagePreview { max-height: 250px; margin-bottom: 15px; }
+            #postBtn { padding: 12px 20px; }
+            
+            .posts-container h3 { font-size: 1.8rem; margin-bottom: 25px; padding-bottom: 12px; border-bottom-width: 2px; }
+            .post-header { margin-bottom: 15px; gap: 12px; }
+            .post-header img { width: 48px; height: 48px; }
+            .post-header strong { font-size: 1.1rem; }
+            .post-header span.timestamp { font-size: 0.85rem; }
+            .post-content p { font-size: 1rem; margin-bottom: 12px; }
+            .post-content img.post-image { margin-top: 15px; }
+            .post-actions { margin-top: 15px; gap: 10px; padding-top: 15px; }
+            .post-actions button { font-size: 0.9rem; padding: 8px 10px; }
+            .post-actions button i { font-size: 1.2rem; margin-right: 8px; }
+
+            .comments-area { margin-top: 20px; padding-top: 20px; }
+            .comments-list .comment { padding: 15px; font-size: 0.95rem; margin-bottom: 15px; }
+            .comment-header { margin-bottom: 8px; gap: 10px; }
+            .comment-header img { width: 35px; height: 35px; }
+            .comment-header strong { font-size: 0.9rem; }
+            .comment-header .timestamp { font-size: 0.8rem; }
+            .comment-content p { margin: 0 0 8px 0; font-size: 0.95rem;}
+            .comment-content img.comment-image { max-width: 220px; max-height: 160px; }
+
+            .comment-form-actual { gap: 8px; }
+            .comment-form-actual input[type="text"].comment-text-input { padding: 10px 12px; font-size: 0.95rem; height: 42px; }
+            .comment-image-upload-label { padding: 0 12px; height: 42px; }
+            .comment-image-upload-label i { font-size: 1.1rem; }
+            .comment-form-actual button.comment-submit-btn { padding: 0 18px; height: 42px; font-size: 0.95rem; }
+            .comment-image-preview { max-width: 100px; max-height: 100px; margin-top: 10px; }
+            .comment-upload-progress { font-size: 0.85em; margin-top: 8px; }
+
+            .comment-actions { gap: 10px; margin-top: 8px; }
+            .reply-to-comment-btn { font-size: 0.85rem !important; padding: 4px 6px !important; }
+            .reply-to-comment-btn i { font-size: 0.9em !important; }
+            .replies-list { margin-left: 20px; margin-top: 12px; padding-left: 15px; }
+            .comment-reply { padding: 10px; margin-bottom: 10px; font-size: 0.9em; }
+            .comment-reply .comment-header img { width: 30px; height: 30px; }
+            .reply-form-container { margin-top: 10px; }
+            .reply-form-actual { gap: 8px; }
+            .reply-form-actual input.reply-text-input { padding: 8px 10px; font-size: 0.9em; height: 40px; }
+            .reply-form-actual button.reply-submit-btn { padding: 0 15px; font-size: 0.9em; height: 40px; }
+        }
+
+        /* Fine-tuning for very small mobile screens */
+        @media (max-width: 480px) {
+            html { font-size: 15px; } /* Base for rem on small screens */
+            .header h1 { font-size: 1.2rem; letter-spacing: 1px; }
+            .header h2 { font-size: 0.7rem; letter-spacing: 0.1px; }
+            .bottom-nav a span { font-size: 0.65rem; }
+            .bottom-nav a i { font-size: 1.15rem; }
+
+            .container { padding: 15px 8px; }
+            .card { padding: 15px; margin-bottom: 15px; }
+            .card-header { font-size: 1.2rem; margin-bottom: 10px; padding-bottom: 6px; }
+            
+            .post-form h3 { font-size: 1.1rem; }
+            textarea#postContent { min-height: 80px; }
+            label[for="postImageFile"] { padding: 7px 10px; font-size: 0.85rem; }
+
+            .posts-container h3 { font-size: 1.3rem; }
+            .post-header strong { font-size: 0.9rem; }
+            .post-header span.timestamp { font-size: 0.75rem; }
+            .post-content p { font-size: 0.9rem; }
+            .post-actions button { font-size: 0.8rem; padding: 5px 7px; }
+            .post-actions button i { font-size: 1rem; }
+            
+            .comment-form-actual, .reply-form-actual {
+                flex-direction: column;
+            }
+            .comment-form-actual > *, .reply-form-actual > * {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+            .comment-form-actual > *:last-child, .reply-form-actual > *:last-child {
+                margin-bottom: 0;
+            }
+            .comment-image-upload-label {
+                justify-content: flex-start; /* Align text/icon left */
+                gap: 8px;
+            }
         }
 
     </style>
 </head>
 <body>
-    <nav class="mobile-menu" id="mobileMenu"> <!-- Added ID for easier JS targeting if needed -->
-        <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
-        <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
-        <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
-        <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="#"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+        <a href="#"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+        <a href="#"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+        <a href="#"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
         <a href="#post-form-container" class="nav-post-link"><i class="fas fa-pen-to-square"></i><span data-translate-key="post">Post</span></a>
 
         <div class="language-select-label">
@@ -745,39 +661,42 @@
     </nav>
 
     <header class="header">
-      <img src="images/logo.png" alt="Virat Swarup Logo" class="header-logo">
+        <div class="header-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#FFFFFF" aria-label="Virat Swarup Logo">
+                <path d="M50,5 A45,45 0 0 1 50,95 A45,45 0 0 1 50,5 M50,15 A35,35 0 1 0 50,85 A35,35 0 1 0 50,15 Z"/>
+                <text x="50" y="63" font-family="Georgia, serif" font-size="30" fill="#FFFFFF" text-anchor="middle">VS</text>
+            </svg>
+        </div>
       <div class="header-text-content">
         <h1>VIRAT SWARUP</h1>
         <h2 data-translate-key="headerSubtitle">The Supreme Divine of Every Faith</h2>
       </div>
-      <!-- Placeholder for a potential mobile menu toggle if not using bottom nav for it -->
-      <!-- <button id="mobileMenuToggle" class="mobile-menu-toggle"><i class="fas fa-bars"></i></button> -->
     </header>
 
     <nav class="desktop-nav">
         <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
-            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
-            <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
-            <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+            <li><a href="#"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+            <li><a href="#"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+            <li><a href="#"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
             <li><a href="#post-form-container" class="nav-post-link"><i class="fas fa-pen-to-square"></i><span data-translate-key="post">Post</span></a></li>
         </ul>
     </nav>
 
     <nav class="bottom-nav">
         <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
-            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
-            <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
-            <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+            <li><a href="#"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+            <li><a href="#"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+            <li><a href="#"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+            <li><a href="#"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
             <li><a href="#" id="bottomNavMenuBtn"><i class="fas fa-bars"></i><span data-translate-key="menu">Menu</span></a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <div class="login-section card" id="loginSection"> <!-- Added .card -->
+        <div class="login-section card" id="loginSection">
             <h1 data-translate-key="welcomeTitle">Welcome</h1>
-            <p style="margin-bottom: 20px; color: #555;" data-translate-key="signInToConnect">Sign in to share and connect.</p>
+            <p data-translate-key="signInToConnect">Sign in to share and connect.</p>
             <button class="login-btn google-btn" id="googleLoginBtn">
                 <i class="fab fa-google"></i> <span data-translate-key="signInWithGoogle">Sign in with Google</span>
             </button>
@@ -786,16 +705,16 @@
             </button>
         </div>
 
-        <div class="app-section" id="appSection" style="display: none;"> <!-- Ensure this is hidden initially by JS or style -->
-            <div class="user-info card" id="userInfoCard"> <!-- Added .card -->
+        <div class="app-section" id="appSection" style="display: none;">
+            <div class="user-info card" id="userInfoCard">
                 <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
-                    <button id="logoutBtn" class="btn-primary" data-translate-key="logout">Logout</button> <!-- Added .btn-primary -->
+                    <button id="logoutBtn" class="btn-primary" data-translate-key="logout">Logout</button>
                 </div>
             </div>
 
-            <div class="post-form card" id="post-form-container"> <!-- Added .card -->
+            <div class="post-form card" id="post-form-container">
                 <h3 data-translate-key="createPostTitle">Create Post</h3>
                 <textarea id="postContent" data-translate-key-placeholder="postPlaceholder"></textarea>
 
@@ -808,7 +727,7 @@
                     <p id="uploadProgressText"></p>
                 </div>
 
-                <button id="postBtn" class="btn-primary" data-translate-key="postButton">Post</button> <!-- Added .btn-primary -->
+                <button id="postBtn" class="btn-primary" data-translate-key="postButton">Post</button>
             </div>
 
             <div class="posts-container" id="postsContainer">
@@ -820,421 +739,136 @@
 
     <script>
     // --- START CLOUDINARY CONFIGURATION ---
-    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f";
-    const CLOUDINARY_UPLOAD_PRESET = "public_uploader";
+    // IMPORTANT: Replace with your actual Cloudinary cloud name and upload preset for image uploads to work.
+    const CLOUDINARY_CLOUD_NAME = "YOUR_CLOUDINARY_CLOUD_NAME"; // e.g., "your-cloud-name"
+    const CLOUDINARY_UPLOAD_PRESET = "YOUR_CLOUDINARY_UPLOAD_PRESET"; // e.g., "your-unsigned-preset"
     const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
     // --- END CLOUDINARY CONFIGURATION ---
 
     // --- START FIREBASE CONFIGURATION ---
+    // IMPORTANT: Replace with your actual Firebase project configuration for authentication and database features to work.
     const firebaseConfig = {
-      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Keep your actual API key secure
-      authDomain: "viratsawarup.firebaseapp.com",
-      projectId: "viratsawarup",
-      // storageBucket: "viratsawarup.appspot.com", // Often needed for Firebase Storage if used directly
-      messagingSenderId: "264071748020",
-      appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-      measurementId: "G-7GJQPJCR1L"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+      measurementId: "YOUR_MEASUREMENT_ID" // Optional
     };
     // --- END FIREBASE CONFIGURATION ---
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const auth = firebase.auth();
     const db = firebase.firestore();
 
     // --- START TRANSLATION DATA & LOGIC ---
     const translations = {
         en: {
-            headerSubtitle: "The Supreme Divine of Every Faith",
-            home: "Home",
-            agnosia: "Agnosia",
-            enigma: "Enigma",
-            emulate: "Emulate",
-            post: "Post",
-            language: "Language",
-            login: "Login",
-            logout: "Logout",
-            menu: "Menu",
-            welcomeTitle: "Welcome",
-            signInToConnect: "Sign in to share and connect.",
-            signInWithGoogle: "Sign in with Google",
-            signInWithFacebook: "Sign in with Facebook",
-            createPostTitle: "Create Post",
-            postPlaceholder: "What's on your mind, Virat Bhakt?",
-            addImageOptional: "Add Image (Optional)",
-            postButton: "Post",
-            postingButton: "Posting...",
-            feedTitle: "Feed",
-            noPosts: "No posts yet. Be the first to share!",
-            errorLoadingPosts: "Error loading posts.",
-            loginToSeeFeed: "Please log in to see the feed.",
-            likes: "Likes",
-            comments: "Comments",
-            deleteAction: "Delete",
-            replyAction: "Reply",
-            addCommentPlaceholder: "Add a comment...",
-            commentPostButton: "Post", // For comment form
-            noCommentsYet: "No comments yet.",
-            writeReplyPlaceholder: "Write a reply...",
-            replyPostButton: "Post Reply",
-            uploadingImage: "Uploading image...",
-            imageUploaded: "Image uploaded!",
-            uploadFailed: "Upload failed.",
-            deletePostConfirm: "Are you sure you want to delete this post?",
-            postContentRequired: "Post content or an image is required!",
-            loginRequiredToPost: "You must be logged in to post!",
-            loginRequiredToComment: "Please log in to comment.",
-            commentContentRequired: "Comment text or an image is required.",
-            loginRequiredToReply: "Please log in to reply.",
-            replyTextRequired: "Reply text cannot be empty.",
-            loginRequiredToLike: "Please log in to like posts.",
-            signInError: "Sign-in error",
-            postError: "Error creating post"
+            headerSubtitle: "The Supreme Divine of Every Faith", home: "Home", agnosia: "Agnosia", enigma: "Enigma", emulate: "Emulate", post: "Post", language: "Language", login: "Login", logout: "Logout", menu: "Menu", welcomeTitle: "Welcome", signInToConnect: "Sign in to share and connect.", signInWithGoogle: "Sign in with Google", signInWithFacebook: "Sign in with Facebook", createPostTitle: "Create Post", postPlaceholder: "What's on your mind, Virat Bhakt?", addImageOptional: "Add Image (Optional)", postButton: "Post", postingButton: "Posting...", feedTitle: "Feed", noPosts: "No posts yet. Be the first to share!", errorLoadingPosts: "Error loading posts.", loginToSeeFeed: "Please log in to see the feed.", likes: "Likes", comments: "Comments", deleteAction: "Delete", replyAction: "Reply", addCommentPlaceholder: "Add a comment...", commentPostButton: "Post", noCommentsYet: "No comments yet.", writeReplyPlaceholder: "Write a reply...", replyPostButton: "Post Reply", uploadingImage: "Uploading image...", imageUploaded: "Image uploaded!", uploadFailed: "Upload failed.", deletePostConfirm: "Are you sure you want to delete this post?", postContentRequired: "Post content or an image is required!", loginRequiredToPost: "You must be logged in to post!", loginRequiredToComment: "Please log in to comment.", commentContentRequired: "Comment text or an image is required.", loginRequiredToReply: "Please log in to reply.", replyTextRequired: "Reply text cannot be empty.", loginRequiredToLike: "Please log in to like posts.", signInError: "Sign-in error", postError: "Error creating post"
         },
         ne: {
-            headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा",
-            home: "गृहपृष्ठ",
-            agnosia: "अज्ञानता",
-            enigma: "पहेली",
-            emulate: "अनुकरण",
-            post: "पोस्ट",
-            language: "भाषा",
-            login: "लग - इन",
-            logout: "लग - आउट",
-            menu: "मेनु",
-            welcomeTitle: "स्वागत छ",
-            signInToConnect: "साझा गर्न र जडान गर्न साइन इन गर्नुहोस्।",
-            signInWithGoogle: "Google बाट साइन इन गर्नुहोस्",
-            signInWithFacebook: "Facebook बाट साइन इन गर्नुहोस्",
-            createPostTitle: "पोस्ट सिर्जना गर्नुहोस्",
-            postPlaceholder: "मनमा के छ, विराट भक्त?",
-            addImageOptional: "फोटो थप्नुहोस् (ऐच्छिक)",
-            postButton: "पोस्ट गर्नुहोस्",
-            postingButton: "पोस्ट गर्दै...",
-            feedTitle: "फिड",
-            noPosts: "अहिलेसम्म कुनै पोस्ट छैन। साझा गर्ने पहिलो व्यक्ति बन्नुहोस्!",
-            errorLoadingPosts: "पोस्टहरू लोड गर्दा त्रुटि भयो।",
-            loginToSeeFeed: "फिड हेर्न कृपया लग इन गर्नुहोस्।",
-            likes: "लाइकहरू",
-            comments: "टिप्पणीहरू",
-            deleteAction: "मेटाउनुहोस्",
-            replyAction: "जवाफ दिनुहोस्",
-            addCommentPlaceholder: "टिप्पणी थप्नुहोस्...",
-            commentPostButton: "पोस्ट",
-            noCommentsYet: "अहिलेसम्म कुनै टिप्पणी छैन।",
-            writeReplyPlaceholder: "जवाफ लेख्नुहोस्...",
-            replyPostButton: "जवाफ पोस्ट गर्नुहोस्",
-            uploadingImage: "फोटो अपलोड हुँदैछ...",
-            imageUploaded: "फोटो अपलोड भयो!",
-            uploadFailed: "अपलोड असफल भयो।",
-            deletePostConfirm: "के तपाई साँच्चै यो पोस्ट मेटाउन चाहनुहुन्छ?",
-            postContentRequired: "पोस्ट सामग्री वा फोटो आवश्यक छ!",
-            loginRequiredToPost: "पोस्ट गर्न तपाईं लग इन हुनुपर्छ!",
-            loginRequiredToComment: "कृपया टिप्पणी गर्न लग इन गर्नुहोस्।",
-            commentContentRequired: "टिप्पणी पाठ वा फोटो आवश्यक छ।",
-            loginRequiredToReply: "कृपया जवाफ दिन लग इन गर्नुहोस्।",
-            replyTextRequired: "जवाफ खाली हुन सक्दैन।",
-            loginRequiredToLike: "पोस्ट लाइक गर्न कृपया लग इन गर्नुहोस्。",
-            signInError: "साइन-इन त्रुटि",
-            postError: "पोस्ट बनाउँदा त्रुटि"
+            headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा", login: "लग - इन", logout: "लग - आउट", menu: "मेनु", welcomeTitle: "स्वागत छ", signInToConnect: "साझा गर्न र जडान गर्न साइन इन गर्नुहोस्।", signInWithGoogle: "Google बाट साइन इन गर्नुहोस्", signInWithFacebook: "Facebook बाट साइन इन गर्नुहोस्", createPostTitle: "पोस्ट सिर्जना गर्नुहोस्", postPlaceholder: "मनमा के छ, विराट भक्त?", addImageOptional: "फोटो थप्नुहोस् (ऐच्छिक)", postButton: "पोस्ट गर्नुहोस्", postingButton: "पोस्ट गर्दै...", feedTitle: "फिड", noPosts: "अहिलेसम्म कुनै पोस्ट छैन। साझा गर्ने पहिलो व्यक्ति बन्नुहोस्!", errorLoadingPosts: "पोस्टहरू लोड गर्दा त्रुटि भयो।", loginToSeeFeed: "फिड हेर्न कृपया लग इन गर्नुहोस्।", likes: "लाइकहरू", comments: "टिप्पणीहरू", deleteAction: "मेटाउनुहोस्", replyAction: "जवाफ दिनुहोस्", addCommentPlaceholder: "टिप्पणी थप्नुहोस्...", commentPostButton: "पोस्ट", noCommentsYet: "अहिलेसम्म कुनै टिप्पणी छैन।", writeReplyPlaceholder: "जवाफ लेख्नुहोस्...", replyPostButton: "जवाफ पोस्ट गर्नुहोस्", uploadingImage: "फोटो अपलोड हुँदैछ...", imageUploaded: "फोटो अपलोड भयो!", uploadFailed: "अपलोड असफल भयो।", deletePostConfirm: "के तपाई साँच्चै यो पोस्ट मेटाउन चाहनुहुन्छ?", postContentRequired: "पोस्ट सामग्री वा फोटो आवश्यक छ!", loginRequiredToPost: "पोस्ट गर्न तपाईं लग इन हुनुपर्छ!", loginRequiredToComment: "कृपया टिप्पणी गर्न लग इन गर्नुहोस्।", commentContentRequired: "टिप्पणी पाठ वा फोटो आवश्यक छ।", loginRequiredToReply: "कृपया जवाफ दिन लग इन गर्नुहोस्।", replyTextRequired: "जवाफ खाली हुन सक्दैन।", loginRequiredToLike: "पोस्ट लाइक गर्न कृपया लग इन गर्नुहोस्。", signInError: "साइन-इन त्रुटि", postError: "पोस्ट बनाउँदा त्रुटि"
         },
         hi: {
-            headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा",
-            home: "होम",
-            agnosia: "अज्ञान",
-            enigma: "पहेली",
-            emulate: "अनुकरण",
-            post: "पोस्ट",
-            language: "भाषा",
-            login: "लॉग इन करें",
-            logout: "लॉग आउट करें",
-            menu: "मेन्यू",
-            welcomeTitle: "स्वागत है",
-            signInToConnect: "साझा करने और जुड़ने के लिए साइन इन करें।",
-            signInWithGoogle: "Google से साइन इन करें",
-            signInWithFacebook: "Facebook से साइन इन करें",
-            createPostTitle: "पोस्ट बनाएं",
-            postPlaceholder: "आपके मन में क्या है, विराट भक्त?",
-            addImageOptional: "छवि जोड़ें (वैकल्पिक)",
-            postButton: "पोस्ट करें",
-            postingButton: "पोस्ट कर रहा है...",
-            feedTitle: "फ़ीड",
-            noPosts: "अभी तक कोई पोस्ट नहीं है। साझा करने वाले पहले व्यक्ति बनें!",
-            errorLoadingPosts: "पोस्ट लोड करने में त्रुटि।",
-            loginToSeeFeed: "फ़ीड देखने के लिए कृपया लॉग इन करें।",
-            likes: "लाइक",
-            comments: "टिप्पणियाँ",
-            deleteAction: "हटाएं",
-            replyAction: "उत्तर दें",
-            addCommentPlaceholder: "एक टिप्पणी जोड़ें...",
-            commentPostButton: "पोस्ट",
-            noCommentsYet: "अभी तक कोई टिप्पणी नहीं है।",
-            writeReplyPlaceholder: "एक उत्तर लिखें...",
-            replyPostButton: "उत्तर पोस्ट करें",
-            uploadingImage: "छवि अपलोड हो रही है...",
-            imageUploaded: "छवि अपलोड हो गई!",
-            uploadFailed: "अपलोड विफल रहा।",
-            deletePostConfirm: "क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?",
-            postContentRequired: "पोस्ट सामग्री या एक छवि आवश्यक है!",
-            loginRequiredToPost: "पोस्ट करने के लिए आपको लॉग इन होना चाहिए!",
-            loginRequiredToComment: "टिप्पणी करने के लिए कृपया लॉग इन करें।",
-            commentContentRequired: "टिप्पणी पाठ या एक छवि आवश्यक है।",
-            loginRequiredToReply: "उत्तर देने के लिए कृपया लॉग इन करें।",
-            replyTextRequired: "उत्तर पाठ खाली नहीं हो सकता।",
-            loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।",
-            signInError: "साइन-इन में त्रुटि",
-            postError: "पोस्ट बनाने में त्रुटि"
+            headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा", home: "होम", agnosia: "अज्ञान", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा", login: "लॉग इन करें", logout: "लॉग आउट करें", menu: "मेन्यू", welcomeTitle: "स्वागत है", signInToConnect: "साझा करने और जुड़ने के लिए साइन इन करें।", signInWithGoogle: "Google से साइन इन करें", signInWithFacebook: "Facebook से साइन इन करें", createPostTitle: "पोस्ट बनाएं", postPlaceholder: "आपके मन में क्या है, विराट भक्त?", addImageOptional: "छवि जोड़ें (वैकल्पिक)", postButton: "पोस्ट करें", postingButton: "पोस्ट कर रहा है...", feedTitle: "फ़ीड", noPosts: "अभी तक कोई पोस्ट नहीं है। साझा करने वाले पहले व्यक्ति बनें!", errorLoadingPosts: "पोस्ट लोड करने में त्रुटि।", loginToSeeFeed: "फ़ीड देखने के लिए कृपया लॉग इन करें।", likes: "लाइक", comments: "टिप्पणियाँ", deleteAction: "हटाएं", replyAction: "उत्तर दें", addCommentPlaceholder: "एक टिप्पणी जोड़ें...", commentPostButton: "पोस्ट", noCommentsYet: "अभी तक कोई टिप्पणी नहीं है।", writeReplyPlaceholder: "एक उत्तर लिखें...", replyPostButton: "उत्तर पोस्ट करें", uploadingImage: "छवि अपलोड हो रही है...", imageUploaded: "छवि अपलोड हो गई!", uploadFailed: "अपलोड विफल रहा।", deletePostConfirm: "क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?", postContentRequired: "पोस्ट सामग्री या एक छवि आवश्यक है!", loginRequiredToPost: "पोस्ट करने के लिए आपको लॉग इन होना चाहिए!", loginRequiredToComment: "टिप्पणी करने के लिए कृपया लॉग इन करें।", commentContentRequired: "टिप्पणी पाठ या एक छवि आवश्यक है।", loginRequiredToReply: "उत्तर देने के लिए कृपया लॉग इन करें।", replyTextRequired: "उत्तर पाठ खाली नहीं हो सकता।", loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।", signInError: "साइन-इन में त्रुटि", postError: "पोस्ट बनाने में त्रुटि"
         }
     };
-
     let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
-
     function setLanguage(lang) {
-        currentLanguage = lang;
-        localStorage.setItem('selectedLanguage', lang);
-        applyTranslations();
-        document.querySelectorAll('.language-options a').forEach(a => {
-            a.classList.remove('lang-active');
-            if (a.dataset.lang === lang) {
-                a.classList.add('lang-active');
-            }
-        });
-        if (auth.currentUser) {
-            loadPosts();
-        } else {
-            const loginMessageKey = 'loginToSeeFeed';
-            const translatedLoginMessage = translations[currentLanguage]?.[loginMessageKey] || translations.en[loginMessageKey];
-             if(elements.postsContainer && elements.appSection.style.display === 'none') { // Check if appSection is hidden
-                elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${translations[currentLanguage]?.feedTitle || translations.en.feedTitle}</h3><p class="empty-feed-message">${translatedLoginMessage}</p>`;
-            }
+        currentLanguage = lang; localStorage.setItem('selectedLanguage', lang); document.documentElement.lang = lang; applyTranslations();
+        document.querySelectorAll('.language-options a').forEach(a => { a.classList.remove('lang-active'); if (a.dataset.lang === lang) a.classList.add('lang-active'); });
+        if (auth.currentUser && elements.appSection.style.display !== 'none') { loadPosts(); }
+        else if (elements.postsContainer && elements.appSection.style.display === 'none') {
+            const msgKey = 'loginToSeeFeed'; elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_(feedTitle)}</h3><p class="empty-feed-message">${_(msgKey)}</p>`;
         }
-         // Update HTML lang attribute
-        document.documentElement.lang = lang;
     }
-
-    function _(key, fallbackLang = 'en') {
-        return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
-    }
-
+    function _(key, fbLang = 'en') { return translations[currentLanguage]?.[key] || translations[fbLang]?.[key] || key; }
     function applyTranslations() {
-        document.querySelectorAll('[data-translate-key]').forEach(element => {
-            const key = element.dataset.translateKey;
-            element.textContent = _(key);
-        });
-        document.querySelectorAll('[data-translate-key-placeholder]').forEach(element => {
-            const key = element.dataset.translateKeyPlaceholder;
-            element.placeholder = _(key);
-        });
-        if (elements.postBtn && !elements.postBtn.disabled) {
-            elements.postBtn.textContent = _('postButton');
-        }
-        // For dynamic title (though it's better to set once)
-        // document.title = _('pageTitle', 'en'); // Example if you had a pageTitle key
+        document.querySelectorAll('[data-translate-key]').forEach(el => el.textContent = _(el.dataset.translateKey));
+        document.querySelectorAll('[data-translate-key-placeholder]').forEach(el => el.placeholder = _(el.dataset.translateKeyPlaceholder));
+        if (elements.postBtn && !elements.postBtn.disabled) elements.postBtn.textContent = _('postButton');
     }
     // --- END TRANSLATION LOGIC ---
 
-
     const elements = {
-        loginSection: document.getElementById('loginSection'),
-        appSection: document.getElementById('appSection'),
-        googleLoginBtn: document.getElementById('googleLoginBtn'),
-        facebookLoginBtn: document.getElementById('facebookLoginBtn'),
-        logoutBtn: document.getElementById('logoutBtn'),
-        userPhoto: document.getElementById('userPhoto'),
-        userName: document.getElementById('userName'),
-        postBtn: document.getElementById('postBtn'),
-        postContent: document.getElementById('postContent'),
-        postsContainer: document.getElementById('postsContainer'),
-        mobileMenu: document.getElementById('mobileMenu'),
-        postImageFile: document.getElementById('postImageFile'),
-        imagePreview: document.getElementById('imagePreview'),
-        uploadProgressContainer: document.getElementById('uploadProgressContainer'),
-        uploadProgressText: document.getElementById('uploadProgressText'),
-        mobileLoginLink: document.getElementById('mobileLoginLink'),
-        mobileLogoutLink: document.getElementById('mobileLogoutLink'),
-        bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn'),
-        languageSelectLabel: document.querySelector('.language-select-label'),
-        languageOptionsDiv: document.querySelector('.language-options')
+        loginSection: document.getElementById('loginSection'), appSection: document.getElementById('appSection'), googleLoginBtn: document.getElementById('googleLoginBtn'), facebookLoginBtn: document.getElementById('facebookLoginBtn'), logoutBtn: document.getElementById('logoutBtn'), userPhoto: document.getElementById('userPhoto'), userName: document.getElementById('userName'), postBtn: document.getElementById('postBtn'), postContent: document.getElementById('postContent'), postsContainer: document.getElementById('postsContainer'), mobileMenu: document.getElementById('mobileMenu'), postImageFile: document.getElementById('postImageFile'), imagePreview: document.getElementById('imagePreview'), uploadProgressContainer: document.getElementById('uploadProgressContainer'), uploadProgressText: document.getElementById('uploadProgressText'), mobileLoginLink: document.getElementById('mobileLoginLink'), mobileLogoutLink: document.getElementById('mobileLogoutLink'), bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn'), languageSelectLabel: document.querySelector('.language-select-label'), languageOptionsDiv: document.querySelector('.language-options')
     };
 
     if (elements.languageSelectLabel && elements.languageOptionsDiv) {
         elements.languageSelectLabel.addEventListener('click', () => {
-            const optionsDiv = elements.languageOptionsDiv;
-            optionsDiv.style.display = optionsDiv.style.display === 'none' || optionsDiv.style.display === '' ? 'block' : 'none';
+            const div = elements.languageOptionsDiv; div.style.display = div.style.display === 'none' || div.style.display === '' ? 'block' : 'none';
         });
     }
-
     document.querySelectorAll('.language-options a').forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const lang = e.currentTarget.dataset.lang;
-            setLanguage(lang);
+            e.preventDefault(); setLanguage(e.currentTarget.dataset.lang);
             if (elements.languageOptionsDiv) elements.languageOptionsDiv.style.display = 'none';
         });
     });
 
-
     if (elements.postImageFile) {
         elements.postImageFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    if (elements.imagePreview) {
-                        elements.imagePreview.src = event.target.result;
-                        elements.imagePreview.style.display = 'block';
-                    }
-                }
-                reader.readAsDataURL(file);
-            } else {
-                if (elements.imagePreview) {
-                    elements.imagePreview.src = '#';
-                    elements.imagePreview.style.display = 'none';
-                }
-            }
+            if (file) { const reader = new FileReader(); reader.onload = (ev) => { if (elements.imagePreview) { elements.imagePreview.src = ev.target.result; elements.imagePreview.style.display = 'block'; } }; reader.readAsDataURL(file); }
+            else { if (elements.imagePreview) { elements.imagePreview.src = '#'; elements.imagePreview.style.display = 'none'; } }
         });
     }
 
     auth.onAuthStateChanged(user => {
         if (user) {
-            if(elements.loginSection) elements.loginSection.style.display = 'none';
-            if(elements.appSection) elements.appSection.style.display = 'block'; // Ensure this is block not inheriting from .card initially
+            if(elements.loginSection) elements.loginSection.style.display = 'none'; if(elements.appSection) elements.appSection.style.display = 'block';
             if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
             if(elements.userName) elements.userName.textContent = user.displayName || 'User';
-
-            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none';
-            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
-
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none'; if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
             loadPosts();
         } else {
-            if(elements.loginSection) elements.loginSection.style.display = 'block'; // This should be .card, so block is fine
-            if(elements.appSection) elements.appSection.style.display = 'none';
-            if(elements.postsContainer) {
-                 elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_('feedTitle')}</h3><p class="empty-feed-message">${_('loginToSeeFeed')}</p>`;
-            }
-
-            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex';
-            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
-
-            if (postsUnsubscribe) {
-                postsUnsubscribe();
-                postsUnsubscribe = null;
-            }
+            if(elements.loginSection) elements.loginSection.style.display = 'block'; if(elements.appSection) elements.appSection.style.display = 'none';
+            if(elements.postsContainer) { elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_('feedTitle')}</h3><p class="empty-feed-message">${_('loginToSeeFeed')}</p>`;}
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex'; if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
+            if (postsUnsubscribe) { postsUnsubscribe(); postsUnsubscribe = null; }
         }
         applyTranslations();
     });
 
     async function handleAuth(provider) {
-        try {
-            await auth.signInWithPopup(provider);
-        } catch (error) {
-            console.error("Login Error:", error);
-            if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-                return;
-            }
-            alert(_('signInError') + `: ${error.message}`);
-        }
+        try { await auth.signInWithPopup(provider); }
+        catch (error) { console.error("Login Error:", error); if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') return; alert(_('signInError') + `: ${error.message}`); }
     }
-
     if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
-    if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires additional developer setup and permissions review. Please use Google Sign-In for now.");
-    });
-
+    if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => alert("Facebook login requires additional developer setup. Please use Google Sign-In."));
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
-
     if (elements.mobileLogoutLink) {
-        elements.mobileLogoutLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            auth.signOut();
-            if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
+        elements.mobileLogoutLink.addEventListener('click', (e) => { e.preventDefault(); auth.signOut(); if (elements.mobileMenu?.classList.contains('active')) toggleMenu(); });
     }
 
     if (elements.postBtn) {
         elements.postBtn.addEventListener('click', async () => {
-            const content = elements.postContent ? elements.postContent.value.trim() : "";
-            const imageFile = elements.postImageFile ? elements.postImageFile.files[0] : null;
-            const currentUser = auth.currentUser;
-
-            if (!content && !imageFile) {
-                alert(_('postContentRequired'));
-                return;
-            }
-            if (!currentUser) {
-                alert(_('loginRequiredToPost'));
-                return;
-            }
-
-            elements.postBtn.disabled = true;
-            elements.postBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; // Added spinner
-            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
-            if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
-
+            const content = elements.postContent?.value.trim() || ""; const imageFile = elements.postImageFile?.files[0]; const currentUser = auth.currentUser;
+            if (!content && !imageFile) { alert(_('postContentRequired')); return; } if (!currentUser) { alert(_('loginRequiredToPost')); return; }
+            elements.postBtn.disabled = true; elements.postBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`;
+            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none'; if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
             try {
-                let imageUrl = null;
-                let imagePublicId = null;
-
+                let imageUrl = null, imagePublicId = null;
                 if (imageFile) {
-                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
-                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('uploadingImage');
-                    const formData = new FormData();
-                    formData.append('file', imageFile);
-                    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    if (CLOUDINARY_CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME" || CLOUDINARY_UPLOAD_PRESET === "YOUR_CLOUDINARY_UPLOAD_PRESET") throw new Error("Cloudinary not configured.");
+                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block'; if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('uploadingImage');
+                    const formData = new FormData(); formData.append('file', imageFile); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
                     const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(`Cloudinary upload failed: ${errorData.error.message || 'Unknown error'}`);
-                    }
-                    const data = await response.json();
-                    imageUrl = data.secure_url;
-                    imagePublicId = data.public_id;
+                    if (!response.ok) { const errData = await response.json(); throw new Error(`Cloudinary upload failed: ${errData.error?.message || 'Unknown'}`); }
+                    const data = await response.json(); imageUrl = data.secure_url; imagePublicId = data.public_id;
                     if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('imageUploaded');
                 }
-
-                const postData = {
-                    content: content || "",
-                    userId: currentUser.uid,
-                    userName: currentUser.displayName || 'Anonymous User',
-                    userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: [],
-                    comments: [] // Initialize as empty array
-                };
-                if (imageUrl) {
-                    postData.imageUrl = imageUrl;
-                    if (imagePublicId) postData.imagePublicId = imagePublicId;
-                }
-
+                const postData = { content, userId: currentUser.uid, userName: currentUser.displayName || 'User', userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', timestamp: firebase.firestore.FieldValue.serverTimestamp(), likes: [], comments: [] };
+                if (imageUrl) { postData.imageUrl = imageUrl; if (imagePublicId) postData.imagePublicId = imagePublicId; }
                 await db.collection('posts').add(postData);
-
-                if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null; // Reset file input
-                if(elements.imagePreview) {
-                    elements.imagePreview.src = '#';
-                    elements.imagePreview.style.display = 'none';
-                }
-            } catch (error) {
-                console.error("Post Error:", error);
-                alert(_('postError') + `: ${error.message}`);
-                if(elements.uploadProgressText && elements.uploadProgressContainer && elements.uploadProgressContainer.style.display === 'block') {
-                     elements.uploadProgressText.textContent = _('uploadFailed');
-                }
+                if(elements.postContent) elements.postContent.value = ''; if(elements.postImageFile) elements.postImageFile.value = null;
+                if(elements.imagePreview) { elements.imagePreview.src = '#'; elements.imagePreview.style.display = 'none'; }
+            } catch (error) { console.error("Post Error:", error); alert(_('postError') + `: ${error.message}`); if(elements.uploadProgressText && elements.uploadProgressContainer?.style.display === 'block') elements.uploadProgressText.textContent = _('uploadFailed');
             } finally {
-                if(elements.postBtn) {
-                    elements.postBtn.disabled = false;
-                    elements.postBtn.textContent = _('postButton'); // Reset text
-                }
-                setTimeout(() => {
-                    if(elements.uploadProgressContainer && elements.uploadProgressText) {
-                        // Only hide if not showing a failure message
-                        if (elements.uploadProgressText.textContent && !elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
-                            elements.uploadProgressContainer.style.display = 'none';
-                            elements.uploadProgressText.textContent = '';
-                        }
-                    }
-                }, 3000);
+                if(elements.postBtn) { elements.postBtn.disabled = false; elements.postBtn.textContent = _('postButton'); }
+                setTimeout(() => { if(elements.uploadProgressContainer && elements.uploadProgressText && elements.uploadProgressText.textContent && !elements.uploadProgressText.textContent.toLowerCase().includes('failed')) { elements.uploadProgressContainer.style.display = 'none'; elements.uploadProgressText.textContent = ''; } }, 3000);
             }
         });
     }
@@ -1242,539 +876,202 @@
     let postsUnsubscribe = null;
     function loadPosts() {
         if (postsUnsubscribe) postsUnsubscribe();
+        let titleEl = elements.postsContainer.querySelector('h3[data-translate-key="feedTitle"]');
+        if (!titleEl) { titleEl = document.createElement('h3'); titleEl.setAttribute('data-translate-key', 'feedTitle'); if (!elements.postsContainer.firstChild || elements.postsContainer.firstChild.nodeName !== 'H3') elements.postsContainer.prepend(titleEl); }
+        titleEl.textContent = _('feedTitle');
 
-        // Ensure feed title element exists or create it
-        let feedTitleElement = elements.postsContainer.querySelector('h3[data-translate-key="feedTitle"]');
-        if (!feedTitleElement) {
-            feedTitleElement = document.createElement('h3');
-            feedTitleElement.setAttribute('data-translate-key', 'feedTitle');
-            // Prepend if not first child or if postsContainer is empty
-            if (!elements.postsContainer.firstChild || elements.postsContainer.firstChild.nodeName !== 'H3') {
-                 elements.postsContainer.prepend(feedTitleElement);
+        postsUnsubscribe = db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            if (elements.postsContainer) {
+                elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message').forEach(el => el.remove());
+                if (snapshot.empty) { const p = document.createElement('p'); p.className = 'empty-feed-message'; p.textContent = _('noPosts'); elements.postsContainer.appendChild(p); return; }
+                snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
             }
-        }
-        feedTitleElement.textContent = _('feedTitle');
-
-
-        postsUnsubscribe = db.collection('posts')
-          .orderBy('timestamp', 'desc')
-          .onSnapshot(snapshot => {
-              if (elements.postsContainer) {
-                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message');
-                  existingPosts.forEach(el => el.remove());
-
-                  if (snapshot.empty) {
-                      const p = document.createElement('p');
-                      p.className = 'empty-feed-message'; // For styling if needed
-                      p.textContent = _('noPosts');
-                      elements.postsContainer.appendChild(p);
-                      return;
-                  }
-                  snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
-              }
-          }, error => {
-              console.error("Error loading posts: ", error);
-              if (elements.postsContainer) {
-                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message');
-                  existingPosts.forEach(el => el.remove());
-                  const p = document.createElement('p');
-                  p.className = 'error-loading-message'; // For styling if needed
-                  p.textContent = _('errorLoadingPosts');
-                  elements.postsContainer.appendChild(p);
-              }
-          });
+        }, error => {
+            console.error("Error loading posts: ", error); if (elements.postsContainer) {
+                elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message').forEach(el => el.remove());
+                if (!elements.postsContainer.querySelector('h3[data-translate-key="feedTitle"]')) elements.postsContainer.prepend(titleEl);
+                const p = document.createElement('p'); p.className = 'error-loading-message'; p.textContent = _('errorLoadingPosts'); elements.postsContainer.appendChild(p);
+            }
+        });
     }
 
     function createPostElement(postId, post) {
-        const currentUser = auth.currentUser;
-        const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-        const postDiv = document.createElement('div');
-        postDiv.className = 'post card'; // Added .card
-        postDiv.setAttribute('data-post-id', postId);
-
-        const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
-                                ? post.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'})
-                                : (post.timestamp ? new Date(post.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
-
-        let contentHTML = '';
-        if (post.content) { // Ensure post.content is not empty before creating <p>
-            contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
-        }
-        if (post.imageUrl) {
-            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none';">`;
-        }
-        if (!contentHTML) { // If both content and imageUrl are empty, provide a placeholder or leave it be
-            contentHTML = `<p style="min-height:1.5em;"> </p>`; // Ensures div has some height
-        }
+        const currentUser = auth.currentUser; const isLiked = currentUser && post.likes?.includes(currentUser.uid);
+        const postDiv = document.createElement('div'); postDiv.className = 'post card'; postDiv.setAttribute('data-post-id', postId);
+        const timestamp = post.timestamp?.toDate ? post.timestamp.toDate() : (post.timestamp ? new Date(post.timestamp) : null);
+        const formattedTimestamp = timestamp ? timestamp.toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'}) : _('recently', 'en'); // Added fallback
+        let contentHTML = post.content ? `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>` : '';
+        if (post.imageUrl) contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.warn('Failed to load post image:', this.src)">`;
+        if (!contentHTML) contentHTML = `<p style="min-height:1.5em;"> </p>`; // Ensure some height
 
         postDiv.innerHTML = `
             <div class="post-header">
                 <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';">
-                <strong>${escapeHTML(post.userName)}</strong>
-                <span class="timestamp">${formattedTimestamp}</span>
+                <strong>${escapeHTML(post.userName)}</strong><span class="timestamp">${formattedTimestamp}</span>
             </div>
             <div class="post-content">${contentHTML}</div>
             <div class="post-actions">
-                <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
-                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
-                    <span class="like-text">${post.likes ? post.likes.length : 0} ${_('likes')}</span>
-                </button>
-                <button class="comment-toggle-btn" data-post-id="${postId}">
-                    <i class="far fa-comment"></i>
-                    <span class="comment-text">${Array.isArray(post.comments) ? post.comments.length : 0} ${_('comments')}</span>
-                </button>
-                ${currentUser && post.userId === currentUser.uid ?
-                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}">
-                        <i class="fas fa-trash"></i> <span data-translate-key="deleteAction">${_('deleteAction')}</span>
-                     </button>` : ''}
+                <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}"><i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i><span class="like-text">${post.likes?.length || 0} ${_('likes')}</span></button>
+                <button class="comment-toggle-btn" data-post-id="${postId}"><i class="far fa-comment"></i><span class="comment-text">${post.comments?.length || 0} ${_('comments')}</span></button>
+                ${currentUser && post.userId === currentUser.uid ? `<button class="delete-post-btn" data-post-id="${postId}" data-image-public-id="${post.imagePublicId || ''}"><i class="fas fa-trash"></i><span data-translate-key="deleteAction">${_('deleteAction')}</span></button>` : ''}
             </div>
             <div class="comments-area" id="comments-area-${postId}" style="display: none;">
                 <div class="comments-list" id="comments-list-${postId}"></div>
                 <form class="comment-form-actual" data-post-id="${postId}">
                     <input type="text" name="commentText" class="comment-text-input" placeholder="${_('addCommentPlaceholder')}" autocomplete="off">
-                    <label class="comment-image-upload-label" title="${_('addImageOptional')}">
-                        <i class="fas fa-paperclip"></i>
-                        <input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;">
-                    </label>
-                    <button type="submit" class="comment-submit-btn btn-primary">${_('commentPostButton')}</button> <!-- Added .btn-primary -->
+                    <label class="comment-image-upload-label" title="${_('addImageOptional')}"><i class="fas fa-paperclip"></i><input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;"></label>
+                    <button type="submit" class="comment-submit-btn btn-primary">${_('commentPostButton')}</button>
                 </form>
-                <img src="#" alt="Comment image preview" class="comment-image-preview">
-                <div class="comment-upload-progress"></div>
+                <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;"><div class="comment-upload-progress" style="display: none;"></div>
             </div>`;
-        if (elements.postsContainer) {
-            // Insert new posts after the H3 title
-            const titleElement = elements.postsContainer.querySelector('h3');
-            if (titleElement && titleElement.nextSibling) {
-                elements.postsContainer.insertBefore(postDiv, titleElement.nextSibling);
-            } else {
-                elements.postsContainer.appendChild(postDiv);
-            }
-        }
+        if (elements.postsContainer) { const titleEl = elements.postsContainer.querySelector('h3'); if (titleEl?.nextSibling) elements.postsContainer.insertBefore(postDiv, titleEl.nextSibling); else elements.postsContainer.appendChild(postDiv); }
 
-
-        const commentImageInput = postDiv.querySelector('.comment-image-input');
-        const commentImagePreview = postDiv.querySelector('.comment-image-preview');
-        if (commentImageInput && commentImagePreview) {
-            commentImageInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        commentImagePreview.src = event.target.result;
-                        commentImagePreview.style.display = 'block';
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    commentImagePreview.src = '#';
-                    commentImagePreview.style.display = 'none';
-                }
-            });
-        }
-
+        const commentImgInput = postDiv.querySelector('.comment-image-input'), commentImgPreview = postDiv.querySelector('.comment-image-preview');
+        if (commentImgInput && commentImgPreview) { commentImgInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { commentImgPreview.src = ev.target.result; commentImgPreview.style.display = 'block'; }; reader.readAsDataURL(file); } else { commentImgPreview.src = '#'; commentImgPreview.style.display = 'none'; } }); }
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
-        if (commentsList) {
-            if (post.comments && Array.isArray(post.comments) && post.comments.length > 0) {
-                const sortedComments = [...post.comments].sort((a,b) => {
-                    const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
-                    const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                    return timeA - timeB; // Ascending order for comments
-                });
-                sortedComments.forEach(comment => renderComment(comment, commentsList, postId));
-            } else {
-                commentsList.innerHTML = `<p style="font-size:0.9em; color:#777; padding:5px 0; text-align:center;">${_('noCommentsYet')}</p>`;
-            }
-        }
-
-        const likeBtn = postDiv.querySelector('.like-btn');
-        if (likeBtn) likeBtn.addEventListener('click', () => handleLike(postId));
-        const commentToggleBtn = postDiv.querySelector('.comment-toggle-btn');
-        if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
-        const commentForm = postDiv.querySelector('.comment-form-actual');
-        if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
-        const deleteBtn = postDiv.querySelector('.delete-post-btn');
-        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl, deleteBtn.dataset.imagePublicId));
+        if (commentsList) { commentsList.innerHTML = ''; if (post.comments?.length > 0) { const sorted = [...post.comments].sort((a,b) => (a.timestamp?.toDate?a.timestamp.toDate().getTime():new Date(a.timestamp).getTime())-(b.timestamp?.toDate?b.timestamp.toDate().getTime():new Date(b.timestamp).getTime())); sorted.forEach(c => renderComment(c, commentsList, postId)); } else { commentsList.innerHTML = `<p style="font-size:0.9em; color:#777; padding:5px 0; text-align:center;">${_('noCommentsYet')}</p>`; } }
+        postDiv.querySelector('.like-btn')?.addEventListener('click', () => handleLike(postId));
+        postDiv.querySelector('.comment-toggle-btn')?.addEventListener('click', () => toggleComments(postId));
+        postDiv.querySelector('.comment-form-actual')?.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
+        postDiv.querySelector('.delete-post-btn')?.addEventListener('click', (e) => handleDeletePost(postId, e.currentTarget.dataset.imagePublicId));
     }
 
-    async function handleDeletePost(postId, imageUrl, imagePublicId) {
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToPost')); return; }
-        if (!confirm(_('deletePostConfirm'))) return;
+    async function handleDeletePost(postId, imagePublicId) {
+        const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToPost')); return; } if (!confirm(_('deletePostConfirm'))) return;
         const postRef = db.collection('posts').doc(postId);
-        try {
-            const doc = await postRef.get();
-            if (doc.exists && doc.data().userId === currentUser.uid) {
-                // Note: Deleting images from Cloudinary usually requires backend/signed requests for security.
-                // This frontend attempt might not work if Cloudinary API has restrictions for unsigned deletion by public_id.
-                if (imagePublicId) {
-                    console.warn(`Attempting to delete image with public_id: ${escapeHTML(imagePublicId)}. This typically requires a signed API call from a backend for security.`);
-                    // Example: Simple deletion (might fail due to permissions if not configured for it)
-                    // await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/destroy`, {
-                    //     method: 'POST',
-                    //     headers: { 'Content-Type': 'application/json' },
-                    //     body: JSON.stringify({ public_id: imagePublicId, api_key: 'YOUR_API_KEY', timestamp: Date.now(), signature: 'GENERATED_SIGNATURE' })
-                    // });
-                    // For now, just log it. Proper deletion is a backend task.
-                }
-                await postRef.delete();
-                // The post element will be removed by the onSnapshot listener automatically
-            } else { alert("Permission denied or post not found."); }
-        } catch (error) {
-            console.error("Error deleting post:", error);
-            alert("Failed to delete post: " + error.message);
-        }
+        try { const doc = await postRef.get(); if (doc.exists && doc.data().userId === currentUser.uid) { if (imagePublicId && imagePublicId !== "undefined" && imagePublicId !== "") console.warn(`Cloudinary image (public_id: ${escapeHTML(imagePublicId)}) deletion is a backend task.`); await postRef.delete(); } else alert("Permission denied or post not found."); }
+        catch (error) { console.error("Error deleting post:", error); alert("Failed to delete post: " + error.message); }
     }
 
     async function handleCommentSubmit(event, postId) {
-        event.preventDefault();
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToComment')); return; }
-
-        const form = event.target;
-        const commentTextInput = form.querySelector('.comment-text-input');
-        const commentImageInput = form.querySelector('.comment-image-input');
-        const commentsArea = form.closest('.comments-area');
-        const commentImagePreview = commentsArea ? commentsArea.querySelector('.comment-image-preview') : null;
-        const commentUploadProgress = commentsArea ? commentsArea.querySelector('.comment-upload-progress') : null;
-
-        const commentText = commentTextInput ? commentTextInput.value.trim() : "";
-        const imageFile = commentImageInput ? commentImageInput.files[0] : null;
-
-        if (!commentText && !imageFile) { alert(_('commentContentRequired')); return; }
-
-        const submitButton = form.querySelector('.comment-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
-        if(commentUploadProgress) { commentUploadProgress.textContent = ''; commentUploadProgress.style.display = 'none';}
-
-        let commentImageUrl = null;
-        let commentImagePublicId = null;
-
+        event.preventDefault(); const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToComment')); return; }
+        const form = event.target, textInput = form.querySelector('.comment-text-input'), imgInput = form.querySelector('.comment-image-input');
+        const area = form.closest('.comments-area'), imgPreview = area?.querySelector('.comment-image-preview'), progress = area?.querySelector('.comment-upload-progress');
+        const text = textInput?.value.trim() || "", imgFile = imgInput?.files[0]; if (!text && !imgFile) { alert(_('commentContentRequired')); return; }
+        const btn = form.querySelector('.comment-submit-btn'); if (btn) { btn.disabled = true; btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
+        if(progress) { progress.textContent = ''; progress.style.display = 'none'; }
+        let imgUrl = null, imgPublicId = null;
         try {
-            if (imageFile) {
-                if(commentUploadProgress) { commentUploadProgress.textContent = _('uploadingImage'); commentUploadProgress.style.display = 'block'; }
-                const formData = new FormData();
-                formData.append('file', imageFile);
-                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-                const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Cloudinary comment image upload failed: ${errorData.error.message || 'Unknown error'}`);
-                }
-                const data = await response.json();
-                commentImageUrl = data.secure_url;
-                commentImagePublicId = data.public_id;
-                if(commentUploadProgress) commentUploadProgress.textContent = _('imageUploaded');
+            if (imgFile) {
+                if (CLOUDINARY_CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME" || CLOUDINARY_UPLOAD_PRESET === "YOUR_CLOUDINARY_UPLOAD_PRESET") throw new Error("Cloudinary not configured.");
+                if(progress) { progress.textContent = _('uploadingImage'); progress.style.display = 'block'; }
+                const formData = new FormData(); formData.append('file', imgFile); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                const resp = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData }); if (!resp.ok) { const errD = await resp.json(); throw new Error(`Cloudinary comment image upload failed: ${errD.error?.message||'Unknown'}`); }
+                const data = await resp.json(); imgUrl = data.secure_url; imgPublicId = data.public_id; if(progress) progress.textContent = _('imageUploaded');
             }
-
-            const commentId = db.collection('posts').doc().id; // Generate a unique ID for the comment
-
-            const newComment = {
-                id: commentId, // Store the ID within the comment object
-                userId: currentUser.uid,
-                userName: currentUser.displayName || 'User',
-                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                text: commentText || "",
-                timestamp: new Date(), // Use JS Date for immediate client-side rendering, Firestore converts to Timestamp
-                replies: [],
-                imageUrl: commentImageUrl || null,
-                imagePublicId: commentImagePublicId || null
-            };
-
-            const postRef = db.collection('posts').doc(postId);
-            await postRef.update({
-                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
-            });
-
-            if (commentTextInput) commentTextInput.value = '';
-            if (commentImageInput) commentImageInput.value = null; // Reset file input
-            if (commentImagePreview) { commentImagePreview.src = '#'; commentImagePreview.style.display = 'none';}
-            // Comment will be rendered by onSnapshot listener automatically
-        } catch (error) {
-            console.error("Error adding comment:", error);
-            alert("Failed to add comment: " + error.message);
-            if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
-                commentUploadProgress.textContent = _('uploadFailed');
-            }
-        } finally {
-            if (submitButton) { submitButton.disabled = false; submitButton.textContent = _('commentPostButton'); }
-            setTimeout(() => {
-                if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
-                    if (commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
-                        commentUploadProgress.style.display = 'none';
-                        commentUploadProgress.textContent = '';
-                    }
-                }
-            }, 3000);
-        }
+            const commentId = db.collection('posts').doc().id;
+            const newComment = { id: commentId, userId: currentUser.uid, userName: currentUser.displayName||'User', userPhoto: currentUser.photoURL||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', text, timestamp: new Date(), replies: [], imageUrl: imgUrl, imagePublicId: imgPublicId };
+            await db.collection('posts').doc(postId).update({ comments: firebase.firestore.FieldValue.arrayUnion(newComment) });
+            if (textInput) textInput.value = ''; if (imgInput) imgInput.value = null; if (imgPreview) { imgPreview.src = '#'; imgPreview.style.display = 'none'; }
+        } catch (error) { console.error("Error adding comment:", error); alert("Failed to add comment: " + error.message); if(progress?.style.display === 'block') progress.textContent = _('uploadFailed');
+        } finally { if (btn) { btn.disabled = false; btn.textContent = _('commentPostButton'); } setTimeout(() => { if(progress?.style.display === 'block' && progress.textContent && !progress.textContent.toLowerCase().includes('failed')) { progress.style.display = 'none'; progress.textContent = ''; } }, 3000); }
     }
 
     function toggleReplyForm(commentId) {
-        const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
-        if (replyFormContainer) {
-            const isHidden = replyFormContainer.style.display === 'none' || replyFormContainer.style.display === '';
-            replyFormContainer.style.display = isHidden ? 'block' : 'none';
-            if (isHidden) {
-                const inputField = replyFormContainer.querySelector('.reply-text-input');
-                if (inputField) inputField.focus();
-            }
-        }
+        const formContainer = document.getElementById(`reply-form-container-${commentId}`);
+        if (formContainer) { const hidden = formContainer.style.display === 'none' || formContainer.style.display === ''; formContainer.style.display = hidden ? 'block' : 'none'; if (hidden) formContainer.querySelector('.reply-text-input')?.focus(); }
     }
 
     async function handleReplySubmit(event, postId, parentCommentId) {
-        event.preventDefault();
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToReply')); return; }
-
-        const form = event.target;
-        const replyTextInput = form.querySelector('.reply-text-input');
-        const replyText = replyTextInput ? replyTextInput.value.trim() : "";
-
-        if (!replyText) { alert(_('replyTextRequired')); return; }
-
-        const submitButton = form.querySelector('.reply-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
-
+        event.preventDefault(); const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToReply')); return; }
+        const form = event.target, textInput = form.querySelector('.reply-text-input'), text = textInput?.value.trim() || ""; if (!text) { alert(_('replyTextRequired')); return; }
+        const btn = form.querySelector('.reply-submit-btn'); if (btn) { btn.disabled = true; btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
         const postRef = db.collection('posts').doc(postId);
         try {
-             const newReply = {
-                id: db.collection('posts').doc().id, // Unique ID for reply
-                userId: currentUser.uid,
-                userName: currentUser.displayName || 'User',
-                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                text: replyText,
-                timestamp: new Date() // JS Date
-            };
-
+            const newReply = { id: db.collection('posts').doc().id, userId: currentUser.uid, userName: currentUser.displayName||'User', userPhoto: currentUser.photoURL||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', text, timestamp: new Date() };
             await db.runTransaction(async (transaction) => {
-                const postDoc = await transaction.get(postRef);
-                if (!postDoc.exists) throw "Post document does not exist!";
-                const postData = postDoc.data();
-                let comments = postData.comments && Array.isArray(postData.comments) ? [...postData.comments] : []; // Make a mutable copy
-                const commentIndex = comments.findIndex(c => c.id === parentCommentId);
-
-                if (commentIndex > -1) {
-                    const parentComment = comments[commentIndex];
-                    const existingReplies = parentComment.replies && Array.isArray(parentComment.replies) ? [...parentComment.replies] : [];
-                    existingReplies.push(newReply);
-                    comments[commentIndex] = { ...parentComment, replies: existingReplies };
-                    transaction.update(postRef, { comments: comments });
-                } else {
-                    throw "Parent comment not found!";
-                }
+                const postDoc = await transaction.get(postRef); if (!postDoc.exists) throw "Post does not exist!";
+                const postData = postDoc.data(); let comments = postData.comments && Array.isArray(postData.comments) ? [...postData.comments] : [];
+                const cIndex = comments.findIndex(c => c.id === parentCommentId);
+                if (cIndex > -1) { const pComment = comments[cIndex]; const exReplies = pComment.replies && Array.isArray(pComment.replies) ? [...pComment.replies] : []; exReplies.push(newReply); comments[cIndex] = { ...pComment, replies: exReplies }; transaction.update(postRef, { comments }); }
+                else throw "Parent comment not found!";
             });
-            if (replyTextInput) replyTextInput.value = '';
-            // Reply will be rendered by onSnapshot listener
-            // toggleReplyForm(parentCommentId); // Optionally close form
-        } catch (error) {
-            console.error("Error adding reply:", error);
-            alert("Failed to add reply: " + error.message);
-        } finally {
-            if (submitButton) { submitButton.disabled = false; submitButton.textContent = _('replyPostButton');}
-        }
+            if (textInput) textInput.value = '';
+        } catch (error) { console.error("Error adding reply:", error); alert("Failed to add reply: " + error.message);
+        } finally { if (btn) { btn.disabled = false; btn.textContent = _('replyPostButton'); } }
     }
 
     function renderReply(reply, repliesListDiv) {
-        const replyDiv = document.createElement('div');
-        replyDiv.className = 'comment-reply';
-        replyDiv.setAttribute('data-reply-id', reply.id);
-
-        const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
-                                ? reply.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'})
-                                : (reply.timestamp ? new Date(reply.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
-
-        let replyContentHTML = '';
-        if (reply.text) {
-            replyContentHTML = `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>`;
-        }
+        const replyDiv = document.createElement('div'); replyDiv.className = 'comment-reply'; replyDiv.setAttribute('data-reply-id', reply.id);
+        const timestamp = reply.timestamp?.toDate ? reply.timestamp.toDate() : (reply.timestamp ? new Date(reply.timestamp) : null);
+        const formattedTimestamp = timestamp ? timestamp.toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) : _('recently', 'en');
+        let contentHTML = reply.text ? `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>` : '<p style="min-height:1em;"> </p>';
         replyDiv.innerHTML = `
-            <div class="comment-header">
-                <img src="${reply.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';">
-                <strong>${escapeHTML(reply.userName) || 'User'}</strong>
-                <span class="timestamp">${replyTimestamp}</span>
-            </div>
-            <div class="comment-content">${replyContentHTML || '<p style="min-height:1em;"> </p>'}</div>`;
+            <div class="comment-header"><img src="${reply.userPhoto||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName||'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';"><strong>${escapeHTML(reply.userName||'User')}</strong><span class="timestamp">${formattedTimestamp}</span></div>
+            <div class="comment-content">${contentHTML}</div>`;
         repliesListDiv.appendChild(replyDiv);
     }
 
     function renderComment(comment, commentsListElement, postId) {
-        // Remove "No comments yet" message if it exists
-        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
-        if(noCommentP) noCommentP.remove();
-
-        const commentDiv = document.createElement('div');
-        commentDiv.className = 'comment';
-        commentDiv.setAttribute('data-comment-id', comment.id);
-
-        const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
-                                ? comment.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'})
-                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
-
-        let commentContentHTML = '';
-        if (comment.text) commentContentHTML += `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>`;
-        if (comment.imageUrl) commentContentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none';">`;
-        if (!commentContentHTML) commentContentHTML = `<p style="min-height:1.5em;"> </p>`;
-
+        commentsListElement.querySelector('p[style*="No comments yet"]')?.remove();
+        const commentDiv = document.createElement('div'); commentDiv.className = 'comment'; commentDiv.setAttribute('data-comment-id', comment.id);
+        const timestamp = comment.timestamp?.toDate ? comment.timestamp.toDate() : (comment.timestamp ? new Date(comment.timestamp) : null);
+        const formattedTimestamp = timestamp ? timestamp.toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) : _('recently', 'en');
+        let contentHTML = comment.text ? `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>` : '';
+        if (comment.imageUrl) contentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none'; console.warn('Failed to load comment image:', this.src)">`;
+        if (!contentHTML) contentHTML = `<p style="min-height:1.5em;"> </p>`;
         commentDiv.innerHTML = `
-            <div class="comment-header">
-                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';">
-                <strong>${escapeHTML(comment.userName) || 'User'}</strong>
-                <span class="timestamp">${commentTimestamp}</span>
-            </div>
-            <div class="comment-content">${commentContentHTML}</div>
-            <div class="comment-actions">
-                <button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}">
-                    <i class="fas fa-reply"></i> <span data-translate-key="replyAction">${_('replyAction')}</span>
-                </button>
-            </div>
+            <div class="comment-header"><img src="${comment.userPhoto||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName||'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';"><strong>${escapeHTML(comment.userName||'User')}</strong><span class="timestamp">${formattedTimestamp}</span></div>
+            <div class="comment-content">${contentHTML}</div>
+            <div class="comment-actions"><button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}"><i class="fas fa-reply"></i><span data-translate-key="replyAction">${_('replyAction')}</span></button></div>
             <div class="replies-list" id="replies-list-${comment.id}"></div>
             <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
-                <form class="reply-form-actual" data-post-id="${postId}" data-parent-comment-id="${comment.id}">
-                    <input type="text" name="replyText" class="reply-text-input" placeholder="${_('writeReplyPlaceholder')}" autocomplete="off">
-                    <button type="submit" class="reply-submit-btn">${_('replyPostButton')}</button>
-                </form>
+                <form class="reply-form-actual" data-post-id="${postId}" data-parent-comment-id="${comment.id}"><input type="text" name="replyText" class="reply-text-input" placeholder="${_('writeReplyPlaceholder')}" autocomplete="off"><button type="submit" class="reply-submit-btn btn-primary">${_('replyPostButton')}</button></form>
             </div>`;
         commentsListElement.appendChild(commentDiv);
-
-        const repliesListDiv = commentDiv.querySelector(`#replies-list-${comment.id}`);
-        if (comment.replies && Array.isArray(comment.replies) && comment.replies.length > 0) {
-            const sortedReplies = [...comment.replies].sort((a,b) => {
-                const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
-                const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                return timeA - timeB; // Ascending for replies
-            });
-            sortedReplies.forEach(reply => renderReply(reply, repliesListDiv));
-        }
-
-        const replyButton = commentDiv.querySelector('.reply-to-comment-btn');
-        if (replyButton) replyButton.addEventListener('click', () => toggleReplyForm(comment.id));
-        const replyForm = commentDiv.querySelector('.reply-form-actual');
-        if (replyForm) replyForm.addEventListener('submit', (e) => handleReplySubmit(e, postId, comment.id));
+        const repliesListDiv = commentDiv.querySelector(`#replies-list-${comment.id}`); repliesListDiv.innerHTML = '';
+        if (comment.replies?.length > 0) { const sortedR = [...comment.replies].sort((a,b) => (a.timestamp?.toDate?a.timestamp.toDate().getTime():new Date(a.timestamp).getTime())-(b.timestamp?.toDate?b.timestamp.toDate().getTime():new Date(b.timestamp).getTime())); sortedR.forEach(r => renderReply(r, repliesListDiv)); }
+        commentDiv.querySelector('.reply-to-comment-btn')?.addEventListener('click', () => toggleReplyForm(comment.id));
+        commentDiv.querySelector('.reply-form-actual')?.addEventListener('submit', (e) => handleReplySubmit(e, postId, comment.id));
     }
 
     async function handleLike(postId) {
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToLike')); return; }
+        const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToLike')); return; }
         const postRef = db.collection('posts').doc(postId);
-        try {
-            await db.runTransaction(async (transaction) => {
-                const doc = await transaction.get(postRef);
-                if (!doc.exists) throw "Document does not exist!";
-                const postData = doc.data();
-                let currentLikes = postData.likes && Array.isArray(postData.likes) ? postData.likes : [];
-                let newLikesArray;
-                if (currentLikes.includes(currentUser.uid)) {
-                    newLikesArray = currentLikes.filter(uid => uid !== currentUser.uid);
-                } else {
-                    newLikesArray = [...currentLikes, currentUser.uid];
-                }
-                transaction.update(postRef, { likes: newLikesArray });
-            });
-            // UI will update via onSnapshot
-        } catch (error) {
-            console.error("Like transaction failed:", error);
-            alert("Failed to update like: " + error.message);
-        }
+        try { await db.runTransaction(async (transaction) => { const doc = await transaction.get(postRef); if (!doc.exists) throw "Document does not exist!"; const postData = doc.data(); let likes = postData.likes && Array.isArray(postData.likes) ? postData.likes : []; let newLikes = likes.includes(currentUser.uid) ? likes.filter(uid => uid !== currentUser.uid) : [...likes, currentUser.uid]; transaction.update(postRef, { likes: newLikes }); });
+        } catch (error) { console.error("Like transaction failed:", error); alert("Failed to update like: " + error.message); }
     }
 
     function toggleComments(postId) {
-        const commentsArea = document.getElementById(`comments-area-${postId}`);
-        if (commentsArea) {
-            const isHidden = commentsArea.style.display === 'none' || commentsArea.style.display === '';
-            commentsArea.style.display = isHidden ? 'block' : 'none';
-            if (isHidden) {
-               const inputField = commentsArea.querySelector('input[name="commentText"]');
-               if (inputField) inputField.focus();
-            }
-        }
+        const area = document.getElementById(`comments-area-${postId}`);
+        if (area) { const hidden = area.style.display === 'none' || area.style.display === ''; area.style.display = hidden ? 'block' : 'none'; if (hidden) area.querySelector('input[name="commentText"]')?.focus(); }
     }
 
-    function toggleMenu() {
-        if (elements.mobileMenu) {
-            elements.mobileMenu.classList.toggle('active');
-            // Optional: Add/remove a class on body to prevent scrolling when menu is open
-            // document.body.classList.toggle('mobile-menu-open');
-        }
-    }
-
+    function toggleMenu() { elements.mobileMenu?.classList.toggle('active'); }
     function closeMenuAndScroll(event) {
-        const link = event.currentTarget;
-        const isLanguageOption = link.closest('.language-options');
-
-        if (!isLanguageOption && elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-            if (!link.closest('.language-select-label') && !link.dataset.lang) {
-                 toggleMenu();
-            }
-        }
-
+        const link = event.currentTarget; if (!link.closest('.language-options') && elements.mobileMenu?.classList.contains('active') && !link.closest('.language-select-label') && !link.dataset.lang) toggleMenu();
         const targetId = link.getAttribute('href');
-        if (targetId && targetId.startsWith('#') && targetId.length > 1 && link.classList.contains('nav-post-link')) {
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                event.preventDefault();
-                targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
+        if (targetId?.startsWith('#') && targetId.length > 1 && (link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink')) {
+            const targetEl = document.querySelector(targetId); if (targetEl) { event.preventDefault(); targetEl.scrollIntoView({ behavior: "smooth", block: "start" }); }
         }
     }
 
-
-    if (elements.bottomNavMenuBtn) {
-        elements.bottomNavMenuBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            toggleMenu();
-        });
-    }
-
+    if (elements.bottomNavMenuBtn) elements.bottomNavMenuBtn.addEventListener('click', (e) => { e.preventDefault(); toggleMenu(); });
     document.querySelectorAll('.mobile-menu a:not(.language-options a)').forEach(link => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
-            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink' && !link.closest('.language-select-label')) {
-                if(link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink') {
-                    closeMenuAndScroll(event); // This already calls toggleMenu
-                } else { // For other # links that aren't special scroll links
-                     if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                        toggleMenu();
-                    }
-                }
-            } else if (link.id === 'mobileLogoutLink') {
-                // Handled by its own listener
-            } else if (!link.closest('.language-select-label') && !link.dataset.lang) { // Standard page navigation
-                if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                    toggleMenu();
-                }
+            if (href?.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink' && !link.closest('.language-select-label')) {
+                if (link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink') closeMenuAndScroll(event);
+                else if (elements.mobileMenu?.classList.contains('active')) toggleMenu();
+            } else if (link.id === 'mobileLogoutLink') { /* handled */ }
+            else if (!link.closest('.language-select-label') && !link.dataset.lang && href === '#') { if (elements.mobileMenu?.classList.contains('active')) toggleMenu(); event.preventDefault(); } // Placeholder links
+            else if (!link.closest('.language-select-label') && !link.dataset.lang ) { // Actual navigation
+                if (elements.mobileMenu?.classList.contains('active')) toggleMenu();
             }
         });
     });
-
-    document.addEventListener('click', (e) => {
-        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) && // Click not on toggle button
-            !elements.mobileMenu.contains(e.target)) { // Click not inside menu
-            toggleMenu();
-        }
-    });
+    document.addEventListener('click', (e) => { if (elements.mobileMenu?.classList.contains('active') && elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) && !elements.mobileMenu.contains(e.target)) toggleMenu(); });
 
     function escapeHTML(str) {
-        if (str === null || str === undefined) return '';
-        const s = String(str); // Ensure it's a string
-        return s.replace(/[&<>"']/g, function (match) {
-            switch (match) {
-                case '&': return '&';
-                case '<': return '<';
-                case '>': return '>';
-                case '"': return '"';
-                case "'": return '''; // or '
-                default: return match;
-            }
-        });
+        if (str === null || str === undefined) return ''; const s = String(str);
+        return s.replace(/[&<>"']/g, (m) => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": ''' }[m] || m));
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        setLanguage(currentLanguage);
-        // Ensure app section is hidden by default if user not logged in,
-        // auth.onAuthStateChanged will handle showing it.
         if (elements.appSection) elements.appSection.style.display = 'none';
-        if (elements.loginSection) elements.loginSection.style.display = 'block'; // Show login by default
+        if (elements.loginSection) elements.loginSection.style.display = 'block';
+        setLanguage(currentLanguage);
     });
-
     </script>
 </body>
 </html>
