@@ -3,85 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIRAT SWARUP</title> <!-- This title tag itself is not easily translatable with this method -->
+    <title>VIRAT SWARUP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <style>
+        /* Global Resets and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Georgia", serif; /* May need fallback for Devanagari script */
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px; /* Base for rem units */
         }
 
         body {
-            background: #ffffff;
-            color: #2c2c2c;
+            background: #f4f6f8; /* Light cool gray background */
+            color: #333; /* Default text color */
+            /* Mobile-first font stack: modern sans-serif for UI elements */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.6;
             padding-bottom: 70px; /* Space for bottom nav */
+            -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
+            -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
         }
 
+        /* Headings retain Georgia, but general text uses the body's sans-serif stack */
+        h1, h2, h3, h4, h5, h6, .header-text-content h1, .header-text-content h2 /* Ensure header H tags use Georgia */ {
+            font-family: "Georgia", serif;
+            color: #2c2c2c; /* Darker color for headings for contrast */
+            line-height: 1.3;
+            font-weight: 600; /* Default bold for headings */
+        }
+        .header-text-content h1 { font-weight: 700; } /* Original bold for main title */
+        .header-text-content h2 { font-weight: 300; font-style: italic; } /* Original style for subtitle */
+
+
+        a {
+            color: #8b0000; /* Theme color for links */
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+        a:hover {
+            color: #6a0000; /* Darker shade on hover */
+        }
+
+        /* General Button Styling - Mobile First */
+        button, .button-like {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
+            border: none;
+            font-size: 0.95rem; /* Good readable size for mobile */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            line-height: 1.4; /* Ensure text within button is well-spaced */
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+        }
+        button:active, .button-like:active {
+            transform: translateY(1px);
+        }
+        button:disabled, .button-like:disabled {
+            background: #e0e0e0 !important; /* Softer disabled background */
+            color: #9e9e9e !important; /* Softer disabled text */
+            cursor: not-allowed !important;
+            opacity: 0.8 !important;
+            box-shadow: none !important;
+        }
+        button:disabled .fa-spinner { color: #9e9e9e !important; }
+
+        /* Primary Button Style */
+        .btn-primary {
+            background-color: #8b0000;
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #6a0000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Input Fields General Styling - Mobile First */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ced4da; /* Standard border color */
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-family: inherit; /* Uses body's sans-serif */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            margin-bottom: 12px; /* Default margin for mobile */
+            background-color: #fff; /* Ensure white background */
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        textarea:focus {
+            border-color: #8b0000;
+            box-shadow: 0 0 0 0.15rem rgba(139,0,0,0.2); /* Softer focus shadow */
+            outline: none;
+        }
+        textarea {
+            min-height: 80px; /* Mobile-friendly height */
+            resize: vertical;
+        }
+
+        /* Header - Mobile First */
         .header {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* Align logo to start */
             align-items: center;
-            position: relative;
-            padding: 15px 140px;
+            position: relative; /* For potential absolute elements on desktop */
+            padding: 10px 15px; /* Mobile padding */
             border-bottom: 1px solid #7a0000;
             background-color: #8b0000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Softer shadow */
         }
 
         .header-logo {
-            position: absolute;
-            left: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 100px;
-            width: 100px;
+            /* Mobile styles (overriding desktop absolute positioning) */
+            position: static;
+            transform: none;
+            left: auto;
+            top: auto;
+            height: 45px; /* Smaller logo for mobile */
+            width: 45px;
+            margin-right: 10px; /* Space between logo and text */
+            flex-shrink: 0; /* Prevent logo from shrinking */
             object-fit: contain;
         }
 
         .header-text-content {
             text-align: center;
+            flex-grow: 1; /* Takes remaining space */
+            margin-right: 45px; /* Make space for a potential right-aligned icon (like menu toggle if bottom nav wasn't used for it) */
+                                /* If no right-side icon planned, this can be 0 or small value */
         }
+
 
         .header h1 {
-            font-size: 42px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            font-size: clamp(1.3rem, 5vw, 1.7rem); /* Responsive and mobile-friendly */
+            letter-spacing: 1.5px;
+            margin-bottom: 2px;
             color: white;
-            margin-top: 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            font-weight: 600;
-            /* data-translate-key="headerTitle" will be handled by JS if needed, but it's a proper noun */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         .header h2 {
-            font-size: 22px;
-            color: #f5f5f5;
-            font-weight: 300;
-            margin-top: 0;
-            margin-bottom: 0;
-            letter-spacing: 1px;
-            font-style: italic;
-            data-translate-key="headerSubtitle"
+            font-size: clamp(0.75rem, 3vw, 0.9rem); /* Responsive and mobile-friendly */
+            color: #f0f0f0; /* Slightly less bright for subtitle */
+            letter-spacing: 0.3px;
         }
 
+        /* Mobile Menu (Side Menu) */
         .mobile-menu {
             position: fixed;
             top: 0;
-            right: -300px;
-            width: 300px;
+            right: -280px; /* Slightly narrower for mobile */
+            width: 280px;
+            max-width: 85%; /* Ensure it doesn't take full screen */
             height: 100%;
-            background: #8b0000;
-            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-            transition: 0.4s;
-            padding-top: 60px; /* Adjusted for language options */
-            z-index: 1000;
-            overflow-y: auto; /* For scrollability if menu gets long */
+            background: #7a0000; /* Darker shade for depth */
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15); /* Softer shadow */
+            transition: right 0.3s ease-out; /* Faster, smoother transition */
+            padding-top: 20px;
+            z-index: 1001; /* Above other fixed elements */
+            overflow-y: auto;
         }
         .mobile-menu.active {
             right: 0;
@@ -89,437 +187,451 @@
         .mobile-menu a, .mobile-menu .language-select-label {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 15px 30px; /* Adjusted padding */
+            gap: 12px;
+            padding: 14px 20px; /* Good touch target */
             color: #fff !important;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1); /* Softer border */
+            font-size: 1rem; /* Readable size */
             cursor: pointer;
         }
         .mobile-menu i {
-            width: 25px;
-            font-size: 20px;
+            width: 22px;
+            font-size: 1.1rem;
             color: #fff !important;
+            text-align: center;
         }
-        .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
-            border-bottom: none;
+        .mobile-menu a:hover, .mobile-menu .language-select-label:hover {
+            background-color: rgba(255,255,255,0.08); /* Subtle hover */
         }
         .language-options {
-            padding-left: 30px; /* Indent language options */
-            display: none; /* Hidden by default */
-            background-color: rgba(0,0,0,0.1);
+            padding-left: 0; /* Full width */
+            display: none;
+            background-color: rgba(0,0,0,0.15); /* Darker submenu */
         }
         .language-options a {
-            padding: 12px 30px;
-            font-size: 0.9em;
+            padding: 12px 20px 12px 45px; /* Indent language options */
+            font-size: 0.9rem;
         }
         .language-options a.lang-active {
             font-weight: bold;
             background-color: rgba(255,255,255,0.1);
         }
 
-
+        /* Bottom Navigation - Mobile First */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: #8b0000;
-            border-top: 1px solid #eee;
-            padding: 8px 0;
-            display: none;
+            border-top: 1px solid #7a0000; /* Darker border */
+            padding: 4px 0; /* Compact padding */
+            display: flex; /* Default for mobile */
+            justify-content: center;
+            align-items: center;
             z-index: 999;
+            box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
         }
         .bottom-nav ul {
             display: flex;
             justify-content: space-around;
             list-style: none;
+            width: 100%;
         }
         .bottom-nav a {
             color: #fff !important;
-            font-size: 14px;
+            font-size: 0.7rem; /* Small, clear text */
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: 8px 10px;
-            border-radius: 8px;
-            transition: background 0.3s;
+            gap: 2px; /* Minimal gap */
+            padding: 6px 5px; /* Adjusted for compactness and touch */
+            border-radius: 6px;
+            transition: background-color 0.2s, transform 0.1s;
+            flex: 1; /* Equal distribution */
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
         }
         .bottom-nav a i {
-            font-size: 20px;
+            font-size: 1.2rem; /* Clear icons */
         }
         .bottom-nav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.08);
         }
-        .bottom-nav a span { /* To target the text for translation */
-            /* data-translate-key will be applied to span */
-        }
-
-
-        .desktop-nav {
-            margin: 45px 0;
-        }
-        .desktop-nav ul {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            list-style: none;
-        }
-        .desktop-nav a {
-            color: #8b0000;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 18px;
-            /* data-translate-key will be on the text part of the link if not just icon */
-        }
-        .desktop-nav a span { /* If text is in a span */
-            /* data-translate-key will be applied here */
+        .bottom-nav a:active {
+            transform: scale(0.96);
         }
 
+        /* Desktop Navigation - Hidden on mobile by default */
+        .desktop-nav { display: none; }
 
-        @media (max-width: 768px) {
-            .desktop-nav { display: none; }
-            .bottom-nav { display: flex; justify-content: center; align-items: center; }
 
-            .header {
-                justify-content: flex-start;
-                padding: 10px 15px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            }
-            .header-logo {
-                position: static;
-                transform: none;
-                left: auto;
-                height: 70px;
-                width: 70px;
-                margin-right: 10px;
-                flex-shrink: 0;
-            }
-            .header-text-content {
-                flex-grow: 1;
-                text-align: center;
-            }
-
-            .header h1 {
-                font-size: 28px;
-                letter-spacing: 2.5px;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-                margin-bottom: 5px;
-            }
-            .header h2 {
-                font-size: 16px;
-                letter-spacing: 0.5px;
-                color: #f0f0f0;
-            }
-
-            .user-info #logoutBtn {
-                display: none !important;
-            }
-        }
-
+        /* Container - Mobile First */
         .container {
-            max-width: 800px;
+            max-width: 800px; /* Retain max-width for larger screens */
             margin: 0 auto;
-            padding: 20px;
-        }
-        .login-section {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            margin-top: 50px;
-        }
-        .login-section h1 { color: #333; margin-bottom: 20px; data-translate-key="welcomeTitle"; }
-        .login-section p { data-translate-key="signInToConnect"; }
-        .login-btn span { /* Target text part of button */
-            /* data-translate-key will be applied here */
+            padding: 15px 10px; /* Reduced padding for mobile */
         }
 
-        .app-section { display: none; }
+        /* Card Styling - Mobile First */
+        .card {
+            background: #ffffff;
+            border-radius: 8px; /* Slightly reduced radius */
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05); /* Softer shadow */
+            padding: 15px; /* Reduced padding */
+            margin-bottom: 15px; /* Reduced margin */
+        }
+        .login-section { margin-top: 30px; } /* Specific margin for login */
+
+        .login-section h1 { font-size: 1.5rem; margin-bottom: 10px; color: #333;}
+        .login-section p { font-size: 0.95rem; margin-bottom: 18px; color: #555; }
+        .login-btn {
+            width: 100%;
+            max-width: 260px; /* Adjust max-width for mobile buttons */
+            margin: 0 auto 10px auto;
+            padding: 10px 12px; /* Compact button padding */
+            font-size: 0.9rem;
+        }
+        .login-btn i { margin-right: 8px; font-size: 1.1rem; }
+
+        /* App Section */
+        .app-section { display: none; } /* JS controls visibility */
         .user-info {
+            /* Default flex direction is row. For mobile, if stacking is desired, it's often done in media query. */
+            /* User's original CSS does not stack .user-info on mobile. */
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 12px; /* Compact padding */
+            border-radius: 6px;
         }
         .user-info img {
-            width: 50px;
-            height: 50px;
+            width: 45px; /* Smaller avatar */
+            height: 45px;
             border-radius: 50%;
-            margin-right: 15px;
-            border: 2px solid #8b0000;
+            margin-right: 10px;
+            border: 2px solid #8b0000; /* Theme border */
         }
-        .user-info div h2 { margin: 0; font-size: 18px; color: #333; }
+        .user-info div h2 { font-size: 1.05rem; color: #333; margin: 0; } /* Smaller username */
         #logoutBtn {
-            background: #8b0000;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 5px;
-            data-translate-key="logout"
+            /* This is hidden by user's original @media query: .user-info #logoutBtn { display: none !important; } */
+            /* If it were to be shown, it would inherit general button styles */
+             background: #8b0000; color: white; border: none;
+             padding: 6px 10px; border-radius: 5px; cursor: pointer;
+             font-size: 0.85rem; margin-top: 8px; /* Adjusted for consistency if shown */
         }
-        #logoutBtn:hover { background: #6a0000; }
 
-        .post-form {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+        .post-form h3 { font-size: 1.2rem; margin-bottom: 12px; color: #333;}
+        .post-form label[for="postImageFile"] {
+            display: inline-flex; align-items: center; gap: 6px;
+            background-color: #f0f0f0; border: 1px dashed #ccc;
+            padding: 8px 10px; border-radius: 6px; cursor: pointer;
+            margin-bottom: 10px; color: #555; font-size: 0.85rem;
         }
-        .post-form h3 { margin-bottom: 15px; color: #333; data-translate-key="createPostTitle"; }
-        /* postContent placeholder handled by JS */
-        /* postImageFile label text handled by JS if needed, or give span inside label a key */
-        .post-form label[for="postImageFile"] span { data-translate-key="addImageOptional"; }
-        /* postBtn text handled by JS */
+        .post-form label[for="postImageFile"] i { color: #8b0000; font-size: 1em; }
+        #imagePreview { max-height: 180px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee; }
+        #uploadProgressContainer { margin-bottom: 10px; }
+        #uploadProgressText { font-size: 0.8rem; text-align: center; }
+        #postBtn { width: 100%; padding: 10px; }
 
 
         .posts-container h3 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 24px;
-            border-bottom: 2px solid #8b0000;
-            padding-bottom: 10px;
-            data-translate-key="feedTitle";
+            font-size: 1.4rem; color: #333; margin-bottom: 15px;
+            border-bottom: 1px solid #8b0000; /* Thinner border */
+            padding-bottom: 8px;
         }
-        /* Dynamic messages like "No posts yet..." handled in JS loadPosts */
-        .post {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .post-header img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-            border: 1px solid #eee;
-        }
-        .post-header strong { font-size: 16px; color: #333; }
-        .post-header span.timestamp { font-size: 12px; color: #777; margin-left: auto; }
-        .post-content p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #444;
-            margin-bottom: 10px;
-            white-space: pre-wrap;
-        }
-        .post-content img.post-image {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: block;
-            border: 1px solid #eee;
-        }
+        .post { padding: 12px; margin-bottom: 15px; } /* Compact post padding */
+        .post-header { display:flex; align-items:center; margin-bottom: 8px; gap: 8px; }
+        .post-header img { width: 36px; height: 36px; border-radius:50%; margin-right: 8px; border:1px solid #eee; }
+        .post-header strong { font-size: 0.95rem; color:#333; }
+        .post-header span.timestamp { font-size: 0.75rem; color:#777; margin-left:auto; }
+        .post-content p { font-size: 0.9rem; line-height: 1.55; margin-bottom: 8px; color:#444; white-space: pre-wrap; word-break: break-word; }
+        .post-content img.post-image { max-width:100%; border-radius:8px; margin-top: 8px; display:block; border:1px solid #eee;}
 
-        .post-actions {
-            display: flex;
-            margin-top: 10px;
-            gap: 15px;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-            align-items: center;
-        }
-        .post-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #555;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            padding: 5px;
-        }
-        .post-actions button i { font-size: 18px; margin-right: 8px; color: #8b0000; }
+        .post-actions { display:flex; margin-top: 8px; gap: 10px; border-top:1px solid #eee; padding-top: 8px; align-items:center;}
+        .post-actions button { background:none; border:none; cursor:pointer; color:#555; display:flex; align-items:center; font-size: 0.8rem; padding: 4px 6px; }
+        .post-actions button i { font-size: 1rem; margin-right: 5px; color:#8b0000; }
         .post-actions button:hover i, .post-actions button:hover span { color: #6a0000; }
         .like-btn.liked i { color: red !important; }
-        .post-actions button span.like-text { /* data-translate-key="likes" - handled in createPostElement */ }
-        .post-actions button span.comment-text { /* data-translate-key="comments" - handled in createPostElement */ }
-        .post-actions button.delete-post-btn span { data-translate-key="deleteAction"; }
 
 
-        .comments-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
-        .comments-list .comment {
-            margin-bottom: 12px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        /* commentText placeholder handled by JS */
-        /* comment submit button text handled by JS */
-        .comment-actions button.reply-to-comment-btn span { data-translate-key="replyAction"; }
-        /* reply text placeholder handled by JS */
-        /* reply submit button text handled by JS */
+        .comments-area { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #d0d0d0; }
+        .comments-list .comment { margin-bottom: 10px; padding: 10px; background-color:#f9f9f9; border-radius:5px; font-size: 0.85rem; }
+        .comment-header { display:flex; align-items:center; margin-bottom: 4px; gap: 6px;}
+        .comment-header img { width: 28px; height: 28px; border-radius:50%; margin-right: 6px; }
+        .comment-header strong { font-size: 0.8rem; color:#333; }
+        .comment-header .timestamp { font-size: 0.7rem; color:#888; margin-left:auto; }
+        .comment-content p { margin: 0 0 4px 0; color: #555; white-space: pre-wrap; font-size: 0.85rem; word-break: break-word;}
+        .comment-content img.comment-image { max-width: 160px; max-height: 120px; border-radius:5px; margin-top:8px; display:block; border:1px solid #eee; }
 
-
-        .comment-header { display: flex; align-items: center; margin-bottom: 5px; }
-        .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
-        .comment-header strong { font-size: 13px; color: #333; }
-        .comment-header .timestamp { font-size: 11px; color: #888; margin-left: auto; }
-        .comment-content p { margin: 0 0 5px 0; color: #555; white-space: pre-wrap; }
-
-        .comment-form-actual {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-            gap: 5px;
-        }
+        .comment-form-actual { display:flex; align-items:center; margin-top: 8px; gap: 6px; }
         .comment-form-actual input[type="text"].comment-text-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            flex:1; padding: 8px 10px; border:1px solid #ddd; border-radius:5px; font-size: 0.85rem; height: 38px;
         }
         .comment-image-upload-label {
-            padding: 8px 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 40px;
-            box-sizing: border-box;
+            padding: 0 8px; background-color:#f0f0f0; border:1px solid #ddd; border-radius:5px; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; height:38px; box-sizing:border-box;
         }
-        .comment-image-upload-label:hover { background-color: #e0e0e0; }
-        .comment-image-upload-label i { color: #555; font-size: 16px; }
+        .comment-image-upload-label:hover { background-color:#e0e0e0; }
+        .comment-image-upload-label i { color:#555; font-size:0.9rem; }
         .comment-form-actual button.comment-submit-btn {
-            background: #8b0000;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            height: 40px;
-            box-sizing: border-box;
+            background:#8b0000; color:white; border:none; padding:0 12px; border-radius:5px; cursor:pointer;
+            font-weight:bold; height:38px; box-sizing:border-box; font-size: 0.85rem;
         }
-        .comment-form-actual button.comment-submit-btn:hover { background: #6a0000; }
-        .comment-image-preview {
-            max-width: 80px;
-            max-height: 80px;
-            display: none;
-            margin-top: 8px;
-            border-radius: 4px;
-            border: 1px solid #eee;
-            object-fit: cover;
-        }
-        .comment-upload-progress {
-            font-size: 0.8em;
-            margin-top: 5px;
-            color: #555;
-            display: none;
-            width: 100%;
-            text-align: left;
-            padding-left: 5px;
-        }
-        .comment-content img.comment-image {
-            max-width: 200px;
-            max-height: 150px;
-            border-radius: 5px;
-            margin-top: 8px;
-            display: block;
-            border: 1px solid #eee;
+        .comment-form-actual button.comment-submit-btn:hover { background:#6a0000; }
+        .comment-image-preview { max-width:70px; max-height:70px; display:none; margin-top:8px; border-radius:4px; border:1px solid #eee; object-fit:cover;}
+        .comment-upload-progress { font-size:0.75em; margin-top:5px; color:#555; display:none; width:100%; text-align:left; padding-left:5px;}
+
+        .comment-actions { display:flex; gap:8px; align-items:center; margin-top:4px;}
+        .reply-to-comment-btn { font-size:0.75em !important; color:#555 !important; background:none !important; border:none !important; cursor:pointer !important; padding:2px 4px !important;}
+        .reply-to-comment-btn i { margin-right:4px !important; font-size:0.9em !important; color:#8b0000 !important;}
+        .reply-to-comment-btn:hover, .reply-to-comment-btn:hover i, .reply-to-comment-btn:hover span { color:#6a0000 !important;}
+        .replies-list { margin-left:15px; margin-top:8px; padding-left:8px; border-left:2px solid #ddd; }
+        .comment-reply { border-left:none; padding:6px; background-color:#f0f0f0; border-radius:4px; margin-bottom:6px; font-size:0.85em;}
+        .comment-reply .comment-header img { width:22px; height:22px;}
+        .reply-form-container { margin-left:0; margin-top:4px;} /* Aligned with parent comment actions */
+        .reply-form-actual { display:flex; gap:6px; align-items:center;}
+        .reply-form-actual input.reply-text-input { flex:1; padding:6px 8px; border:1px solid #ccc; border-radius:3px; font-size:0.8em; height: auto; /* Allow natural height */ }
+        .reply-form-actual button.reply-submit-btn { padding:6px 10px; background:#5cb85c; color:white; border:none; border-radius:3px; cursor:pointer; font-size:0.8em; font-weight:bold; height: auto; /* Allow natural height */ }
+        .reply-form-actual button.reply-submit-btn:hover { background:#4cae4c; }
+
+        /* Disabled button states inherit from global */
+        .empty-feed-message, .error-loading-message {
+            text-align: center; color: #777; padding: 15px; font-style: italic; font-size: 0.9rem;
         }
 
-        .comment-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 5px;
-        }
-        .reply-to-comment-btn {
-            font-size: 0.8em !important;
-            color: #555 !important;
-            background: none !important;
-            border: none !important;
-            cursor: pointer !important;
-            padding: 2px 5px !important;
-        }
-        .reply-to-comment-btn i {
-            margin-right: 4px !important;
-            font-size: 1em !important;
-            color: #8b0000 !important;
-        }
-         .reply-to-comment-btn:hover, .reply-to-comment-btn:hover i, .reply-to-comment-btn:hover span {
-            color: #6a0000 !important;
-        }
-        .replies-list {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-        .comment-reply {
-            border-left: 2px solid #ddd;
-            padding-left: 10px;
-            font-size: 0.9em;
-            padding: 8px;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-            margin-bottom: 8px;
-        }
-        .comment-reply .comment-header img {
-            width: 25px;
-            height: 25px;
-        }
-        .reply-form-container {
-            margin-left: 20px;
-            margin-top: 5px;
-        }
-        .reply-form-actual {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-        .reply-form-actual input.reply-text-input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }
-        .reply-form-actual button.reply-submit-btn {
-            padding: 8px 12px;
-            background: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-        .reply-form-actual button.reply-submit-btn:hover { background: #4cae4c; }
 
-        .post-form button#postBtn:disabled,
-        .comment-form-actual button.comment-submit-btn:disabled,
-        .reply-form-actual button.reply-submit-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            opacity: 0.7;
+        /* --- Desktop Overrides --- */
+        @media (min-width: 769px) {
+            body {
+                /* Revert to Georgia for body text on desktop IF that was the original consistent design intent. */
+                /* If only headings were Georgia, this line can be removed and font-family set on specific elements. */
+                /* font-family: "Georgia", serif;  */
+                padding-bottom: 0; /* No fixed bottom nav on desktop */
+            }
+            /* Ensure UI elements like buttons, inputs, and specific text spans use sans-serif on desktop for clarity */
+            input, textarea, button, .bottom-nav a span, .mobile-menu a span, 
+            .post-header strong, .comment-header strong, .login-btn span, label[for="postImageFile"] span,
+            .post-actions button span, .comment-actions button span, .reply-to-comment-btn span,
+            #uploadProgressText, .timestamp, .login-section p, .post-content p, .comment-content p, .empty-feed-message, .error-loading-message,
+            .language-options a, .user-info div h2 /* Ensure user name is sans-serif if desired */
+            {
+                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+            /* Headings remain Georgia */
+            h1, h2, h3, h4, h5, h6, .header-text-content h1, .header-text-content h2 { font-family: "Georgia", serif; }
+
+
+            .desktop-nav { display: flex; margin: 45px 0; }
+            .desktop-nav ul { gap: 32px; }
+            .desktop-nav a { font-size: 18px; gap: 8px; }
+            
+            .bottom-nav { display: none; }
+
+            .header {
+                justify-content: center;
+                padding: 15px 140px;
+            }
+            .header-logo {
+                position: absolute;
+                left: 30px;
+                top: 50%;
+                transform: translateY(-50%);
+                height: 100px;
+                width: 100px;
+                margin-right: 0; /* Reset mobile margin */
+            }
+            .header-text-content {
+                text-align: center;
+                flex-grow: 0; 
+                margin-left: 90px; /* For logo */
+                margin-right: 90px; /* Balance */
+            }
+            .header h1 {
+                font-size: 42px;
+                letter-spacing: 4px;
+                margin-bottom: 8px;
+            }
+            .header h2 {
+                font-size: 22px;
+                letter-spacing: 1px;
+            }
+
+            .container { padding: 20px; max-width: 800px; }
+            .card { padding: 30px; margin-bottom: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            .login-section { margin-top: 50px; padding: 30px; }
+            .login-section h1 { font-size: 1.8rem; color: #333; margin-bottom: 20px; }
+            .login-section p { font-size: 1rem; color: #555; } /* Original p had no specific font size */
+            .login-btn { max-width: 320px; padding: 12px 20px; font-size: 1rem; margin-bottom: 15px;}
+            .login-btn i { font-size: 1.25rem; }
+            
+            .user-info {
+                flex-direction: row; 
+                align-items: center;
+                background: #f9f9f9;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                text-align: left; /* For desktop */
+            }
+            .user-info img { width: 50px; height: 50px; margin-right: 15px; border: 2px solid #8b0000;}
+            .user-info div h2 { font-size: 18px; color: #333; margin: 0; }
+            #logoutBtn {
+                /* Original CSS hides this for screens <= 768px. This ensures it appears on larger screens. */
+                display: inline-flex !important; 
+                background: #8b0000; color: white; border: none;
+                padding: 8px 12px; border-radius: 5px; cursor: pointer;
+                font-size: 14px; margin-top: 5px; /* Or 0 if preferred for desktop */
+            }
+
+            .post-form { padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
+            .post-form h3 { margin-bottom: 15px; color: #333; font-size: 1.5rem; }
+            textarea { min-height: 100px; padding: 12px 15px; font-size: 1rem; }
+            .post-form label[for="postImageFile"] { padding: 8px 12px; font-size: 1rem; gap: 8px; border-radius: 5px; background-color: #f9f9f9; margin-bottom:10px; } /* Reverted to original values */
+            #imagePreview { max-height: 200px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee; }
+            #uploadProgressContainer { margin-bottom: 10px; }
+            #uploadProgressText { font-size: 0.9em; }
+            #postBtn { padding: 10px 15px; font-size: 1rem; } /* Default button padding and size */
+
+            .posts-container h3 { font-size: 24px; color: #333; margin-bottom: 20px; border-bottom: 2px solid #8b0000; padding-bottom: 10px; }
+            .post { padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+            .post-header { margin-bottom: 10px; gap: 10px; }
+            .post-header img { width: 40px; height: 40px; margin-right: 10px; border: 1px solid #eee;}
+            .post-header strong { font-size: 16px; color: #333; }
+            .post-header span.timestamp { font-size: 12px; color: #777; }
+            .post-content p { font-size: 16px; line-height: 1.6; margin-bottom: 10px; color: #444;}
+            .post-content img.post-image { margin-top: 10px; border-radius: 8px; border: 1px solid #eee;}
+
+            .post-actions { margin-top: 10px; gap: 15px; padding-top: 10px; border-top:1px solid #eee;}
+            .post-actions button { font-size: 14px; padding: 5px; }
+            .post-actions button i { font-size: 18px; margin-right: 8px; }
+
+            .comments-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
+            .comments-list .comment { margin-bottom: 12px; padding: 10px; font-size: 14px; background-color: #f9f9f9; border-radius: 5px;}
+            .comment-header { margin-bottom: 5px; gap: 8px;}
+            .comment-header img { width: 30px; height: 30px; margin-right: 8px; }
+            .comment-header strong { font-size: 13px; color:#333; }
+            .comment-header .timestamp { font-size: 11px; color:#888;}
+            .comment-content p { margin: 0 0 5px 0; color: #555; font-size: 14px; }
+            .comment-content img.comment-image { max-width: 200px; max-height: 150px; border-radius:5px; margin-top:8px; border:1px solid #eee;}
+
+            .comment-form-actual { margin-top: 10px; gap: 5px; flex-direction: row; }
+            .comment-form-actual > * { width: auto; margin-bottom: 0; }
+            .comment-form-actual input[type="text"].comment-text-input { flex: 1; padding: 10px; font-size: 14px; height: 40px; }
+            .comment-image-upload-label { padding: 8px 10px; height: 40px; }
+            .comment-image-upload-label i { font-size: 16px; }
+            .comment-form-actual button.comment-submit-btn { padding: 10px 15px; height: 40px; font-size: 14px; /* Original button was bold only, inherit font-size from .button */}
+            .comment-image-preview { max-width: 80px; max-height: 80px; }
+            .comment-upload-progress { font-size: 0.8em; }
+
+            .comment-actions { margin-top: 5px; gap: 10px; }
+            .reply-to-comment-btn { font-size: 0.8em !important; padding: 2px 5px !important; }
+            .reply-to-comment-btn i { font-size: 1em !important; }
+            .replies-list { margin-left: 20px; margin-top: 10px; padding-left: 10px; border-left:2px solid #ddd;}
+            .comment-reply { font-size: 0.9em; padding: 8px; margin-bottom: 8px; background-color: #f0f0f0; border-radius: 4px; border-left: none;}
+            .comment-reply .comment-header img { width: 25px; height: 25px; }
+            .reply-form-container { margin-left: 20px; margin-top: 5px; }
+            .reply-form-actual { flex-direction: row; gap: 5px; }
+            .reply-form-actual > * { width: auto; margin-bottom: 0; }
+            .reply-form-actual input.reply-text-input { flex: 1; padding: 8px; font-size: 0.9em; height: auto; }
+            .reply-form-actual button.reply-submit-btn { padding: 8px 12px; font-size: 0.9em; height: auto; }
         }
+
+        /* Original @media (max-width: 768px) block for reference - its rules have been integrated or refined */
+        /* This block is intentionally kept for reference to the user's original mobile styles */
+        @media (max-width: 768px) {
+            /* .desktop-nav { display: none; } */ /* Handled by mobile-first: .desktop-nav { display: none; } */
+            /* .bottom-nav { display: flex; justify-content: center; align-items: center; } */ /* Handled by mobile-first: .bottom-nav { display: flex; ... } */
+
+            .header {
+                /* justify-content: flex-start; */ /* Already mobile-first */
+                /* padding: 10px 15px; */ /* Already mobile-first */
+                /* box-shadow: 0 1px 3px rgba(0,0,0,0.1); */ /* Already mobile-first */
+            }
+            .header-logo {
+                /* position: static; */ /* Already mobile-first */
+                /* transform: none; */ /* Already mobile-first */
+                /* left: auto; */ /* Already mobile-first */
+                /* height: 70px; */ /* Adjusted to 45px for mobile-first */
+                /* width: 70px; */  /* Adjusted to 45px for mobile-first */
+                /* margin-right: 10px; */ /* Already mobile-first */
+                /* flex-shrink: 0; */ /* Already mobile-first */
+            }
+            .header-text-content {
+                /* flex-grow: 1; */ /* Already mobile-first */
+                /* text-align: center; */ /* Already mobile-first */
+            }
+
+            .header h1 {
+                /* font-size: 28px; */ /* Handled by clamp() in mobile-first */
+                /* letter-spacing: 2.5px; */ /* Adjusted in mobile-first */
+                /* text-shadow: 1px 1px 2px rgba(0,0,0,0.3); */ /* Already mobile-first */
+                /* margin-bottom: 5px; */ /* Adjusted in mobile-first */
+            }
+            .header h2 {
+                /* font-size: 16px; */ /* Handled by clamp() in mobile-first */
+                /* letter-spacing: 0.5px; */ /* Adjusted in mobile-first */
+                /* color: #f0f0f0; */ /* Already mobile-first */
+            }
+
+            .user-info #logoutBtn {
+                display: none !important; /* This original rule is respected. Mobile logout is via side menu. */
+            }
+        }
+        
+        /* Fine-tuning for very small mobile screens (from previous enhancement) */
+        @media (max-width: 480px) {
+            html { font-size: 15px; } /* Slightly smaller base font for small devices */
+            
+            .header { padding: 8px 10px; }
+            .header-logo { height: 40px; width: 40px; margin-right: 8px; }
+            .header h1 { font-size: clamp(1.1rem, 4vw, 1.4rem); letter-spacing: 1px; }
+            .header h2 { font-size: clamp(0.7rem, 2.5vw, 0.8rem); letter-spacing: 0.2px; }
+            .header-text-content { margin-right: 0; } 
+
+
+            .bottom-nav a span { font-size: 0.65rem; }
+            .bottom-nav a i { font-size: 1.1rem; }
+            .bottom-nav a { padding: 5px; gap: 1px;}
+
+            .container { padding: 10px 5px; } 
+            .card { padding: 10px; margin-bottom: 10px; }
+            .login-section { margin-top: 20px; }
+            .login-section h1 {font-size: 1.3rem;}
+
+            .post-form h3 { font-size: 1.1rem; }
+            textarea#postContent { min-height: 70px; }
+            label[for="postImageFile"] { padding: 6px 8px; font-size: 0.8rem; }
+
+            .posts-container h3 { font-size: 1.2rem; }
+            .post-header strong { font-size: 0.85rem; }
+            .post-content p { font-size: 0.85rem; }
+            .post-actions button { font-size: 0.75rem; padding: 4px 5px; }
+            .post-actions button i { font-size: 0.9rem; }
+
+            .comment-form-actual, .reply-form-actual {
+                flex-direction: column; /* Stack elements vertically */
+                align-items: stretch; /* Make them full width */
+            }
+            .comment-form-actual > *, .reply-form-actual > * {
+                width: 100%; /* Full width when stacked */
+                margin-bottom: 6px; /* Spacing when stacked */
+            }
+            .comment-form-actual > *:last-child, .reply-form-actual > *:last-child {
+                margin-bottom: 0; /* No margin for the last item */
+            }
+            .comment-image-upload-label {
+                justify-content: flex-start; /* Align icon/text left */
+            }
+        }
+
     </style>
 </head>
 <body>
-    <nav class="mobile-menu">
+    <nav class="mobile-menu" id="mobileMenu">
         <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
         <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
         <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
@@ -568,7 +680,7 @@
     </nav>
 
     <div class="container">
-        <div class="login-section" id="loginSection">
+        <div class="login-section card" id="loginSection">
             <h1 data-translate-key="welcomeTitle">Welcome</h1>
             <p style="margin-bottom: 20px; color: #555;" data-translate-key="signInToConnect">Sign in to share and connect.</p>
             <button class="login-btn google-btn" id="googleLoginBtn">
@@ -580,15 +692,15 @@
         </div>
 
         <div class="app-section" id="appSection">
-            <div class="user-info">
+            <div class="user-info card">
                 <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
-                    <button id="logoutBtn" data-translate-key="logout">Logout</button>
+                    <button id="logoutBtn" class="btn-primary" data-translate-key="logout">Logout</button>
                 </div>
             </div>
 
-            <div class="post-form" id="post-form-container">
+            <div class="post-form card" id="post-form-container">
                 <h3 data-translate-key="createPostTitle">Create Post</h3>
                 <textarea id="postContent" data-translate-key-placeholder="postPlaceholder"></textarea>
 
@@ -601,7 +713,7 @@
                     <p id="uploadProgressText" style="font-size: 0.9em; text-align: center;"></p>
                 </div>
 
-                <button id="postBtn" data-translate-key="postButton">Post</button>
+                <button id="postBtn" class="btn-primary" data-translate-key="postButton">Post</button>
             </div>
 
             <div class="posts-container" id="postsContainer">
@@ -613,422 +725,137 @@
 
     <script>
     // --- START CLOUDINARY CONFIGURATION ---
-    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f";
-    const CLOUDINARY_UPLOAD_PRESET = "public_uploader";
+    // IMPORTANT: Replace with your actual Cloudinary cloud name and upload preset for image uploads to work.
+    const CLOUDINARY_CLOUD_NAME = "ddjtcap4f"; // Example: "your-cloud-name"
+    const CLOUDINARY_UPLOAD_PRESET = "public_uploader"; // Example: "your-unsigned-preset"
     const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
     // --- END CLOUDINARY CONFIGURATION ---
 
     // --- START FIREBASE CONFIGURATION ---
+    // IMPORTANT: Replace with your actual Firebase project configuration.
     const firebaseConfig = {
-      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
-      authDomain: "viratsawarup.firebaseapp.com",
-      projectId: "viratsawarup",
-      messagingSenderId: "264071748020",
-      appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
-      measurementId: "G-7GJQPJCR1L"
+      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Example: "AIza..."
+      authDomain: "viratsawarup.firebaseapp.com", // Example: "your-project-id.firebaseapp.com"
+      projectId: "viratsawarup", // Example: "your-project-id"
+      messagingSenderId: "264071748020", // Example: "123456789012"
+      appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1", // Example: "1:123...:web:abc..."
+      measurementId: "G-7GJQPJCR1L" // Example: "G-XXXXXXXXXX" (Optional)
     };
     // --- END FIREBASE CONFIGURATION ---
 
-    firebase.initializeApp(firebaseConfig);
+    // Initialize Firebase (check if already initialized to prevent errors in some environments)
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const auth = firebase.auth();
     const db = firebase.firestore();
 
     // --- START TRANSLATION DATA & LOGIC ---
     const translations = {
         en: {
-            headerSubtitle: "The Supreme Divine of Every Faith",
-            home: "Home",
-            agnosia: "Agnosia",
-            enigma: "Enigma",
-            emulate: "Emulate",
-            post: "Post",
-            language: "Language",
-            login: "Login",
-            logout: "Logout",
-            menu: "Menu",
-            welcomeTitle: "Welcome",
-            signInToConnect: "Sign in to share and connect.",
-            signInWithGoogle: "Sign in with Google",
-            signInWithFacebook: "Sign in with Facebook",
-            createPostTitle: "Create Post",
-            postPlaceholder: "What's on your mind, Virat Bhakt?",
-            addImageOptional: "Add Image (Optional)",
-            postButton: "Post",
-            postingButton: "Posting...",
-            feedTitle: "Feed",
-            noPosts: "No posts yet. Be the first to share!",
-            errorLoadingPosts: "Error loading posts.",
-            loginToSeeFeed: "Please log in to see the feed.",
-            likes: "Likes",
-            comments: "Comments",
-            deleteAction: "Delete",
-            replyAction: "Reply",
-            addCommentPlaceholder: "Add a comment...",
-            commentPostButton: "Post", // For comment form
-            noCommentsYet: "No comments yet.",
-            writeReplyPlaceholder: "Write a reply...",
-            replyPostButton: "Post Reply",
-            uploadingImage: "Uploading image...",
-            imageUploaded: "Image uploaded!",
-            uploadFailed: "Upload failed.",
-            deletePostConfirm: "Are you sure you want to delete this post?",
-            postContentRequired: "Post content or an image is required!",
-            loginRequiredToPost: "You must be logged in to post!",
-            loginRequiredToComment: "Please log in to comment.",
-            commentContentRequired: "Comment text or an image is required.",
-            loginRequiredToReply: "Please log in to reply.",
-            replyTextRequired: "Reply text cannot be empty.",
-            loginRequiredToLike: "Please log in to like posts."
+            headerSubtitle: "The Supreme Divine of Every Faith", home: "Home", agnosia: "Agnosia", enigma: "Enigma", emulate: "Emulate", post: "Post", language: "Language", login: "Login", logout: "Logout", menu: "Menu", welcomeTitle: "Welcome", signInToConnect: "Sign in to share and connect.", signInWithGoogle: "Sign in with Google", signInWithFacebook: "Sign in with Facebook", createPostTitle: "Create Post", postPlaceholder: "What's on your mind, Virat Bhakt?", addImageOptional: "Add Image (Optional)", postButton: "Post", postingButton: "Posting...", feedTitle: "Feed", noPosts: "No posts yet. Be the first to share!", errorLoadingPosts: "Error loading posts.", loginToSeeFeed: "Please log in to see the feed.", likes: "Likes", comments: "Comments", deleteAction: "Delete", replyAction: "Reply", addCommentPlaceholder: "Add a comment...", commentPostButton: "Post", noCommentsYet: "No comments yet.", writeReplyPlaceholder: "Write a reply...", replyPostButton: "Post Reply", uploadingImage: "Uploading image...", imageUploaded: "Image uploaded!", uploadFailed: "Upload failed.", deletePostConfirm: "Are you sure you want to delete this post?", postContentRequired: "Post content or an image is required!", loginRequiredToPost: "You must be logged in to post!", loginRequiredToComment: "Please log in to comment.", commentContentRequired: "Comment text or an image is required.", loginRequiredToReply: "Please log in to reply.", replyTextRequired: "Reply text cannot be empty.", loginRequiredToLike: "Please log in to like posts.", signInError: "Sign-in error", postError: "Error creating post", recently: "Recently"
         },
         ne: {
-            headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा",
-            home: "गृहपृष्ठ",
-            agnosia: "अज्ञानता",
-            enigma: "पहेली",
-            emulate: "अनुकरण",
-            post: "पोस्ट",
-            language: "भाषा",
-            login: "लग - इन",
-            logout: "लग - आउट",
-            menu: "मेनु",
-            welcomeTitle: "स्वागत छ",
-            signInToConnect: "साझा गर्न र जडान गर्न साइन इन गर्नुहोस्।",
-            signInWithGoogle: "Google बाट साइन इन गर्नुहोस्",
-            signInWithFacebook: "Facebook बाट साइन इन गर्नुहोस्",
-            createPostTitle: "पोस्ट सिर्जना गर्नुहोस्",
-            postPlaceholder: "मनमा के छ, विराट भक्त?",
-            addImageOptional: "फोटो थप्नुहोस् (ऐच्छिक)",
-            postButton: "पोस्ट गर्नुहोस्",
-            postingButton: "पोस्ट गर्दै...",
-            feedTitle: "फिड",
-            noPosts: "अहिलेसम्म कुनै पोस्ट छैन। साझा गर्ने पहिलो व्यक्ति बन्नुहोस्!",
-            errorLoadingPosts: "पोस्टहरू लोड गर्दा त्रुटि भयो।",
-            loginToSeeFeed: "फिड हेर्न कृपया लग इन गर्नुहोस्।",
-            likes: "लाइकहरू",
-            comments: "टिप्पणीहरू",
-            deleteAction: "मेटाउनुहोस्",
-            replyAction: "जवाफ दिनुहोस्",
-            addCommentPlaceholder: "टिप्पणी थप्नुहोस्...",
-            commentPostButton: "पोस्ट",
-            noCommentsYet: "अहिलेसम्म कुनै टिप्पणी छैन।",
-            writeReplyPlaceholder: "जवाफ लेख्नुहोस्...",
-            replyPostButton: "जवाफ पोस्ट गर्नुहोस्",
-            uploadingImage: "फोटो अपलोड हुँदैछ...",
-            imageUploaded: "फोटो अपलोड भयो!",
-            uploadFailed: "अपलोड असफल भयो।",
-            deletePostConfirm: "के तपाई साँच्चै यो पोस्ट मेटाउन चाहनुहुन्छ?",
-            postContentRequired: "पोस्ट सामग्री वा फोटो आवश्यक छ!",
-            loginRequiredToPost: "पोस्ट गर्न तपाईं लग इन हुनुपर्छ!",
-            loginRequiredToComment: "कृपया टिप्पणी गर्न लग इन गर्नुहोस्।",
-            commentContentRequired: "टिप्पणी पाठ वा फोटो आवश्यक छ।",
-            loginRequiredToReply: "कृपया जवाफ दिन लग इन गर्नुहोस्।",
-            replyTextRequired: "जवाफ खाली हुन सक्दैन।",
-            loginRequiredToLike: "पोस्ट लाइक गर्न कृपया लग इन गर्नुहोस्।"
+            headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा", login: "लग - इन", logout: "लग - आउट", menu: "मेनु", welcomeTitle: "स्वागत छ", signInToConnect: "साझा गर्न र जडान गर्न साइन इन गर्नुहोस्।", signInWithGoogle: "Google बाट साइन इन गर्नुहोस्", signInWithFacebook: "Facebook बाट साइन इन गर्नुहोस्", createPostTitle: "पोस्ट सिर्जना गर्नुहोस्", postPlaceholder: "मनमा के छ, विराट भक्त?", addImageOptional: "फोटो थप्नुहोस् (ऐच्छिक)", postButton: "पोस्ट गर्नुहोस्", postingButton: "पोस्ट गर्दै...", feedTitle: "फिड", noPosts: "अहिलेसम्म कुनै पोस्ट छैन। साझा गर्ने पहिलो व्यक्ति बन्नुहोस्!", errorLoadingPosts: "पोस्टहरू लोड गर्दा त्रुटि भयो।", loginToSeeFeed: "फिड हेर्न कृपया लग इन गर्नुहोस्।", likes: "लाइकहरू", comments: "टिप्पणीहरू", deleteAction: "मेटाउनुहोस्", replyAction: "जवाफ दिनुहोस्", addCommentPlaceholder: "टिप्पणी थप्नुहोस्...", commentPostButton: "पोस्ट", noCommentsYet: "अहिलेसम्म कुनै टिप्पणी छैन।", writeReplyPlaceholder: "जवाफ लेख्नुहोस्...", replyPostButton: "जवाफ पोस्ट गर्नुहोस्", uploadingImage: "फोटो अपलोड हुँदैछ...", imageUploaded: "फोटो अपलोड भयो!", uploadFailed: "अपलोड असफल भयो।", deletePostConfirm: "के तपाई साँच्चै यो पोस्ट मेटाउन चाहनुहुन्छ?", postContentRequired: "पोस्ट सामग्री वा फोटो आवश्यक छ!", loginRequiredToPost: "पोस्ट गर्न तपाईं लग इन हुनुपर्छ!", loginRequiredToComment: "कृपया टिप्पणी गर्न लग इन गर्नुहोस्।", commentContentRequired: "टिप्पणी पाठ वा फोटो आवश्यक छ।", loginRequiredToReply: "कृपया जवाफ दिन लग इन गर्नुहोस्।", replyTextRequired: "जवाफ खाली हुन सक्दैन।", loginRequiredToLike: "पोस्ट लाइक गर्न कृपया लग इन गर्नुहोस्。", signInError: "साइन-इन त्रुटि", postError: "पोस्ट बनाउँदा त्रुटि", recently: "हालै"
         },
         hi: {
-            headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा",
-            home: "होम",
-            agnosia: "अज्ञान",
-            enigma: "पहेली",
-            emulate: "अनुकरण",
-            post: "पोस्ट",
-            language: "भाषा",
-            login: "लॉग इन करें",
-            logout: "लॉग आउट करें",
-            menu: "मेन्यू",
-            welcomeTitle: "स्वागत है",
-            signInToConnect: "साझा करने और जुड़ने के लिए साइन इन करें।",
-            signInWithGoogle: "Google से साइन इन करें",
-            signInWithFacebook: "Facebook से साइन इन करें",
-            createPostTitle: "पोस्ट बनाएं",
-            postPlaceholder: "आपके मन में क्या है, विराट भक्त?",
-            addImageOptional: "छवि जोड़ें (वैकल्पिक)",
-            postButton: "पोस्ट करें",
-            postingButton: "पोस्ट कर रहा है...",
-            feedTitle: "फ़ीड",
-            noPosts: "अभी तक कोई पोस्ट नहीं है। साझा करने वाले पहले व्यक्ति बनें!",
-            errorLoadingPosts: "पोस्ट लोड करने में त्रुटि।",
-            loginToSeeFeed: "फ़ीड देखने के लिए कृपया लॉग इन करें।",
-            likes: "लाइक",
-            comments: "टिप्पणियाँ",
-            deleteAction: "हटाएं",
-            replyAction: "उत्तर दें",
-            addCommentPlaceholder: "एक टिप्पणी जोड़ें...",
-            commentPostButton: "पोस्ट",
-            noCommentsYet: "अभी तक कोई टिप्पणी नहीं है।",
-            writeReplyPlaceholder: "एक उत्तर लिखें...",
-            replyPostButton: "उत्तर पोस्ट करें",
-            uploadingImage: "छवि अपलोड हो रही है...",
-            imageUploaded: "छवि अपलोड हो गई!",
-            uploadFailed: "अपलोड विफल रहा।",
-            deletePostConfirm: "क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?",
-            postContentRequired: "पोस्ट सामग्री या एक छवि आवश्यक है!",
-            loginRequiredToPost: "पोस्ट करने के लिए आपको लॉग इन होना चाहिए!",
-            loginRequiredToComment: "टिप्पणी करने के लिए कृपया लॉग इन करें।",
-            commentContentRequired: "टिप्पणी पाठ या एक छवि आवश्यक है।",
-            loginRequiredToReply: "उत्तर देने के लिए कृपया लॉग इन करें।",
-            replyTextRequired: "उत्तर पाठ खाली नहीं हो सकता।",
-            loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।"
+            headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा", home: "होम", agnosia: "अज्ञान", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा", login: "लॉग इन करें", logout: "लॉग आउट करें", menu: "मेन्यू", welcomeTitle: "स्वागत है", signInToConnect: "साझा करने और जुड़ने के लिए साइन इन करें।", signInWithGoogle: "Google से साइन इन करें", signInWithFacebook: "Facebook से साइन इन करें", createPostTitle: "पोस्ट बनाएं", postPlaceholder: "आपके मन में क्या है, विराट भक्त?", addImageOptional: "छवि जोड़ें (वैकल्पिक)", postButton: "पोस्ट करें", postingButton: "पोस्ट कर रहा है...", feedTitle: "फ़ीड", noPosts: "अभी तक कोई पोस्ट नहीं है। साझा करने वाले पहले व्यक्ति बनें!", errorLoadingPosts: "पोस्ट लोड करने में त्रुटि।", loginToSeeFeed: "फ़ीड देखने के लिए कृपया लॉग इन करें।", likes: "लाइक", comments: "टिप्पणियाँ", deleteAction: "हटाएं", replyAction: "उत्तर दें", addCommentPlaceholder: "एक टिप्पणी जोड़ें...", commentPostButton: "पोस्ट", noCommentsYet: "अभी तक कोई टिप्पणी नहीं है।", writeReplyPlaceholder: "एक उत्तर लिखें...", replyPostButton: "उत्तर पोस्ट करें", uploadingImage: "छवि अपलोड हो रही है...", imageUploaded: "छवि अपलोड हो गई!", uploadFailed: "अपलोड विफल रहा।", deletePostConfirm: "क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?", postContentRequired: "पोस्ट सामग्री या एक छवि आवश्यक है!", loginRequiredToPost: "पोस्ट करने के लिए आपको लॉग इन होना चाहिए!", loginRequiredToComment: "टिप्पणी करने के लिए कृपया लॉग इन करें।", commentContentRequired: "टिप्पणी पाठ या एक छवि आवश्यक है।", loginRequiredToReply: "उत्तर देने के लिए कृपया लॉग इन करें।", replyTextRequired: "उत्तर पाठ खाली नहीं हो सकता।", loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।", signInError: "साइन-इन में त्रुटि", postError: "पोस्ट बनाने में त्रुटि", recently: "हाल ही में"
         }
     };
-
     let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
-
     function setLanguage(lang) {
-        currentLanguage = lang;
-        localStorage.setItem('selectedLanguage', lang);
-        applyTranslations();
-        // Update active class for language options
-        document.querySelectorAll('.language-options a').forEach(a => {
-            a.classList.remove('lang-active');
-            if (a.dataset.lang === lang) {
-                a.classList.add('lang-active');
-            }
-        });
-        // Reload posts to apply translations to dynamic parts like "Likes", "Comments" text
-        if (auth.currentUser) { // Only if user is logged in and posts are visible
-            loadPosts();
-        } else { // If user is logged out, still apply translations to static messages like "Please log in to see feed"
-            const loginMessageKey = 'loginToSeeFeed';
-            const translatedLoginMessage = translations[currentLanguage]?.[loginMessageKey] || translations.en[loginMessageKey];
-             if(elements.postsContainer && elements.appSection.style.display === 'none') {
-                elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${translations[currentLanguage]?.feedTitle || translations.en.feedTitle}</h3><p>${translatedLoginMessage}</p>`;
-            }
+        currentLanguage = lang; localStorage.setItem('selectedLanguage', lang); document.documentElement.lang = lang; applyTranslations();
+        document.querySelectorAll('.language-options a').forEach(a => { a.classList.remove('lang-active'); if (a.dataset.lang === lang) a.classList.add('lang-active'); });
+        if (auth.currentUser && elements.appSection.style.display !== 'none') { loadPosts(); }
+        else if (elements.postsContainer && elements.appSection.style.display === 'none') {
+            const msgKey = 'loginToSeeFeed'; elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_(feedTitle)}</h3><p class="empty-feed-message">${_(msgKey)}</p>`;
         }
     }
-
-    function _(key, fallbackLang = 'en') { // Helper function to get translation
-        return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
-    }
-
+    function _(key, fbLang = 'en') { return translations[currentLanguage]?.[key] || translations[fbLang]?.[key] || key; }
     function applyTranslations() {
-        document.querySelectorAll('[data-translate-key]').forEach(element => {
-            const key = element.dataset.translateKey;
-            element.textContent = _(key);
-        });
-        document.querySelectorAll('[data-translate-key-placeholder]').forEach(element => {
-            const key = element.dataset.translateKeyPlaceholder;
-            element.placeholder = _(key);
-        });
-         // For buttons that might have their text changed programmatically (like Post button)
-        if (elements.postBtn && !elements.postBtn.disabled) {
-            elements.postBtn.textContent = _('postButton');
-        }
-        // Translate titles set by JS that don't have data-translate-key
-        if(document.title && !document.head.querySelector('title[data-translate-key]')) {
-             // Title tag is tricky, better to set it once or handle server-side for SEO
-        }
-
+        document.querySelectorAll('[data-translate-key]').forEach(el => el.textContent = _(el.dataset.translateKey));
+        document.querySelectorAll('[data-translate-key-placeholder]').forEach(el => el.placeholder = _(el.dataset.translateKeyPlaceholder));
+        if (elements.postBtn && !elements.postBtn.disabled) elements.postBtn.textContent = _('postButton');
     }
     // --- END TRANSLATION LOGIC ---
 
-
     const elements = {
-        loginSection: document.getElementById('loginSection'),
-        appSection: document.getElementById('appSection'),
-        googleLoginBtn: document.getElementById('googleLoginBtn'),
-        facebookLoginBtn: document.getElementById('facebookLoginBtn'),
-        logoutBtn: document.getElementById('logoutBtn'),
-        userPhoto: document.getElementById('userPhoto'),
-        userName: document.getElementById('userName'),
-        postBtn: document.getElementById('postBtn'),
-        postContent: document.getElementById('postContent'),
-        postsContainer: document.getElementById('postsContainer'),
-        mobileMenu: document.querySelector('.mobile-menu'),
-        postImageFile: document.getElementById('postImageFile'),
-        imagePreview: document.getElementById('imagePreview'),
-        uploadProgressContainer: document.getElementById('uploadProgressContainer'),
-        uploadProgressText: document.getElementById('uploadProgressText'),
-        mobileLoginLink: document.getElementById('mobileLoginLink'),
-        mobileLogoutLink: document.getElementById('mobileLogoutLink'),
-        bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn'),
-        languageSelectLabel: document.querySelector('.language-select-label'),
-        languageOptionsDiv: document.querySelector('.language-options')
+        loginSection: document.getElementById('loginSection'), appSection: document.getElementById('appSection'), googleLoginBtn: document.getElementById('googleLoginBtn'), facebookLoginBtn: document.getElementById('facebookLoginBtn'), logoutBtn: document.getElementById('logoutBtn'), userPhoto: document.getElementById('userPhoto'), userName: document.getElementById('userName'), postBtn: document.getElementById('postBtn'), postContent: document.getElementById('postContent'), postsContainer: document.getElementById('postsContainer'), mobileMenu: document.querySelector('.mobile-menu'), postImageFile: document.getElementById('postImageFile'), imagePreview: document.getElementById('imagePreview'), uploadProgressContainer: document.getElementById('uploadProgressContainer'), uploadProgressText: document.getElementById('uploadProgressText'), mobileLoginLink: document.getElementById('mobileLoginLink'), mobileLogoutLink: document.getElementById('mobileLogoutLink'), bottomNavMenuBtn: document.getElementById('bottomNavMenuBtn'), languageSelectLabel: document.querySelector('.language-select-label'), languageOptionsDiv: document.querySelector('.language-options')
     };
 
-    if (elements.languageSelectLabel) {
+    if (elements.languageSelectLabel && elements.languageOptionsDiv) {
         elements.languageSelectLabel.addEventListener('click', () => {
-            const optionsDiv = elements.languageOptionsDiv;
-            if (optionsDiv) {
-                optionsDiv.style.display = optionsDiv.style.display === 'none' || optionsDiv.style.display === '' ? 'block' : 'none';
-            }
+            const div = elements.languageOptionsDiv; div.style.display = div.style.display === 'none' || div.style.display === '' ? 'block' : 'none';
         });
     }
-
     document.querySelectorAll('.language-options a').forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const lang = e.currentTarget.dataset.lang;
-            setLanguage(lang);
-            if (elements.languageOptionsDiv) elements.languageOptionsDiv.style.display = 'none'; // Hide options after selection
-            if (elements.mobileMenu.classList.contains('active')) { // Optionally close menu
-                 // toggleMenu(); // Uncomment to close menu after language selection
-            }
+            e.preventDefault(); setLanguage(e.currentTarget.dataset.lang);
+            if (elements.languageOptionsDiv) elements.languageOptionsDiv.style.display = 'none';
         });
     });
-
 
     if (elements.postImageFile) {
         elements.postImageFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    if (elements.imagePreview) {
-                        elements.imagePreview.src = event.target.result;
-                        elements.imagePreview.style.display = 'block';
-                    }
-                }
-                reader.readAsDataURL(file);
-            } else {
-                if (elements.imagePreview) {
-                    elements.imagePreview.src = '#';
-                    elements.imagePreview.style.display = 'none';
-                }
-            }
+            if (file) { const reader = new FileReader(); reader.onload = (ev) => { if (elements.imagePreview) { elements.imagePreview.src = ev.target.result; elements.imagePreview.style.display = 'block'; } }; reader.readAsDataURL(file); }
+            else { if (elements.imagePreview) { elements.imagePreview.src = '#'; elements.imagePreview.style.display = 'none'; } }
         });
     }
 
     auth.onAuthStateChanged(user => {
         if (user) {
-            if(elements.loginSection) elements.loginSection.style.display = 'none';
-            if(elements.appSection) elements.appSection.style.display = 'block';
+            if(elements.loginSection) elements.loginSection.style.display = 'none'; if(elements.appSection) elements.appSection.style.display = 'block';
             if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
             if(elements.userName) elements.userName.textContent = user.displayName || 'User';
-
-            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none';
-            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
-
-            loadPosts(); // This will now use translated strings
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none'; if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
+            loadPosts();
         } else {
-            if(elements.loginSection) elements.loginSection.style.display = 'block';
-            if(elements.appSection) elements.appSection.style.display = 'none';
-            if(elements.postsContainer) {
-                 elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_('feedTitle')}</h3><p>${_('loginToSeeFeed')}</p>`;
-            }
-
-            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex';
-            if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
-
-            if (postsUnsubscribe) {
-                postsUnsubscribe();
-                postsUnsubscribe = null;
-            }
+            if(elements.loginSection) elements.loginSection.style.display = 'block'; if(elements.appSection) elements.appSection.style.display = 'none';
+            if(elements.postsContainer) { elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_('feedTitle')}</h3><p class="empty-feed-message">${_('loginToSeeFeed')}</p>`;}
+            if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex'; if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'none';
+            if (postsUnsubscribe) { postsUnsubscribe(); postsUnsubscribe = null; }
         }
-        applyTranslations(); // Apply translations after auth state change
+        applyTranslations();
     });
 
     async function handleAuth(provider) {
-        try {
-            await auth.signInWithPopup(provider);
-        } catch (error) {
-            console.error("Login Error:", error);
-            if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-                return;
-            }
-            alert(_('signInError', 'en') + `: ${error.message}`); // Basic translation for generic error
-        }
+        try { await auth.signInWithPopup(provider); }
+        catch (error) { console.error("Login Error:", error); if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') return; alert(_('signInError') + `: ${error.message}`); }
     }
-
     if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
-    if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires additional developer setup. Please use Google Sign-In."); // Kept simple for now
-    });
-
+    if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => alert("Facebook login requires additional developer setup. Please use Google Sign-In."));
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
-
     if (elements.mobileLogoutLink) {
-        elements.mobileLogoutLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            auth.signOut();
-            if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
+        elements.mobileLogoutLink.addEventListener('click', (e) => { e.preventDefault(); auth.signOut(); if (elements.mobileMenu?.classList.contains('active')) toggleMenu(); });
     }
 
     if (elements.postBtn) {
         elements.postBtn.addEventListener('click', async () => {
-            const content = elements.postContent ? elements.postContent.value.trim() : "";
-            const imageFile = elements.postImageFile ? elements.postImageFile.files[0] : null;
-            const currentUser = auth.currentUser;
-
-            if (!content && !imageFile) {
-                alert(_('postContentRequired'));
-                return;
-            }
-            if (!currentUser) {
-                alert(_('loginRequiredToPost'));
-                return;
-            }
-
-            elements.postBtn.disabled = true;
-            elements.postBtn.textContent = _('postingButton');
-            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
-            if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
-
+            const content = elements.postContent?.value.trim() || ""; const imageFile = elements.postImageFile?.files[0]; const currentUser = auth.currentUser;
+            if (!content && !imageFile) { alert(_('postContentRequired')); return; } if (!currentUser) { alert(_('loginRequiredToPost')); return; }
+            elements.postBtn.disabled = true; elements.postBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`;
+            if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none'; if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
             try {
-                let imageUrl = null;
-                let imagePublicId = null;
-
+                let imageUrl = null, imagePublicId = null;
                 if (imageFile) {
-                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block';
-                    if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('uploadingImage');
-                    const formData = new FormData();
-                    formData.append('file', imageFile);
-                    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    if (CLOUDINARY_CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME" || CLOUDINARY_UPLOAD_PRESET === "YOUR_CLOUDINARY_UPLOAD_PRESET") throw new Error("Cloudinary not configured.");
+                    if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'block'; if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('uploadingImage');
+                    const formData = new FormData(); formData.append('file', imageFile); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
                     const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(`Cloudinary upload failed: ${errorData.error.message || 'Unknown error'}`);
-                    }
-                    const data = await response.json();
-                    imageUrl = data.secure_url;
-                    imagePublicId = data.public_id;
+                    if (!response.ok) { const errData = await response.json(); throw new Error(`Cloudinary upload failed: ${errData.error?.message || 'Unknown'}`); }
+                    const data = await response.json(); imageUrl = data.secure_url; imagePublicId = data.public_id;
                     if(elements.uploadProgressText) elements.uploadProgressText.textContent = _('imageUploaded');
                 }
-
-                const postData = {
-                    content: content || "",
-                    userId: currentUser.uid,
-                    userName: currentUser.displayName || 'Anonymous User',
-                    userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: [],
-                    comments: []
-                };
-                if (imageUrl) {
-                    postData.imageUrl = imageUrl;
-                    if (imagePublicId) postData.imagePublicId = imagePublicId;
-                }
-
+                const postData = { content, userId: currentUser.uid, userName: currentUser.displayName || 'User', userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', timestamp: firebase.firestore.FieldValue.serverTimestamp(), likes: [], comments: [] };
+                if (imageUrl) { postData.imageUrl = imageUrl; if (imagePublicId) postData.imagePublicId = imagePublicId; }
                 await db.collection('posts').add(postData);
-
-                if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null;
-                if(elements.imagePreview) {
-                    elements.imagePreview.src = '#';
-                    elements.imagePreview.style.display = 'none';
-                }
-            } catch (error) {
-                console.error("Post Error:", error);
-                alert(_('postError', 'en') + `: ${error.message}`);
-                if(elements.uploadProgressText && elements.uploadProgressContainer && elements.uploadProgressContainer.style.display === 'block') {
-                     elements.uploadProgressText.textContent = _('uploadFailed');
-                }
+                if(elements.postContent) elements.postContent.value = ''; if(elements.postImageFile) elements.postImageFile.value = null;
+                if(elements.imagePreview) { elements.imagePreview.src = '#'; elements.imagePreview.style.display = 'none'; }
+            } catch (error) { console.error("Post Error:", error); alert(_('postError') + `: ${error.message}`); if(elements.uploadProgressText && elements.uploadProgressContainer?.style.display === 'block') elements.uploadProgressText.textContent = _('uploadFailed');
             } finally {
-                if(elements.postBtn) {
-                    elements.postBtn.disabled = false;
-                    elements.postBtn.textContent = _('postButton');
-                }
-                setTimeout(() => {
-                    if(elements.uploadProgressContainer && elements.uploadProgressText) {
-                        if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) { // Check for generic fail
-                            elements.uploadProgressContainer.style.display = 'none';
-                            elements.uploadProgressText.textContent = '';
-                        }
-                    }
-                }, 3000);
+                if(elements.postBtn) { elements.postBtn.disabled = false; elements.postBtn.textContent = _('postButton'); }
+                setTimeout(() => { if(elements.uploadProgressContainer && elements.uploadProgressText && elements.uploadProgressText.textContent && !elements.uploadProgressText.textContent.toLowerCase().includes('failed')) { elements.uploadProgressContainer.style.display = 'none'; elements.uploadProgressText.textContent = ''; } }, 3000);
             }
         });
     }
@@ -1036,488 +863,207 @@
     let postsUnsubscribe = null;
     function loadPosts() {
         if (postsUnsubscribe) postsUnsubscribe();
-        const feedTitleElement = elements.postsContainer.querySelector('h3') || document.createElement('h3');
-        feedTitleElement.setAttribute('data-translate-key', 'feedTitle');
-        feedTitleElement.textContent = _('feedTitle');
+        let titleEl = elements.postsContainer.querySelector('h3[data-translate-key="feedTitle"]');
+        if (!titleEl) { titleEl = document.createElement('h3'); titleEl.setAttribute('data-translate-key', 'feedTitle'); if (!elements.postsContainer.firstChild || elements.postsContainer.firstChild.nodeName !== 'H3') elements.postsContainer.prepend(titleEl); }
+        titleEl.textContent = _('feedTitle');
 
-
-        postsUnsubscribe = db.collection('posts')
-          .orderBy('timestamp', 'desc')
-          .onSnapshot(snapshot => {
-              if (elements.postsContainer) {
-                  // Clear only posts, keep the title
-                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .no-posts-message, .error-loading-message');
-                  existingPosts.forEach(el => el.remove());
-
-                  if (!elements.postsContainer.querySelector('h3')) { // Ensure title is there
-                     elements.postsContainer.prepend(feedTitleElement);
-                  }
-
-
-                  if (snapshot.empty) {
-                      const p = document.createElement('p');
-                      p.className = 'no-posts-message';
-                      p.textContent = _('noPosts');
-                      elements.postsContainer.appendChild(p);
-                      return;
-                  }
-                  snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
-              }
-          }, error => {
-              console.error("Error loading posts: ", error);
-              if (elements.postsContainer) {
-                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .no-posts-message, .error-loading-message');
-                  existingPosts.forEach(el => el.remove());
-                  if (!elements.postsContainer.querySelector('h3')) {
-                     elements.postsContainer.prepend(feedTitleElement);
-                  }
-                  const p = document.createElement('p');
-                  p.className = 'error-loading-message';
-                  p.textContent = _('errorLoadingPosts');
-                  elements.postsContainer.appendChild(p);
-              }
-          });
+        postsUnsubscribe = db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            if (elements.postsContainer) {
+                elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message').forEach(el => el.remove());
+                if (snapshot.empty) { const p = document.createElement('p'); p.className = 'empty-feed-message'; p.textContent = _('noPosts'); elements.postsContainer.appendChild(p); return; }
+                snapshot.forEach(doc => createPostElement(doc.id, doc.data()));
+            }
+        }, error => {
+            console.error("Error loading posts: ", error); if (elements.postsContainer) {
+                elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message').forEach(el => el.remove());
+                if (!elements.postsContainer.querySelector('h3[data-translate-key="feedTitle"]')) elements.postsContainer.prepend(titleEl);
+                const p = document.createElement('p'); p.className = 'error-loading-message'; p.textContent = _('errorLoadingPosts'); elements.postsContainer.appendChild(p);
+            }
+        });
     }
 
     function createPostElement(postId, post) {
-        const currentUser = auth.currentUser;
-        const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-        const postDiv = document.createElement('div');
-        postDiv.className = 'post';
-        postDiv.setAttribute('data-post-id', postId);
+        const currentUser = auth.currentUser; const isLiked = currentUser && post.likes?.includes(currentUser.uid);
+        const postDiv = document.createElement('div'); postDiv.className = 'post card'; postDiv.setAttribute('data-post-id', postId);
+        const timestamp = post.timestamp?.toDate ? post.timestamp.toDate() : (post.timestamp ? new Date(post.timestamp) : null);
+        const formattedTimestamp = timestamp ? timestamp.toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'}) : _('recently', 'en'); 
+        let contentHTML = post.content ? `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>` : '';
+        if (post.imageUrl) contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none'; console.warn('Failed to load post image:', this.src)">`;
+        if (!contentHTML.trim()) contentHTML = `<p style="min-height:1.5em;"> </p>`; 
 
-        const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
-                                ? post.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0]) // Use language for date formatting
-                                : (post.timestamp ? new Date(post.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
-
-        let contentHTML = '';
-        if (post.content) {
-            contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
-        }
-        if (post.imageUrl) {
-            contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none';">`;
-        }
         postDiv.innerHTML = `
             <div class="post-header">
-                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
-                <div><strong>${escapeHTML(post.userName)}</strong></div>
-                <span class="timestamp">${formattedTimestamp}</span>
+                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';">
+                <strong>${escapeHTML(post.userName)}</strong><span class="timestamp">${formattedTimestamp}</span>
             </div>
-            <div class="post-content">${contentHTML || '<p> </p>'}</div>
+            <div class="post-content">${contentHTML}</div>
             <div class="post-actions">
-                <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
-                    <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
-                    <span class="like-text">${post.likes ? post.likes.length : 0} ${_('likes')}</span>
-                </button>
-                <button class="comment-toggle-btn" data-post-id="${postId}">
-                    <i class="far fa-comment"></i>
-                    <span class="comment-text">${post.comments ? post.comments.length : 0} ${_('comments')}</span>
-                </button>
-                ${currentUser && post.userId === currentUser.uid ?
-                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}" style="margin-left: auto; color: #cc0000;">
-                        <i class="fas fa-trash"></i> <span data-translate-key="deleteAction">${_('deleteAction')}</span>
-                     </button>` : ''}
+                <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}"><i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i><span class="like-text">${post.likes?.length || 0} ${_('likes')}</span></button>
+                <button class="comment-toggle-btn" data-post-id="${postId}"><i class="far fa-comment"></i><span class="comment-text">${post.comments?.length || 0} ${_('comments')}</span></button>
+                ${currentUser && post.userId === currentUser.uid ? `<button class="delete-post-btn" data-post-id="${postId}" data-image-public-id="${post.imagePublicId || ''}"><i class="fas fa-trash"></i><span data-translate-key="deleteAction">${_('deleteAction')}</span></button>` : ''}
             </div>
             <div class="comments-area" id="comments-area-${postId}" style="display: none;">
                 <div class="comments-list" id="comments-list-${postId}"></div>
                 <form class="comment-form-actual" data-post-id="${postId}">
                     <input type="text" name="commentText" class="comment-text-input" placeholder="${_('addCommentPlaceholder')}" autocomplete="off">
-                    <label class="comment-image-upload-label" title="${_('addImageOptional')}">
-                        <i class="fas fa-paperclip"></i>
-                        <input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;">
-                    </label>
-                    <button type="submit" class="comment-submit-btn">${_('commentPostButton')}</button>
+                    <label class="comment-image-upload-label" title="${_('addImageOptional')}"><i class="fas fa-paperclip"></i><input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;"></label>
+                    <button type="submit" class="comment-submit-btn btn-primary">${_('commentPostButton')}</button>
                 </form>
-                <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;">
-                <div class="comment-upload-progress" style="display: none;"></div>
+                <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;"><div class="comment-upload-progress" style="display: none;"></div>
             </div>`;
-        if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
+        if (elements.postsContainer) { const titleEl = elements.postsContainer.querySelector('h3'); if (titleEl?.nextSibling) elements.postsContainer.insertBefore(postDiv, titleEl.nextSibling); else elements.postsContainer.appendChild(postDiv); }
 
-        const commentImageInput = postDiv.querySelector('.comment-image-input');
-        const commentImagePreview = postDiv.querySelector('.comment-image-preview');
-        if (commentImageInput && commentImagePreview) {
-            commentImageInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        commentImagePreview.src = event.target.result;
-                        commentImagePreview.style.display = 'block';
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    commentImagePreview.src = '#';
-                    commentImagePreview.style.display = 'none';
-                }
-            });
-        }
-
+        const commentImgInput = postDiv.querySelector('.comment-image-input'), commentImgPreview = postDiv.querySelector('.comment-image-preview');
+        if (commentImgInput && commentImgPreview) { commentImgInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { commentImgPreview.src = ev.target.result; commentImgPreview.style.display = 'block'; }; reader.readAsDataURL(file); } else { commentImgPreview.src = '#'; commentImgPreview.style.display = 'none'; } }); }
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
-        if (commentsList) {
-            if (post.comments && post.comments.length > 0) {
-                const sortedComments = [...post.comments].sort((a,b) => {
-                    const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
-                    const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                    return timeA - timeB;
-                });
-                sortedComments.forEach(comment => renderComment(comment, commentsList, postId));
-            } else {
-                commentsList.innerHTML = `<p style="font-size:0.9em; color:#777; padding:5px 0;">${_('noCommentsYet')}</p>`;
-            }
-        }
-
-        const likeBtn = postDiv.querySelector('.like-btn');
-        if (likeBtn) likeBtn.addEventListener('click', () => handleLike(postId));
-        const commentToggleBtn = postDiv.querySelector('.comment-toggle-btn');
-        if (commentToggleBtn) commentToggleBtn.addEventListener('click', () => toggleComments(postId));
-        const commentForm = postDiv.querySelector('.comment-form-actual');
-        if (commentForm) commentForm.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
-        const deleteBtn = postDiv.querySelector('.delete-post-btn');
-        if (deleteBtn) deleteBtn.addEventListener('click', () => handleDeletePost(postId, deleteBtn.dataset.imageUrl, deleteBtn.dataset.imagePublicId));
+        if (commentsList) { commentsList.innerHTML = ''; if (post.comments?.length > 0) { const sorted = [...post.comments].sort((a,b) => (a.timestamp?.toDate?a.timestamp.toDate().getTime():new Date(a.timestamp).getTime())-(b.timestamp?.toDate?b.timestamp.toDate().getTime():new Date(b.timestamp).getTime())); sorted.forEach(c => renderComment(c, commentsList, postId)); } else { commentsList.innerHTML = `<p style="font-size:0.9em; color:#777; padding:5px 0; text-align:center;">${_('noCommentsYet')}</p>`; } }
+        postDiv.querySelector('.like-btn')?.addEventListener('click', () => handleLike(postId));
+        postDiv.querySelector('.comment-toggle-btn')?.addEventListener('click', () => toggleComments(postId));
+        postDiv.querySelector('.comment-form-actual')?.addEventListener('submit', (e) => handleCommentSubmit(e, postId));
+        postDiv.querySelector('.delete-post-btn')?.addEventListener('click', (e) => handleDeletePost(postId, e.currentTarget.dataset.imagePublicId));
     }
 
-    async function handleDeletePost(postId, imageUrl, imagePublicId) {
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToPost')); return; } // Re-using a similar message
-        if (!confirm(_('deletePostConfirm'))) return;
+    async function handleDeletePost(postId, imagePublicId) {
+        const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToPost')); return; } if (!confirm(_('deletePostConfirm'))) return;
         const postRef = db.collection('posts').doc(postId);
-        try {
-            const doc = await postRef.get();
-            if (doc.exists && doc.data().userId === currentUser.uid) {
-                await postRef.delete();
-                if (imageUrl) console.warn(`Image at ${escapeHTML(imageUrl)} (public_id: ${escapeHTML(imagePublicId) || 'N/A'}) needs server-side deletion.`);
-            } else { alert("Permission denied or post not found."); } // Keep specific errors in English for now
-        } catch (error) {
-            console.error("Error deleting post:", error);
-            alert("Failed to delete post: " + error.message);
-        }
+        try { const doc = await postRef.get(); if (doc.exists && doc.data().userId === currentUser.uid) { if (imagePublicId && imagePublicId !== "undefined" && imagePublicId !== "") console.warn(`Cloudinary image (public_id: ${escapeHTML(imagePublicId)}) deletion is a backend task.`); await postRef.delete(); } else alert("Permission denied or post not found."); }
+        catch (error) { console.error("Error deleting post:", error); alert("Failed to delete post: " + error.message); }
     }
 
     async function handleCommentSubmit(event, postId) {
-        event.preventDefault();
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToComment')); return; }
-
-        const form = event.target;
-        const commentTextInput = form.querySelector('.comment-text-input');
-        const commentImageInput = form.querySelector('.comment-image-input');
-        const commentsArea = form.closest('.comments-area');
-        const commentImagePreview = commentsArea ? commentsArea.querySelector('.comment-image-preview') : null;
-        const commentUploadProgress = commentsArea ? commentsArea.querySelector('.comment-upload-progress') : null;
-
-        const commentText = commentTextInput ? commentTextInput.value.trim() : "";
-        const imageFile = commentImageInput ? commentImageInput.files[0] : null;
-
-        if (!commentText && !imageFile) { alert(_('commentContentRequired')); return; }
-
-        const submitButton = form.querySelector('.comment-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.textContent = _('postingButton'); }
-        if(commentUploadProgress) { commentUploadProgress.textContent = ''; commentUploadProgress.style.display = 'none';}
-
-        let commentImageUrl = null;
-        let commentImagePublicId = null;
-
+        event.preventDefault(); const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToComment')); return; }
+        const form = event.target, textInput = form.querySelector('.comment-text-input'), imgInput = form.querySelector('.comment-image-input');
+        const area = form.closest('.comments-area'), imgPreview = area?.querySelector('.comment-image-preview'), progress = area?.querySelector('.comment-upload-progress');
+        const text = textInput?.value.trim() || "", imgFile = imgInput?.files[0]; if (!text && !imgFile) { alert(_('commentContentRequired')); return; }
+        const btn = form.querySelector('.comment-submit-btn'); if (btn) { btn.disabled = true; btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
+        if(progress) { progress.textContent = ''; progress.style.display = 'none'; }
+        let imgUrl = null, imgPublicId = null;
         try {
-            if (imageFile) {
-                if(commentUploadProgress) { commentUploadProgress.textContent = _('uploadingImage'); commentUploadProgress.style.display = 'block'; }
-                const formData = new FormData();
-                formData.append('file', imageFile);
-                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-                const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Cloudinary comment image upload failed: ${errorData.error.message || 'Unknown error'}`);
-                }
-                const data = await response.json();
-                commentImageUrl = data.secure_url;
-                commentImagePublicId = data.public_id;
-                if(commentUploadProgress) commentUploadProgress.textContent = _('imageUploaded');
+            if (imgFile) {
+                if (CLOUDINARY_CLOUD_NAME === "YOUR_CLOUDINARY_CLOUD_NAME" || CLOUDINARY_UPLOAD_PRESET === "YOUR_CLOUDINARY_UPLOAD_PRESET") throw new Error("Cloudinary not configured.");
+                if(progress) { progress.textContent = _('uploadingImage'); progress.style.display = 'block'; }
+                const formData = new FormData(); formData.append('file', imgFile); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                const resp = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData }); if (!resp.ok) { const errD = await resp.json(); throw new Error(`Cloudinary comment image upload failed: ${errD.error?.message||'Unknown'}`); }
+                const data = await resp.json(); imgUrl = data.secure_url; imgPublicId = data.public_id; if(progress) progress.textContent = _('imageUploaded');
             }
-
             const commentId = db.collection('posts').doc().id;
-
-            const newComment = {
-                id: commentId,
-                userId: currentUser.uid,
-                userName: currentUser.displayName || 'User',
-                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                text: commentText || "",
-                timestamp: new Date(),
-                replies: [],
-                imageUrl: commentImageUrl || null,
-                imagePublicId: commentImagePublicId || null
-            };
-
-            const postRef = db.collection('posts').doc(postId);
-            await postRef.update({
-                comments: firebase.firestore.FieldValue.arrayUnion(newComment)
-            });
-
-            if (commentTextInput) commentTextInput.value = '';
-            if (commentImageInput) commentImageInput.value = null;
-            if (commentImagePreview) { commentImagePreview.src = '#'; commentImagePreview.style.display = 'none';}
-        } catch (error) {
-            console.error("Error adding comment:", error);
-            alert("Failed to add comment: " + error.message);
-            if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
-                commentUploadProgress.textContent = _('uploadFailed');
-            }
-        } finally {
-            if (submitButton) { submitButton.disabled = false; submitButton.textContent = _('commentPostButton'); }
-            setTimeout(() => {
-                if(commentUploadProgress && commentUploadProgress.style.display === 'block') {
-                    if (commentUploadProgress.textContent && !commentUploadProgress.textContent.toLowerCase().includes('failed')) {
-                        commentUploadProgress.style.display = 'none';
-                        commentUploadProgress.textContent = '';
-                    }
-                }
-            }, 3000);
-        }
+            const newComment = { id: commentId, userId: currentUser.uid, userName: currentUser.displayName||'User', userPhoto: currentUser.photoURL||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', text, timestamp: new Date(), replies: [], imageUrl: imgUrl, imagePublicId: imgPublicId };
+            await db.collection('posts').doc(postId).update({ comments: firebase.firestore.FieldValue.arrayUnion(newComment) });
+            if (textInput) textInput.value = ''; if (imgInput) imgInput.value = null; if (imgPreview) { imgPreview.src = '#'; imgPreview.style.display = 'none'; }
+        } catch (error) { console.error("Error adding comment:", error); alert("Failed to add comment: " + error.message); if(progress?.style.display === 'block') progress.textContent = _('uploadFailed');
+        } finally { if (btn) { btn.disabled = false; btn.textContent = _('commentPostButton'); } setTimeout(() => { if(progress?.style.display === 'block' && progress.textContent && !progress.textContent.toLowerCase().includes('failed')) { progress.style.display = 'none'; progress.textContent = ''; } }, 3000); }
     }
 
     function toggleReplyForm(commentId) {
-        const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
-        if (replyFormContainer) {
-            const isHidden = replyFormContainer.style.display === 'none' || replyFormContainer.style.display === '';
-            replyFormContainer.style.display = isHidden ? 'block' : 'none';
-            if (isHidden) {
-                const inputField = replyFormContainer.querySelector('.reply-text-input');
-                if (inputField) inputField.focus();
-            }
-        }
+        const formContainer = document.getElementById(`reply-form-container-${commentId}`);
+        if (formContainer) { const hidden = formContainer.style.display === 'none' || formContainer.style.display === ''; formContainer.style.display = hidden ? 'block' : 'none'; if (hidden) formContainer.querySelector('.reply-text-input')?.focus(); }
     }
 
     async function handleReplySubmit(event, postId, parentCommentId) {
-        event.preventDefault();
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToReply')); return; }
-
-        const form = event.target;
-        const replyTextInput = form.querySelector('.reply-text-input');
-        const replyText = replyTextInput ? replyTextInput.value.trim() : "";
-
-        if (!replyText) { alert(_('replyTextRequired')); return; }
-
-        const submitButton = form.querySelector('.reply-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.textContent = _('postingButton');}
-
+        event.preventDefault(); const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToReply')); return; }
+        const form = event.target, textInput = form.querySelector('.reply-text-input'), text = textInput?.value.trim() || ""; if (!text) { alert(_('replyTextRequired')); return; }
+        const btn = form.querySelector('.reply-submit-btn'); if (btn) { btn.disabled = true; btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
         const postRef = db.collection('posts').doc(postId);
         try {
-             const newReply = {
-                userId: currentUser.uid,
-                userName: currentUser.displayName || 'User',
-                userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-                text: replyText,
-                timestamp: new Date()
-            };
-
+            const newReply = { id: db.collection('posts').doc().id, userId: currentUser.uid, userName: currentUser.displayName||'User', userPhoto: currentUser.photoURL||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', text, timestamp: new Date() };
             await db.runTransaction(async (transaction) => {
-                const postDoc = await transaction.get(postRef);
-                if (!postDoc.exists) throw "Post document does not exist!";
-                const postData = postDoc.data();
-                const comments = postData.comments || [];
-                const updatedComments = comments.map(comment => {
-                    if (comment.id === parentCommentId) {
-                        const existingReplies = comment.replies || [];
-                        return { ...comment, replies: [...existingReplies, newReply] };
-                    }
-                    return comment;
-                });
-                transaction.update(postRef, { comments: updatedComments });
+                const postDoc = await transaction.get(postRef); if (!postDoc.exists) throw "Post does not exist!";
+                const postData = postDoc.data(); let comments = postData.comments && Array.isArray(postData.comments) ? [...postData.comments] : [];
+                const cIndex = comments.findIndex(c => c.id === parentCommentId);
+                if (cIndex > -1) { const pComment = comments[cIndex]; const exReplies = pComment.replies && Array.isArray(pComment.replies) ? [...pComment.replies] : []; exReplies.push(newReply); comments[cIndex] = { ...pComment, replies: exReplies }; transaction.update(postRef, { comments }); }
+                else throw "Parent comment not found!";
             });
-            if (replyTextInput) replyTextInput.value = '';
-            toggleReplyForm(parentCommentId); // This might need to re-render if the form is closed
-        } catch (error) {
-            console.error("Error adding reply:", error);
-            alert("Failed to add reply: " + error.message);
-        } finally {
-            if (submitButton) { submitButton.disabled = false; submitButton.textContent = _('replyPostButton');}
-        }
+            if (textInput) textInput.value = '';
+        } catch (error) { console.error("Error adding reply:", error); alert("Failed to add reply: " + error.message);
+        } finally { if (btn) { btn.disabled = false; btn.textContent = _('replyPostButton'); } }
     }
 
     function renderReply(reply, repliesListDiv) {
-        const replyDiv = document.createElement('div');
-        replyDiv.className = 'comment-reply';
-
-        const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
-                                ? reply.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0])
-                                : (reply.timestamp ? new Date(reply.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
-
-        let replyContentHTML = '';
-        if (reply.text) {
-            replyContentHTML = `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>`;
-        }
+        const replyDiv = document.createElement('div'); replyDiv.className = 'comment-reply'; replyDiv.setAttribute('data-reply-id', reply.id); 
+        const timestamp = reply.timestamp?.toDate ? reply.timestamp.toDate() : (reply.timestamp ? new Date(reply.timestamp) : null);
+        const formattedTimestamp = timestamp ? timestamp.toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) : _('recently', 'en');
+        let contentHTML = reply.text ? `<p>${escapeHTML(reply.text).replace(/\n/g, '<br>')}</p>` : '<p style="min-height:1em;"> </p>';
         replyDiv.innerHTML = `
-            <div class="comment-header">
-                <img src="${reply.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
-                <strong>${escapeHTML(reply.userName) || 'User'}</strong>
-                <span class="timestamp">${replyTimestamp}</span>
-            </div>
-            <div class="comment-content">${replyContentHTML || '<p> </p>'}</div>`;
+            <div class="comment-header"><img src="${reply.userPhoto||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName||'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';"><strong>${escapeHTML(reply.userName||'User')}</strong><span class="timestamp">${formattedTimestamp}</span></div>
+            <div class="comment-content">${contentHTML}</div>`;
         repliesListDiv.appendChild(replyDiv);
     }
 
     function renderComment(comment, commentsListElement, postId) {
-        const commentDiv = document.createElement('div');
-        commentDiv.className = 'comment';
-        commentDiv.setAttribute('data-comment-id', comment.id);
-
-        const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
-                                ? comment.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0])
-                                : (comment.timestamp ? new Date(comment.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
-
-        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]'); // Might need a class for easier targeting
-        if(noCommentP) noCommentP.remove();
-
-        let commentContentHTML = '';
-        if (comment.text) commentContentHTML += `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>`;
-        if (comment.imageUrl) commentContentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none';">`;
-
+        commentsListElement.querySelector('p[style*="No comments yet"]')?.remove(); 
+        const commentDiv = document.createElement('div'); commentDiv.className = 'comment'; commentDiv.setAttribute('data-comment-id', comment.id);
+        const timestamp = comment.timestamp?.toDate ? comment.timestamp.toDate() : (comment.timestamp ? new Date(comment.timestamp) : null);
+        const formattedTimestamp = timestamp ? timestamp.toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) : _('recently', 'en');
+        let contentHTML = comment.text ? `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>` : '';
+        if (comment.imageUrl) contentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none'; console.warn('Failed to load comment image:', this.src)">`;
+        if (!contentHTML.trim()) contentHTML = `<p style="min-height:1.5em;"> </p>`;
         commentDiv.innerHTML = `
-            <div class="comment-header">
-                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
-                <strong>${escapeHTML(comment.userName) || 'User'}</strong>
-                <span class="timestamp">${commentTimestamp}</span>
-            </div>
-            <div class="comment-content">${commentContentHTML || '<p> </p>'}</div>
-            <div class="comment-actions">
-                <button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}">
-                    <i class="fas fa-reply"></i> <span data-translate-key="replyAction">${_('replyAction')}</span>
-                </button>
-            </div>
+            <div class="comment-header"><img src="${comment.userPhoto||'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName||'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';"><strong>${escapeHTML(comment.userName||'User')}</strong><span class="timestamp">${formattedTimestamp}</span></div>
+            <div class="comment-content">${contentHTML}</div>
+            <div class="comment-actions"><button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}"><i class="fas fa-reply"></i><span data-translate-key="replyAction">${_('replyAction')}</span></button></div>
             <div class="replies-list" id="replies-list-${comment.id}"></div>
             <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
-                <form class="reply-form-actual" data-post-id="${postId}" data-parent-comment-id="${comment.id}">
-                    <input type="text" name="replyText" class="reply-text-input" placeholder="${_('writeReplyPlaceholder')}" autocomplete="off">
-                    <button type="submit" class="reply-submit-btn">${_('replyPostButton')}</button>
-                </form>
+                <form class="reply-form-actual" data-post-id="${postId}" data-parent-comment-id="${comment.id}"><input type="text" name="replyText" class="reply-text-input" placeholder="${_('writeReplyPlaceholder')}" autocomplete="off"><button type="submit" class="reply-submit-btn btn-primary">${_('replyPostButton')}</button></form>
             </div>`;
         commentsListElement.appendChild(commentDiv);
-
-        const repliesListDiv = commentDiv.querySelector(`#replies-list-${comment.id}`);
-        if (comment.replies && comment.replies.length > 0) {
-            const sortedReplies = [...comment.replies].sort((a,b) => {
-                const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
-                const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                return timeA - timeB;
-            });
-            sortedReplies.forEach(reply => renderReply(reply, repliesListDiv));
-        }
-
-        const replyButton = commentDiv.querySelector('.reply-to-comment-btn');
-        if (replyButton) replyButton.addEventListener('click', () => toggleReplyForm(comment.id));
-        const replyForm = commentDiv.querySelector('.reply-form-actual');
-        if (replyForm) replyForm.addEventListener('submit', (e) => handleReplySubmit(e, postId, comment.id));
+        const repliesListDiv = commentDiv.querySelector(`#replies-list-${comment.id}`); repliesListDiv.innerHTML = '';
+        if (comment.replies?.length > 0) { const sortedR = [...comment.replies].sort((a,b) => (a.timestamp?.toDate?a.timestamp.toDate().getTime():new Date(a.timestamp).getTime())-(b.timestamp?.toDate?b.timestamp.toDate().getTime():new Date(b.timestamp).getTime())); sortedR.forEach(r => renderReply(r, repliesListDiv)); }
+        commentDiv.querySelector('.reply-to-comment-btn')?.addEventListener('click', () => toggleReplyForm(comment.id));
+        commentDiv.querySelector('.reply-form-actual')?.addEventListener('submit', (e) => handleReplySubmit(e, postId, comment.id));
     }
 
     async function handleLike(postId) {
-        const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToLike')); return; }
+        const currentUser = auth.currentUser; if (!currentUser) { alert(_('loginRequiredToLike')); return; }
         const postRef = db.collection('posts').doc(postId);
-        try {
-            await db.runTransaction(async (transaction) => {
-                const doc = await transaction.get(postRef);
-                if (!doc.exists) throw "Document does not exist!";
-                const postData = doc.data();
-                let currentLikes = postData.likes || [];
-                let newLikesArray = currentLikes.includes(currentUser.uid)
-                                   ? currentLikes.filter(uid => uid !== currentUser.uid)
-                                   : [...currentLikes, currentUser.uid];
-                transaction.update(postRef, { likes: newLikesArray });
-            });
-        } catch (error) {
-            console.error("Like transaction failed:", error);
-            alert("Failed to update like: " + error.message);
-        }
+        try { await db.runTransaction(async (transaction) => { const doc = await transaction.get(postRef); if (!doc.exists) throw "Document does not exist!"; const postData = doc.data(); let likes = postData.likes && Array.isArray(postData.likes) ? postData.likes : []; let newLikes = likes.includes(currentUser.uid) ? likes.filter(uid => uid !== currentUser.uid) : [...likes, currentUser.uid]; transaction.update(postRef, { likes: newLikes }); });
+        } catch (error) { console.error("Like transaction failed:", error); alert("Failed to update like: " + error.message); }
     }
 
     function toggleComments(postId) {
-        const commentsArea = document.getElementById(`comments-area-${postId}`);
-        if (commentsArea) {
-            const isHidden = commentsArea.style.display === 'none' || commentsArea.style.display === '';
-            commentsArea.style.display = isHidden ? 'block' : 'none';
-            if (isHidden) {
-               const inputField = commentsArea.querySelector('input[name="commentText"]');
-               if (inputField) inputField.focus();
-            }
-        }
+        const area = document.getElementById(`comments-area-${postId}`);
+        if (area) { const hidden = area.style.display === 'none' || area.style.display === ''; area.style.display = hidden ? 'block' : 'none'; if (hidden) area.querySelector('input[name="commentText"]')?.focus(); }
     }
 
-    function toggleMenu() {
-        if (elements.mobileMenu) {
-            elements.mobileMenu.classList.toggle('active');
-        }
-    }
-
+    function toggleMenu() { elements.mobileMenu?.classList.toggle('active'); }
     function closeMenuAndScroll(event) {
-        const link = event.currentTarget;
-        const isLanguageOption = link.closest('.language-options');
-
-        if (!isLanguageOption && elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-             // Don't close menu if a language option itself is clicked, allow its own handler.
-             // Only close if it's a main navigation link.
-            if (!link.closest('.language-select-label') && !link.dataset.lang) {
-                 toggleMenu();
-            }
-        }
-
+        const link = event.currentTarget; if (!link.closest('.language-options') && elements.mobileMenu?.classList.contains('active') && !link.closest('.language-select-label') && !link.dataset.lang) toggleMenu();
         const targetId = link.getAttribute('href');
-        if (targetId && targetId.startsWith('#') && targetId.length > 1 && link.classList.contains('nav-post-link')) { // only for specific scroll links
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                event.preventDefault();
-                targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
+        if (targetId?.startsWith('#') && targetId.length > 1 && (link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink')) {
+            const targetEl = document.querySelector(targetId); if (targetEl) { event.preventDefault(); targetEl.scrollIntoView({ behavior: "smooth", block: "start" }); }
         }
     }
 
-
-    if (elements.bottomNavMenuBtn) {
-        elements.bottomNavMenuBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            toggleMenu();
-        });
-    }
-
-    document.querySelectorAll('.mobile-menu a:not(.language-options a)').forEach(link => { // Exclude language options from this generic handler
+    if (elements.bottomNavMenuBtn) elements.bottomNavMenuBtn.addEventListener('click', (e) => { e.preventDefault(); toggleMenu(); });
+    document.querySelectorAll('.mobile-menu a:not(.language-options a)').forEach(link => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
-            if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink' && !link.closest('.language-select-label')) {
-                 // Only close if it's a direct scroll link within main menu items
-                if(link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink') {
-                    closeMenuAndScroll(event);
-                }
-            } else if (link.id === 'mobileLogoutLink') {
-                // This is handled by its own dedicated event listener
-            } else if (!link.closest('.language-select-label')) { // Standard page navigation
-                if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-                    toggleMenu();
-                }
+            if (href?.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink' && !link.closest('.language-select-label')) {
+                if (link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink') closeMenuAndScroll(event);
+                else if (elements.mobileMenu?.classList.contains('active')) toggleMenu();
+            } else if (link.id === 'mobileLogoutLink') { /* handled */ }
+            else if (!link.closest('.language-select-label') && !link.dataset.lang && href === 'index.html') { // Special handling for home link to prevent reload if it's the current page, but still close menu
+                 if (elements.mobileMenu?.classList.contains('active')) toggleMenu();
+                 // Allow default if it's truly a different page, otherwise if it's just index.html on index.html, prevent default
+                 if (window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/index.html')) {
+                    event.preventDefault(); // Prevent reload if already on home
+                 }
+            } else if (!link.closest('.language-select-label') && !link.dataset.lang ) { // Actual navigation to other pages
+                if (elements.mobileMenu?.classList.contains('active')) toggleMenu();
             }
         });
     });
-
-    document.addEventListener('click', (e) => {
-        if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) &&
-            !elements.mobileMenu.contains(e.target)) { // Ensure click is not on menu itself or its toggle button
-            toggleMenu();
-        }
-    });
+    document.addEventListener('click', (e) => { if (elements.mobileMenu?.classList.contains('active') && elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) && !elements.mobileMenu.contains(e.target)) toggleMenu(); });
 
     function escapeHTML(str) {
-        if (str === null || str === undefined) return '';
-        const s = String(str);
-        const div = document.createElement('div');
-        div.appendChild(document.createTextNode(s));
-        return div.innerHTML;
+        if (str === null || str === undefined) return ''; const s = String(str);
+        return s.replace(/[&<>"']/g, (m) => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": ''' }[m] || m));
     }
 
-    // Initial setup
     document.addEventListener('DOMContentLoaded', () => {
-        setLanguage(currentLanguage); // Apply initial language
+        if (elements.appSection) elements.appSection.style.display = 'none';
+        if (elements.loginSection) elements.loginSection.style.display = 'block';
+        setLanguage(currentLanguage);
     });
-
     </script>
 </body>
 </html>
