@@ -3,85 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIRAT SWARUP</title> <!-- This title tag itself is not easily translatable with this method -->
+    <title>VIRAT SWARUP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <style>
+        /* Global Resets and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Georgia", serif; /* May need fallback for Devanagari script */
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px; /* Base font size */
         }
 
         body {
-            background: #ffffff;
-            color: #2c2c2c;
-            padding-bottom: 70px; /* Space for bottom nav */
+            background: #f4f6f8; /* Light cool gray background */
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Modern sans-serif stack */
+            line-height: 1.6;
+            padding-bottom: 80px; /* Space for bottom nav, increased */
+            overflow-x: hidden; /* Prevent horizontal scroll on small screens */
         }
 
+        /* Headings and Thematic Font */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Georgia", serif; /* Keep Georgia for headings */
+            color: #2c2c2c;
+            line-height: 1.3;
+        }
+
+        a {
+            color: #8b0000;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #6a0000;
+        }
+
+        /* Buttons General Styling */
+        button, .button-like { /* .button-like for a tags styled as buttons */
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+            border: none;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        button:active, .button-like:active {
+            transform: translateY(1px);
+        }
+        button:disabled, .button-like:disabled {
+            background: #cccccc !important;
+            color: #666666 !important;
+            cursor: not-allowed !important;
+            opacity: 0.7 !important;
+        }
+
+        /* Primary Button Style */
+        .btn-primary {
+            background-color: #8b0000;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #6a0000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        
+        /* Input Fields General Styling */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            line-height: 1.5;
+            font-family: inherit;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 15px;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        textarea:focus {
+            border-color: #8b0000;
+            box-shadow: 0 0 0 0.2rem rgba(139,0,0,0.25);
+            outline: none;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+
+        /* Header */
         .header {
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            padding: 15px 140px;
-            border-bottom: 1px solid #7a0000;
+            padding: 20px clamp(15px, 4vw, 60px); /* Responsive padding */
+            border-bottom: 1px solid #d9a7a7; /* Softer border */
             background-color: #8b0000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
 
         .header-logo {
             position: absolute;
-            left: 30px;
+            left: clamp(15px, 4vw, 30px);
             top: 50%;
             transform: translateY(-50%);
-            height: 100px;
-            width: 100px;
+            height: 70px; /* Adjusted */
+            width: 70px;  /* Adjusted */
             object-fit: contain;
         }
 
         .header-text-content {
             text-align: center;
+            margin-left: 90px; /* Space for logo on left */
+            margin-right: 90px; /* Space for potential menu icon on right if not fixed */
         }
 
         .header h1 {
-            font-size: 42px;
-            letter-spacing: 4px;
+            font-size: clamp(1.8rem, 5vw, 2.6rem); /* Fluid font size */
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             color: white;
-            margin-top: 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            font-weight: 600;
-            /* data-translate-key="headerTitle" will be handled by JS if needed, but it's a proper noun */
+            font-weight: 700; /* Bolder */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
         }
         .header h2 {
-            font-size: 22px;
+            font-size: clamp(1rem, 3vw, 1.3rem); /* Fluid font size */
             color: #f5f5f5;
             font-weight: 300;
             margin-top: 0;
             margin-bottom: 0;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             font-style: italic;
-            data-translate-key="headerSubtitle"
         }
 
+        /* Mobile Menu */
         .mobile-menu {
             position: fixed;
             top: 0;
-            right: -300px;
+            right: -300px; /* Start off-screen */
             width: 300px;
+            max-width: 80%; /* Ensure it doesn't take full screen on small devices */
             height: 100%;
-            background: #8b0000;
-            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-            transition: 0.4s;
-            padding-top: 60px; /* Adjusted for language options */
-            z-index: 1000;
-            overflow-y: auto; /* For scrollability if menu gets long */
+            background: #7a0000; /* Slightly darker maroon for depth */
+            box-shadow: -3px 0 15px rgba(0, 0, 0, 0.2);
+            transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+            padding-top: 20px; /* Space from top */
+            z-index: 1001; /* Above header if header is also fixed/sticky */
+            overflow-y: auto;
         }
         .mobile-menu.active {
             right: 0;
@@ -90,45 +179,52 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 15px 30px; /* Adjusted padding */
+            padding: 16px 25px; /* Generous padding for touch */
             color: #fff !important;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            font-size: 1.05rem;
         }
+         .mobile-menu .language-select-label { cursor: pointer; }
         .mobile-menu i {
             width: 25px;
-            font-size: 20px;
+            font-size: 1.2rem;
             color: #fff !important;
+            text-align: center;
+        }
+        .mobile-menu a:hover, .mobile-menu .language-select-label:hover {
+            background-color: rgba(255,255,255,0.1);
         }
         .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
             border-bottom: none;
         }
         .language-options {
-            padding-left: 30px; /* Indent language options */
-            display: none; /* Hidden by default */
-            background-color: rgba(0,0,0,0.1);
+            padding-left: 0; /* Full width for lang options */
+            display: none;
+            background-color: rgba(0,0,0,0.2);
         }
         .language-options a {
-            padding: 12px 30px;
-            font-size: 0.9em;
+            padding: 14px 25px 14px 55px; /* Indent text */
+            font-size: 0.95em;
         }
         .language-options a.lang-active {
             font-weight: bold;
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255,255,255,0.15);
         }
 
 
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: #8b0000;
-            border-top: 1px solid #eee;
-            padding: 8px 0;
-            display: none;
+            border-top: 1px solid #7a0000;
+            padding: 5px 0; /* Reduced top/bottom padding for compactness */
+            display: none; /* Shown via media query */
             z-index: 999;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
         }
         .bottom-nav ul {
             display: flex;
@@ -137,389 +233,498 @@
         }
         .bottom-nav a {
             color: #fff !important;
-            font-size: 14px;
+            font-size: 0.8rem; /* Slightly smaller text */
             text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             padding: 8px 10px;
             border-radius: 8px;
-            transition: background 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
+            flex-grow: 1;
+            text-align: center;
         }
         .bottom-nav a i {
-            font-size: 20px;
+            font-size: 1.3rem; /* Larger icons */
         }
         .bottom-nav a:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        .bottom-nav a span { /* To target the text for translation */
-            /* data-translate-key will be applied to span */
+        .bottom-nav a:active {
+            transform: scale(0.95);
         }
 
-
+        /* Desktop Navigation */
         .desktop-nav {
-            margin: 45px 0;
+            margin: 35px 0; /* Reduced margin */
+            padding: 0 15px;
         }
         .desktop-nav ul {
             display: flex;
             justify-content: center;
-            gap: 32px;
+            gap: 15px; /* Reduced gap */
             list-style: none;
+            flex-wrap: wrap; /* Allow wrapping on smaller desktop screens */
         }
         .desktop-nav a {
-            color: #8b0000;
+            color: #7a0000; /* Slightly muted maroon */
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 18px;
-            /* data-translate-key will be on the text part of the link if not just icon */
+            font-size: 1.1rem;
+            padding: 10px 18px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 500;
         }
-        .desktop-nav a span { /* If text is in a span */
-            /* data-translate-key will be applied here */
+        .desktop-nav a:hover {
+            background-color: #f0e0e0; /* Light maroon/pinkish hover */
+            color: #5a0000; /* Darker maroon on hover */
         }
-
-
-        @media (max-width: 768px) {
-            .desktop-nav { display: none; }
-            .bottom-nav { display: flex; justify-content: center; align-items: center; }
-
-            .header {
-                justify-content: flex-start;
-                padding: 10px 15px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            }
-            .header-logo {
-                position: static;
-                transform: none;
-                left: auto;
-                height: 70px;
-                width: 70px;
-                margin-right: 10px;
-                flex-shrink: 0;
-            }
-            .header-text-content {
-                flex-grow: 1;
-                text-align: center;
-            }
-
-            .header h1 {
-                font-size: 28px;
-                letter-spacing: 2.5px;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-                margin-bottom: 5px;
-            }
-            .header h2 {
-                font-size: 16px;
-                letter-spacing: 0.5px;
-                color: #f0f0f0;
-            }
-
-            .user-info #logoutBtn {
-                display: none !important;
-            }
+        .desktop-nav a i {
+           font-size: 1.1em;
         }
 
+        /* Main Container */
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        .login-section {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            margin-top: 50px;
-        }
-        .login-section h1 { color: #333; margin-bottom: 20px; data-translate-key="welcomeTitle"; }
-        .login-section p { data-translate-key="signInToConnect"; }
-        .login-btn span { /* Target text part of button */
-            /* data-translate-key will be applied here */
+            padding: 25px 15px; /* Responsive padding */
         }
 
-        .app-section { display: none; }
-        .user-info {
+        /* Card Styling (General) */
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .card-header { /* This class can be added to H3s or divs if needed */
+            font-size: 1.5rem;
+            color: #8b0000;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+
+        /* Login Section */
+        .login-section { /* Inherits .card */
+            text-align: center;
+        }
+        .login-section h1 { /* from .card-header if used, or style separately */
+            font-size: 1.8rem; color: #8b0000; margin-bottom: 15px;
+        }
+        .login-section p { margin-bottom: 25px; color: #555; font-size: 1.05rem; }
+        .login-btn {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            background: #f9f9f9;
-            padding: 15px;
+            justify-content: center;
+            width: 100%;
+            max-width: 320px; /* Max width for login buttons */
+            margin: 0 auto 15px auto; /* Centering */
+            padding: 12px 20px;
             border-radius: 8px;
-        }
-        .user-info img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
-            border: 2px solid #8b0000;
-        }
-        .user-info div h2 { margin: 0; font-size: 18px; color: #333; }
-        #logoutBtn {
-            background: #8b0000;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            border: 1px solid transparent;
             color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 5px;
-            data-translate-key="logout"
+        }
+        .login-btn i { margin-right: 12px; font-size: 1.25rem; }
+        .google-btn { background-color: #db4437; }
+        .google-btn:hover { background-color: #c33d2e; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .facebook-btn { background-color: #3b5998; }
+        .facebook-btn:hover { background-color: #324d84; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+        /* App Section - User Info */
+        .user-info { /* Inherits .card styling */
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-info img#userPhoto { /* More specific selector */
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #8b0000;
+            object-fit: cover;
+        }
+        .user-info div h2 { margin: 0 0 5px 0; font-size: 1.3rem; color: #333; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; } /* Explicitly use sans-serif */
+        #logoutBtn { /* Uses .btn-primary class implicitly through JS or apply here */
+            background: #8b0000; color: white; padding: 8px 15px; font-size: 0.9rem;
         }
         #logoutBtn:hover { background: #6a0000; }
 
-        .post-form {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+
+        /* Post Form */
+        .post-form { /* Inherits .card styling */
         }
-        .post-form h3 { margin-bottom: 15px; color: #333; data-translate-key="createPostTitle"; }
-        /* postContent placeholder handled by JS */
-        /* postImageFile label text handled by JS if needed, or give span inside label a key */
-        .post-form label[for="postImageFile"] span { data-translate-key="addImageOptional"; }
-        /* postBtn text handled by JS */
+        .post-form h3 { /* from .card-header if used, or style here */
+           font-size: 1.5rem; color: #8b0000; margin-bottom: 20px;
+        }
+        /* textarea#postContent uses global textarea styles */
+
+        label[for="postImageFile"] {
+            display: inline-flex; /* Changed from inline-block for align-items */
+            align-items: center;
+            gap: 8px;
+            background-color: #e9ecef;
+            border: 1px dashed #ced4da; /* Dashed border for upload area */
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            color: #495057;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        label[for="postImageFile"]:hover {
+            background-color: #dde2e6;
+            border-color: #adb5bd;
+        }
+        label[for="postImageFile"] i { color: #8b0000; }
+        #imagePreview {
+            max-width: 100%;
+            max-height: 250px; /* Increased max height */
+            display: none;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            object-fit: cover;
+        }
+        #uploadProgressContainer { margin-bottom: 15px; }
+        #uploadProgressText { font-size: 0.9em; text-align: center; color: #555; }
+        #postBtn { /* Uses .btn-primary */
+           width: 100%;
+           padding: 12px 20px;
+        }
 
 
+        /* Posts Container & Individual Post */
         .posts-container h3 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 24px;
-            border-bottom: 2px solid #8b0000;
-            padding-bottom: 10px;
-            data-translate-key="feedTitle";
+            font-size: 1.8rem; /* Adjusted size */
+            color: #8b0000;
+            border-bottom: 2px solid #e0e0e0; /* Lighter border */
+            padding-bottom: 12px;
+            margin-bottom: 25px;
         }
-        /* Dynamic messages like "No posts yet..." handled in JS loadPosts */
-        .post {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
+        .post { /* Inherits .card styling */
         }
         .post-header {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px; /* Increased margin */
+            gap: 12px;
         }
         .post-header img {
-            width: 40px;
-            height: 40px;
+            width: 48px; /* Slightly larger */
+            height: 48px;
             border-radius: 50%;
-            margin-right: 10px;
-            border: 1px solid #eee;
+            border: 2px solid #f0f0f0; /* Light border, could be user-specific color */
+            object-fit: cover;
         }
-        .post-header strong { font-size: 16px; color: #333; }
-        .post-header span.timestamp { font-size: 12px; color: #777; margin-left: auto; }
+        .post-header strong { font-size: 1.1rem; color: #2c3e50; font-weight: 600; font-family: inherit; } /* Sans-serif for username */
+        .post-header span.timestamp { font-size: 0.85rem; color: #7f8c8d; margin-left: auto; }
+
         .post-content p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #444;
-            margin-bottom: 10px;
-            white-space: pre-wrap;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #4a4a4a; /* Softer black */
+            margin-bottom: 12px;
+            white-space: pre-wrap; /* Keep for newlines */
         }
         .post-content img.post-image {
             max-width: 100%;
             border-radius: 8px;
-            margin-top: 10px;
+            margin-top: 15px;
             display: block;
-            border: 1px solid #eee;
+            border: 1px solid #e9ecef;
         }
 
         .post-actions {
             display: flex;
-            margin-top: 10px;
-            gap: 15px;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
+            margin-top: 15px;
+            gap: 10px; /* Reduced gap */
+            border-top: 1px solid #f0f0f0; /* Lighter separator */
+            padding-top: 15px;
             align-items: center;
+            flex-wrap: wrap; /* Allow actions to wrap */
         }
         .post-actions button {
             background: none;
             border: none;
             cursor: pointer;
-            color: #555;
+            color: #555e64; /* Cool gray for action text */
             display: flex;
             align-items: center;
-            font-size: 14px;
-            padding: 5px;
+            font-size: 0.9rem;
+            padding: 8px 10px; /* Consistent padding */
+            border-radius: 6px;
+            transition: background-color 0.2s, color 0.2s;
         }
-        .post-actions button i { font-size: 18px; margin-right: 8px; color: #8b0000; }
+        .post-actions button i { font-size: 1.2rem; margin-right: 8px; color: #8b0000; transition: color 0.2s; }
+        .post-actions button:hover { background-color: #f0f0f0; }
         .post-actions button:hover i, .post-actions button:hover span { color: #6a0000; }
-        .like-btn.liked i { color: red !important; }
-        .post-actions button span.like-text { /* data-translate-key="likes" - handled in createPostElement */ }
-        .post-actions button span.comment-text { /* data-translate-key="comments" - handled in createPostElement */ }
-        .post-actions button.delete-post-btn span { data-translate-key="deleteAction"; }
+        .like-btn.liked i { color: #e74c3c !important; /* Brighter, distinct red for liked */ }
+        .delete-post-btn { margin-left: auto !important; } /* Ensure it stays right */
+        .delete-post-btn i { color: #c0392b !important; } /* Specific delete icon color */
+        .delete-post-btn:hover i, .delete-post-btn:hover span { color: #a52f23 !important; }
 
 
-        .comments-area { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
-        .comments-list .comment {
-            margin-bottom: 12px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            font-size: 14px;
+        /* Comments Area */
+        .comments-area {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #dde2e6; /* Dashed line for comments section */
         }
-        /* commentText placeholder handled by JS */
-        /* comment submit button text handled by JS */
-        .comment-actions button.reply-to-comment-btn span { data-translate-key="replyAction"; }
-        /* reply text placeholder handled by JS */
-        /* reply submit button text handled by JS */
-
-
-        .comment-header { display: flex; align-items: center; margin-bottom: 5px; }
-        .comment-header img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; }
-        .comment-header strong { font-size: 13px; color: #333; }
-        .comment-header .timestamp { font-size: 11px; color: #888; margin-left: auto; }
-        .comment-content p { margin: 0 0 5px 0; color: #555; white-space: pre-wrap; }
+        .comments-list .comment {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa; /* Slightly off-white for comments */
+            border-radius: 8px;
+            border: 1px solid #e9ecef; /* Subtle border */
+            font-size: 0.95rem;
+        }
+        .comment-header { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; }
+        .comment-header img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+        .comment-header strong { font-size: 0.9rem; color: #333; font-weight: 600; font-family: inherit; } /* Sans-serif for username */
+        .comment-header .timestamp { font-size: 0.8rem; color: #888; margin-left: auto; }
+        .comment-content p { margin: 0 0 8px 0; color: #555; white-space: pre-wrap; line-height: 1.6; }
+        .comment-content img.comment-image {
+            max-width: 220px; /* Adjusted */
+            max-height: 160px; /* Adjusted */
+            border-radius: 6px;
+            margin-top: 8px;
+            display: block;
+            border: 1px solid #eee;
+        }
 
         .comment-form-actual {
             display: flex;
-            align-items: center;
+            align-items: stretch; /* Align items to stretch vertically */
             margin-top: 10px;
-            gap: 5px;
+            gap: 8px;
         }
         .comment-form-actual input[type="text"].comment-text-input {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            /* padding: 10px 12px; Inherits global */
+            /* border: 1px solid #ddd; Inherits global */
+            /* border-radius: 6px; Inherits global */
+            font-size: 0.9rem;
+            height: 42px; /* Explicit height */
+            margin-bottom: 0; /* Override global margin */
         }
         .comment-image-upload-label {
-            padding: 8px 10px;
+            padding: 0 12px; /* Horizontal padding only */
             background-color: #f0f0f0;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 40px;
-            box-sizing: border-box;
+            height: 42px; /* Match input height */
+            transition: background-color 0.3s;
+            margin-bottom: 0;
         }
         .comment-image-upload-label:hover { background-color: #e0e0e0; }
-        .comment-image-upload-label i { color: #555; font-size: 16px; }
+        .comment-image-upload-label i { color: #555; font-size: 1.1rem; }
         .comment-form-actual button.comment-submit-btn {
-            background: #8b0000;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            /* background: #8b0000; Inherits .btn-primary */
+            /* color: white; Inherits .btn-primary */
+            /* border: none; Inherits .btn-primary */
+            padding: 0 18px; /* Horizontal padding only */
+            /* border-radius: 6px; Inherits global button */
             cursor: pointer;
             font-weight: bold;
-            height: 40px;
-            box-sizing: border-box;
+            height: 42px; /* Match input height */
+            font-size: 0.9rem;
         }
-        .comment-form-actual button.comment-submit-btn:hover { background: #6a0000; }
+        /* .comment-form-actual button.comment-submit-btn:hover { background: #6a0000; } Inherits .btn-primary hover */
         .comment-image-preview {
-            max-width: 80px;
-            max-height: 80px;
+            max-width: 100px;
+            max-height: 100px;
             display: none;
-            margin-top: 8px;
+            margin-top: 10px;
             border-radius: 4px;
             border: 1px solid #eee;
             object-fit: cover;
         }
         .comment-upload-progress {
-            font-size: 0.8em;
-            margin-top: 5px;
+            font-size: 0.85em;
+            margin-top: 8px;
             color: #555;
             display: none;
             width: 100%;
             text-align: left;
             padding-left: 5px;
         }
-        .comment-content img.comment-image {
-            max-width: 200px;
-            max-height: 150px;
-            border-radius: 5px;
-            margin-top: 8px;
-            display: block;
-            border: 1px solid #eee;
-        }
 
         .comment-actions {
             display: flex;
             gap: 10px;
             align-items: center;
-            margin-top: 5px;
+            margin-top: 8px;
         }
-        .reply-to-comment-btn {
-            font-size: 0.8em !important;
-            color: #555 !important;
+        .reply-to-comment-btn { /* This is a button element */
+            font-size: 0.85rem !important; /* Keep specificity */
+            color: #555e64 !important;
             background: none !important;
             border: none !important;
             cursor: pointer !important;
-            padding: 2px 5px !important;
+            padding: 4px 6px !important; /* Smaller padding */
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
         .reply-to-comment-btn i {
-            margin-right: 4px !important;
-            font-size: 1em !important;
+            margin-right: 0 !important; /* Reset margin */
+            font-size: 0.9em !important;
             color: #8b0000 !important;
         }
          .reply-to-comment-btn:hover, .reply-to-comment-btn:hover i, .reply-to-comment-btn:hover span {
             color: #6a0000 !important;
+            text-decoration: underline;
         }
         .replies-list {
-            margin-left: 20px;
-            margin-top: 10px;
+            margin-left: 20px; /* Indent replies */
+            margin-top: 12px;
+            padding-left: 15px;
+            border-left: 2px solid #e9ecef; /* Visual cue for reply thread */
         }
-        .comment-reply {
-            border-left: 2px solid #ddd;
-            padding-left: 10px;
-            font-size: 0.9em;
-            padding: 8px;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-            margin-bottom: 8px;
+        .comment-reply { /* A single reply item */
+            border: 1px solid #f0f0f0;
+            padding: 10px;
+            background-color: #fff; /* Replies on white background for contrast */
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.9em; /* Slightly smaller than main comment */
         }
         .comment-reply .comment-header img {
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
         }
         .reply-form-container {
-            margin-left: 20px;
-            margin-top: 5px;
+            margin-left: 0; /* Align with parent comment's action */
+            margin-top: 10px;
         }
         .reply-form-actual {
             display: flex;
-            gap: 5px;
-            align-items: center;
+            gap: 8px;
+            align-items: stretch; /* Stretch for consistent height */
         }
         .reply-form-actual input.reply-text-input {
             flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+            padding: 8px 10px;
+            /* border: 1px solid #ccc; Inherits global */
+            /* border-radius: 6px; Inherits global */
             font-size: 0.9em;
+            height: 40px; /* Explicit height */
+             margin-bottom: 0;
         }
         .reply-form-actual button.reply-submit-btn {
-            padding: 8px 12px;
-            background: #5cb85c;
+            padding: 0 15px;
+            background: #28a745; /* Green for reply confirm */
             color: white;
-            border: none;
-            border-radius: 3px;
+            /* border: none; Inherits global */
+            /* border-radius: 6px; Inherits global */
             cursor: pointer;
             font-size: 0.9em;
             font-weight: bold;
+            height: 40px;
         }
-        .reply-form-actual button.reply-submit-btn:hover { background: #4cae4c; }
+        .reply-form-actual button.reply-submit-btn:hover { background: #218838; }
 
-        .post-form button#postBtn:disabled,
-        .comment-form-actual button.comment-submit-btn:disabled,
-        .reply-form-actual button.reply-submit-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            opacity: 0.7;
+        /* Disabled button states are handled by global button style */
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            html { font-size: 15px; } /* Slightly smaller base on mobile */
+
+            .desktop-nav { display: none; }
+            .bottom-nav { display: flex; } /* Show bottom nav */
+
+            .header {
+                justify-content: space-between; /* Align items to sides */
+                padding: 15px;
+            }
+            .header-logo {
+                position: static; /* No longer absolute */
+                transform: none;
+                height: 50px; /* Smaller logo */
+                width: 50px;
+                margin-right: 10px;
+            }
+            .header-text-content {
+                flex-grow: 1;
+                text-align: center;
+                margin-left: 0;
+                margin-right: 40px; /* Space for a potential menu toggle on the right */
+            }
+             /* Add a menu toggle button for mobile header if not using bottom nav for menu */
+            /* This seems to be handled by bottomNavMenuBtn for the side menu */
+
+
+            .header h1 {
+                font-size: 1.5rem; /* Adjusted for mobile */
+                letter-spacing: 1.5px;
+                margin-bottom: 3px;
+            }
+            .header h2 {
+                font-size: 0.85rem; /* Adjusted for mobile */
+                letter-spacing: 0.2px;
+                color: #f0f0f0;
+            }
+
+            .user-info { flex-direction: column; text-align: center; }
+            .user-info #logoutBtn {
+                /* display: none !important; This was in original, but seems like it should be visible */
+                margin-top: 10px;
+            }
+
+            .container { padding: 20px 10px; }
+            .card { padding: 20px; margin-bottom: 20px; }
+            /* .card-header class is available for use if needed */
+            .posts-container h3 { font-size: 1.5rem; margin-bottom: 20px; padding-bottom: 10px; }
+
+            .post-header img { width: 40px; height: 40px; }
+            .post-header strong { font-size: 1rem; }
+            .post-header span.timestamp { font-size: 0.8rem; }
+            .post-content p { font-size: 0.95rem; }
+
+            .login-section h1 {font-size: 1.6rem;}
+            .login-section p {font-size: 1rem;}
+            .login-btn {max-width: 100%;}
+
+            .post-form h3 {font-size: 1.3rem;}
+
+            .comments-list .comment { padding: 12px; font-size: 0.9rem; }
+            .comment-header img {width: 30px; height: 30px;}
+            .comment-header strong {font-size: 0.85rem;}
+
+            .replies-list { margin-left: 15px; padding-left: 10px; }
+            .comment-reply { padding: 8px; font-size: 0.85em; }
         }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.3rem; }
+            .header h2 { font-size: 0.75rem; }
+            .bottom-nav a span { font-size: 0.7rem; } /* Even smaller text if needed */
+            .bottom-nav a i { font-size: 1.2rem; }
+
+            .post-actions button { font-size: 0.85rem; padding: 6px 8px; }
+            .post-actions button i { font-size: 1.1rem; }
+        }
+
     </style>
 </head>
 <body>
-    <nav class="mobile-menu">
+    <nav class="mobile-menu" id="mobileMenu"> <!-- Added ID for easier JS targeting if needed -->
         <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
         <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
         <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
@@ -545,6 +750,8 @@
         <h1>VIRAT SWARUP</h1>
         <h2 data-translate-key="headerSubtitle">The Supreme Divine of Every Faith</h2>
       </div>
+      <!-- Placeholder for a potential mobile menu toggle if not using bottom nav for it -->
+      <!-- <button id="mobileMenuToggle" class="mobile-menu-toggle"><i class="fas fa-bars"></i></button> -->
     </header>
 
     <nav class="desktop-nav">
@@ -568,7 +775,7 @@
     </nav>
 
     <div class="container">
-        <div class="login-section" id="loginSection">
+        <div class="login-section card" id="loginSection"> <!-- Added .card -->
             <h1 data-translate-key="welcomeTitle">Welcome</h1>
             <p style="margin-bottom: 20px; color: #555;" data-translate-key="signInToConnect">Sign in to share and connect.</p>
             <button class="login-btn google-btn" id="googleLoginBtn">
@@ -579,29 +786,29 @@
             </button>
         </div>
 
-        <div class="app-section" id="appSection">
-            <div class="user-info">
+        <div class="app-section" id="appSection" style="display: none;"> <!-- Ensure this is hidden initially by JS or style -->
+            <div class="user-info card" id="userInfoCard"> <!-- Added .card -->
                 <img id="userPhoto" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="User Photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
                 <div>
                     <h2 id="userName"></h2>
-                    <button id="logoutBtn" data-translate-key="logout">Logout</button>
+                    <button id="logoutBtn" class="btn-primary" data-translate-key="logout">Logout</button> <!-- Added .btn-primary -->
                 </div>
             </div>
 
-            <div class="post-form" id="post-form-container">
+            <div class="post-form card" id="post-form-container"> <!-- Added .card -->
                 <h3 data-translate-key="createPostTitle">Create Post</h3>
                 <textarea id="postContent" data-translate-key-placeholder="postPlaceholder"></textarea>
 
-                <label for="postImageFile" style="cursor: pointer; display: inline-block; margin-bottom: 10px; color: #555; padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                <label for="postImageFile">
                     <i class="fas fa-image"></i> <span data-translate-key="addImageOptional">Add Image (Optional)</span>
                 </label>
                 <input type="file" id="postImageFile" accept="image/*" style="display: none;">
-                <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 100%; max-height: 200px; display: none; margin-bottom: 10px; border-radius: 5px; border: 1px solid #eee;">
-                <div id="uploadProgressContainer" style="display: none; margin-bottom: 10px;">
-                    <p id="uploadProgressText" style="font-size: 0.9em; text-align: center;"></p>
+                <img id="imagePreview" src="#" alt="Image Preview">
+                <div id="uploadProgressContainer" style="display: none;">
+                    <p id="uploadProgressText"></p>
                 </div>
 
-                <button id="postBtn" data-translate-key="postButton">Post</button>
+                <button id="postBtn" class="btn-primary" data-translate-key="postButton">Post</button> <!-- Added .btn-primary -->
             </div>
 
             <div class="posts-container" id="postsContainer">
@@ -620,9 +827,10 @@
 
     // --- START FIREBASE CONFIGURATION ---
     const firebaseConfig = {
-      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
+      apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Keep your actual API key secure
       authDomain: "viratsawarup.firebaseapp.com",
       projectId: "viratsawarup",
+      // storageBucket: "viratsawarup.appspot.com", // Often needed for Firebase Storage if used directly
       messagingSenderId: "264071748020",
       appId: "1:264071748020:web:c939e9a9cdc14e80f77ae1",
       measurementId: "G-7GJQPJCR1L"
@@ -678,7 +886,9 @@
             commentContentRequired: "Comment text or an image is required.",
             loginRequiredToReply: "Please log in to reply.",
             replyTextRequired: "Reply text cannot be empty.",
-            loginRequiredToLike: "Please log in to like posts."
+            loginRequiredToLike: "Please log in to like posts.",
+            signInError: "Sign-in error",
+            postError: "Error creating post"
         },
         ne: {
             headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा",
@@ -723,7 +933,9 @@
             commentContentRequired: "टिप्पणी पाठ वा फोटो आवश्यक छ।",
             loginRequiredToReply: "कृपया जवाफ दिन लग इन गर्नुहोस्।",
             replyTextRequired: "जवाफ खाली हुन सक्दैन।",
-            loginRequiredToLike: "पोस्ट लाइक गर्न कृपया लग इन गर्नुहोस्।"
+            loginRequiredToLike: "पोस्ट लाइक गर्न कृपया लग इन गर्नुहोस्。",
+            signInError: "साइन-इन त्रुटि",
+            postError: "पोस्ट बनाउँदा त्रुटि"
         },
         hi: {
             headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा",
@@ -768,7 +980,9 @@
             commentContentRequired: "टिप्पणी पाठ या एक छवि आवश्यक है।",
             loginRequiredToReply: "उत्तर देने के लिए कृपया लॉग इन करें।",
             replyTextRequired: "उत्तर पाठ खाली नहीं हो सकता।",
-            loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।"
+            loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।",
+            signInError: "साइन-इन में त्रुटि",
+            postError: "पोस्ट बनाने में त्रुटि"
         }
     };
 
@@ -778,26 +992,26 @@
         currentLanguage = lang;
         localStorage.setItem('selectedLanguage', lang);
         applyTranslations();
-        // Update active class for language options
         document.querySelectorAll('.language-options a').forEach(a => {
             a.classList.remove('lang-active');
             if (a.dataset.lang === lang) {
                 a.classList.add('lang-active');
             }
         });
-        // Reload posts to apply translations to dynamic parts like "Likes", "Comments" text
-        if (auth.currentUser) { // Only if user is logged in and posts are visible
+        if (auth.currentUser) {
             loadPosts();
-        } else { // If user is logged out, still apply translations to static messages like "Please log in to see feed"
+        } else {
             const loginMessageKey = 'loginToSeeFeed';
             const translatedLoginMessage = translations[currentLanguage]?.[loginMessageKey] || translations.en[loginMessageKey];
-             if(elements.postsContainer && elements.appSection.style.display === 'none') {
-                elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${translations[currentLanguage]?.feedTitle || translations.en.feedTitle}</h3><p>${translatedLoginMessage}</p>`;
+             if(elements.postsContainer && elements.appSection.style.display === 'none') { // Check if appSection is hidden
+                elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${translations[currentLanguage]?.feedTitle || translations.en.feedTitle}</h3><p class="empty-feed-message">${translatedLoginMessage}</p>`;
             }
         }
+         // Update HTML lang attribute
+        document.documentElement.lang = lang;
     }
 
-    function _(key, fallbackLang = 'en') { // Helper function to get translation
+    function _(key, fallbackLang = 'en') {
         return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
     }
 
@@ -810,15 +1024,11 @@
             const key = element.dataset.translateKeyPlaceholder;
             element.placeholder = _(key);
         });
-         // For buttons that might have their text changed programmatically (like Post button)
         if (elements.postBtn && !elements.postBtn.disabled) {
             elements.postBtn.textContent = _('postButton');
         }
-        // Translate titles set by JS that don't have data-translate-key
-        if(document.title && !document.head.querySelector('title[data-translate-key]')) {
-             // Title tag is tricky, better to set it once or handle server-side for SEO
-        }
-
+        // For dynamic title (though it's better to set once)
+        // document.title = _('pageTitle', 'en'); // Example if you had a pageTitle key
     }
     // --- END TRANSLATION LOGIC ---
 
@@ -834,7 +1044,7 @@
         postBtn: document.getElementById('postBtn'),
         postContent: document.getElementById('postContent'),
         postsContainer: document.getElementById('postsContainer'),
-        mobileMenu: document.querySelector('.mobile-menu'),
+        mobileMenu: document.getElementById('mobileMenu'),
         postImageFile: document.getElementById('postImageFile'),
         imagePreview: document.getElementById('imagePreview'),
         uploadProgressContainer: document.getElementById('uploadProgressContainer'),
@@ -846,12 +1056,10 @@
         languageOptionsDiv: document.querySelector('.language-options')
     };
 
-    if (elements.languageSelectLabel) {
+    if (elements.languageSelectLabel && elements.languageOptionsDiv) {
         elements.languageSelectLabel.addEventListener('click', () => {
             const optionsDiv = elements.languageOptionsDiv;
-            if (optionsDiv) {
-                optionsDiv.style.display = optionsDiv.style.display === 'none' || optionsDiv.style.display === '' ? 'block' : 'none';
-            }
+            optionsDiv.style.display = optionsDiv.style.display === 'none' || optionsDiv.style.display === '' ? 'block' : 'none';
         });
     }
 
@@ -860,10 +1068,7 @@
             e.preventDefault();
             const lang = e.currentTarget.dataset.lang;
             setLanguage(lang);
-            if (elements.languageOptionsDiv) elements.languageOptionsDiv.style.display = 'none'; // Hide options after selection
-            if (elements.mobileMenu.classList.contains('active')) { // Optionally close menu
-                 // toggleMenu(); // Uncomment to close menu after language selection
-            }
+            if (elements.languageOptionsDiv) elements.languageOptionsDiv.style.display = 'none';
         });
     });
 
@@ -892,19 +1097,19 @@
     auth.onAuthStateChanged(user => {
         if (user) {
             if(elements.loginSection) elements.loginSection.style.display = 'none';
-            if(elements.appSection) elements.appSection.style.display = 'block';
+            if(elements.appSection) elements.appSection.style.display = 'block'; // Ensure this is block not inheriting from .card initially
             if(elements.userPhoto) elements.userPhoto.src = user.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
             if(elements.userName) elements.userName.textContent = user.displayName || 'User';
 
             if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'none';
             if (elements.mobileLogoutLink) elements.mobileLogoutLink.style.display = 'flex';
 
-            loadPosts(); // This will now use translated strings
+            loadPosts();
         } else {
-            if(elements.loginSection) elements.loginSection.style.display = 'block';
+            if(elements.loginSection) elements.loginSection.style.display = 'block'; // This should be .card, so block is fine
             if(elements.appSection) elements.appSection.style.display = 'none';
             if(elements.postsContainer) {
-                 elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_('feedTitle')}</h3><p>${_('loginToSeeFeed')}</p>`;
+                 elements.postsContainer.innerHTML = `<h3 data-translate-key="feedTitle">${_('feedTitle')}</h3><p class="empty-feed-message">${_('loginToSeeFeed')}</p>`;
             }
 
             if (elements.mobileLoginLink) elements.mobileLoginLink.style.display = 'flex';
@@ -915,7 +1120,7 @@
                 postsUnsubscribe = null;
             }
         }
-        applyTranslations(); // Apply translations after auth state change
+        applyTranslations();
     });
 
     async function handleAuth(provider) {
@@ -926,13 +1131,13 @@
             if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
                 return;
             }
-            alert(_('signInError', 'en') + `: ${error.message}`); // Basic translation for generic error
+            alert(_('signInError') + `: ${error.message}`);
         }
     }
 
     if (elements.googleLoginBtn) elements.googleLoginBtn.addEventListener('click', () => handleAuth(new firebase.auth.GoogleAuthProvider()));
     if (elements.facebookLoginBtn) elements.facebookLoginBtn.addEventListener('click', () => {
-        alert("Facebook login requires additional developer setup. Please use Google Sign-In."); // Kept simple for now
+        alert("Facebook login requires additional developer setup and permissions review. Please use Google Sign-In for now.");
     });
 
     if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', () => auth.signOut());
@@ -963,7 +1168,7 @@
             }
 
             elements.postBtn.disabled = true;
-            elements.postBtn.textContent = _('postingButton');
+            elements.postBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; // Added spinner
             if(elements.uploadProgressContainer) elements.uploadProgressContainer.style.display = 'none';
             if(elements.uploadProgressText) elements.uploadProgressText.textContent = '';
 
@@ -995,7 +1200,7 @@
                     userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     likes: [],
-                    comments: []
+                    comments: [] // Initialize as empty array
                 };
                 if (imageUrl) {
                     postData.imageUrl = imageUrl;
@@ -1005,25 +1210,26 @@
                 await db.collection('posts').add(postData);
 
                 if(elements.postContent) elements.postContent.value = '';
-                if(elements.postImageFile) elements.postImageFile.value = null;
+                if(elements.postImageFile) elements.postImageFile.value = null; // Reset file input
                 if(elements.imagePreview) {
                     elements.imagePreview.src = '#';
                     elements.imagePreview.style.display = 'none';
                 }
             } catch (error) {
                 console.error("Post Error:", error);
-                alert(_('postError', 'en') + `: ${error.message}`);
+                alert(_('postError') + `: ${error.message}`);
                 if(elements.uploadProgressText && elements.uploadProgressContainer && elements.uploadProgressContainer.style.display === 'block') {
                      elements.uploadProgressText.textContent = _('uploadFailed');
                 }
             } finally {
                 if(elements.postBtn) {
                     elements.postBtn.disabled = false;
-                    elements.postBtn.textContent = _('postButton');
+                    elements.postBtn.textContent = _('postButton'); // Reset text
                 }
                 setTimeout(() => {
                     if(elements.uploadProgressContainer && elements.uploadProgressText) {
-                        if (!elements.uploadProgressText.textContent.toLowerCase().includes('failed')) { // Check for generic fail
+                        // Only hide if not showing a failure message
+                        if (elements.uploadProgressText.textContent && !elements.uploadProgressText.textContent.toLowerCase().includes('failed')) {
                             elements.uploadProgressContainer.style.display = 'none';
                             elements.uploadProgressText.textContent = '';
                         }
@@ -1036,8 +1242,17 @@
     let postsUnsubscribe = null;
     function loadPosts() {
         if (postsUnsubscribe) postsUnsubscribe();
-        const feedTitleElement = elements.postsContainer.querySelector('h3') || document.createElement('h3');
-        feedTitleElement.setAttribute('data-translate-key', 'feedTitle');
+
+        // Ensure feed title element exists or create it
+        let feedTitleElement = elements.postsContainer.querySelector('h3[data-translate-key="feedTitle"]');
+        if (!feedTitleElement) {
+            feedTitleElement = document.createElement('h3');
+            feedTitleElement.setAttribute('data-translate-key', 'feedTitle');
+            // Prepend if not first child or if postsContainer is empty
+            if (!elements.postsContainer.firstChild || elements.postsContainer.firstChild.nodeName !== 'H3') {
+                 elements.postsContainer.prepend(feedTitleElement);
+            }
+        }
         feedTitleElement.textContent = _('feedTitle');
 
 
@@ -1045,18 +1260,12 @@
           .orderBy('timestamp', 'desc')
           .onSnapshot(snapshot => {
               if (elements.postsContainer) {
-                  // Clear only posts, keep the title
-                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .no-posts-message, .error-loading-message');
+                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message');
                   existingPosts.forEach(el => el.remove());
-
-                  if (!elements.postsContainer.querySelector('h3')) { // Ensure title is there
-                     elements.postsContainer.prepend(feedTitleElement);
-                  }
-
 
                   if (snapshot.empty) {
                       const p = document.createElement('p');
-                      p.className = 'no-posts-message';
+                      p.className = 'empty-feed-message'; // For styling if needed
                       p.textContent = _('noPosts');
                       elements.postsContainer.appendChild(p);
                       return;
@@ -1066,13 +1275,10 @@
           }, error => {
               console.error("Error loading posts: ", error);
               if (elements.postsContainer) {
-                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .no-posts-message, .error-loading-message');
+                  const existingPosts = elements.postsContainer.querySelectorAll('.post, .empty-feed-message, .error-loading-message');
                   existingPosts.forEach(el => el.remove());
-                  if (!elements.postsContainer.querySelector('h3')) {
-                     elements.postsContainer.prepend(feedTitleElement);
-                  }
                   const p = document.createElement('p');
-                  p.className = 'error-loading-message';
+                  p.className = 'error-loading-message'; // For styling if needed
                   p.textContent = _('errorLoadingPosts');
                   elements.postsContainer.appendChild(p);
               }
@@ -1083,27 +1289,31 @@
         const currentUser = auth.currentUser;
         const isLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
         const postDiv = document.createElement('div');
-        postDiv.className = 'post';
+        postDiv.className = 'post card'; // Added .card
         postDiv.setAttribute('data-post-id', postId);
 
         const formattedTimestamp = post.timestamp && typeof post.timestamp.toDate === 'function'
-                                ? post.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0]) // Use language for date formatting
+                                ? post.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'})
                                 : (post.timestamp ? new Date(post.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
 
         let contentHTML = '';
-        if (post.content) {
+        if (post.content) { // Ensure post.content is not empty before creating <p>
             contentHTML += `<p>${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
         }
         if (post.imageUrl) {
             contentHTML += `<img src="${post.imageUrl}" alt="Post image" class="post-image" onerror="this.style.display='none';">`;
         }
+        if (!contentHTML) { // If both content and imageUrl are empty, provide a placeholder or leave it be
+            contentHTML = `<p style="min-height:1.5em;"> </p>`; // Ensures div has some height
+        }
+
         postDiv.innerHTML = `
             <div class="post-header">
-                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
-                <div><strong>${escapeHTML(post.userName)}</strong></div>
+                <img src="${post.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(post.userName)}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';">
+                <strong>${escapeHTML(post.userName)}</strong>
                 <span class="timestamp">${formattedTimestamp}</span>
             </div>
-            <div class="post-content">${contentHTML || '<p> </p>'}</div>
+            <div class="post-content">${contentHTML}</div>
             <div class="post-actions">
                 <button class="like-btn ${isLiked ? 'liked' : ''}" data-post-id="${postId}">
                     <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
@@ -1111,10 +1321,10 @@
                 </button>
                 <button class="comment-toggle-btn" data-post-id="${postId}">
                     <i class="far fa-comment"></i>
-                    <span class="comment-text">${post.comments ? post.comments.length : 0} ${_('comments')}</span>
+                    <span class="comment-text">${Array.isArray(post.comments) ? post.comments.length : 0} ${_('comments')}</span>
                 </button>
                 ${currentUser && post.userId === currentUser.uid ?
-                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}" style="margin-left: auto; color: #cc0000;">
+                    `<button class="delete-post-btn" data-post-id="${postId}" data-image-url="${post.imageUrl || ''}" data-image-public-id="${post.imagePublicId || ''}">
                         <i class="fas fa-trash"></i> <span data-translate-key="deleteAction">${_('deleteAction')}</span>
                      </button>` : ''}
             </div>
@@ -1126,12 +1336,21 @@
                         <i class="fas fa-paperclip"></i>
                         <input type="file" name="commentImageFile" class="comment-image-input" accept="image/*" style="display: none;">
                     </label>
-                    <button type="submit" class="comment-submit-btn">${_('commentPostButton')}</button>
+                    <button type="submit" class="comment-submit-btn btn-primary">${_('commentPostButton')}</button> <!-- Added .btn-primary -->
                 </form>
-                <img src="#" alt="Comment image preview" class="comment-image-preview" style="display: none;">
-                <div class="comment-upload-progress" style="display: none;"></div>
+                <img src="#" alt="Comment image preview" class="comment-image-preview">
+                <div class="comment-upload-progress"></div>
             </div>`;
-        if (elements.postsContainer) elements.postsContainer.appendChild(postDiv);
+        if (elements.postsContainer) {
+            // Insert new posts after the H3 title
+            const titleElement = elements.postsContainer.querySelector('h3');
+            if (titleElement && titleElement.nextSibling) {
+                elements.postsContainer.insertBefore(postDiv, titleElement.nextSibling);
+            } else {
+                elements.postsContainer.appendChild(postDiv);
+            }
+        }
+
 
         const commentImageInput = postDiv.querySelector('.comment-image-input');
         const commentImagePreview = postDiv.querySelector('.comment-image-preview');
@@ -1154,15 +1373,15 @@
 
         const commentsList = postDiv.querySelector(`#comments-list-${postId}`);
         if (commentsList) {
-            if (post.comments && post.comments.length > 0) {
+            if (post.comments && Array.isArray(post.comments) && post.comments.length > 0) {
                 const sortedComments = [...post.comments].sort((a,b) => {
                     const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
                     const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                    return timeA - timeB;
+                    return timeA - timeB; // Ascending order for comments
                 });
                 sortedComments.forEach(comment => renderComment(comment, commentsList, postId));
             } else {
-                commentsList.innerHTML = `<p style="font-size:0.9em; color:#777; padding:5px 0;">${_('noCommentsYet')}</p>`;
+                commentsList.innerHTML = `<p style="font-size:0.9em; color:#777; padding:5px 0; text-align:center;">${_('noCommentsYet')}</p>`;
             }
         }
 
@@ -1178,15 +1397,27 @@
 
     async function handleDeletePost(postId, imageUrl, imagePublicId) {
         const currentUser = auth.currentUser;
-        if (!currentUser) { alert(_('loginRequiredToPost')); return; } // Re-using a similar message
+        if (!currentUser) { alert(_('loginRequiredToPost')); return; }
         if (!confirm(_('deletePostConfirm'))) return;
         const postRef = db.collection('posts').doc(postId);
         try {
             const doc = await postRef.get();
             if (doc.exists && doc.data().userId === currentUser.uid) {
+                // Note: Deleting images from Cloudinary usually requires backend/signed requests for security.
+                // This frontend attempt might not work if Cloudinary API has restrictions for unsigned deletion by public_id.
+                if (imagePublicId) {
+                    console.warn(`Attempting to delete image with public_id: ${escapeHTML(imagePublicId)}. This typically requires a signed API call from a backend for security.`);
+                    // Example: Simple deletion (might fail due to permissions if not configured for it)
+                    // await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/destroy`, {
+                    //     method: 'POST',
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify({ public_id: imagePublicId, api_key: 'YOUR_API_KEY', timestamp: Date.now(), signature: 'GENERATED_SIGNATURE' })
+                    // });
+                    // For now, just log it. Proper deletion is a backend task.
+                }
                 await postRef.delete();
-                if (imageUrl) console.warn(`Image at ${escapeHTML(imageUrl)} (public_id: ${escapeHTML(imagePublicId) || 'N/A'}) needs server-side deletion.`);
-            } else { alert("Permission denied or post not found."); } // Keep specific errors in English for now
+                // The post element will be removed by the onSnapshot listener automatically
+            } else { alert("Permission denied or post not found."); }
         } catch (error) {
             console.error("Error deleting post:", error);
             alert("Failed to delete post: " + error.message);
@@ -1211,7 +1442,7 @@
         if (!commentText && !imageFile) { alert(_('commentContentRequired')); return; }
 
         const submitButton = form.querySelector('.comment-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.textContent = _('postingButton'); }
+        if (submitButton) { submitButton.disabled = true; submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
         if(commentUploadProgress) { commentUploadProgress.textContent = ''; commentUploadProgress.style.display = 'none';}
 
         let commentImageUrl = null;
@@ -1234,15 +1465,15 @@
                 if(commentUploadProgress) commentUploadProgress.textContent = _('imageUploaded');
             }
 
-            const commentId = db.collection('posts').doc().id;
+            const commentId = db.collection('posts').doc().id; // Generate a unique ID for the comment
 
             const newComment = {
-                id: commentId,
+                id: commentId, // Store the ID within the comment object
                 userId: currentUser.uid,
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: commentText || "",
-                timestamp: new Date(),
+                timestamp: new Date(), // Use JS Date for immediate client-side rendering, Firestore converts to Timestamp
                 replies: [],
                 imageUrl: commentImageUrl || null,
                 imagePublicId: commentImagePublicId || null
@@ -1254,8 +1485,9 @@
             });
 
             if (commentTextInput) commentTextInput.value = '';
-            if (commentImageInput) commentImageInput.value = null;
+            if (commentImageInput) commentImageInput.value = null; // Reset file input
             if (commentImagePreview) { commentImagePreview.src = '#'; commentImagePreview.style.display = 'none';}
+            // Comment will be rendered by onSnapshot listener automatically
         } catch (error) {
             console.error("Error adding comment:", error);
             alert("Failed to add comment: " + error.message);
@@ -1299,34 +1531,39 @@
         if (!replyText) { alert(_('replyTextRequired')); return; }
 
         const submitButton = form.querySelector('.reply-submit-btn');
-        if (submitButton) { submitButton.disabled = true; submitButton.textContent = _('postingButton');}
+        if (submitButton) { submitButton.disabled = true; submitButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_('postingButton')}`; }
 
         const postRef = db.collection('posts').doc(postId);
         try {
              const newReply = {
+                id: db.collection('posts').doc().id, // Unique ID for reply
                 userId: currentUser.uid,
                 userName: currentUser.displayName || 'User',
                 userPhoto: currentUser.photoURL || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
                 text: replyText,
-                timestamp: new Date()
+                timestamp: new Date() // JS Date
             };
 
             await db.runTransaction(async (transaction) => {
                 const postDoc = await transaction.get(postRef);
                 if (!postDoc.exists) throw "Post document does not exist!";
                 const postData = postDoc.data();
-                const comments = postData.comments || [];
-                const updatedComments = comments.map(comment => {
-                    if (comment.id === parentCommentId) {
-                        const existingReplies = comment.replies || [];
-                        return { ...comment, replies: [...existingReplies, newReply] };
-                    }
-                    return comment;
-                });
-                transaction.update(postRef, { comments: updatedComments });
+                let comments = postData.comments && Array.isArray(postData.comments) ? [...postData.comments] : []; // Make a mutable copy
+                const commentIndex = comments.findIndex(c => c.id === parentCommentId);
+
+                if (commentIndex > -1) {
+                    const parentComment = comments[commentIndex];
+                    const existingReplies = parentComment.replies && Array.isArray(parentComment.replies) ? [...parentComment.replies] : [];
+                    existingReplies.push(newReply);
+                    comments[commentIndex] = { ...parentComment, replies: existingReplies };
+                    transaction.update(postRef, { comments: comments });
+                } else {
+                    throw "Parent comment not found!";
+                }
             });
             if (replyTextInput) replyTextInput.value = '';
-            toggleReplyForm(parentCommentId); // This might need to re-render if the form is closed
+            // Reply will be rendered by onSnapshot listener
+            // toggleReplyForm(parentCommentId); // Optionally close form
         } catch (error) {
             console.error("Error adding reply:", error);
             alert("Failed to add reply: " + error.message);
@@ -1338,9 +1575,10 @@
     function renderReply(reply, repliesListDiv) {
         const replyDiv = document.createElement('div');
         replyDiv.className = 'comment-reply';
+        replyDiv.setAttribute('data-reply-id', reply.id);
 
         const replyTimestamp = reply.timestamp && typeof reply.timestamp.toDate === 'function'
-                                ? reply.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0])
+                                ? reply.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'})
                                 : (reply.timestamp ? new Date(reply.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
 
         let replyContentHTML = '';
@@ -1349,37 +1587,39 @@
         }
         replyDiv.innerHTML = `
             <div class="comment-header">
-                <img src="${reply.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <img src="${reply.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(reply.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';">
                 <strong>${escapeHTML(reply.userName) || 'User'}</strong>
                 <span class="timestamp">${replyTimestamp}</span>
             </div>
-            <div class="comment-content">${replyContentHTML || '<p> </p>'}</div>`;
+            <div class="comment-content">${replyContentHTML || '<p style="min-height:1em;"> </p>'}</div>`;
         repliesListDiv.appendChild(replyDiv);
     }
 
     function renderComment(comment, commentsListElement, postId) {
+        // Remove "No comments yet" message if it exists
+        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]');
+        if(noCommentP) noCommentP.remove();
+
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
         commentDiv.setAttribute('data-comment-id', comment.id);
 
         const commentTimestamp = comment.timestamp && typeof comment.timestamp.toDate === 'function'
-                                ? comment.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0])
+                                ? comment.timestamp.toDate().toLocaleString(currentLanguage.split('-')[0], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'})
                                 : (comment.timestamp ? new Date(comment.timestamp).toLocaleString(currentLanguage.split('-')[0]) : 'Recently');
-
-        const noCommentP = commentsListElement.querySelector('p[style*="No comments yet"]'); // Might need a class for easier targeting
-        if(noCommentP) noCommentP.remove();
 
         let commentContentHTML = '';
         if (comment.text) commentContentHTML += `<p>${escapeHTML(comment.text).replace(/\n/g, '<br>')}</p>`;
         if (comment.imageUrl) commentContentHTML += `<img src="${comment.imageUrl}" alt="Comment image" class="comment-image" onerror="this.style.display='none';">`;
+        if (!commentContentHTML) commentContentHTML = `<p style="min-height:1.5em;"> </p>`;
 
         commentDiv.innerHTML = `
             <div class="comment-header">
-                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';">
+                <img src="${comment.userPhoto || 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='}" alt="${escapeHTML(comment.userName || 'User')}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; this.alt='User avatar';">
                 <strong>${escapeHTML(comment.userName) || 'User'}</strong>
                 <span class="timestamp">${commentTimestamp}</span>
             </div>
-            <div class="comment-content">${commentContentHTML || '<p> </p>'}</div>
+            <div class="comment-content">${commentContentHTML}</div>
             <div class="comment-actions">
                 <button class="reply-to-comment-btn" data-post-id="${postId}" data-comment-id="${comment.id}">
                     <i class="fas fa-reply"></i> <span data-translate-key="replyAction">${_('replyAction')}</span>
@@ -1395,11 +1635,11 @@
         commentsListElement.appendChild(commentDiv);
 
         const repliesListDiv = commentDiv.querySelector(`#replies-list-${comment.id}`);
-        if (comment.replies && comment.replies.length > 0) {
+        if (comment.replies && Array.isArray(comment.replies) && comment.replies.length > 0) {
             const sortedReplies = [...comment.replies].sort((a,b) => {
                 const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
                 const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-                return timeA - timeB;
+                return timeA - timeB; // Ascending for replies
             });
             sortedReplies.forEach(reply => renderReply(reply, repliesListDiv));
         }
@@ -1419,12 +1659,16 @@
                 const doc = await transaction.get(postRef);
                 if (!doc.exists) throw "Document does not exist!";
                 const postData = doc.data();
-                let currentLikes = postData.likes || [];
-                let newLikesArray = currentLikes.includes(currentUser.uid)
-                                   ? currentLikes.filter(uid => uid !== currentUser.uid)
-                                   : [...currentLikes, currentUser.uid];
+                let currentLikes = postData.likes && Array.isArray(postData.likes) ? postData.likes : [];
+                let newLikesArray;
+                if (currentLikes.includes(currentUser.uid)) {
+                    newLikesArray = currentLikes.filter(uid => uid !== currentUser.uid);
+                } else {
+                    newLikesArray = [...currentLikes, currentUser.uid];
+                }
                 transaction.update(postRef, { likes: newLikesArray });
             });
+            // UI will update via onSnapshot
         } catch (error) {
             console.error("Like transaction failed:", error);
             alert("Failed to update like: " + error.message);
@@ -1446,6 +1690,8 @@
     function toggleMenu() {
         if (elements.mobileMenu) {
             elements.mobileMenu.classList.toggle('active');
+            // Optional: Add/remove a class on body to prevent scrolling when menu is open
+            // document.body.classList.toggle('mobile-menu-open');
         }
     }
 
@@ -1454,15 +1700,13 @@
         const isLanguageOption = link.closest('.language-options');
 
         if (!isLanguageOption && elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
-             // Don't close menu if a language option itself is clicked, allow its own handler.
-             // Only close if it's a main navigation link.
             if (!link.closest('.language-select-label') && !link.dataset.lang) {
                  toggleMenu();
             }
         }
 
         const targetId = link.getAttribute('href');
-        if (targetId && targetId.startsWith('#') && targetId.length > 1 && link.classList.contains('nav-post-link')) { // only for specific scroll links
+        if (targetId && targetId.startsWith('#') && targetId.length > 1 && link.classList.contains('nav-post-link')) {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 event.preventDefault();
@@ -1479,17 +1723,20 @@
         });
     }
 
-    document.querySelectorAll('.mobile-menu a:not(.language-options a)').forEach(link => { // Exclude language options from this generic handler
+    document.querySelectorAll('.mobile-menu a:not(.language-options a)').forEach(link => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
             if (href && href.startsWith('#') && href.length > 1 && link.id !== 'mobileLogoutLink' && !link.closest('.language-select-label')) {
-                 // Only close if it's a direct scroll link within main menu items
                 if(link.classList.contains('nav-post-link') || link.id === 'mobileLoginLink') {
-                    closeMenuAndScroll(event);
+                    closeMenuAndScroll(event); // This already calls toggleMenu
+                } else { // For other # links that aren't special scroll links
+                     if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
+                        toggleMenu();
+                    }
                 }
             } else if (link.id === 'mobileLogoutLink') {
-                // This is handled by its own dedicated event listener
-            } else if (!link.closest('.language-select-label')) { // Standard page navigation
+                // Handled by its own listener
+            } else if (!link.closest('.language-select-label') && !link.dataset.lang) { // Standard page navigation
                 if (elements.mobileMenu && elements.mobileMenu.classList.contains('active')) {
                     toggleMenu();
                 }
@@ -1499,23 +1746,33 @@
 
     document.addEventListener('click', (e) => {
         if (elements.mobileMenu && elements.mobileMenu.classList.contains('active') &&
-            elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) &&
-            !elements.mobileMenu.contains(e.target)) { // Ensure click is not on menu itself or its toggle button
+            elements.bottomNavMenuBtn && !elements.bottomNavMenuBtn.contains(e.target) && // Click not on toggle button
+            !elements.mobileMenu.contains(e.target)) { // Click not inside menu
             toggleMenu();
         }
     });
 
     function escapeHTML(str) {
         if (str === null || str === undefined) return '';
-        const s = String(str);
-        const div = document.createElement('div');
-        div.appendChild(document.createTextNode(s));
-        return div.innerHTML;
+        const s = String(str); // Ensure it's a string
+        return s.replace(/[&<>"']/g, function (match) {
+            switch (match) {
+                case '&': return '&';
+                case '<': return '<';
+                case '>': return '>';
+                case '"': return '"';
+                case "'": return '''; // or '
+                default: return match;
+            }
+        });
     }
 
-    // Initial setup
     document.addEventListener('DOMContentLoaded', () => {
-        setLanguage(currentLanguage); // Apply initial language
+        setLanguage(currentLanguage);
+        // Ensure app section is hidden by default if user not logged in,
+        // auth.onAuthStateChanged will handle showing it.
+        if (elements.appSection) elements.appSection.style.display = 'none';
+        if (elements.loginSection) elements.loginSection.style.display = 'block'; // Show login by default
     });
 
     </script>
