@@ -15,7 +15,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
+        font-family: "Georgia", serif;
       }
 
       body {
@@ -23,56 +23,77 @@
         color: #2c2c2c;
       }
 
-      /* Hamburger & Menu Styles (same as previous) */
+      /* --- NEW HEADER STYLES (same as successful example) --- */
+      .site-header {
+          background-color: #8b0000;
+          color: white;
+          padding: 8px 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+      }
+      .header-left-section { display: flex; align-items: center; }
+      .site-logo { height: 45px; margin-right: 12px; }
+      .site-titles { display: flex; flex-direction: column; justify-content: center; }
+      .site-main-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.1; text-transform: uppercase; }
+      .site-subtitle { font-size: 12px; font-style: italic; color: rgba(255, 255, 255, 0.9); margin: 2px 0 0 0; font-weight: 300; line-height: 1.1; }
+      .header-right-section { display: flex; align-items: center; gap: 12px; }
+      .language-selector-wrapper { position: relative; }
+      .header-language-switcher {
+          display: flex; align-items: center; border: 1px solid rgba(255, 255, 255, 0.5);
+          border-radius: 4px; padding: 6px 8px; cursor: pointer; color: white; gap: 5px;
+          background-color: rgba(0,0,0,0.1);
+      }
+      .header-language-switcher:hover { background-color: rgba(0,0,0,0.2); }
+      .header-language-switcher .fas { font-size: 14px; }
+      .header-language-switcher .lang-abbr { font-size: 13px; font-weight: 500; }
+      .language-dropdown {
+          display: none; position: absolute; top: 100%; right: 0; background-color: #800000;
+          border: 1px solid rgba(255, 255, 255, 0.3); border-top: none; border-radius: 0 0 4px 4px;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.15); z-index: 910; min-width: 150px; padding: 5px 0;
+      }
+      .language-dropdown.active { display: block; }
+      .language-dropdown a { display: block; padding: 8px 15px; color: white; text-decoration: none; font-size: 13px; }
+      .language-dropdown a:hover { background-color: rgba(255, 255, 255, 0.1); }
+      .language-dropdown a.lang-active { font-weight: bold; background-color: rgba(255, 255, 255, 0.15); }
+      /* --- END NEW HEADER STYLES --- */
+
+
+      /* Hamburger & Menu Styles (hamburger position adjusted) */
       .hamburger {
-        position: fixed;
-        top: 25px;
-        right: 25px;
+        /* position: fixed; top: 25px; right: 25px; */ /* REMOVED fixed positioning */
         cursor: pointer;
-        display: none;
-        z-index: 1001;
+        display: none; /* Shown by media query */
+        width: 28px; height: auto; padding: 5px 0;
       }
       .hamburger-line {
-        width: 28px;
-        height: 2px;
-        background: #ffffff; /* White for visibility on dark header */
-        margin: 6px 0;
-        transition: 0.4s;
+        width: 28px; height: 2px; background: #ffffff;
+        margin: 6px 0; transition: 0.4s;
       }
       .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
       .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; }
       .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
 
       .mobile-menu {
-        position: fixed;
-        top: 0;
-        right: -300px;
-        width: 300px;
-        height: 100%;
-        background: #8b0000;
-        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-        transition: 0.4s;
-        padding-top: 60px;
-        z-index: 1000;
-        overflow-y: auto;
+        position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+        background: #8b0000; box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+        transition: 0.4s; padding-top: 20px; /* Adjusted, lang select gone */
+        z-index: 1000; overflow-y: auto;
       }
       .mobile-menu.active { right: 0; }
-      .mobile-menu a, .mobile-menu .language-select-label {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 15px 30px;
-        color: #fff !important;
-        text-decoration: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        cursor: pointer;
+      .mobile-menu a { /* Removed .mobile-menu .language-select-label */
+        display: flex; align-items: center; gap: 15px; padding: 15px 30px;
+        color: #fff !important; text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer;
       }
       .mobile-menu i { width: 25px; font-size: 20px; color: #fff !important; }
-      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child { border-bottom: none; }
+      .mobile-menu a:last-child { border-bottom: none; } /* Removed .language-options specific rule */
 
-      .language-options { padding-left: 30px; display: none; background-color: rgba(0,0,0,0.1); }
-      .language-options a { padding: 12px 30px; font-size: 0.9em; }
-      .language-options a.lang-active { font-weight: bold; background-color: rgba(255,255,255,0.1); }
+      /* Language options from mobile menu CSS commented out */
+      /* .language-options { ... } */
 
       /* Navigations (same as previous) */
       .bottom-nav {
@@ -100,47 +121,31 @@
         .hamburger { display: block; }
         .desktop-nav { display: none; }
         .bottom-nav { display: block; }
+        /* Responsive adjustments for new header */
+        .site-main-title { font-size: 18px; }
+        .site-subtitle { font-size: 10px; }
+        .site-logo { height: 35px; margin-right: 8px; }
+        .header-language-switcher { padding: 5px 7px; gap: 4px; }
+        .header-language-switcher .fas, .header-language-switcher .lang-abbr { font-size: 12px; }
+        .header-right-section { gap: 8px; }
+        .site-header { padding: 8px 10px; }
       }
 
-      /* Styles for content sections */
+      /* Styles for content sections (Unchanged) */
       .content-section {
-        padding: 30px 20px;
-        text-align: center; 
-        background: #fff; 
-        max-width: 800px;
-        margin: 30px auto;
-        border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(139, 0, 0, 0.15);
+        padding: 30px 20px; text-align: center; background: #fff; max-width: 800px;
+        margin: 30px auto; border-radius: 12px; box-shadow: 0 6px 15px rgba(139, 0, 0, 0.15);
         color: #333;
       }
-      .content-section h2 {
-        font-size: 28px;
-        color: #8b0000; 
-        margin-bottom: 20px;
-      }
+      .content-section h2 { font-size: 28px; color: #8b0000; margin-bottom: 20px; }
       .content-section img {
-        width: 100%; 
-        max-width: 600px; 
-        height: auto; 
-        border-radius: 16px; 
-        box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
-        margin-bottom: 25px;
+        width: 100%; max-width: 600px; height: auto; border-radius: 16px;
+        box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); margin-bottom: 25px;
       }
-      .content-section p {
-        font-size: 17px;
-        line-height: 1.7;
-        text-align: justify;
-      }
+      .content-section p { font-size: 17px; line-height: 1.7; text-align: justify; }
     </style>
   </head>
   <body>
-    <!-- Hamburger Icon -->
-    <div class="hamburger"> <!-- onclick removed -->
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-    </div>
-
     <!-- Mobile Menu -->
     <nav class="mobile-menu">
       <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
@@ -150,21 +155,39 @@
       <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
       <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
       <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
-
-      <div class="language-select-label">
-            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
-      </div>
-      <div class="language-options">
-          <a href="#" data-lang="en">English</a>
-          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
-          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
-      </div>
+      <!-- Language options removed from mobile menu -->
     </nav>
 
-    <!-- Header -->
-    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
-        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
-        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitleBirthPoint"> The Supreme Devine of Every Faith</h2>
+    <!-- RESTRUCTURED HEADER -->
+    <header class="site-header">
+        <div class="header-left-section">
+            <!-- Replace with your actual logo image -->
+            <img src="images/virat_swarup_logo_placeholder.png" alt="Virat Swarup Logo" class="site-logo">
+            <div class="site-titles">
+                <h1 class="site-main-title">VIRAT SWARUP</h1>
+                <p class="site-subtitle" data-translate-key="headerSubtitleBirthPoint"> The Supreme Devine of Every Faith</p>
+            </div>
+        </div>
+        <div class="header-right-section">
+            <div class="language-selector-wrapper">
+                <div class="header-language-switcher" id="headerLangSwitcher">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-abbr">EN</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="language-dropdown" id="headerLangDropdown">
+                    <a href="#" data-lang="en">English</a>
+                    <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+                    <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+                </div>
+            </div>
+            <!-- Hamburger moved here -->
+            <div class="hamburger">
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+            </div>
+        </div>
     </header>
 
     <!-- Desktop Navigation -->
@@ -189,7 +212,7 @@
       </ul>
     </nav>
 
-    <!-- Content Sections for "Birth from a Point" -->
+    <!-- Content Sections for "Birth from a Point" (Unchanged) -->
     <section class="content-section">
       <h2 data-translate-key="birthTitle1">Birth from a Point</h2>
       <img src="images/birth_from_point.jpg" alt="Abstract representation of a point of origin" data-translate-key-alt="altBirthFromPoint" />
@@ -239,7 +262,7 @@
     </section>
 
     <section class="content-section">
-      <h2 data-translate-key="birthTitle7">Practice yoga</h2> <!-- Consider a more specific title if the image and text are very specific -->
+      <h2 data-translate-key="birthTitle7">Practice yoga</h2>
       <img src="images/Practice_Surya_Namaskar.jpg" alt="Person practicing Surya Namaskar or a yoga pose" data-translate-key-alt="altPracticeYoga" />
       <p data-translate-key="birthDesc7">
         Speak lovingly to your cells. Express gratitude and appreciation. This practice creates a deep inner connection.
@@ -269,110 +292,85 @@
               headerSubtitleBirthPoint: "The Supreme Divine of Every Faith",
               login: "Login", share: "Share", home: "Home", agnosia: "Agnosia", enigma: "Enigma",
               emulate: "Emulate", post: "Post", language: "Language",
-              // "Birth from a Point" Page Specific
-              birthTitle1: "Birth from a Point",
-              altBirthFromPoint: "Abstract representation of a point of origin or a single cell",
+              birthTitle1: "Birth from a Point", altBirthFromPoint: "Abstract representation of a point of origin or a single cell",
               birthDesc1: "Imagine — somewhere in the vast expanse of the universe, an invisible droplet is born, which we call a cell. It wasn't a machine, nor a mere physical structure. It held the seed of life. A single cell… that never went to school, never read scriptures, yet somehow it knew it had to divide, grow, build structure — it was the definition of intelligence itself. The origin of every living being begins here — from a small unit holding limitless design. But the real question arises: Where did that design come from? Who instructed the cell what to do? That’s the mystery where science pauses, and meditation begins. “The first spark of life — a single cell born in cosmic silence.”",
-              birthTitle2: "Rise of Consciousness",
-              altRiseOfConsciousness: "Illustration of rising consciousness or neural activity",
+              birthTitle2: "Rise of Consciousness", altRiseOfConsciousness: "Illustration of rising consciousness or neural activity",
               birthDesc2: "As the cell develops, it doesn't remain just a physical form. A capacity to make decisions emerges within it. Neurons, senses, perception — none of these were programmed externally, but arose from within that very cell’s innate consciousness. The human brain, made of trillions of cells, traces its origin to that first living cell. When we concentrate, feel emotions, or slip into meditation — it is that same cell manifesting as consciousness. “From cell to self-awareness — neurons birthing thought.” \"The senses are superior, the mind is higher than the senses, but the intellect is even higher than the mind, and the Self is higher than the intellect.\" — Bhagavad Gita 3.42",
-              birthTitle3: "The Path of Knowledge",
-              altPathOfKnowledge: "Symbolic image of a path leading towards light or understanding",
+              birthTitle3: "The Path of Knowledge", altPathOfKnowledge: "Symbolic image of a path leading towards light or understanding",
               birthDesc3: "Consciousness awakens when knowledge is truly understood. It is the moment when awareness transforms knowledge into deeper wisdom. True understanding comes when consciousness and knowledge unite.",
-              birthTitle4: "Connect with Your Cellular Intelligence through Meditation & Yoga",
-              altCellularIntelligence: "Person meditating deeply, connecting with inner cellular energy",
+              birthTitle4: "Connect with Your Cellular Intelligence through Meditation & Yoga", altCellularIntelligence: "Person meditating deeply, connecting with inner cellular energy",
               birthDesc4: "Every cell in the human body is a center of subtle consciousness. Through yoga and meditation, we can connect with this intelligence and experience a higher spiritual awareness. Follow the steps below to tune into the divine energy within your body:",
-              birthTitle5: "Inner Journey through Meditation",
-              altInnerJourney: "Symbolic representation of an introspective journey or meditation",
+              birthTitle5: "Inner Journey through Meditation", altInnerJourney: "Symbolic representation of an introspective journey or meditation",
               birthDesc5: "Practice silent meditation for 10–15 minutes daily.Focus on your breath to calm the mind.Feel the presence of each cell in your body. Visualize each cell glowing with energy and light.",
-              birthTitle6: "Energy Flow through Yoga",
-              altEnergyFlowYoga: "Depiction of energy flow, perhaps chakras or aura, during a yoga practice",
+              birthTitle6: "Energy Flow through Yoga", altEnergyFlowYoga: "Depiction of energy flow, perhaps chakras or aura, during a yoga practice",
               birthDesc6: "Practice Surya Namaskar, pranayama,and basic asanas. Yoga activates not only the muscles but also awakens the cells.",
-              birthTitle7: "Practice yoga", // Consider a more descriptive title like "Cellular Connection" or "Affirmations for Cells"
-              altPracticeYoga: "Person in a yoga pose, possibly Surya Namaskar or a meditative asana",
+              birthTitle7: "Practice yoga", altPracticeYoga: "Person in a yoga pose, possibly Surya Namaskar or a meditative asana",
               birthDesc7: "Speak lovingly to your cells. Express gratitude and appreciation. This practice creates a deep inner connection.",
-              birthTitle8: "Sattvic Lifestyle",
-              altSattvicLifestyle: "Image representing a pure and balanced (sattvic) lifestyle - e.g., fresh foods, serene nature",
+              birthTitle8: "Sattvic Lifestyle", altSattvicLifestyle: "Image representing a pure and balanced (sattvic) lifestyle - e.g., fresh foods, serene nature",
               birthDesc8: "Adopt pure diet and positive thinking. Stay in spiritual company and treat your body as a temple.",
-              birthTitle9: "Divine Perspective",
-              altDivinePerspective: "Cosmic imagery, or an eye looking towards the universe, symbolizing divine insight",
+              birthTitle9: "Divine Perspective", altDivinePerspective: "Cosmic imagery, or an eye looking towards the universe, symbolizing divine insight",
               birthDesc9: "See each cell as a reflection of the universe. By understanding the language of your cells, you understand the language of the cosmos."
           },
           ne: {
-              headerSubtitleBirthPoint: "हरेक आस्थाका सर्वोच्च परमात्मा",
-              login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली",
-              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
-              // NEPALI TRANSLATIONS NEEDED FOR EACH KEY
-              birthTitle1: "एक बिन्दुबाट जन्म",
-              altBirthFromPoint: "उत्पत्तिको बिन्दु वा एकल कोशिकाको अमूर्त प्रतिनिधित्व",
+              headerSubtitleBirthPoint: "हरेक आस्थाका सर्वोच्च परमात्मा", login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              birthTitle1: "एक बिन्दुबाट जन्म", altBirthFromPoint: "उत्पत्तिको बिन्दु वा एकल कोशिकाको अमूर्त प्रतिनिधित्व",
               birthDesc1: "कल्पना गर्नुहोस् — ब्रह्माण्डको विशाल विस्तारमा कतै, एउटा अदृश्य थोपा जन्मन्छ, जसलाई हामी कोशिका भन्छौं। यो कुनै मेसिन थिएन, न त केवल भौतिक संरचना। यसमा जीवनको बीउ थियो। एउटा एकल कोशिका... जुन कहिल्यै स्कूल गएन, कहिल्यै धर्मशास्त्र पढेन, तैपनि कुनै न कुनै रूपमा यसलाई थाहा थियो कि यसले विभाजन गर्नुपर्छ, बढ्नुपर्छ, संरचना निर्माण गर्नुपर्छ — यो स्वयं बुद्धिको परिभाषा थियो। हरेक जीवित प्राणीको उत्पत्ति यहींबाट सुरु हुन्छ — असीमित डिजाइन बोकेको सानो इकाईबाट। तर वास्तविक प्रश्न उठ्छ: त्यो डिजाइन कहाँबाट आयो? कोशिकालाई के गर्ने भनेर कसले निर्देशन दियो? त्यो रहस्य हो जहाँ विज्ञान रोकिन्छ, र ध्यान सुरु हुन्छ। “जीवनको पहिलो झिल्का — ब्रह्माण्डीय मौनतामा जन्मेको एकल कोशिका।”",
-              birthTitle2: "चेतनाको उदय",
-              altRiseOfConsciousness: "बढ्दो चेतना वा मस्तिष्क गतिविधिलाई चित्रण",
+              birthTitle2: "चेतनाको उदय", altRiseOfConsciousness: "बढ्दो चेतना वा मस्तिष्क गतिविधिलाई चित्रण",
               birthDesc2: "कोशिका विकसित हुँदै जाँदा, यो केवल भौतिक रूप मात्र रहँदैन। यसभित्र निर्णय गर्ने क्षमता देखा पर्दछ। न्यूरोन, इन्द्रिय, धारणा — यी मध्ये कुनै पनि बाह्य रूपमा प्रोग्राम गरिएको थिएन, तर त्यो कोशिकाको जन्मजात चेतनाबाट नै उत्पन्न भयो। खरबौं कोशिकाहरूबाट बनेको मानव मस्तिष्कले आफ्नो उत्पत्ति त्यो पहिलो जीवित कोशिकाबाट पत्ता लगाउँछ। जब हामी ध्यान केन्द्रित गर्छौं, भावनाहरू महसुस गर्छौं, वा ध्यानमा डुब्छौं — यो त्यही कोशिका हो जुन चेतनाको रूपमा प्रकट हुन्छ। “कोशिकाबाट आत्म-जागरूकतासम्म — विचार जन्माउने न्यूरोनहरू।” \"इन्द्रियहरू श्रेष्ठ छन्, मन इन्द्रियहरूभन्दा उच्च छ, तर बुद्धि मनभन्दा पनि उच्च छ, र आत्मा बुद्धिभन्दा उच्च छ।\" — भगवद् गीता ३.४२",
-              birthTitle3: "ज्ञानको मार्ग",
-              altPathOfKnowledge: "ज्ञान वा प्रकाशतर्फ लैजाने मार्गको प्रतीकात्मक छवि",
+              birthTitle3: "ज्ञानको मार्ग", altPathOfKnowledge: "ज्ञान वा प्रकाशतर्फ लैजाने मार्गको प्रतीकात्मक छवि",
               birthDesc3: "ज्ञानलाई साँच्चै बुझेपछि चेतना जाग्दछ। यो त्यो क्षण हो जब जागरूकताले ज्ञानलाई गहिरो बुद्धिमा रूपान्तरण गर्दछ। साँचो समझ तब आउँछ जब चेतना र ज्ञान एक हुन्छन्।",
-              birthTitle4: "ध्यान र योग मार्फत आफ्नो सेलुलर बुद्धिसँग जोड्नुहोस्",
-              altCellularIntelligence: "ध्यान गरिरहेको व्यक्ति, भित्री सेलुलर ऊर्जासँग जोडिएको",
+              birthTitle4: "ध्यान र योग मार्फत आफ्नो सेलुलर बुद्धिसँग जोड्नुहोस्", altCellularIntelligence: "ध्यान गरिरहेको व्यक्ति, भित्री सेलुलर ऊर्जासँग जोडिएको",
               birthDesc4: "मानव शरीरको प्रत्येक कोशिका सूक्ष्म चेतनाको केन्द्र हो। योग र ध्यान मार्फत, हामी यो बुद्धिसँग जोडिन सक्छौं र उच्च आध्यात्मिक जागरूकता अनुभव गर्न सक्छौं। तपाईंको शरीर भित्रको दिव्य ऊर्जासँग तालमेल मिलाउन तलका चरणहरू पालना गर्नुहोस्:",
-              birthTitle5: "ध्यान मार्फत भित्री यात्रा",
-              altInnerJourney: "एक आत्मनिरीक्षण यात्रा वा ध्यानको प्रतीकात्मक प्रतिनिधित्व",
+              birthTitle5: "ध्यान मार्फत भित्री यात्रा", altInnerJourney: "एक आत्मनिरीक्षण यात्रा वा ध्यानको प्रतीकात्मक प्रतिनिधित्व",
               birthDesc5: "दैनिक १०-१५ मिनेट मौन ध्यान अभ्यास गर्नुहोस्। मन शान्त गर्न आफ्नो श्वासमा ध्यान केन्द्रित गर्नुहोस्। आफ्नो शरीरको प्रत्येक कोशिकाको उपस्थिति महसुस गर्नुहोस्। प्रत्येक कोशिका ऊर्जा र प्रकाशले चम्किरहेको कल्पना गर्नुहोस्।",
-              birthTitle6: "योग मार्फत ऊर्जा प्रवाह",
-              altEnergyFlowYoga: "योग अभ्यासको क्रममा ऊर्जा प्रवाह, सायद चक्र वा आभाको चित्रण",
+              birthTitle6: "योग मार्फत ऊर्जा प्रवाह", altEnergyFlowYoga: "योग अभ्यासको क्रममा ऊर्जा प्रवाह, सायद चक्र वा आभाको चित्रण",
               birthDesc6: "सूर्य नमस्कार, प्राणायाम, र आधारभूत आसनहरूको अभ्यास गर्नुहोस्। योगले मांसपेशी मात्र होइन कोशिकाहरूलाई पनि जगाउँछ।",
-              birthTitle7: "योग अभ्यास गर्नुहोस्",
-              altPracticeYoga: "सूर्य नमस्कार वा ध्यान आसन गरिरहेको व्यक्ति",
+              birthTitle7: "योग अभ्यास गर्नुहोस्", altPracticeYoga: "सूर्य नमस्कार वा ध्यान आसन गरिरहेको व्यक्ति",
               birthDesc7: "आफ्ना कोशिकाहरूसँग प्रेमपूर्वक कुरा गर्नुहोस्। कृतज्ञता र प्रशंसा व्यक्त गर्नुहोस्। यो अभ्यासले गहिरो भित्री सम्बन्ध सिर्जना गर्दछ।",
-              birthTitle8: "सात्त्विक जीवनशैली",
-              altSattvicLifestyle: "एक शुद्ध र सन्तुलित (सात्त्विक) जीवनशैलीको प्रतिनिधित्व गर्ने छवि - जस्तै, ताजा खाना, शान्त प्रकृति",
+              birthTitle8: "सात्त्विक जीवनशैली", altSattvicLifestyle: "एक शुद्ध र सन्तुलित (सात्त्विक) जीवनशैलीको प्रतिनिधित्व गर्ने छवि - जस्तै, ताजा खाना, शान्त प्रकृति",
               birthDesc8: "शुद्ध आहार र सकारात्मक सोच अपनाउनुहोस्। आध्यात्मिक संगतमा रहनुहोस् र आफ्नो शरीरलाई मन्दिर जस्तै व्यवहार गर्नुहोस्।",
-              birthTitle9: "दिव्य दृष्टिकोण",
-              altDivinePerspective: "ब्रह्माण्डीय वा दिव्य चित्रण, वा ब्रह्माण्डलाई हेरिरहेको आँखा, दिव्य अन्तरदृष्टिको प्रतीक",
+              birthTitle9: "दिव्य दृष्टिकोण", altDivinePerspective: "ब्रह्माण्डीय वा दिव्य चित्रण, वा ब्रह्माण्डलाई हेरिरहेको आँखा, दिव्य अन्तरदृष्टिको प्रतीक",
               birthDesc9: "प्रत्येक कोशिकालाई ब्रह्माण्डको प्रतिबिम्बको रूपमा हेर्नुहोस्। आफ्ना कोशिकाहरूको भाषा बुझेर, तपाईंले ब्रह्माण्डको भाषा बुझ्नुहुन्छ।"
           },
           hi: {
-              headerSubtitleBirthPoint: "हर आस्था के सर्वोच्च परमात्मा",
-              login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली",
-              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
-              // HINDI TRANSLATIONS NEEDED FOR EACH KEY
-              birthTitle1: "एक बिंदु से जन्म",
-              altBirthFromPoint: "उत्पत्ति के एक बिंदु या एकल कोशिका का अमूर्त निरूपण",
+              headerSubtitleBirthPoint: "हर आस्था के सर्वोच्च परमात्मा", login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              birthTitle1: "एक बिंदु से जन्म", altBirthFromPoint: "उत्पत्ति के एक बिंदु या एकल कोशिका का अमूर्त निरूपण",
               birthDesc1: "कल्पना कीजिए - ब्रह्मांड के विशाल विस्तार में कहीं, एक अदृश्य बूंद का जन्म होता है, जिसे हम कोशिका कहते हैं। यह कोई मशीन नहीं थी, न ही कोई मात्र भौतिक संरचना। इसमें जीवन का बीज था। एक एकल कोशिका... जो कभी स्कूल नहीं गई, कभी शास्त्र नहीं पढ़े, फिर भी किसी तरह उसे पता था कि उसे विभाजित होना है, बढ़ना है, संरचना का निर्माण करना है - यह स्वयं बुद्धि की परिभाषा थी। प्रत्येक जीवित प्राणी की उत्पत्ति यहीं से शुरू होती है - असीमित डिजाइन वाली एक छोटी इकाई से। लेकिन असली सवाल यह उठता है: वह डिजाइन कहाँ से आया? कोशिका को क्या करना है इसका निर्देश किसने दिया? यह वह रहस्य है जहाँ विज्ञान रुक जाता है, और ध्यान शुरू होता है। \"जीवन की पहली चिंगारी - ब्रह्मांडीय मौन में जन्मी एक एकल कोशिका।\"",
-              birthTitle2: "चेतना का उदय",
-              altRiseOfConsciousness: "बढ़ती चेतना या तंत्रिका गतिविधि का चित्रण",
+              birthTitle2: "चेतना का उदय", altRiseOfConsciousness: "बढ़ती चेतना या तंत्रिका गतिविधि का चित्रण",
               birthDesc2: "जैसे-जैसे कोशिका विकसित होती है, यह केवल एक भौतिक रूप नहीं रहती। इसके भीतर निर्णय लेने की क्षमता उभरती है। न्यूरॉन्स, इंद्रियां, धारणा - इनमें से कोई भी बाहरी रूप से क्रमादेशित नहीं किया गया था, बल्कि उसी कोशिका की जन्मजात चेतना के भीतर से उत्पन्न हुआ था। मानव मस्तिष्क, खरबों कोशिकाओं से बना है, अपनी उत्पत्ति उसी पहली जीवित कोशिका से करता है। जब हम ध्यान केंद्रित करते हैं, भावनाओं को महसूस करते हैं, या ध्यान में फिसल जाते हैं - तो यह वही कोशिका है जो चेतना के रूप में प्रकट होती है। \"कोशिका से आत्म-जागरूकता तक - विचार उत्पन्न करने वाले न्यूरॉन्स।\" \"इंद्रियाँ श्रेष्ठ हैं, मन इंद्रियों से ऊँचा है, लेकिन बुद्धि मन से भी ऊँची है, और आत्मा बुद्धि से भी ऊँची है।\" - भगवद् गीता ३.४२",
-              birthTitle3: "ज्ञान का मार्ग",
-              altPathOfKnowledge: "प्रकाश या समझ की ओर ले जाने वाले मार्ग की प्रतीकात्मक छवि",
+              birthTitle3: "ज्ञान का मार्ग", altPathOfKnowledge: "प्रकाश या समझ की ओर ले जाने वाले मार्ग की प्रतीकात्मक छवि",
               birthDesc3: "जब ज्ञान को सही मायने में समझा जाता है तो चेतना जागृत होती है। यह वह क्षण है जब जागरूकता ज्ञान को गहरे ज्ञान में बदल देती है। सच्ची समझ तब आती है जब चेतना और ज्ञान एकजुट होते हैं।",
-              birthTitle4: "ध्यान और योग के माध्यम से अपनी कोशिकीय बुद्धि से जुड़ें",
-              altCellularIntelligence: "गहन ध्यान करने वाला व्यक्ति, आंतरिक कोशिकीय ऊर्जा से जुड़ता हुआ",
+              birthTitle4: "ध्यान और योग के माध्यम से अपनी कोशिकीय बुद्धि से जुड़ें", altCellularIntelligence: "गहन ध्यान करने वाला व्यक्ति, आंतरिक कोशिकीय ऊर्जा से जुड़ता हुआ",
               birthDesc4: "मानव शरीर की प्रत्येक कोशिका सूक्ष्म चेतना का केंद्र है। योग और ध्यान के माध्यम से, हम इस बुद्धि से जुड़ सकते हैं और उच्च आध्यात्मिक जागरूकता का अनुभव कर सकते हैं। अपने शरीर के भीतर दिव्य ऊर्जा के साथ तालमेल बिठाने के लिए नीचे दिए गए चरणों का पालन करें:",
-              birthTitle5: "ध्यान के माध्यम से आंतरिक यात्रा",
-              altInnerJourney: "एक आत्मनिरीक्षण यात्रा या ध्यान का प्रतीकात्मक प्रतिनिधित्व",
+              birthTitle5: "ध्यान के माध्यम से आंतरिक यात्रा", altInnerJourney: "एक आत्मनिरीक्षण यात्रा या ध्यान का प्रतीकात्मक प्रतिनिधित्व",
               birthDesc5: "प्रतिदिन १०-१५ मिनट मौन ध्यान का अभ्यास करें। मन को शांत करने के लिए अपनी सांस पर ध्यान केंद्रित करें। अपने शरीर की प्रत्येक कोशिका की उपस्थिति को महसूस करें। प्रत्येक कोशिका को ऊर्जा और प्रकाश से चमकते हुए कल्पना करें।",
-              birthTitle6: "योग के माध्यम से ऊर्जा प्रवाह",
-              altEnergyFlowYoga: "योग अभ्यास के दौरान ऊर्जा प्रवाह, शायद चक्र या आभा का चित्रण",
+              birthTitle6: "योग के माध्यम से ऊर्जा प्रवाह", altEnergyFlowYoga: "योग अभ्यास के दौरान ऊर्जा प्रवाह, शायद चक्र या आभा का चित्रण",
               birthDesc6: "सूर्य नमस्कार, प्राणायाम और बुनियादी आसनों का अभ्यास करें। योग न केवल मांसपेशियों को सक्रिय करता है बल्कि कोशिकाओं को भी जगाता है।",
-              birthTitle7: "योग का अभ्यास करें",
-              altPracticeYoga: "सूर्य नमस्कार या ध्यान मुद्रा में व्यक्ति",
+              birthTitle7: "योग का अभ्यास करें", altPracticeYoga: "सूर्य नमस्कार या ध्यान मुद्रा में व्यक्ति",
               birthDesc7: "अपनी कोशिकाओं से प्यार से बात करें। कृतज्ञता और प्रशंसा व्यक्त करें। यह अभ्यास एक गहरा आंतरिक संबंध बनाता है।",
-              birthTitle8: "सात्विक जीवनशैली",
-              altSattvicLifestyle: "एक शुद्ध और संतुलित (सात्विक) जीवनशैली का प्रतिनिधित्व करने वाली छवि - जैसे, ताज़ा भोजन, शांत प्रकृति",
+              birthTitle8: "सात्विक जीवनशैली", altSattvicLifestyle: "एक शुद्ध और संतुलित (सात्विक) जीवनशैली का प्रतिनिधित्व करने वाली छवि - जैसे, ताज़ा भोजन, शांत प्रकृति",
               birthDesc8: "शुद्ध आहार और सकारात्मक सोच अपनाएं। आध्यात्मिक संगति में रहें और अपने शरीर को मंदिर मानें।",
-              birthTitle9: "दिव्य दृष्टिकोण",
-              altDivinePerspective: "ब्रह्मांडीय या दिव्य कल्पना, या ब्रह्मांड को देखती हुई आँख, दिव्य अंतर्दृष्टि का प्रतीक",
+              birthTitle9: "दिव्य दृष्टिकोण", altDivinePerspective: "ब्रह्मांडीय या दिव्य कल्पना, या ब्रह्मांड को देखती हुई आँख, दिव्य अंतर्दृष्टि का प्रतीक",
               birthDesc9: "प्रत्येक कोशिका को ब्रह्मांड के प्रतिबिंब के रूप में देखें। अपनी कोशिकाओं की भाषा को समझकर, आप ब्रह्मांड की भाषा को समझते हैं।"
           }
       };
 
-      let currentLanguage = localStorage.getItem('selectedLanguageBirthPage') || 'en'; // Unique key for this page
+      let currentLanguage = localStorage.getItem('selectedLanguageBirthPage') || 'en';
 
       function setLanguage(lang) {
           currentLanguage = lang;
           localStorage.setItem('selectedLanguageBirthPage', lang);
           applyTranslations();
-          document.querySelectorAll('.language-options a').forEach(a => {
+
+          // Update header language display
+          const headerLangAbbr = document.querySelector('.site-header .lang-abbr');
+          if (headerLangAbbr) {
+              headerLangAbbr.textContent = lang.toUpperCase();
+          }
+
+          // Update active class for language options in the new header dropdown
+          const headerDropdownLinks = document.querySelectorAll('#headerLangDropdown a');
+          headerDropdownLinks.forEach(a => {
               a.classList.remove('lang-active');
               if (a.dataset.lang === lang) {
                   a.classList.add('lang-active');
@@ -398,46 +396,65 @@
 
       const hamburger = document.querySelector(".hamburger");
       const mobileMenu = document.querySelector(".mobile-menu");
-      const languageSelectLabel = document.querySelector('.language-select-label');
-      const languageOptionsDiv = document.querySelector('.language-options');
+      const headerLanguageSwitcher = document.getElementById('headerLangSwitcher');
+      const headerLangDropdown = document.getElementById('headerLangDropdown');
+      // const languageSelectLabel = document.querySelector('.language-select-label'); // No longer in mobile menu
+      // const languageOptionsDiv = document.querySelector('.language-options'); // No longer in mobile menu
+
 
       function toggleMenu() {
         mobileMenu.classList.toggle("active");
-        hamburger.classList.toggle("active");
+        if (hamburger) {
+            hamburger.classList.toggle("active");
+        }
+        // Close language dropdown if mobile menu is opened
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            headerLangDropdown.classList.remove('active');
+        }
       }
 
       if (hamburger) {
         hamburger.addEventListener('click', toggleMenu);
       }
 
-      if (languageSelectLabel) {
-        languageSelectLabel.addEventListener('click', () => {
-            if (languageOptionsDiv) {
-                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
-            }
-        });
+      if (headerLanguageSwitcher) {
+          headerLanguageSwitcher.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (headerLangDropdown) {
+                  headerLangDropdown.classList.toggle('active');
+              }
+              // Close mobile menu if language dropdown is opened
+              if (mobileMenu && mobileMenu.classList.contains('active')) {
+                  toggleMenu();
+              }
+          });
       }
 
-      document.querySelectorAll('.language-options a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const lang = e.currentTarget.dataset.lang;
-            setLanguage(lang);
-            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
-        });
-      });
+      if (headerLangDropdown) {
+          const dropdownLinks = headerLangDropdown.querySelectorAll('a');
+          dropdownLinks.forEach(link => {
+              link.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  const lang = e.currentTarget.dataset.lang;
+                  setLanguage(lang);
+                  headerLangDropdown.classList.remove('active');
+              });
+          });
+      }
 
       document.addEventListener("click", (e) => {
-        let clickedInsideMenuComponent = false;
-        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
-        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
+        // Close mobile menu if click is outside
+        if (mobileMenu && mobileMenu.classList.contains("active")) {
+            if (!mobileMenu.contains(e.target) && hamburger && !hamburger.contains(e.target)) {
+                 toggleMenu();
+            }
+        }
 
-        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
-          toggleMenu();
-        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
-                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
-                   !languageOptionsDiv.contains(e.target) ) {
-            languageOptionsDiv.style.display = 'none';
+        // Close header language dropdown if click is outside
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            if (!headerLangDropdown.contains(e.target) && headerLanguageSwitcher && !headerLanguageSwitcher.contains(e.target)) {
+                headerLangDropdown.classList.remove('active');
+            }
         }
       });
 
