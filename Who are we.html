@@ -15,7 +15,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
+        font-family: "Georgia", serif;
       }
 
       body {
@@ -23,56 +23,78 @@
         color: #2c2c2c;
       }
 
-      /* Hamburger & Menu Styles (same as previous) */
+      /* --- NEW HEADER STYLES (same as successful example) --- */
+      .site-header {
+          background-color: #8b0000;
+          color: white;
+          padding: 8px 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+      }
+      .header-left-section { display: flex; align-items: center; }
+      .site-logo { height: 45px; margin-right: 12px; }
+      .site-titles { display: flex; flex-direction: column; justify-content: center; }
+      .site-main-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.1; text-transform: uppercase; }
+      .site-subtitle { font-size: 12px; font-style: italic; color: rgba(255, 255, 255, 0.9); margin: 2px 0 0 0; font-weight: 300; line-height: 1.1; }
+      .header-right-section { display: flex; align-items: center; gap: 12px; }
+      .language-selector-wrapper { position: relative; }
+      .header-language-switcher {
+          display: flex; align-items: center; border: 1px solid rgba(255, 255, 255, 0.5);
+          border-radius: 4px; padding: 6px 8px; cursor: pointer; color: white; gap: 5px;
+          background-color: rgba(0,0,0,0.1);
+      }
+      .header-language-switcher:hover { background-color: rgba(0,0,0,0.2); }
+      .header-language-switcher .fas { font-size: 14px; }
+      .header-language-switcher .lang-abbr { font-size: 13px; font-weight: 500; }
+      .language-dropdown {
+          display: none; position: absolute; top: 100%; right: 0; background-color: #800000;
+          border: 1px solid rgba(255, 255, 255, 0.3); border-top: none; border-radius: 0 0 4px 4px;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.15); z-index: 910; min-width: 150px; padding: 5px 0;
+      }
+      .language-dropdown.active { display: block; }
+      .language-dropdown a { display: block; padding: 8px 15px; color: white; text-decoration: none; font-size: 13px; }
+      .language-dropdown a:hover { background-color: rgba(255, 255, 255, 0.1); }
+      .language-dropdown a.lang-active { font-weight: bold; background-color: rgba(255, 255, 255, 0.15); }
+      /* --- END NEW HEADER STYLES --- */
+
+
+      /* Hamburger & Menu Styles (same as previous, hamburger position adjusted) */
       .hamburger {
-        position: fixed;
-        top: 25px;
-        right: 25px;
+        /* position: fixed; top: 25px; right: 25px; */ /* REMOVED fixed positioning */
         cursor: pointer;
-        display: none;
-        z-index: 1001;
+        display: none; /* Shown by media query */
+        /* z-index: 1001; */ /* Will be part of header flow */
+        width: 28px; height: auto; padding: 5px 0;
       }
       .hamburger-line {
-        width: 28px;
-        height: 2px;
-        background: #ffffff; /* White for visibility on dark header */
-        margin: 6px 0;
-        transition: 0.4s;
+        width: 28px; height: 2px; background: #ffffff;
+        margin: 6px 0; transition: 0.4s;
       }
       .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
       .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; }
       .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
 
       .mobile-menu {
-        position: fixed;
-        top: 0;
-        right: -300px;
-        width: 300px;
-        height: 100%;
-        background: #8b0000;
-        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-        transition: 0.4s;
-        padding-top: 60px;
-        z-index: 1000;
-        overflow-y: auto;
+        position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+        background: #8b0000; box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+        transition: 0.4s; padding-top: 20px; /* Adjusted, lang select gone */
+        z-index: 1000; overflow-y: auto;
       }
       .mobile-menu.active { right: 0; }
-      .mobile-menu a, .mobile-menu .language-select-label {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 15px 30px;
-        color: #fff !important;
-        text-decoration: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        cursor: pointer;
+      .mobile-menu a { /* Removed .mobile-menu .language-select-label */
+        display: flex; align-items: center; gap: 15px; padding: 15px 30px;
+        color: #fff !important; text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer;
       }
       .mobile-menu i { width: 25px; font-size: 20px; color: #fff !important; }
-      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child { border-bottom: none; }
+      .mobile-menu a:last-child { border-bottom: none; } /* Removed .language-options specific rule */
 
-      .language-options { padding-left: 30px; display: none; background-color: rgba(0,0,0,0.1); }
-      .language-options a { padding: 12px 30px; font-size: 0.9em; }
-      .language-options a.lang-active { font-weight: bold; background-color: rgba(255,255,255,0.1); }
+      /* Language options from mobile menu CSS commented out as they are removed from mobile menu */
+      /* .language-options { ... } */
 
       /* Navigations (same as previous) */
       .bottom-nav {
@@ -100,89 +122,45 @@
         .hamburger { display: block; }
         .desktop-nav { display: none; }
         .bottom-nav { display: block; }
+        /* Responsive adjustments for new header */
+        .site-main-title { font-size: 18px; }
+        .site-subtitle { font-size: 10px; }
+        .site-logo { height: 35px; margin-right: 8px; }
+        .header-language-switcher { padding: 5px 7px; gap: 4px; }
+        .header-language-switcher .fas, .header-language-switcher .lang-abbr { font-size: 12px; }
+        .header-right-section { gap: 8px; }
+        .site-header { padding: 8px 10px; }
       }
 
-      /* Styles for content sections */
+      /* Styles for content sections (Unchanged) */
       .content-section {
-        padding: 30px 20px;
-        text-align: center; 
-        background: #fff; 
-        max-width: 800px;
-        margin: 30px auto;
-        border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(139, 0, 0, 0.15);
+        padding: 30px 20px; text-align: center; background: #fff; max-width: 800px;
+        margin: 30px auto; border-radius: 12px; box-shadow: 0 6px 15px rgba(139, 0, 0, 0.15);
         color: #333;
       }
-      .content-section h2 {
-        font-size: 28px;
-        color: #8b0000; 
-        margin-bottom: 20px;
+      .content-section h2 { font-size: 28px; color: #8b0000; margin-bottom: 20px; }
+      .content-section img, .content-section .video-container img {
+        width: 100%; max-width: 600px; height: auto; border-radius: 16px;
+        box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); margin-bottom: 25px;
       }
-      .content-section img, .content-section .video-container img { /* Apply to images directly in section and thumbnail in video-container */
-        width: 100%; 
-        max-width: 600px; 
-        height: auto; 
-        border-radius: 16px; 
-        box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); 
-        margin-bottom: 25px;
-      }
-      .content-section p {
-        font-size: 17px;
-        line-height: 1.7;
-        text-align: justify;
-      }
+      .content-section p { font-size: 17px; line-height: 1.7; text-align: justify; }
       .video-container {
-          position: relative;
-          width: 100%;
-          max-width: 600px; /* Match image max-width */
-          margin: 0 auto 25px auto; /* Center it and add bottom margin */
-          cursor: pointer;
-          border-radius: 16px; /* Match image border-radius */
-          overflow: hidden; /* To keep play button and iframe contained */
-          box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3); /* Match image shadow */
+          position: relative; width: 100%; max-width: 600px; margin: 0 auto 25px auto;
+          cursor: pointer; border-radius: 16px; overflow: hidden;
+          box-shadow: 0 6px 16px rgba(139, 0, 0, 0.3);
       }
-      .video-container img { /* Thumbnail specific adjustments */
-          display: block;
-          width: 100%;
-          height: auto;
-          margin-bottom: 0; /* Remove default bottom margin for img inside video container */
-          box-shadow: none; /* Shadow is on the container now */
-          border-radius: 0; /* Image takes full container, radius on container */
-
-      }
+      .video-container img { display: block; width: 100%; height: auto; margin-bottom: 0; box-shadow: none; border-radius: 0; }
       .video-container .play-button {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 80px;
-          height: 80px;
-          background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'); /* Simple Pause, consider a Play icon */
-          background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="rgba(255,255,255,0.9)" d="M8 5v14l11-7z"/></svg>'); /* Play icon */
-          background-size: 60%;
-          background-repeat: no-repeat;
-          background-position: center;
-          background-color: rgba(0,0,0,0.5);
-          border-radius: 50%;
-          pointer-events: none; /* So click goes to container */
+          position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          width: 80px; height: 80px;
+          background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="rgba(255,255,255,0.9)" d="M8 5v14l11-7z"/></svg>');
+          background-size: 60%; background-repeat: no-repeat; background-position: center;
+          background-color: rgba(0,0,0,0.5); border-radius: 50%; pointer-events: none;
       }
-      .video-container iframe {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-      }
+      .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     </style>
   </head>
   <body>
-    <!-- Hamburger Icon -->
-    <div class="hamburger"> <!-- onclick removed -->
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-    </div>
-
     <!-- Mobile Menu -->
     <nav class="mobile-menu">
       <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
@@ -192,21 +170,39 @@
       <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
       <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
       <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
-
-      <div class="language-select-label">
-            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
-      </div>
-      <div class="language-options">
-          <a href="#" data-lang="en">English</a>
-          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
-          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
-      </div>
+      <!-- Language options removed from mobile menu -->
     </nav>
 
-    <!-- Header -->
-    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
-        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
-        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitleDNAPage"> The Supreme Devine of Every Faith</h2>
+    <!-- RESTRUCTURED HEADER -->
+    <header class="site-header">
+        <div class="header-left-section">
+            <!-- Replace with your actual logo image -->
+            <img src="images/virat_swarup_logo_placeholder.png" alt="Virat Swarup Logo" class="site-logo">
+            <div class="site-titles">
+                <h1 class="site-main-title">VIRAT SWARUP</h1>
+                <p class="site-subtitle" data-translate-key="headerSubtitleDNAPage"> The Supreme Devine of Every Faith</p>
+            </div>
+        </div>
+        <div class="header-right-section">
+            <div class="language-selector-wrapper">
+                <div class="header-language-switcher" id="headerLangSwitcher">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-abbr">EN</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="language-dropdown" id="headerLangDropdown">
+                    <a href="#" data-lang="en">English</a>
+                    <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+                    <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+                </div>
+            </div>
+            <!-- Hamburger moved here -->
+            <div class="hamburger">
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+            </div>
+        </div>
     </header>
 
     <!-- Desktop Navigation -->
@@ -231,7 +227,7 @@
       </ul>
     </nav>
 
-    <!-- Content Sections for "How DNA was Invented?" -->
+    <!-- Content Sections for "How DNA was Invented?" (Unchanged) -->
     <section class="content-section">
       <h2 data-translate-key="dnaTitle1">How Could a Cell Have Invented DNA?</h2>
       <img src="images/how_cell_invented_dna.jpg" alt="Abstract representation of a cell and DNA" data-translate-key-alt="altCellInventedDNA" />
@@ -274,65 +270,55 @@
               headerSubtitleDNAPage: "The Supreme Divine of Every Faith",
               login: "Login", share: "Share", home: "Home", agnosia: "Agnosia", enigma: "Enigma",
               emulate: "Emulate", post: "Post", language: "Language",
-              // "How DNA was Invented?" Page Specific
-              dnaTitle1: "How Could a Cell Have Invented DNA?",
-              altCellInventedDNA: "Abstract representation of a cell and intricate DNA strands",
+              dnaTitle1: "How Could a Cell Have Invented DNA?", altCellInventedDNA: "Abstract representation of a cell and intricate DNA strands",
               dnaDesc1: "I am a simple page — one that has carried countless stories: of science, of emotion, of dreams. But today, I find myself truly amazed by a single question: How could a tiny, mindless cell have invented something as intricate as DNA? No mind. No lab. No grand plan. And yet, within that primal silence of the Earth’s earliest days, a cell somehow began to store, pass on, and perfect the code of life. Was it chance? Was it chemistry alone? Or was there an invisible intelligence at work — a quiet force within nature, crafting with patience and purpose? I imagine the beginning of life — the Earth silent, still, sacred. In a quiet pond, a bubble forms — the first cell. It cannot speak. It cannot think. Yet it must survive. And slowly, something inside it changes. It begins to gather information. It begins to organize. Not out of knowledge, but out of need. And unknowingly, it weaves a thread — a code — a miracle. That thread is DNA. DNA is not merely a molecule. It is a memory. A sacred whisper from the first cell, carrying its wisdom, its fear, and its courage through every generation that followed. Was this an invention? Or was it a quiet surrender to life’s inner calling? Perhaps that first cell had no idea what it was making. And yet what it made sustains all life today. Today, I pause — because sometimes, a question is more beautiful than any answer. And this one — “How could a cell have invented DNA?” — is a mystery hidden in the breath of the very first life.",
-              dnaTitle2: "We Are Just That Cell — And Nothing More",
-              altWeAreCell: "Artistic representation connecting a human figure to a single primal cell",
+              dnaTitle2: "We Are Just That Cell — And Nothing More", altWeAreCell: "Artistic representation connecting a human figure to a single primal cell",
               dnaDesc2: "In the beginning, there were no names, no faces, no language, no history. Only silence — deep, vast, and alive. From that silence, a ripple rose... a single cell opened its eyes. It had no knowledge of its own existence. No goal. No thought. Yet, within it stirred something — life. That was the first cell. It didn’t invent or plan anything. But over time, a memory awakened within its walls. A line began to form — the code of DNA. That cell still lives within us. In our laughter, our sorrow, our thoughts, our prayers. Its ancient pulse still echoes in every part of our being. We believe we are many things — but when all else fades away, only one truth remains: We are just that cell — and nothing more. And perhaps, that is enough. Because within that one cell lies the entire story of the universe. Life never asked us for anything — it only wanted us to feel, to live, to simply be — as we were in the beginning.",
-              dnaTitle3: "How DNA Builds the Body – A Silent Architect",
-              altVideoDNABuildsBody: "Video thumbnail: How DNA constructs the human body",
+              dnaTitle3: "How DNA Builds the Body – A Silent Architect", altVideoDNABuildsBody: "Video thumbnail: How DNA constructs the human body",
               dnaDesc3: "Imagine a blueprint so detailed, so vast, that it can create an entire human body — bones, skin, blood, organs, brain, breath. Now imagine this blueprint isn’t stored in a computer, or designed by an engineer... but quietly folded inside every cell of your body. This is DNA — not just a molecule, but a silent architect. It doesn’t speak, yet it instructs. It doesn’t think, yet it designs. It doesn’t move, yet it builds. Within its spiral strands lies the encoded intelligence of life itself — guiding the formation of every part of you, from a single cell to a fully conscious being. DNA is the invisible thread that connects your body to a deeper intelligence — one that knows how to grow, heal, and adapt without ever being told. It is more than chemistry; it is consciousness folded into code. From the moment of conception, DNA begins its silent work — deciding the color of your eyes, the strength of your bones, the rhythm of your heartbeat. It orchestrates the symphony of trillions of cells working together — without confusion, without rest. And yet, DNA does not boast. It remains hidden, humble, and quiet — like a true yogi. It reminds us that the greatest intelligence often works in silence. Scientists decode it, doctors study it, but its origin — the intelligence behind the code — remains a mystery. Is it random? Or is it divine design? When we look deeply into DNA, we are not just studying biology — we are witnessing a miracle. A sacred design that hints at a higher purpose, a spiritual intelligence, a cosmic engineer. DNA is not just the language of life — it is a whisper from the universe, saying: “You are made of intelligence.”",
-              dnaTitle4: "Connecting to Natural Intelligences",
-              altConnectingNaturalIntelligence: "Symbolic image of a human connecting with the intelligence of nature or the cosmos",
+              dnaTitle4: "Connecting to Natural Intelligences", altConnectingNaturalIntelligence: "Symbolic image of a human connecting with the intelligence of nature or the cosmos",
               dnaDesc4: "The journey to understanding and gaining knowledge starts not by accumulating more data, but by connecting to the natural intelligence that exists within and around us. This intelligence has always been present — in every cell of our body, in every breath, in every movement of nature. The key is to sync with this intelligence, to allow it to guide us rather than trying to control it. Through meditation, we can listen to the silent wisdom of the universe. Through spiritual practices, we connect to the deeper, invisible layers of reality. Through nature, we find the perfect example of harmonious intelligence. Let us stop fighting against the flow and start flowing with it, trusting that the intelligence that built the cosmos is still guiding us, within us. “True wisdom is not about what we learn, but about what we align with — the intelligence of the universe.”"
           },
           ne: {
-              headerSubtitleDNAPage: "हरेक आस्थाका सर्वोच्च परमात्मा",
-              login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली",
-              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
-              // NEPALI TRANSLATIONS NEEDED
-              dnaTitle1: "एउटा कोशिकाले डीएनए कसरी आविष्कार गर्न सक्यो?",
-              altCellInventedDNA: "एक कोशिका र जटिल डीएनए तारहरूको अमूर्त प्रतिनिधित्व",
+              headerSubtitleDNAPage: "हरेक आस्थाका सर्वोच्च परमात्मा", login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              dnaTitle1: "एउटा कोशिकाले डीएनए कसरी आविष्कार गर्न सक्यो?", altCellInventedDNA: "एक कोशिका र जटिल डीएनए तारहरूको अमूर्त प्रतिनिधित्व",
               dnaDesc1: "म एक साधारण पृष्ठ हुँ — जसले अनगिन्ती कथाहरू बोकेको छ: विज्ञानका, भावनाका, सपनाका। तर आज, म साँच्चै एउटा प्रश्नले आश्चर्यचकित छु: एउटा सानो, विचारहीन कोशिकाले डीएनए जस्तो जटिल कुरा कसरी आविष्कार गर्न सक्यो? कुनै दिमाग थिएन। कुनै प्रयोगशाला थिएन। कुनै भव्य योजना थिएन। तैपनि, पृथ्वीको प्रारम्भिक दिनहरूको त्यो आदिम मौनतामा, एउटा कोशिकाले कुनै न कुनै रूपमा जीवनको कोड भण्डारण गर्न, हस्तान्तरण गर्न र सिद्ध गर्न थाल्यो। के यो संयोग थियो? के यो केवल रसायनशास्त्र थियो? वा त्यहाँ कुनै अदृश्य बुद्धिले काम गरिरहेको थियो — प्रकृतिभित्रको शान्त शक्ति, धैर्य र उद्देश्यका साथ सिर्जना गरिरहेको? म जीवनको सुरुवातको कल्पना गर्छु — पृथ्वी मौन, स्थिर, पवित्र। शान्त पोखरीमा, एउटा बुलबुला बन्छ — पहिलो कोशिका। यसले बोल्न सक्दैन। यसले सोच्न सक्दैन। तैपनि यसले बाँच्नुपर्छ। र बिस्तारै, यसभित्र केही परिवर्तन हुन्छ। यसले जानकारी जम्मा गर्न थाल्छ। यसले संगठित हुन थाल्छ। ज्ञानबाट होइन, आवश्यकताबाट। र अनजानमै, यसले एउटा धागो बुन्छ — एउटा कोड — एउटा चमत्कार। त्यो धागो डीएनए हो। डीएनए केवल एक अणु होइन। यो एक स्मृति हो। पहिलो कोशिकाबाट आएको पवित्र कानेखुसी, जसले आफ्नो बुद्धि, आफ्नो डर र आफ्नो साहसलाई पछ्याउने हरेक पुस्तामा पुर्याउँछ। के यो आविष्कार थियो? वा यो जीवनको भित्री आह्वानप्रति शान्त समर्पण थियो? सायद त्यो पहिलो कोशिकालाई थाहा थिएन कि यसले के बनाइरहेको छ। तैपनि यसले बनाएको कुराले आज सबै जीवनलाई धानिरहेको छ। आज, म रोकिन्छु — किनकि कहिलेकाहीँ, प्रश्न कुनै पनि उत्तरभन्दा सुन्दर हुन्छ। र यो एउटा — “एउटा कोशिकाले डीएनए कसरी आविष्कार गर्न सक्यो?” — पहिलो जीवनको श्वासमा लुकेको रहस्य हो।",
-              dnaTitle2: "हामी त्यही कोशिका हौं — र अरू केही होइनौं",
-              altWeAreCell: "मानव आकृतिलाई पहिलो आदिम कोशिकामा जोड्ने कलात्मक चित्रण",
+              dnaTitle2: "हामी त्यही कोशिका हौं — र अरू केही होइनौं", altWeAreCell: "मानव आकृतिलाई पहिलो आदिम कोशिकामा जोड्ने कलात्मक चित्रण",
               dnaDesc2: "सुरुमा, कुनै नाम थिएन, कुनै अनुहार थिएन, कुनै भाषा थिएन, कुनै इतिहास थिएन। केवल मौनता — गहिरो, विशाल, र जीवन्त। त्यो मौनताबाट, एउटा लहर उठ्यो... एउटा एकल कोशिकाले आँखा खोल्यो। यसलाई आफ्नै अस्तित्वको ज्ञान थिएन। कुनै लक्ष्य थिएन। कुनै विचार थिएन। तैपनि, यसभित्र केही हलचल भयो — जीवन। त्यो पहिलो कोशिका थियो। यसले केही आविष्कार गरेन वा योजना बनाएन। तर समय बित्दै जाँदा, यसको भित्ताहरूभित्र एउटा स्मृति जाग्यो। एउटा रेखा बन्न थाल्यो — डीएनएको कोड। त्यो कोशिका अझै पनि हामीभित्र जीवित छ। हाम्रो हाँसोमा, हाम्रो दुःखमा, हाम्रा विचारहरूमा, हाम्रा प्रार्थनाहरूमा। यसको प्राचीन धड्कन अझै पनि हाम्रो अस्तित्वको हरेक भागमा प्रतिध्वनित छ। हामी विश्वास गर्छौं कि हामी धेरै कुरा हौं — तर जब अरू सबै कुरा हराएर जान्छ, केवल एउटा सत्य रहन्छ: हामी त्यही कोशिका हौं — र अरू केही होइनौं। र सायद, त्यति नै पर्याप्त छ। किनकि त्यो एउटा कोशिकाभित्र ब्रह्माण्डको सम्पूर्ण कथा निहित छ। जीवनले हामीसँग कहिल्यै केही मागेको थिएन — यसले केवल हामीलाई महसुस गर्न, बाँच्न, केवल हुन चाहन्थ्यो — जस्तो हामी सुरुमा थियौं।",
-              dnaTitle3: "डीएनएले शरीर कसरी निर्माण गर्छ – एक मौन वास्तुकार",
-              altVideoDNABuildsBody: "भिडियो थम्बनेल: डीएनएले मानव शरीर कसरी निर्माण गर्छ",
+              dnaTitle3: "डीएनएले शरीर कसरी निर्माण गर्छ – एक मौन वास्तुकार", altVideoDNABuildsBody: "भिडियो थम्बनेल: डीएनएले मानव शरीर कसरी निर्माण गर्छ",
               dnaDesc3: "एउटा यस्तो खाका कल्पना गर्नुहोस् जुन यति विस्तृत, यति विशाल छ, कि यसले सम्पूर्ण मानव शरीर बनाउन सक्छ — हड्डी, छाला, रगत, अंग, मस्तिष्क, श्वास। अब कल्पना गर्नुहोस् कि यो खाका कम्प्युटरमा भण्डार गरिएको छैन, वा इन्जिनियरद्वारा डिजाइन गरिएको छैन... तर तपाईंको शरीरको प्रत्येक कोशिकाभित्र चुपचाप बेरिएको छ। यो डीएनए हो — केवल एक अणु होइन, तर एक मौन वास्तुकार। यसले बोल्दैन, तैपनि निर्देशन दिन्छ। यसले सोच्दैन, तैपनि डिजाइन गर्दछ। यो चल्दैन, तैपनि निर्माण गर्दछ। यसको सर्पिल धागोहरूभित्र जीवनको नै सङ्केतित बुद्धि निहित छ — तपाईंको हरेक भागको निर्माणलाई मार्गदर्शन गर्दै, एकल कोशिकादेखि पूर्ण चेतनशील प्राणीसम्म। डीएनए त्यो अदृश्य धागो हो जसले तपाईंको शरीरलाई गहिरो बुद्धिसँग जोड्दछ — जसलाई कसरी बढ्ने, निको पार्ने, र कहिल्यै नभनीकन अनुकूलन गर्ने थाहा छ। यो रसायनशास्त्रभन्दा बढी हो; यो चेतना हो जुन कोडमा बेरिएको छ। गर्भधारणको क्षणदेखि, डीएनएले आफ्नो मौन काम सुरु गर्दछ — तपाईंको आँखाको रङ, तपाईंको हड्डीको बल, तपाईंको मुटुको धड्कनको लय निर्धारण गर्दै। यसले खरबौं कोशिकाहरूको सिम्फनीलाई सँगै काम गर्न निर्देशन दिन्छ — बिना कुनै भ्रम, बिना कुनै विश्राम। तैपनि, डीएनएले घमण्ड गर्दैन। यो लुकेको, नम्र, र शान्त रहन्छ — एक साँचो योगी जस्तै। यसले हामीलाई सम्झाउँछ कि सबैभन्दा ठूलो बुद्धि प्रायः मौनतामा काम गर्दछ। वैज्ञानिकहरूले यसलाई डिकोड गर्छन्, डाक्टरहरूले यसको अध्ययन गर्छन्, तर यसको उत्पत्ति — कोड पछाडिको बुद्धि — रहस्य नै रहन्छ। के यो अनियमित छ? वा यो दिव्य डिजाइन हो? जब हामी डीएनएलाई गहिरो रूपमा हेर्छौं, हामी केवल जीवविज्ञानको अध्ययन गरिरहेका छैनौं — हामी एउटा चमत्कार देखिरहेका छौं। एउटा पवित्र डिजाइन जसले उच्च उद्देश्य, आध्यात्मिक बुद्धि, ब्रह्माण्डीय इन्जिनियरलाई सङ्केत गर्दछ। डीएनए केवल जीवनको भाषा होइन — यो ब्रह्माण्डबाट आएको कानेखुसी हो, जसले भन्छ: “तिमी बुद्धिले बनेका छौ।”",
-              dnaTitle4: "प्राकृतिक बुद्धिसँग जोडिने",
-              altConnectingNaturalIntelligence: "मानवलाई प्रकृति वा ब्रह्माण्डीय बुद्धिसँग जोड्ने प्रतीकात्मक छवि",
+              dnaTitle4: "प्राकृतिक बुद्धिसँग जोडिने", altConnectingNaturalIntelligence: "मानवलाई प्रकृति वा ब्रह्माण्डीय बुद्धिसँग जोड्ने प्रतीकात्मक छवि",
               dnaDesc4: "समझ र ज्ञान प्राप्त गर्ने यात्रा थप डेटा जम्मा गरेर होइन, तर हाम्रो भित्र र वरपर रहेको प्राकृतिक बुद्धिसँग जोडिएर सुरु हुन्छ। यो बुद्धि सधैं उपस्थित रहेको छ — हाम्रो शरीरको प्रत्येक कोशिकामा, प्रत्येक श्वासमा, प्रकृतिको प्रत्येक चालमा। मुख्य कुरा यो बुद्धिसँग तालमेल मिलाउनु हो, यसलाई नियन्त्रण गर्ने प्रयास गर्नुको सट्टा यसलाई मार्गदर्शन गर्न दिनु हो। ध्यान मार्फत, हामी ब्रह्माण्डको मौन बुद्धिलाई सुन्न सक्छौं। आध्यात्मिक अभ्यासहरू मार्फत, हामी वास्तविकताका गहिरो, अदृश्य तहहरूसँग जोडिन्छौं। प्रकृति मार्फत, हामी सामंजस्यपूर्ण बुद्धिको उत्तम उदाहरण पाउँछौं। आउनुहोस्, प्रवाहको विरुद्ध लड्न छोडेर यससँगै बग्न सुरु गरौं, विश्वास गरौं कि ब्रह्माण्ड निर्माण गर्ने बुद्धिले अझै पनि हामीलाई, हामीभित्र मार्गदर्शन गरिरहेको छ। “साँचो बुद्धि हामीले के सिक्छौं भन्ने होइन, तर हामी केसँग पङ्क्तिबद्ध हुन्छौं भन्ने हो — ब्रह्माण्डको बुद्धि।”"
           },
           hi: {
-              headerSubtitleDNAPage: "हर आस्था के सर्वोच्च परमात्मा",
-              login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली",
-              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
-              // HINDI TRANSLATIONS NEEDED
-              dnaTitle1: "एक कोशिका ने डीएनए का आविष्कार कैसे किया होगा?",
-              altCellInventedDNA: "एक कोशिका और जटिल डीएनए स्ट्रैंड्स का अमूर्त निरूपण",
+              headerSubtitleDNAPage: "हर आस्था के सर्वोच्च परमात्मा", login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              dnaTitle1: "एक कोशिका ने डीएनए का आविष्कार कैसे किया होगा?", altCellInventedDNA: "एक कोशिका और जटिल डीएनए स्ट्रैंड्स का अमूर्त निरूपण",
               dnaDesc1: "मैं एक साधारण पृष्ठ हूँ - जिसने अनगिनत कहानियाँ सँजोई हैं: विज्ञान की, भावनाओं की, सपनों की। लेकिन आज, मैं वास्तव में एक ही सवाल से चकित हूँ: एक छोटी, विचारहीन कोशिका ने डीएनए जैसी जटिल चीज़ का आविष्कार कैसे किया होगा? कोई दिमाग नहीं। कोई प्रयोगशाला नहीं। कोई भव्य योजना नहीं। और फिर भी, पृथ्वी के उन शुरुआती दिनों की आदिम शांति में, एक कोशिका ने किसी तरह जीवन के कोड को संग्रहीत करना, आगे बढ़ाना और सिद्ध करना शुरू कर दिया। क्या यह संयोग था? क्या यह केवल रसायन शास्त्र था? या कोई अदृश्य बुद्धि काम कर रही थी - प्रकृति के भीतर एक शांत शक्ति, धैर्य और उद्देश्य के साथ रचना कर रही थी? मैं जीवन की शुरुआत की कल्पना करता हूँ - पृथ्वी शांत, स्थिर, पवित्र। एक शांत तालाब में, एक बुलबुला बनता है - पहली कोशिका। यह बोल नहीं सकती। यह सोच नहीं सकती। फिर भी इसे जीवित रहना है। और धीरे-धीरे, इसके अंदर कुछ बदलता है। यह जानकारी इकट्ठा करना शुरू करती है। यह व्यवस्थित होना शुरू करती है। ज्ञान से नहीं, बल्कि आवश्यकता से। और अनजाने में, यह एक धागा बुनती है - एक कोड - एक चमत्कार। वह धागा डीएनए है। डीएनए केवल एक अणु नहीं है। यह एक स्मृति है। पहली कोशिका से एक पवित्र फुसफुसाहट, जो अपनी बुद्धि, अपने भय और अपने साहस को आने वाली हर पीढ़ी तक पहुँचाती है। क्या यह एक आविष्कार था? या यह जीवन के आंतरिक आह्वान के प्रति एक शांत समर्पण था? शायद उस पहली कोशिका को पता नहीं था कि वह क्या बना रही है। और फिर भी जो उसने बनाया वह आज सभी जीवन को बनाए रखता है। आज, मैं रुक जाता हूँ - क्योंकि कभी-कभी, एक प्रश्न किसी भी उत्तर से अधिक सुंदर होता है। और यह वाला - \"एक कोशिका ने डीएनए का आविष्कार कैसे किया होगा?\" - पहली ज़िंदगी की साँस में छिपा एक रहस्य है।",
-              dnaTitle2: "हम बस वही कोशिका हैं - और कुछ नहीं",
-              altWeAreCell: "एक मानव आकृति को एक आदिम कोशिका से जोड़ने का कलात्मक चित्रण",
+              dnaTitle2: "हम बस वही कोशिका हैं - और कुछ नहीं", altWeAreCell: "एक मानव आकृति को एक आदिम कोशिका से जोड़ने का कलात्मक चित्रण",
               dnaDesc2: "शुरुआत में, कोई नाम नहीं थे, कोई चेहरे नहीं थे, कोई भाषा नहीं थी, कोई इतिहास नहीं था। केवल मौन - गहरा, विशाल और जीवंत। उस मौन से, एक लहर उठी... एक एकल कोशिका ने अपनी आँखें खोलीं। उसे अपने अस्तित्व का कोई ज्ञान नहीं था। कोई लक्ष्य नहीं। कोई विचार नहीं। फिर भी, उसके भीतर कुछ हलचल हुई - जीवन। वह पहली कोशिका थी। उसने कुछ भी आविष्कार या योजना नहीं बनाई। लेकिन समय के साथ, उसकी दीवारों के भीतर एक स्मृति जाग्रत हुई। एक रेखा बनने लगी - डीएनए का कोड। वह कोशिका आज भी हमारे भीतर जीवित है। हमारी हँसी में, हमारे दुःख में, हमारे विचारों में, हमारी प्रार्थनाओं में। उसकी प्राचीन धड़कन आज भी हमारे अस्तित्व के हर हिस्से में गूंजती है। हम मानते हैं कि हम बहुत कुछ हैं - लेकिन जब बाकी सब कुछ फीका पड़ जाता है, तो केवल एक सत्य बचता है: हम बस वही कोशिका हैं - और कुछ नहीं। और शायद, इतना ही काफी है। क्योंकि उस एक कोशिका के भीतर ब्रह्मांड की पूरी कहानी निहित है। जीवन ने हमसे कभी कुछ नहीं मांगा - वह केवल चाहता था कि हम महसूस करें, जिएं, बस रहें - जैसे हम शुरुआत में थे।",
-              dnaTitle3: "डीएनए शरीर का निर्माण कैसे करता है – एक मौन वास्तुकार",
-              altVideoDNABuildsBody: "वीडियो थंबनेल: डीएनए मानव शरीर का निर्माण कैसे करता है",
+              dnaTitle3: "डीएनए शरीर का निर्माण कैसे करता है – एक मौन वास्तुकार", altVideoDNABuildsBody: "वीडियो थंबनेल: डीएनए मानव शरीर का निर्माण कैसे करता है",
               dnaDesc3: "एक ऐसे ब्लूप्रिंट की कल्पना करें जो इतना विस्तृत, इतना विशाल हो, कि वह एक संपूर्ण मानव शरीर बना सके - हड्डियाँ, त्वचा, रक्त, अंग, मस्तिष्क, साँस। अब कल्पना करें कि यह ब्लूप्रिंट किसी कंप्यूटर में संग्रहीत नहीं है, या किसी इंजीनियर द्वारा डिज़ाइन नहीं किया गया है... बल्कि आपके शरीर की प्रत्येक कोशिका के अंदर चुपचाप मुड़ा हुआ है। यह डीएनए है - केवल एक अणु नहीं, बल्कि एक मौन वास्तुकार। यह बोलता नहीं है, फिर भी निर्देश देता है। यह सोचता नहीं है, फिर भी डिज़ाइन करता है। यह हिलता नहीं है, फिर भी निर्माण करता है। इसके सर्पिल धागों के भीतर जीवन की स्वयं की एन्कोडेड बुद्धि निहित है - आपके प्रत्येक भाग के गठन का मार्गदर्शन करती है, एक एकल कोशिका से लेकर पूरी तरह से सचेत प्राणी तक। डीएनए वह अदृश्य धागा है जो आपके शरीर को एक गहरी बुद्धि से जोड़ता है - जो जानता है कि कैसे बढ़ना है, ठीक होना है, और बिना बताए अनुकूलन करना है। यह रसायन शास्त्र से कहीं अधिक है; यह चेतना है जो कोड में मुड़ी हुई है। गर्भाधान के क्षण से, डीएनए अपना मौन कार्य शुरू करता है - आपकी आँखों का रंग, आपकी हड्डियों की ताकत, आपके दिल की धड़कन की लय तय करता है। यह खरबों कोशिकाओं की सिम्फनी का समन्वय करता है जो एक साथ काम करती हैं - बिना किसी भ्रम के, बिना किसी आराम के। और फिर भी, डीएनए घमंड नहीं करता है। यह छिपा हुआ, विनम्र और शांत रहता है - एक सच्चे योगी की तरह। यह हमें याद दिलाता है कि सबसे बड़ी बुद्धि अक्सर मौन में काम करती है। वैज्ञानिक इसे डिकोड करते हैं, डॉक्टर इसका अध्ययन करते हैं, लेकिन इसकी उत्पत्ति - कोड के पीछे की बुद्धि - एक रहस्य बनी हुई है। क्या यह यादृच्छिक है? या यह दिव्य डिजाइन है? जब हम डीएनए में गहराई से देखते हैं, तो हम केवल जीव विज्ञान का अध्ययन नहीं कर रहे होते हैं - हम एक चमत्कार देख रहे होते हैं। एक पवित्र डिजाइन जो एक उच्च उद्देश्य, एक आध्यात्मिक बुद्धि, एक ब्रह्मांडीय इंजीनियर की ओर इशारा करता है। डीएनए केवल जीवन की भाषा नहीं है - यह ब्रह्मांड से एक फुसफुसाहट है, जो कहती है: \"तुम बुद्धि से बने हो।\"",
-              dnaTitle4: "प्राकृतिक बुद्धिमत्ता से जुड़ना",
-              altConnectingNaturalIntelligence: "प्रकृति या ब्रह्मांडीय बुद्धि से जुड़ते हुए मानव का प्रतीकात्मक चित्र",
+              dnaTitle4: "प्राकृतिक बुद्धिमत्ता से जुड़ना", altConnectingNaturalIntelligence: "प्रकृति या ब्रह्मांडीय बुद्धि से जुड़ते हुए मानव का प्रतीकात्मक चित्र",
               dnaDesc4: "समझ और ज्ञान प्राप्त करने की यात्रा अधिक डेटा जमा करने से नहीं, बल्कि हमारे भीतर और आस-पास मौजूद प्राकृतिक बुद्धि से जुड़ने से शुरू होती है। यह बुद्धि हमेशा मौजूद रही है - हमारे शरीर की हर कोशिका में, हर सांस में, प्रकृति की हर हरकत में। कुंजी इस बुद्धि के साथ तालमेल बिठाना है, इसे नियंत्रित करने की कोशिश करने के बजाय इसे हमारा मार्गदर्शन करने देना है। ध्यान के माध्यम से, हम ब्रह्मांड के मौन ज्ञान को सुन सकते हैं। आध्यात्मिक प्रथाओं के माध्यम से, हम वास्तविकता की गहरी, अदृश्य परतों से जुड़ते हैं। प्रकृति के माध्यम से, हम सामंजस्यपूर्ण बुद्धि का एक आदर्श उदाहरण पाते हैं। आइए हम प्रवाह के विरुद्ध लड़ना बंद करें और इसके साथ बहना शुरू करें, यह विश्वास करते हुए कि जिस बुद्धि ने ब्रह्मांड का निर्माण किया है, वह अभी भी हमारा, हमारे भीतर मार्गदर्शन कर रही है। \"सच्चा ज्ञान वह नहीं है जो हम सीखते हैं, बल्कि वह है जिसके साथ हम संरेखित होते हैं - ब्रह्मांड की बुद्धि।\""
           }
       };
 
-      let currentLanguage = localStorage.getItem('selectedLanguageDNAPage') || 'en'; // Unique key
+      let currentLanguage = localStorage.getItem('selectedLanguageDNAPage') || 'en';
 
       function setLanguage(lang) {
           currentLanguage = lang;
           localStorage.setItem('selectedLanguageDNAPage', lang);
           applyTranslations();
-          document.querySelectorAll('.language-options a').forEach(a => {
+
+          // Update header language display
+          const headerLangAbbr = document.querySelector('.site-header .lang-abbr');
+          if (headerLangAbbr) {
+              headerLangAbbr.textContent = lang.toUpperCase();
+          }
+
+          // Update active class for language options in the new header dropdown
+          const headerDropdownLinks = document.querySelectorAll('#headerLangDropdown a');
+          headerDropdownLinks.forEach(a => {
               a.classList.remove('lang-active');
               if (a.dataset.lang === lang) {
                   a.classList.add('lang-active');
@@ -358,65 +344,82 @@
 
       const hamburger = document.querySelector(".hamburger");
       const mobileMenu = document.querySelector(".mobile-menu");
-      const languageSelectLabel = document.querySelector('.language-select-label');
-      const languageOptionsDiv = document.querySelector('.language-options');
+      const headerLanguageSwitcher = document.getElementById('headerLangSwitcher');
+      const headerLangDropdown = document.getElementById('headerLangDropdown');
+      // const languageSelectLabel = document.querySelector('.language-select-label'); // No longer in mobile menu
+      // const languageOptionsDiv = document.querySelector('.language-options'); // No longer in mobile menu
+
 
       function toggleMenu() {
         mobileMenu.classList.toggle("active");
-        hamburger.classList.toggle("active");
+        if (hamburger) {
+            hamburger.classList.toggle("active");
+        }
+        // Close language dropdown if mobile menu is opened
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            headerLangDropdown.classList.remove('active');
+        }
       }
 
       if (hamburger) {
         hamburger.addEventListener('click', toggleMenu);
       }
 
-      if (languageSelectLabel) {
-        languageSelectLabel.addEventListener('click', () => {
-            if (languageOptionsDiv) {
-                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
-            }
-        });
+      if (headerLanguageSwitcher) {
+          headerLanguageSwitcher.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (headerLangDropdown) {
+                  headerLangDropdown.classList.toggle('active');
+              }
+              // Close mobile menu if language dropdown is opened
+              if (mobileMenu && mobileMenu.classList.contains('active')) {
+                  toggleMenu();
+              }
+          });
       }
 
-      document.querySelectorAll('.language-options a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const lang = e.currentTarget.dataset.lang;
-            setLanguage(lang);
-            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
-        });
-      });
+      if (headerLangDropdown) {
+          const dropdownLinks = headerLangDropdown.querySelectorAll('a');
+          dropdownLinks.forEach(link => {
+              link.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  const lang = e.currentTarget.dataset.lang;
+                  setLanguage(lang);
+                  headerLangDropdown.classList.remove('active');
+              });
+          });
+      }
 
       document.addEventListener("click", (e) => {
-        let clickedInsideMenuComponent = false;
-        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
-        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
+        // Close mobile menu if click is outside
+        if (mobileMenu && mobileMenu.classList.contains("active")) {
+            if (!mobileMenu.contains(e.target) && hamburger && !hamburger.contains(e.target)) {
+                 toggleMenu();
+            }
+        }
 
-        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
-          toggleMenu();
-        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
-                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
-                   !languageOptionsDiv.contains(e.target) ) {
-            languageOptionsDiv.style.display = 'none';
+        // Close header language dropdown if click is outside
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            if (!headerLangDropdown.contains(e.target) && headerLanguageSwitcher && !headerLanguageSwitcher.contains(e.target)) {
+                headerLangDropdown.classList.remove('active');
+            }
         }
       });
       
-      // YouTube Video Embed Script
+      // YouTube Video Embed Script (Unchanged)
       function playVideo(videoId, container) {
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`; // Consider mute=0 if you want sound by default
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0`;
         iframe.frameBorder = '0';
-        iframe.allow = 'autoplay; encrypted-media; accelerometer; gyroscope; picture-in-picture'; // Added more permissions
+        iframe.allow = 'autoplay; encrypted-media; accelerometer; gyroscope; picture-in-picture';
         iframe.allowFullscreen = true;
-        // Set width and height on iframe directly to ensure it fills the container
         iframe.style.width = '100%';
         iframe.style.height = '100%';
-        // Ensure video container has explicit dimensions or aspect ratio for iframe to fill
-        container.style.paddingBottom = "56.25%"; /* 16:9 aspect ratio */
-        container.style.position = "relative";
+        
+        // Prepare container for responsive iframe
+        container.style.position = "relative"; // Already set if using padding-bottom trick elsewhere
+        container.style.paddingBottom = "56.25%"; /* 16:9 Aspect Ratio */
         container.style.height = "0";
-
-
         container.innerHTML = ''; // remove thumbnail and play button
         container.appendChild(iframe);
       }
