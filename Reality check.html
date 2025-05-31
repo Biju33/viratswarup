@@ -15,7 +15,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Georgia", serif; /* Consider Devanagari fallbacks */
+        font-family: "Georgia", serif;
       }
 
       body {
@@ -23,56 +23,77 @@
         color: #2c2c2c;
       }
 
-      /* Hamburger & Menu Styles (same as previous) */
+      /* --- NEW HEADER STYLES (same as successful example) --- */
+      .site-header {
+          background-color: #8b0000;
+          color: white;
+          padding: 8px 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+      }
+      .header-left-section { display: flex; align-items: center; }
+      .site-logo { height: 45px; margin-right: 12px; }
+      .site-titles { display: flex; flex-direction: column; justify-content: center; }
+      .site-main-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.1; text-transform: uppercase; }
+      .site-subtitle { font-size: 12px; font-style: italic; color: rgba(255, 255, 255, 0.9); margin: 2px 0 0 0; font-weight: 300; line-height: 1.1; }
+      .header-right-section { display: flex; align-items: center; gap: 12px; }
+      .language-selector-wrapper { position: relative; }
+      .header-language-switcher {
+          display: flex; align-items: center; border: 1px solid rgba(255, 255, 255, 0.5);
+          border-radius: 4px; padding: 6px 8px; cursor: pointer; color: white; gap: 5px;
+          background-color: rgba(0,0,0,0.1);
+      }
+      .header-language-switcher:hover { background-color: rgba(0,0,0,0.2); }
+      .header-language-switcher .fas { font-size: 14px; }
+      .header-language-switcher .lang-abbr { font-size: 13px; font-weight: 500; }
+      .language-dropdown {
+          display: none; position: absolute; top: 100%; right: 0; background-color: #800000;
+          border: 1px solid rgba(255, 255, 255, 0.3); border-top: none; border-radius: 0 0 4px 4px;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.15); z-index: 910; min-width: 150px; padding: 5px 0;
+      }
+      .language-dropdown.active { display: block; }
+      .language-dropdown a { display: block; padding: 8px 15px; color: white; text-decoration: none; font-size: 13px; }
+      .language-dropdown a:hover { background-color: rgba(255, 255, 255, 0.1); }
+      .language-dropdown a.lang-active { font-weight: bold; background-color: rgba(255, 255, 255, 0.15); }
+      /* --- END NEW HEADER STYLES --- */
+
+
+      /* Hamburger & Menu Styles (hamburger position adjusted) */
       .hamburger {
-        position: fixed;
-        top: 25px;
-        right: 25px;
+        /* position: fixed; top: 25px; right: 25px; */ /* REMOVED fixed positioning */
         cursor: pointer;
-        display: none;
-        z-index: 1001;
+        display: none; /* Shown by media query */
+        width: 28px; height: auto; padding: 5px 0;
       }
       .hamburger-line {
-        width: 28px;
-        height: 2px;
-        background: #ffffff; /* White for visibility on dark header */
-        margin: 6px 0;
-        transition: 0.4s;
+        width: 28px; height: 2px; background: #ffffff;
+        margin: 6px 0; transition: 0.4s;
       }
       .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
       .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; }
       .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
 
       .mobile-menu {
-        position: fixed;
-        top: 0;
-        right: -300px;
-        width: 300px;
-        height: 100%;
-        background: #8b0000;
-        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-        transition: 0.4s;
-        padding-top: 60px;
-        z-index: 1000;
-        overflow-y: auto;
+        position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+        background: #8b0000; box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+        transition: 0.4s; padding-top: 20px; /* Adjusted, lang select gone */
+        z-index: 1000; overflow-y: auto;
       }
       .mobile-menu.active { right: 0; }
-      .mobile-menu a, .mobile-menu .language-select-label {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 15px 30px;
-        color: #fff !important;
-        text-decoration: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        cursor: pointer;
+      .mobile-menu a { /* Removed .mobile-menu .language-select-label */
+        display: flex; align-items: center; gap: 15px; padding: 15px 30px;
+        color: #fff !important; text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer;
       }
       .mobile-menu i { width: 25px; font-size: 20px; color: #fff !important; }
-      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child { border-bottom: none; }
+      .mobile-menu a:last-child { border-bottom: none; } /* Removed .language-options specific rule */
 
-      .language-options { padding-left: 30px; display: none; background-color: rgba(0,0,0,0.1); }
-      .language-options a { padding: 12px 30px; font-size: 0.9em; }
-      .language-options a.lang-active { font-weight: bold; background-color: rgba(255,255,255,0.1); }
+      /* Language options from mobile menu CSS commented out */
+      /* .language-options { ... } */
 
       /* Navigations (same as previous) */
       .bottom-nav {
@@ -100,40 +121,40 @@
         .hamburger { display: block; }
         .desktop-nav { display: none; }
         .bottom-nav { display: block; }
+        /* Responsive adjustments for new header */
+        .site-main-title { font-size: 18px; }
+        .site-subtitle { font-size: 10px; }
+        .site-logo { height: 35px; margin-right: 8px; }
+        .header-language-switcher { padding: 5px 7px; gap: 4px; }
+        .header-language-switcher .fas, .header-language-switcher .lang-abbr { font-size: 12px; }
+        .header-right-section { gap: 8px; }
+        .site-header { padding: 8px 10px; }
       }
 
-      /* Styles for "What is Reality?" page content sections */
+      /* Styles for "What is Reality?" page content sections (Unchanged) */
       .content-section {
-        padding: 30px 20px; /* Adjusted padding */
+        padding: 30px 20px;
         text-align: center; 
         background: #fff; 
-        max-width: 800px; /* Increased max-width for better readability */
-        margin: 30px auto; /* Adjusted margin */
-        border-radius: 12px; /* Softer radius */
-        box-shadow: 0 6px 15px rgba(139, 0, 0, 0.15); /* Adjusted shadow */
+        max-width: 800px;
+        margin: 30px auto;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(139, 0, 0, 0.15);
         color: #333;
       }
       .content-section h2 {
-        font-size: 28px; /* Slightly adjusted size */
+        font-size: 28px;
         color: #8b0000; 
         margin-bottom: 20px;
       }
       .content-section p {
-        font-size: 17px; /* Slightly adjusted size */
-        line-height: 1.7; /* Adjusted line-height */
-        text-align: justify; /* Justify paragraphs for better block reading */
+        font-size: 17px;
+        line-height: 1.7;
+        text-align: justify;
       }
-
     </style>
   </head>
   <body>
-    <!-- Hamburger Icon -->
-    <div class="hamburger"> <!-- onclick removed -->
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-    </div>
-
     <!-- Mobile Menu -->
     <nav class="mobile-menu">
       <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
@@ -143,21 +164,39 @@
       <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
       <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
       <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
-
-      <div class="language-select-label">
-            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
-      </div>
-      <div class="language-options">
-          <a href="#" data-lang="en">English</a>
-          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
-          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
-      </div>
+      <!-- Language options removed from mobile menu -->
     </nav>
 
-    <!-- Header -->
-    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
-        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
-        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitleReality"> The Supreme Devine of Every Faith</h2>
+    <!-- RESTRUCTURED HEADER -->
+    <header class="site-header">
+        <div class="header-left-section">
+            <!-- Replace with your actual logo image -->
+            <img src="images/virat_swarup_logo_placeholder.png" alt="Virat Swarup Logo" class="site-logo">
+            <div class="site-titles">
+                <h1 class="site-main-title">VIRAT SWARUP</h1>
+                <p class="site-subtitle" data-translate-key="headerSubtitleReality"> The Supreme Devine of Every Faith</p>
+            </div>
+        </div>
+        <div class="header-right-section">
+            <div class="language-selector-wrapper">
+                <div class="header-language-switcher" id="headerLangSwitcher">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-abbr">EN</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="language-dropdown" id="headerLangDropdown">
+                    <a href="#" data-lang="en">English</a>
+                    <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+                    <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+                </div>
+            </div>
+            <!-- Hamburger moved here -->
+            <div class="hamburger">
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+            </div>
+        </div>
     </header>
 
     <!-- Desktop Navigation -->
@@ -182,7 +221,7 @@
       </ul>
     </nav>
 
-    <!-- Content Sections for "What is Reality?" -->
+    <!-- Content Sections for "What is Reality?" (Unchanged) -->
     <section class="content-section">
       <h2 data-translate-key="realityTitle1">What is Reality?</h2>
       <p data-translate-key="realityDesc1">
@@ -207,7 +246,7 @@
     <section class="content-section">
       <h2 data-translate-key="realityTitle4">Searching for Reality in Non-Reality:</h2>
       <p data-translate-key="realityDesc4">
-        Despite the limitations of our senses, humans have an innate desire to seek truth, to uncover the nature of existence beyond the veil of illusion. This search for reality, for what is truly real, is an ongoing pursuit in human consciousness. We constantly search for answers to questions like "What is the nature of life?" "What is the purpose of our existence?" and "What lies beyond this world?" Philosophers, scientists, and spiritual seekers alike have embarked on this quest for understanding. Yet, while science explores the material world and its physical laws, it often fails to address the deeper questions of existence. Spiritual traditions, on the other hand, teach that the path to reality lies not through the senses but through inner contemplation and transcendence. We search for reality within the world of non-reality, but the true nature of existence can only be known when we transcend the limitations of our senses. Spiritual practices such as meditation, yoga, and self-inquiry offer a pathway to experience a deeper reality that exists beyond the physical world.
+        Despite the limitations of our senses, humans have an innate desire to seek truth, to uncover the nature of existence beyond the veil of illusion. This search for reality, for what is truly real, is an ongoing pursuit in human consciousness. We constantly search for answers to questions like "What is the nature of life?" "What is the purpose of our existence?\" and \"What lies beyond this world?\" Philosophers, scientists, and spiritual seekers alike have embarked on this quest for understanding. Yet, while science explores the material world and its physical laws, it often fails to address the deeper questions of existence. Spiritual traditions, on the other hand, teach that the path to reality lies not through the senses but through inner contemplation and transcendence. We search for reality within the world of non-reality, but the true nature of existence can only be known when we transcend the limitations of our senses. Spiritual practices such as meditation, yoga, and self-inquiry offer a pathway to experience a deeper reality that exists beyond the physical world.",
       </p>
     </section>
 
@@ -246,7 +285,6 @@
               headerSubtitleReality: "The Supreme Divine of Every Faith",
               login: "Login", share: "Share", home: "Home", agnosia: "Agnosia", enigma: "Enigma",
               emulate: "Emulate", post: "Post", language: "Language",
-              // "What is Reality?" Page Specific
               realityTitle1: "What is Reality?",
               realityDesc1: "Reality is the true and permanent truth, something that is constant and unchanging. The things we see, hear, and feel are not actually reality. What we experience through our senses—like sight, hearing, and touch—is just an impression or a perception, and it changes all the time. For example, when we look at the sun, we see a bright, glowing object in the sky. But in reality, the sun is a massive ball of gas. What we see with our eyes is not the full truth. Our senses can only perceive a small part of the whole reality, and what we see is just a tiny fraction of what exists. Reality is Unchanging: True reality is something that stays the same, no matter the time, place, or situation. Whether or not we understand it, reality remains constant. Things like the universe, stars, and planets are all part of this deeper, unchanging reality, but we can't fully grasp their true form with our senses alone. Why Can't We See Reality? What we perceive through our senses is just a filtered version of reality. Our eyes, for example, can only see three primary colors, but there are many more colors beyond what we can detect. This shows us that everything we experience is a limited version of what’s truly out there. The real essence of reality can only be understood by going beyond the limitations of our senses—through deep meditation, self-awareness, and spiritual understanding. When we break free from the illusions created by our mind and senses, we begin to connect with the true nature of reality.",
               realityTitle2: "The Illusion of Non-Reality:",
@@ -265,10 +303,7 @@
               realityDesc8: "Reality and non-reality are two sides of the same coin. While non-reality offers us the material world and the sensory experiences we rely on daily, it is through transcending these illusions that we come closer to understanding the true nature of existence. The search for reality is not a search for something external, but a journey inward, where we seek to uncover the eternal truth that lies beyond the limitations of the senses and the mind. By understanding the relationship between reality and non-reality, we can begin to see through the illusions that govern our perception and move closer to the ultimate truth that is present within us all. It is only through this inner awakening that we can experience reality in its purest form — a reality that is beyond time, space, and the material world."
           },
           ne: {
-              headerSubtitleReality: "हरेक आस्थाका सर्वोच्च परमात्मा",
-              login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली",
-              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
-              // "What is Reality?" Page Specific - NEPALI TRANSLATIONS NEEDED
+              headerSubtitleReality: "हरेक आस्थाका सर्वोच्च परमात्मा", login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
               realityTitle1: "वास्तविकता के हो?",
               realityDesc1: "वास्तविकता सत्य र स्थायी सत्य हो, जुन स्थिर र अपरिवर्तनीय छ। हामीले देख्ने, सुन्ने र महसुस गर्ने कुराहरू वास्तवमा वास्तविकता होइनन्। हामीले हाम्रा इन्द्रियहरू—जस्तै दृष्टि, श्रवण, र स्पर्श—मार्फत अनुभव गर्ने कुराहरू केवल एक छाप वा धारणा हो, र यो सधैं परिवर्तन भइरहन्छ। उदाहरणका लागि, जब हामी सूर्यलाई हेर्छौं, हामी आकाशमा चम्किलो, चम्किलो वस्तु देख्छौं। तर वास्तविकतामा, सूर्य ग्यासको एक विशाल गोला हो। हामीले आँखाले देखेको कुरा पूर्ण सत्य होइन। हाम्रा इन्द्रियहरूले सम्पूर्ण वास्तविकताको सानो अंश मात्र बुझ्न सक्छन्, र हामीले देखेको कुरा अस्तित्वको एक सानो अंश मात्र हो। वास्तविकता अपरिवर्तनीय छ: साँचो वास्तविकता त्यो हो जुन समय, स्थान वा परिस्थिति जस्तोसुकै भए पनि उस्तै रहन्छ। हामीले बुझे पनि नबुझे पनि, वास्तविकता स्थिर रहन्छ। ब्रह्माण्ड, तारा र ग्रहहरू जस्ता चीजहरू सबै यो गहिरो, अपरिवर्तनीय वास्तविकताका अंश हुन्, तर हामीले हाम्रा इन्द्रियहरूले मात्र तिनीहरूको वास्तविक रूप पूर्ण रूपमा बुझ्न सक्दैनौं। हामी वास्तविकता किन देख्न सक्दैनौं? हामीले हाम्रा इन्द्रियहरू मार्फत बुझेको कुरा वास्तविकताको फिल्टर गरिएको संस्करण मात्र हो। उदाहरणका लागि, हाम्रा आँखाहरूले केवल तीन प्राथमिक रंगहरू देख्न सक्छन्, तर हामीले पत्ता लगाउन सक्नेभन्दा धेरै रंगहरू छन्। यसले हामीलाई देखाउँछ कि हामीले अनुभव गर्ने हरेक कुरा वास्तवमा त्यहाँ बाहिर के छ भन्ने सीमित संस्करण हो। वास्तविकताको वास्तविक सार हाम्रा इन्द्रियहरूको सीमितताभन्दा पर गएर मात्र बुझ्न सकिन्छ—गहिरो ध्यान, आत्म-जागरूकता, र आध्यात्मिक समझ मार्फत। जब हामी हाम्रो मन र इन्द्रियहरूद्वारा सिर्जित भ्रमहरूबाट मुक्त हुन्छौं, हामी वास्तविकताको वास्तविक प्रकृतिसँग जोडिन थाल्छौं।",
               realityTitle2: "अवास्तविकताको भ्रम:",
@@ -287,10 +322,7 @@
               realityDesc8: "वास्तविकता र अवास्तविकता एउटै सिक्काका दुई पाटा हुन्। जब अवास्तविकताले हामीलाई भौतिक संसार र हामीले दैनिक रूपमा भर पर्ने संवेदी अनुभवहरू प्रदान गर्दछ, यी भ्रमहरूलाई पार गरेर नै हामी अस्तित्वको वास्तविक प्रकृति बुझ्न नजिक पुग्छौं। वास्तविकताको खोजी बाहिरी कुराको खोजी होइन, तर भित्री यात्रा हो, जहाँ हामी इन्द्रिय र मनको सीमितताभन्दा पर रहेको शाश्वत सत्य उजागर गर्न खोज्छौं। वास्तविकता र अवास्तविकता बीचको सम्बन्ध बुझेर, हामी हाम्रो धारणालाई नियन्त्रण गर्ने भ्रमहरू मार्फत हेर्न र हामी सबैमा उपस्थित परम सत्यको नजिक पुग्न थाल्न सक्छौं। यो भित्री जागरण मार्फत मात्र हो कि हामीले वास्तविकतालाई यसको शुद्ध रूपमा अनुभव गर्न सक्छौं—एक वास्तविकता जुन समय, स्थान, र भौतिक संसारभन्दा पर छ।"
           },
           hi: {
-              headerSubtitleReality: "हर आस्था के सर्वोच्च परमात्मा",
-              login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली",
-              emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
-              // "What is Reality?" Page Specific - HINDI TRANSLATIONS NEEDED
+              headerSubtitleReality: "हर आस्था के सर्वोच्च परमात्मा", login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
               realityTitle1: "वास्तविकता क्या है?",
               realityDesc1: "वास्तविकता सच्चा और स्थायी सत्य है, जो स्थिर और अपरिवर्तनीय है। जो चीजें हम देखते, सुनते और महसूस करते हैं, वे वास्तव में वास्तविकता नहीं हैं। जो हम अपनी इंद्रियों—जैसे दृष्टि, श्रवण और स्पर्श—के माध्यम से अनुभव करते हैं, वह केवल एक प्रभाव या धारणा है, और यह हर समय बदलता रहता है। उदाहरण के लिए, जब हम सूर्य को देखते हैं, तो हम आकाश में एक उज्ज्वल, चमकता हुआ पिंड देखते हैं। लेकिन वास्तविकता में, सूर्य गैस का एक विशाल गोला है। जो हम अपनी आँखों से देखते हैं, वह पूर्ण सत्य नहीं है। हमारी इंद्रियाँ समग्र वास्तविकता का केवल एक छोटा सा हिस्सा ही समझ सकती हैं, और जो हम देखते हैं वह अस्तित्व का एक छोटा सा अंश मात्र है। वास्तविकता अपरिवर्तनीय है: सच्ची वास्तविकता वह है जो समय, स्थान या स्थिति कुछ भी हो, वैसी ही रहती है। चाहे हम इसे समझें या न समझें, वास्तविकता स्थिर रहती है। ब्रह्मांड, तारे और ग्रह जैसी चीजें सभी इस गहरी, अपरिवर्तनीय वास्तविकता का हिस्सा हैं, लेकिन हम केवल अपनी इंद्रियों से उनके वास्तविक रूप को पूरी तरह से नहीं समझ सकते। हम वास्तविकता क्यों नहीं देख सकते? जो हम अपनी इंद्रियों के माध्यम से समझते हैं, वह वास्तविकता का केवल एक फ़िल्टर्ड संस्करण है। उदाहरण के लिए, हमारी आँखें केवल तीन प्राथमिक रंग देख सकती हैं, लेकिन कई और रंग हैं जिन्हें हम पहचान नहीं सकते। यह हमें दिखाता है कि हम जो कुछ भी अनुभव करते हैं, वह वास्तव में जो कुछ भी है उसका एक सीमित संस्करण है। वास्तविकता का वास्तविक सार केवल हमारी इंद्रियों की सीमाओं से परे जाकर ही समझा जा सकता है—गहन ध्यान, आत्म-जागरूकता और आध्यात्मिक समझ के माध्यम से। जब हम अपने मन और इंद्रियों द्वारा बनाए गए भ्रमों से मुक्त हो जाते हैं, तो हम वास्तविकता की वास्तविक प्रकृति से जुड़ने लगते हैं।",
               realityTitle2: "अवास्तविकता का भ्रम:",
@@ -310,13 +342,22 @@
           }
       };
 
-      let currentLanguage = localStorage.getItem('selectedLanguageRealityPage') || 'en'; // Unique key for this page
+      let currentLanguage = localStorage.getItem('selectedLanguageRealityPage') || 'en';
 
       function setLanguage(lang) {
           currentLanguage = lang;
           localStorage.setItem('selectedLanguageRealityPage', lang);
           applyTranslations();
-          document.querySelectorAll('.language-options a').forEach(a => {
+
+          // Update header language display
+          const headerLangAbbr = document.querySelector('.site-header .lang-abbr');
+          if (headerLangAbbr) {
+              headerLangAbbr.textContent = lang.toUpperCase();
+          }
+
+          // Update active class for language options in the new header dropdown
+          const headerDropdownLinks = document.querySelectorAll('#headerLangDropdown a');
+          headerDropdownLinks.forEach(a => {
               a.classList.remove('lang-active');
               if (a.dataset.lang === lang) {
                   a.classList.add('lang-active');
@@ -333,51 +374,66 @@
               const key = element.dataset.translateKey;
               element.textContent = _(key);
           });
+          // Note: This page does not use data-translate-key-alt, so that part is omitted.
       }
       // --- END TRANSLATION LOGIC ---
 
       const hamburger = document.querySelector(".hamburger");
       const mobileMenu = document.querySelector(".mobile-menu");
-      const languageSelectLabel = document.querySelector('.language-select-label');
-      const languageOptionsDiv = document.querySelector('.language-options');
+      const headerLanguageSwitcher = document.getElementById('headerLangSwitcher');
+      const headerLangDropdown = document.getElementById('headerLangDropdown');
+      // const languageSelectLabel = document.querySelector('.language-select-label'); // Removed
+      // const languageOptionsDiv = document.querySelector('.language-options'); // Removed
+
 
       function toggleMenu() {
         mobileMenu.classList.toggle("active");
-        hamburger.classList.toggle("active");
+        if (hamburger) {
+            hamburger.classList.toggle("active");
+        }
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            headerLangDropdown.classList.remove('active');
+        }
       }
 
       if (hamburger) {
         hamburger.addEventListener('click', toggleMenu);
       }
 
-      if (languageSelectLabel) {
-        languageSelectLabel.addEventListener('click', () => {
-            if (languageOptionsDiv) {
-                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
-            }
-        });
+      if (headerLanguageSwitcher) {
+          headerLanguageSwitcher.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (headerLangDropdown) {
+                  headerLangDropdown.classList.toggle('active');
+              }
+              if (mobileMenu && mobileMenu.classList.contains('active')) {
+                  toggleMenu();
+              }
+          });
       }
 
-      document.querySelectorAll('.language-options a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const lang = e.currentTarget.dataset.lang;
-            setLanguage(lang);
-            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
-        });
-      });
+      if (headerLangDropdown) {
+          const dropdownLinks = headerLangDropdown.querySelectorAll('a');
+          dropdownLinks.forEach(link => {
+              link.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  const lang = e.currentTarget.dataset.lang;
+                  setLanguage(lang);
+                  headerLangDropdown.classList.remove('active');
+              });
+          });
+      }
 
       document.addEventListener("click", (e) => {
-        let clickedInsideMenuComponent = false;
-        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
-        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
-
-        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
-          toggleMenu();
-        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
-                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
-                   !languageOptionsDiv.contains(e.target) ) {
-            languageOptionsDiv.style.display = 'none';
+        if (mobileMenu && mobileMenu.classList.contains("active")) {
+            if (!mobileMenu.contains(e.target) && hamburger && !hamburger.contains(e.target)) {
+                 toggleMenu();
+            }
+        }
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            if (!headerLangDropdown.contains(e.target) && headerLanguageSwitcher && !headerLanguageSwitcher.contains(e.target)) {
+                headerLangDropdown.classList.remove('active');
+            }
         }
       });
 
