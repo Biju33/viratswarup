@@ -20,7 +20,7 @@
         body {
             background: #ffffff;
             color: #2c2c2c;
-            padding-bottom: 70px;
+            padding-bottom: 70px; /* Default padding, bottom-nav is not shown on desktop */
             padding-top: 70px;
         }
 
@@ -201,13 +201,13 @@
         }
 
         .desktop-nav {
-            margin: 30px 0;
+            margin: 30px 0; /* Adjusted margin for desktop from 45px to 30px to be consistent with the earlier version */
             display: block;
         }
         .desktop-nav ul {
             display: flex;
             justify-content: center;
-            gap: 25px;
+            gap: 25px; /* Adjusted gap for desktop from 32px to 25px */
             list-style: none;
         }
         .desktop-nav a {
@@ -216,7 +216,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 17px;
+            font-size: 17px; /* Adjusted font size for desktop from 18px to 17px */
             padding: 6px 12px;
             border-radius: 4px;
             transition: background-color 0.2s, color 0.2s;
@@ -226,57 +226,67 @@
             color: white;
         }
 
-              .bottom-nav ul {
-        display: flex;
-        justify-content: space-around;
-        list-style: none;
+      /* --- MODIFIED/ADDED CSS FOR BOTTOM NAV --- */
+      .bottom-nav {
+        display: none; /* Hidden by default, shown in media query */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #8b0000; /* Consistent with header */
+        border-top: 1px solid #7a0000; /* Subtle separation, matches header's border logic */
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Softer shadow for bottom nav */
+        z-index: 1000; /* Ensure it's above content */
       }
+
+      .bottom-nav ul {
+        display: flex;
+        justify-content: space-around; /* Distributes LI items evenly */
+        list-style: none;
+        margin: 0; /* Explicitly reset */
+        padding: 0; /* Explicitly reset */
+        width: 100%; /* Ensure ul takes full width of the nav bar */
+      }
+      /* Individual list items will be spaced by justify-content: space-around on ul */
+      /* .bottom-nav li { flex-grow: 1; flex-basis: 0; } /* Alternative for equal width tabs */
+
       .bottom-nav a {
-        color: #fff !important;
-        font-size: 16px;
+        color: #fff !important; /* High importance to override other styles if needed */
+        font-size: 16px; /* Main text size for nav items */
         text-decoration: none;
         display: flex;
-        flex-direction: column; /* Make icon and text stack */
-        align-items: center;
-        gap: 4px; /* Space between icon and text */
-        padding: 8px 10px; /* Adjusted padding */
-        border-radius: 8px;
-        transition: background 0.3s;
+        flex-direction: column; /* Stack icon and text vertically */
+        align-items: center;   /* Center items horizontally */
+        gap: 4px;              /* Space between icon and text */
+        padding: 8px 10px;     /* Padding for tappable area and internal spacing */
+        border-radius: 8px;    /* Rounded corners for hover/active states */
+        transition: background-color 0.3s; /* Smooth transition for background */
+        flex-grow: 1; /* Allows items to grow if ul is display:flex and using space-between/evenly for example */
+        text-align: center;
       }
       .bottom-nav a i {
         font-size: 20px; /* Icon size */
       }
       .bottom-nav a span {
-        font-size: 12px; /* Text size smaller */
+        font-size: 12px; /* Text size smaller for labels */
       }
 
       .bottom-nav a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.1); /* Subtle hover effect */
       }
 
-      /* डेस्कटॉप नेविगेशन */
-      .desktop-nav {
-        margin: 45px 0;
+      .bottom-nav a.active-nav-item { /* Style for the active navigation item */
+        background-color: rgba(0, 0, 0, 0.15); /* Slightly darker background for active item */
       }
-      .desktop-nav ul {
-        display: flex;
-        justify-content: center;
-        gap: 32px;
-        list-style: none;
+      .bottom-nav a.active-nav-item:hover {
+         background-color: rgba(0, 0, 0, 0.25); /* Darker hover for active item */
       }
-      .desktop-nav a {
-        color: #8b0000;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 18px;
-      }
+      /* --- END OF MODIFIED/ADDED CSS FOR BOTTOM NAV --- */
 
         @media (max-width: 768px) {
             body {
                 padding-top: 60px;
-                padding-bottom: 60px;
+                padding-bottom: 60px; /* Make space for fixed bottom nav */
             }
             .header {
                 padding: 5px 10px;
@@ -319,7 +329,7 @@
             }
 
             .desktop-nav { display: none; }
-            .bottom-nav { display: flex; }
+            .bottom-nav { display: flex; } /* Show bottom nav on mobile, flex makes UL a flex item */
 
             .user-info #logoutBtn { display: block !important; font-size: 13px; padding: 6px 10px; }
             .user-info { padding: 10px; }
@@ -585,7 +595,7 @@
 
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw",
+            apiKey: "AIzaSyCg4rPKO6h4VjZsGlaIm8gZbL0J4vJHTrw", // Keep your actual API key secure
             authDomain: "viratsawarup.firebaseapp.com",
             projectId: "viratsawarup",
             messagingSenderId: "264071748020",
@@ -598,7 +608,7 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Translations
+        // Translations (omitted for brevity in this fixed response, but should be present in your actual code)
         const translations = {
             en: {
                 headerSubtitle: "The Supreme Divine of Every Faith",
@@ -736,6 +746,7 @@
                 loginRequiredToLike: "पोस्ट पसंद करने के लिए कृपया लॉग इन करें।"
             }
         };
+
 
         let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
         let postsUnsubscribe = null;
