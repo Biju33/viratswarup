@@ -23,22 +23,134 @@
         color: #2c2c2c;
       }
 
-      /* हैडर सेक्शन (Using inline styles from your HTML) */
-      /* .header class styles from CSS block are mainly for the main index page structure */
+      /* --- HEADER STYLES --- */
+      .site-header {
+          background-color: #8b0000;
+          color: white;
+          padding: 8px 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: sticky;
+          top: 0;
+          z-index: 900;
+      }
+
+      .header-left-section {
+          display: flex;
+          align-items: center;
+      }
+
+      .site-logo {
+          height: 45px;
+          margin-right: 12px;
+      }
+
+      .site-titles {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+      }
+
+      .site-main-title {
+          font-family: "Georgia", serif;
+          font-size: 22px;
+          font-weight: bold;
+          color: white;
+          margin: 0;
+          line-height: 1.1;
+          text-transform: uppercase;
+      }
+
+      .site-subtitle {
+          font-family: "Georgia", serif;
+          font-size: 12px;
+          font-style: italic;
+          color: rgba(255, 255, 255, 0.9);
+          margin: 2px 0 0 0;
+          font-weight: 300;
+          line-height: 1.1;
+      }
+
+      .header-right-section {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+      }
+
+      /* Language Selector Wrapper & Dropdown Styles */
+      .language-selector-wrapper {
+          position: relative; /* For positioning the dropdown */
+      }
+
+      .header-language-switcher {
+          display: flex;
+          align-items: center;
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          border-radius: 4px;
+          padding: 6px 8px;
+          cursor: pointer;
+          color: white;
+          gap: 5px;
+          background-color: rgba(0,0,0,0.1);
+      }
+      .header-language-switcher:hover {
+          background-color: rgba(0,0,0,0.2);
+      }
+      .header-language-switcher .fas {
+          font-size: 14px;
+      }
+      .header-language-switcher .lang-abbr {
+          font-size: 13px;
+          font-weight: 500;
+      }
+
+      .language-dropdown {
+          display: none; /* Hidden by default */
+          position: absolute;
+          top: 100%; /* Position below the switcher */
+          right: 0; /* Align to the right of the wrapper */
+          background-color: #800000; /* Slightly different from header or same */
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-top: none; /* Optional: remove top border if it looks better */
+          border-radius: 0 0 4px 4px; /* Rounded bottom corners */
+          box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+          z-index: 910; /* Above header, below mobile menu */
+          min-width: 150px; /* Ensure enough width for language names */
+          padding: 5px 0;
+      }
+      .language-dropdown.active {
+          display: block; /* Show when active */
+      }
+      .language-dropdown a {
+          display: block;
+          padding: 8px 15px;
+          color: white;
+          text-decoration: none;
+          font-size: 13px;
+      }
+      .language-dropdown a:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+      }
+      .language-dropdown a.lang-active {
+          font-weight: bold;
+          background-color: rgba(255, 255, 255, 0.15);
+      }
+      /* --- END HEADER STYLES --- */
+
 
       /* हैमबर्गर मेन्यू */
       .hamburger {
-        position: fixed;
-        top: 25px;
-        right: 25px;
         cursor: pointer;
-        display: none; /* Shown by media query */
-        z-index: 1001; /* Above mobile menu when closed */
+        display: none;
+        width: 28px;
+        height: auto;
+        padding: 5px 0;
       }
       .hamburger-line {
         width: 28px;
         height: 2px;
-        background: #ffffff; /* To be visible on dark header */
+        background: #ffffff;
         margin: 6px 0;
         transition: 0.4s;
       }
@@ -63,14 +175,14 @@
         background: #8b0000;
         box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
         transition: 0.4s;
-        padding-top: 60px; /* Adjusted for language options */
-        z-index: 1000; /* Below hamburger when closed, above content when open */
+        padding-top: 20px;
+        z-index: 1000;
         overflow-y: auto;
       }
       .mobile-menu.active {
         right: 0;
       }
-      .mobile-menu a, .mobile-menu .language-select-label {
+      .mobile-menu a {
         display: flex;
         align-items: center;
         gap: 15px;
@@ -85,22 +197,8 @@
         font-size: 20px;
         color: #fff !important;
       }
-      .mobile-menu a:last-child, .mobile-menu .language-options a:last-child {
+      .mobile-menu a:last-child {
         border-bottom: none;
-      }
-
-      .language-options {
-        padding-left: 30px;
-        display: none;
-        background-color: rgba(0,0,0,0.1);
-      }
-      .language-options a {
-        padding: 12px 30px;
-        font-size: 0.9em;
-      }
-       .language-options a.lang-active {
-          font-weight: bold;
-          background-color: rgba(255,255,255,0.1);
       }
 
 
@@ -113,7 +211,7 @@
         background: #8b0000;
         border-top: 1px solid #eee;
         padding: 8px 0;
-        display: none; /* Shown by media query */
+        display: none;
         z-index: 999;
       }
       .bottom-nav ul {
@@ -174,26 +272,36 @@
         .bottom-nav {
           display: block;
         }
-        /* Original .header styles for responsive, if needed for consistent mobile header */
-        /* Example:
-        .header.responsive-style {
-          padding: 70px 20px 35px;
+        .site-main-title {
+            font-size: 18px;
         }
-        .header.responsive-style h1 {
-          font-size: 42px;
+        .site-subtitle {
+            font-size: 10px;
         }
-        */
+        .site-logo {
+            height: 35px;
+            margin-right: 8px;
+        }
+        .header-language-switcher {
+            padding: 5px 7px;
+            gap: 4px;
+        }
+        .header-language-switcher .fas {
+            font-size: 12px;
+        }
+        .header-language-switcher .lang-abbr {
+            font-size: 12px;
+        }
+        .header-right-section {
+            gap: 8px;
+        }
+        .site-header {
+            padding: 8px 10px;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- हैमबर्गर आइकन -->
-    <div class="hamburger"> <!-- onclick removed, JS will handle -->
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-      <div class="hamburger-line"></div>
-    </div>
-
     <!-- मोबाइल मेन्यू -->
     <nav class="mobile-menu">
       <a href="#"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
@@ -203,24 +311,39 @@
       <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
       <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
       <a href="index.html"><i class="fas fa-comment"></i><span data-translate-key="post">Post</span></a>
-
-      <div class="language-select-label">
-            <i class="fas fa-language"></i><span data-translate-key="language">Language</span><i class="fas fa-chevron-down" style="margin-left: auto; font-size: 0.8em;"></i>
-      </div>
-      <div class="language-options">
-          <a href="#" data-lang="en">English</a>
-          <a href="#" data-lang="ne">नेपाली (Nepali)</a>
-          <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
-      </div>
     </nav>
 
-    <!-- हैडर -->
-    <header style="background-color: #8b0000; padding: 15px 10px; text-align: center; position: relative;">
-        <h1 style="color: white; font-size: 28px; margin: 0;">VIRAT SWARUP</h1>
-        <h2 style="color: white; font-size: 15px; margin: 5px 0 0; font-weight:300; font-style:italic;" data-translate-key="headerSubtitlePage"> The Supreme Devine of Every Faith</h2>
+    <!-- NEW HEADER STRUCTURE -->
+    <header class="site-header">
+        <div class="header-left-section">
+            <img src="images/virat_swarup_logo.png" alt="Virat Swarup Logo" class="site-logo">
+            <div class="site-titles">
+                <h1 class="site-main-title">VIRAT SWARUP</h1>
+                <p class="site-subtitle" data-translate-key="headerSubtitlePage">The Supreme Divine of Every Faith</p>
+            </div>
+        </div>
+        <div class="header-right-section">
+            <div class="language-selector-wrapper">
+                <div class="header-language-switcher" id="headerLangSwitcher">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-abbr">EN</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="language-dropdown" id="headerLangDropdown">
+                    <a href="#" data-lang="en">English</a>
+                    <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+                    <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+                </div>
+            </div>
+            <div class="hamburger">
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+            </div>
+        </div>
     </header>
 
-    <!-- डेस्कटॉप नेविगेशन -->
+    <!-- Desktop, Bottom Nav, Sections remain the same -->
     <nav class="desktop-nav">
       <ul>
         <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
@@ -231,7 +354,6 @@
       </ul>
     </nav>
 
-    <!-- बॉटम नेविगेशन -->
     <nav class="bottom-nav">
       <ul>
         <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
@@ -242,7 +364,6 @@
       </ul>
     </nav>
 
-    <!-- बटन कार्ड सेक्शन -->
     <section style="padding: 40px 20px; background: #fff;">
       <div style="max-width: 360px; margin: auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); text-align: center; padding: 24px;">
         <h3 style="color: #8b0000; font-size: 24px; margin: 0 0 10px;" data-translate-key="whoAreWeTitle">
@@ -314,76 +435,55 @@
     <script>
       // --- START TRANSLATION DATA & LOGIC ---
       const translations = {
+          en: { /* ... translations ... */ },
+          ne: { /* ... translations ... */ },
+          hi: { /* ... translations ... */ }
+      };
+      // For brevity, I'm keeping the translation objects collapsed. Ensure they are fully populated as before.
+      // Ensure full translation objects are here
+      const fullTranslations = {
           en: {
               headerSubtitlePage: "The Supreme Divine of Every Faith",
-              login: "Login",
-              share: "Share",
-              home: "Home",
-              agnosia: "Agnosia",
-              enigma: "Enigma",
-              emulate: "Emulate",
-              post: "Post",
-              language: "Language",
-              whoAreWeTitle: "Who Are We?",
-              whoAreWeDesc: "Exploring our existence beyond physical form and material identity...",
-              ourGoalTitle: "What Is Our Goal?",
-              ourGoalDesc: "Understanding life's ultimate purpose and spiritual objectives...",
-              consciousnessTitle: "Consciousness with Knowledge",
-              consciousnessDesc: "Integration of awareness and understanding for true enlightenment...",
-              ancestorsTitle: "Our Ancestors",
-              ancestorsDesc: "Learning from ancient wisdom and spiritual legacy...",
-              seeMore: "see more"
+              login: "Login", share: "Share", home: "Home", agnosia: "Agnosia", enigma: "Enigma", emulate: "Emulate", post: "Post", language: "Language",
+              whoAreWeTitle: "Who Are We?", whoAreWeDesc: "Exploring our existence beyond physical form and material identity...",
+              ourGoalTitle: "What Is Our Goal?", ourGoalDesc: "Understanding life's ultimate purpose and spiritual objectives...",
+              consciousnessTitle: "Consciousness with Knowledge", consciousnessDesc: "Integration of awareness and understanding for true enlightenment...",
+              ancestorsTitle: "Our Ancestors", ancestorsDesc: "Learning from ancient wisdom and spiritual legacy...", seeMore: "see more"
           },
           ne: {
               headerSubtitlePage: "हरेक आस्थाका सर्वोच्च परमात्मा",
-              login: "लग - इन",
-              share: "साझा गर्नुहोस्",
-              home: "गृहपृष्ठ",
-              agnosia: "अज्ञानता",
-              enigma: "पहेली",
-              emulate: "अनुकरण",
-              post: "पोस्ट",
-              language: "भाषा",
-              whoAreWeTitle: "हामी को हौं?",
-              whoAreWeDesc: "भौतिक स्वरूप र भौतिक पहिचानभन्दा पर हाम्रो अस्तित्वको खोजी...",
-              ourGoalTitle: "हाम्रो लक्ष्य के हो?",
-              ourGoalDesc: "जीवनको अन्तिम उद्देश्य र आध्यात्मिक लक्ष्यहरू बुझ्दै...",
-              consciousnessTitle: "ज्ञान सहित चेतना",
-              consciousnessDesc: "सच्चा ज्ञान प्राप्तिका लागि जागरूकता र समझको एकीकरण...",
-              ancestorsTitle: " हाम्रा पूर्वजहरू",
-              ancestorsDesc: "प्राचीन ज्ञान र आध्यात्मिक विरासतबाट सिक्दै...",
-              seeMore: "थप हेर्नुहोस्"
+              login: "लग - इन", share: "साझा गर्नुहोस्", home: "गृहपृष्ठ", agnosia: "अज्ञानता", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              whoAreWeTitle: "हामी को हौं?", whoAreWeDesc: "भौतिक स्वरूप र भौतिक पहिचानभन्दा पर हाम्रो अस्तित्वको खोजी...",
+              ourGoalTitle: "हाम्रो लक्ष्य के हो?", ourGoalDesc: "जीवनको अन्तिम उद्देश्य र आध्यात्मिक लक्ष्यहरू बुझ्दै...",
+              consciousnessTitle: "ज्ञान सहित चेतना", consciousnessDesc: "सच्चा ज्ञान प्राप्तिका लागि जागरूकता र समझको एकीकरण...",
+              ancestorsTitle: " हाम्रा पूर्वजहरू", ancestorsDesc: "प्राचीन ज्ञान र आध्यात्मिक विरासतबाट सिक्दै...", seeMore: "थप हेर्नुहोस्"
           },
           hi: {
               headerSubtitlePage: "हर आस्था के सर्वोच्च परमात्मा",
-              login: "लॉग इन करें",
-              share: "साझा करें",
-              home: "होम",
-              agnosia: "अज्ञान",
-              enigma: "पहेली",
-              emulate: "अनुकरण",
-              post: "पोस्ट",
-              language: "भाषा",
-              whoAreWeTitle: "हम कौन हैं?",
-              whoAreWeDesc: "भौतिक रूप और भौतिक पहचान से परे हमारे अस्तित्व की खोज...",
-              ourGoalTitle: "हमारा लक्ष्य क्या है?",
-              ourGoalDesc: "जीवन के अंतिम उद्देश्य और आध्यात्मिक लक्ष्यों को समझना...",
-              consciousnessTitle: "ज्ञान के साथ चेतना",
-              consciousnessDesc: "सच्चे ज्ञानोदय के लिए जागरूकता और समझ का एकीकरण...",
-              ancestorsTitle: "हमारे पूर्वज",
-              ancestorsDesc: "प्राचीन ज्ञान और आध्यात्मिक विरासत से सीखना...",
-              seeMore: " और देखें"
+              login: "लॉग इन करें", share: "साझा करें", home: "होम", agnosia: "अज्ञान", enigma: "पहेली", emulate: "अनुकरण", post: "पोस्ट", language: "भाषा",
+              whoAreWeTitle: "हम कौन हैं?", whoAreWeDesc: "भौतिक रूप और भौतिक पहचान से परे हमारे अस्तित्व की खोज...",
+              ourGoalTitle: "हमारा लक्ष्य क्या है?", ourGoalDesc: "जीवन के अंतिम उद्देश्य और आध्यात्मिक लक्ष्यों को समझना...",
+              consciousnessTitle: "ज्ञान के साथ चेतना", consciousnessDesc: "सच्चे ज्ञानोदय के लिए जागरूकता और समझ का एकीकरण...",
+              ancestorsTitle: "हमारे पूर्वज", ancestorsDesc: "प्राचीन ज्ञान और आध्यात्मिक विरासत से सीखना...", seeMore: " और देखें"
           }
       };
 
-      let currentLanguage = localStorage.getItem('selectedLanguageStaticPage') || 'en'; // Unique key for this page type
+
+      let currentLanguage = localStorage.getItem('selectedLanguageStaticPage') || 'en';
 
       function setLanguage(lang) {
           currentLanguage = lang;
           localStorage.setItem('selectedLanguageStaticPage', lang);
           applyTranslations();
-          // Update active class for language options
-          document.querySelectorAll('.language-options a').forEach(a => {
+
+          const headerLangAbbr = document.querySelector('.site-header .lang-abbr');
+          if (headerLangAbbr) {
+              headerLangAbbr.textContent = lang.toUpperCase();
+          }
+
+          // Update active class for language options in the new header dropdown
+          const headerDropdownLinks = document.querySelectorAll('#headerLangDropdown a');
+          headerDropdownLinks.forEach(a => {
               a.classList.remove('lang-active');
               if (a.dataset.lang === lang) {
                   a.classList.add('lang-active');
@@ -391,8 +491,8 @@
           });
       }
 
-      function _(key, fallbackLang = 'en') { // Helper function to get translation
-          return translations[currentLanguage]?.[key] || translations[fallbackLang]?.[key] || key;
+      function _(key, fallbackLang = 'en') {
+          return fullTranslations[currentLanguage]?.[key] || fullTranslations[fallbackLang]?.[key] || key;
       }
 
       function applyTranslations() {
@@ -400,70 +500,74 @@
               const key = element.dataset.translateKey;
               element.textContent = _(key);
           });
-          // Placeholder translation if needed for this page (none apparent currently)
-          // document.querySelectorAll('[data-translate-key-placeholder]').forEach(element => {
-          //     const key = element.dataset.translateKeyPlaceholder;
-          //     element.placeholder = _(key);
-          // });
       }
       // --- END TRANSLATION LOGIC ---
 
 
       const hamburger = document.querySelector(".hamburger");
       const mobileMenu = document.querySelector(".mobile-menu");
-      const languageSelectLabel = document.querySelector('.language-select-label');
-      const languageOptionsDiv = document.querySelector('.language-options');
+      const headerLanguageSwitcher = document.getElementById('headerLangSwitcher');
+      const headerLangDropdown = document.getElementById('headerLangDropdown');
+
 
       function toggleMenu() {
         mobileMenu.classList.toggle("active");
-        hamburger.classList.toggle("active"); // For the X animation
+        if (hamburger) {
+            hamburger.classList.toggle("active");
+        }
+        // Close language dropdown if mobile menu is opened
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            headerLangDropdown.classList.remove('active');
+        }
       }
 
       if (hamburger) {
         hamburger.addEventListener('click', toggleMenu);
       }
 
-      if (languageSelectLabel) {
-        languageSelectLabel.addEventListener('click', () => {
-            if (languageOptionsDiv) {
-                languageOptionsDiv.style.display = languageOptionsDiv.style.display === 'none' || languageOptionsDiv.style.display === '' ? 'block' : 'none';
-            }
-        });
+      if (headerLanguageSwitcher) {
+          headerLanguageSwitcher.addEventListener('click', (e) => {
+              e.stopPropagation(); // Prevent click from immediately closing dropdown
+              if (headerLangDropdown) {
+                  headerLangDropdown.classList.toggle('active');
+              }
+              // Close mobile menu if language dropdown is opened
+              if (mobileMenu && mobileMenu.classList.contains('active')) {
+                  toggleMenu();
+              }
+          });
       }
 
-      document.querySelectorAll('.language-options a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const lang = e.currentTarget.dataset.lang;
-            setLanguage(lang);
-            if (languageOptionsDiv) languageOptionsDiv.style.display = 'none';
-            // Optionally close main mobile menu after selection
-            // if (mobileMenu.classList.contains('active')) {
-            //    toggleMenu();
-            // }
-        });
-      });
+      if (headerLangDropdown) {
+          const dropdownLinks = headerLangDropdown.querySelectorAll('a');
+          dropdownLinks.forEach(link => {
+              link.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  const lang = e.currentTarget.dataset.lang;
+                  setLanguage(lang);
+                  headerLangDropdown.classList.remove('active'); // Close dropdown after selection
+              });
+          });
+      }
 
-      // Click outside to close menu / language options
       document.addEventListener("click", (e) => {
-        let clickedInsideMenuComponent = false;
-        if (hamburger && hamburger.contains(e.target)) clickedInsideMenuComponent = true;
-        if (mobileMenu && mobileMenu.contains(e.target)) clickedInsideMenuComponent = true;
-        // Note: languageSelectLabel and languageOptionsDiv are INSIDE mobileMenu
+        // Close mobile menu if click is outside
+        if (mobileMenu && mobileMenu.classList.contains("active")) {
+            if (!mobileMenu.contains(e.target) && hamburger && !hamburger.contains(e.target)) {
+                 toggleMenu();
+            }
+        }
 
-        if (mobileMenu && mobileMenu.classList.contains("active") && !clickedInsideMenuComponent) {
-          toggleMenu(); // Close main menu if click is outside and not on hamburger
-        } else if (languageOptionsDiv && languageOptionsDiv.style.display === 'block' &&
-                   languageSelectLabel && !languageSelectLabel.contains(e.target) &&
-                   !languageOptionsDiv.contains(e.target) ) {
-            // If language options are open and click is outside them (and not on the label that opens them)
-            languageOptionsDiv.style.display = 'none';
+        // Close header language dropdown if click is outside
+        if (headerLangDropdown && headerLangDropdown.classList.contains('active')) {
+            if (!headerLangDropdown.contains(e.target) && headerLanguageSwitcher && !headerLanguageSwitcher.contains(e.target)) {
+                headerLangDropdown.classList.remove('active');
+            }
         }
       });
 
-      // Apply translations on page load
       document.addEventListener('DOMContentLoaded', () => {
-          setLanguage(currentLanguage);
+          setLanguage(currentLanguage); // Apply initial language and set active states
       });
     </script>
   </body>
