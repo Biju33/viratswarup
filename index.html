@@ -40,7 +40,7 @@
             padding-top: 70px;
             transition: var(--transition);
         }
-        
+
         #auth-overlay {
             position: fixed;
             top: 0;
@@ -401,7 +401,7 @@
             cursor: not-allowed;
         }
 
-        .post-btn:hover {
+        .post-btn:hover:not(:disabled) {
             background-color: var(--primary-light);
         }
 
@@ -453,6 +453,7 @@
         .post-text {
             margin-bottom: 15px;
             line-height: 1.6;
+            white-space: pre-wrap; /* preserves line breaks */
         }
 
         .post-image {
@@ -1154,30 +1155,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1551818255-e6e10975d17c?q=80" alt="Cultural Mystery" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">Rituals of the Himalayas</h3>
-                        <p class="card-description">Uncover the secret rituals performed by mountain communities that have been preserved for centuries.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 8 min read</span>
-                            <span><i class="fas fa-comment"></i> 18 comments</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1542662565-7e4b66bae529?q=80" alt="Cultural Mystery" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">Vanishing Traditions</h3>
-                        <p class="card-description">Explore cultural practices that are disappearing and efforts to preserve them for future generations.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 12 min read</span>
-                            <span><i class="fas fa-comment"></i> 32 comments</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1189,44 +1166,6 @@
                 <h2 class="page-title">Enigma</h2>
                 <p class="page-subtitle">Solve cultural puzzles and unlock ancient mysteries</p>
             </div>
-            
-            <div class="content-cards">
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80" alt="Cultural Puzzle" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">The Temple Code</h3>
-                        <p class="card-description">Decipher the mathematical patterns in ancient temple architecture and their connection to celestial events.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 15 min read</span>
-                            <span><i class="fas fa-puzzle-piece"></i> 42 solved</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?q=80" alt="Cultural Puzzle" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">Mythical Creatures Riddle</h3>
-                        <p class="card-description">Identify the real-world inspirations behind legendary creatures from South Asian folklore.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 9 min read</span>
-                            <span><i class="fas fa-puzzle-piece"></i> 28 solved</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1528164344705-47542687000d?q=80" alt="Cultural Puzzle" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">The Lost City Challenge</h3>
-                        <p class="card-description">Use historical clues to locate a mythical city described in ancient texts but lost to modern knowledge.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 14 min read</span>
-                            <span><i class="fas fa-puzzle-piece"></i> 19 solved</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     
@@ -1236,44 +1175,6 @@
             <div class="page-header">
                 <h2 class="page-title">Emulation</h2>
                 <p class="page-subtitle">Experience cultural traditions through interactive activities</p>
-            </div>
-            
-            <div class="content-cards">
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80" alt="Cultural Activity" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">Traditional Dance Simulator</h3>
-                        <p class="card-description">Learn the steps of classical dances from different regions with our interactive motion guide.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 20 min activity</span>
-                            <span><i class="fas fa-users"></i> 156 participants</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1562967916-eb82221dfb92?q=80" alt="Cultural Activity" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">Culinary Heritage Challenge</h3>
-                        <p class="card-description">Recreate traditional recipes with step-by-step guidance and share your culinary creations.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 45 min activity</span>
-                            <span><i class="fas fa-users"></i> 89 participants</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1560840067-ddcaeb7831d2?q=80" alt="Cultural Activity" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">Craftsmanship Workshop</h3>
-                        <p class="card-description">Learn traditional crafts like pottery, weaving, and wood carving through our virtual workshops.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 60 min activity</span>
-                            <span><i class="fas fa-users"></i> 112 participants</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1314,10 +1215,6 @@
             <div class="page-header">
                 <h2 class="page-title">Latest Updates</h2>
                 <p class="page-subtitle">Stay current with the newest cultural content and discussions</p>
-            </div>
-            
-            <div class="latest-grid" id="latestGrid">
-                <!-- Latest content will be loaded dynamically -->
             </div>
         </div>
     </div>
@@ -1363,32 +1260,15 @@
             </div>
             
             <div class="profile-content active" id="postsContent">
-                 <!-- User's posts will be loaded here -->
+                 <div id="userPostsContainer" class="posts-container"></div>
             </div>
             
             <div class="profile-content" id="savedContent">
-                <div class="content-card">
-                    <img src="https://images.unsplash.com/photo-1594818379496-da1e345b0ded?q=80" alt="Saved Content" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">Newari Architecture Guide</h3>
-                        <p class="card-description">Detailed guide to traditional Newari architecture found in Kathmandu Valley.</p>
-                        <div class="card-footer">
-                            <span><i class="fas fa-clock"></i> 12 min read</span>
-                            <span><i class="fas fa-bookmark"></i> Saved</span>
-                        </div>
-                    </div>
-                </div>
+                 <!-- Saved content would be implemented here -->
             </div>
             
             <div class="profile-content" id="achievementsContent">
-                 <div class="settings-card">
-                    <h3>Cultural Explorer</h3>
-                    <p>Visited and documented cultural sites in 5 different regions</p>
-                    <div class="progress-bar" style="height: 8px; background: #eee; border-radius: 4px; margin: 10px 0;">
-                        <div style="width: 60%; height: 100%; background: var(--profile-color); border-radius: 4px;"></div>
-                    </div>
-                    <p>5/8 regions explored</p>
-                </div>
+                 <!-- Achievements would be implemented here -->
             </div>
         </div>
     </div>
@@ -1399,43 +1279,6 @@
             <div class="page-header">
                 <h2 class="page-title">Settings</h2>
                 <p class="page-subtitle">Customize your Viratswarup experience</p>
-            </div>
-            
-            <div class="settings-card">
-                <h2 class="settings-title">Account Settings</h2>
-                
-                <div class="setting-item">
-                    <div class="setting-label">Email Notifications</div>
-                    <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="setting-item">
-                    <div class="setting-label">Push Notifications</div>
-                    <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="setting-item">
-                    <div class="setting-label">Dark Mode</div>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="setting-item">
-                    <div class="setting-label">Language</div>
-                    <select class="language-selector" id="settingsLanguage">
-                        <option value="en">English</option>
-                        <option value="hi">हिंदी (Hindi)</option>
-                        <option value="ne">नेपाली (Nepali)</option>
-                    </select>
-                </div>
             </div>
             
             <div class="settings-card">
@@ -1461,17 +1304,6 @@
                 <h2 class="page-title">Notifications</h2>
                 <p class="page-subtitle">Stay updated with community activities</p>
             </div>
-            
-            <div class="notification-item unread">
-                <div class="notification-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">New Followers</div>
-                    <div class="notification-message">Riya Patel and 2 others started following you</div>
-                    <div class="notification-time">10 minutes ago</div>
-                </div>
-            </div>
         </div>
     </div>
     
@@ -1481,41 +1313,6 @@
             <div class="share-header">
                 <h3 class="share-title">Share This Post</h3>
                 <button class="close-share" id="closeShare">&times;</button>
-            </div>
-            
-            <div class="share-options">
-                <div class="share-option" data-platform="facebook">
-                    <div class="share-icon facebook-bg">
-                        <i class="fab fa-facebook-f"></i>
-                    </div>
-                    <div class="share-label">Facebook</div>
-                </div>
-                
-                <div class="share-option" data-platform="twitter">
-                    <div class="share-icon twitter-bg">
-                        <i class="fab fa-twitter"></i>
-                    </div>
-                    <div class="share-label">Twitter</div>
-                </div>
-                
-                <div class="share-option" data-platform="whatsapp">
-                    <div class="share-icon whatsapp-bg">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <div class="share-label">WhatsApp</div>
-                </div>
-                
-                <div class="share-option" data-platform="link">
-                    <div class="share-icon link-bg">
-                        <i class="fas fa-link"></i>
-                    </div>
-                    <div class="share-label">Copy Link</div>
-                </div>
-            </div>
-            
-            <div class="copy-link">
-                <input type="text" value="https://viratswarup.com/post/12345" id="shareLink" readonly>
-                <button class="copy-btn" id="copyLinkBtn">Copy</button>
             </div>
         </div>
     </div>
@@ -1544,13 +1341,39 @@
         </div>
     </nav>
     
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-    
-    <script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            GoogleAuthProvider, 
+            signInWithPopup, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            serverTimestamp,
+            query, 
+            orderBy, 
+            onSnapshot,
+            doc,
+            getDoc,
+            setDoc,
+            where,
+            runTransaction,
+            increment
+        } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { 
+            getStorage, 
+            ref, 
+            uploadBytesResumable, 
+            getDownloadURL 
+        } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
         // Your web app's Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyC_zyzMTc19yL4EtKCCNPBMA3SWsJyFYqo",
@@ -1561,13 +1384,14 @@
           appId: "1:430437295653:web:d4b4d498e2577d8cbec1cc",
           measurementId: "G-2GWVDCGRS4"
         };
-        
+
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-        
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
         // DOM Elements
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -1577,15 +1401,10 @@
         const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
         const pageContainers = document.querySelectorAll('.page-container');
         const postsContainer = document.getElementById('postsContainer');
+        const userPostsContainer = document.getElementById('userPostsContainer');
         const logoutBtn = document.getElementById('mobileLogout');
         const mainLogoutBtn = document.getElementById('logoutBtn');
-        const profileTabs = document.querySelectorAll('.profile-tab');
-        const profileContents = document.querySelectorAll('.profile-content');
-        const shareModal = document.getElementById('shareModal');
-        const closeShare = document.getElementById('closeShare');
-        const copyLinkBtn = document.getElementById('copyLinkBtn');
-        const shareLink = document.getElementById('shareLink');
-
+        
         // Post Form Elements
         const postInput = document.getElementById('postInput');
         const imageUpload = document.getElementById('imageUpload');
@@ -1603,9 +1422,11 @@
 
         let currentUser = null;
         let selectedFile = null;
+        let unsubscribePosts = null; 
+        let unsubscribeUserPosts = null;
 
         // --- AUTHENTICATION ---
-        auth.onAuthStateChanged(async (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
                 authOverlay.style.display = 'none';
@@ -1614,18 +1435,20 @@
             } else {
                 currentUser = null;
                 authOverlay.style.display = 'flex';
+                if(unsubscribePosts) unsubscribePosts();
+                if(unsubscribeUserPosts) unsubscribeUserPosts();
             }
         });
 
         loginBtn.addEventListener('click', () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(error => {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider).catch(error => {
                 console.error("Login failed:", error);
             });
         });
 
         const handleLogout = () => {
-            auth.signOut().then(() => {
+            signOut(auth).then(() => {
                  navigateTo('agnosia');
                  mobileMenu.classList.remove('active');
             });
@@ -1636,37 +1459,35 @@
 
         // --- USER PROFILE SETUP ---
         async function setupUserProfile(user) {
-            // Update UI with user info
-            userAvatar.innerHTML = `<img src="${user.photoURL}" alt="User">`;
+            userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}">`;
             profileAvatar.src = user.photoURL;
             profileName.textContent = user.displayName;
 
-            // Check if user exists in Firestore, if not create a profile
-            const userRef = db.collection('users').doc(user.uid);
-            const userDoc = await userRef.get();
-            if (!userDoc.exists) {
-                userRef.set({
+            const userRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userRef);
+            if (!userDocSnap.exists()) {
+                await setDoc(userRef, {
                     name: user.displayName,
                     email: user.email,
                     photoURL: user.photoURL,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp()
                 });
             }
             
-            // Get user's post count
-            db.collection('posts').where('authorId', '==', user.uid).onSnapshot(snapshot => {
+            const q = query(collection(db, 'posts'), where('authorId', '==', user.uid));
+            onSnapshot(q, (snapshot) => {
                 profilePostCount.textContent = snapshot.size;
             });
         }
-
-        // Initialize the app
+        
+        // Initialize the app listeners
         function initApp() {
-            renderPosts();
-            setupEventListeners();
+            listenForPosts();
+            listenForUserPosts();
         }
 
         // --- EVENT LISTENERS ---
-        function setupEventListeners() {
+        document.addEventListener('DOMContentLoaded', () => {
             mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('active'));
             
             homeLink.addEventListener('click', () => navigateTo('agnosia'));
@@ -1686,54 +1507,19 @@
                 }
             });
             
-            // Post creation
             imageUpload.addEventListener('change', (e) => {
                 selectedFile = e.target.files[0];
-                if (selectedFile) {
-                    uploadStatus.textContent = `${selectedFile.name} selected`;
-                }
+                if (selectedFile) uploadStatus.textContent = `Selected: ${selectedFile.name}`;
             });
 
             submitPostBtn.addEventListener('click', handleCreatePost);
 
-            // Post interactions (Likes & Share) using Event Delegation
             document.body.addEventListener('click', function(e) {
                 const likeButton = e.target.closest('.like-btn');
-                const shareButton = e.target.closest('.share-btn');
-                
-                if (likeButton) {
-                    const postId = likeButton.dataset.id;
-                    handleLikePost(postId, likeButton);
-                }
-                
-                if (shareButton) {
-                    shareModal.classList.add('active');
-                }
+                if (likeButton) handleLikePost(likeButton.dataset.id, likeButton);
             });
-            
-            profileTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.dataset.tab;
-                    profileTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    profileContents.forEach(content => content.classList.remove('active'));
-                    document.getElementById(`${tabName}Content`).classList.add('active');
-                });
-            });
-            
-            closeShare.addEventListener('click', () => shareModal.classList.remove('active'));
-            shareModal.addEventListener('click', (e) => {
-                if (e.target === shareModal) shareModal.classList.remove('active');
-            });
-            
-            copyLinkBtn.addEventListener('click', () => {
-                shareLink.select();
-                document.execCommand('copy');
-                copyLinkBtn.textContent = 'Copied!';
-                setTimeout(() => { copyLinkBtn.textContent = 'Copy'; }, 2000);
-            });
-        }
-        
+        });
+
         // --- NAVIGATION ---
         function navigateTo(page) {
             pageContainers.forEach(container => container.classList.remove('active'));
@@ -1753,141 +1539,168 @@
 
             submitPostBtn.disabled = true;
             submitPostBtn.textContent = 'Posting...';
-            let imageUrl = null;
-
+            
             try {
-                // 1. Handle image upload if a file is selected
                 if (selectedFile) {
-                    uploadStatus.textContent = 'Uploading image...';
                     const filePath = `posts/${currentUser.uid}/${Date.now()}_${selectedFile.name}`;
-                    const fileRef = storage.ref(filePath);
-                    const uploadTask = await fileRef.put(selectedFile);
-                    imageUrl = await uploadTask.ref.getDownloadURL();
-                    uploadStatus.textContent = 'Upload complete!';
+                    const storageRef = ref(storage, filePath);
+                    const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            uploadStatus.textContent = `Uploading: ${Math.round(progress)}%`;
+                        }, 
+                        (error) => {
+                            console.error("Upload failed", error);
+                            uploadStatus.textContent = 'Upload failed!';
+                            submitPostBtn.disabled = false;
+                            submitPostBtn.textContent = 'Post';
+                        }, 
+                        async () => {
+                            const imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                            await createPostDocument(imageUrl);
+                        }
+                    );
+                } else {
+                    await createPostDocument(null);
                 }
-
-                // 2. Add post data to Firestore
-                await db.collection('posts').add({
-                    text: postInput.value,
-                    imageUrl: imageUrl,
-                    authorId: currentUser.uid,
-                    authorName: currentUser.displayName,
-                    authorAvatar: currentUser.photoURL,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    likeCount: 0
-                });
-
-                // 3. Reset form
-                postInput.value = '';
-                imageUpload.value = '';
-                selectedFile = null;
-                uploadStatus.textContent = '';
-
             } catch (error) {
                 console.error("Error creating post:", error);
                 uploadStatus.textContent = 'Error creating post.';
-            } finally {
                 submitPostBtn.disabled = false;
                 submitPostBtn.textContent = 'Post';
             }
         }
+        
+        async function createPostDocument(imageUrl) {
+            await addDoc(collection(db, 'posts'), {
+                text: postInput.value,
+                imageUrl: imageUrl,
+                authorId: currentUser.uid,
+                authorName: currentUser.displayName,
+                authorAvatar: currentUser.photoURL,
+                createdAt: serverTimestamp(),
+                likeCount: 0,
+                likedBy: []
+            });
 
-        // Render posts from Firestore
-        function renderPosts() {
-            if (!postsContainer) return;
-            
-            db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
-                postsContainer.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const post = doc.data();
-                    const postId = doc.id;
-                    
-                    const postElement = document.createElement('div');
-                    postElement.className = 'post-card';
+            postInput.value = '';
+            imageUpload.value = '';
+            selectedFile = null;
+            uploadStatus.textContent = '';
+            submitPostBtn.disabled = false;
+            submitPostBtn.textContent = 'Post';
+            navigateTo('agnosia'); // Navigate to feed after posting
+        }
 
-                    const timeAgo = post.createdAt ? timeSince(post.createdAt.toDate()) : 'just now';
-
-                    postElement.innerHTML = `
-                        <div class="post-header">
-                            <img src="${post.authorAvatar}" alt="User" class="post-user-img">
-                            <div class="post-user-info">
-                                <div class="post-username">${post.authorName}</div>
-                                <div class="post-time">${timeAgo}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="post-content">
-                            <p class="post-text">${post.text}</p>
-                            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post image" class="post-image">` : ''}
-                        </div>
-                        
-                        <div class="post-stats">
-                            <div class="post-likes">
-                                <i class="fas fa-thumbs-up"></i> ${post.likeCount || 0} likes
-                            </div>
-                            <div class="post-comments">
-                                0 comments
-                            </div>
-                        </div>
-                        
-                        <div class="post-actions-bar">
-                            <button class="post-action-btn like-btn" data-id="${postId}">
-                                <i class="far fa-thumbs-up"></i> <span>Like</span>
-                            </button>
-                            <button class="post-action-btn">
-                                <i class="far fa-comment"></i> <span>Comment</span>
-                            </button>
-                            <button class="post-action-btn share-btn" data-id="${postId}">
-                                <i class="far fa-share-square"></i> <span>Share</span>
-                            </button>
-                        </div>
-                    `;
-                    
-                    postsContainer.appendChild(postElement);
-                });
+        function listenForPosts() {
+            const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+            unsubscribePosts = onSnapshot(q, (snapshot) => {
+                renderPostCards(postsContainer, snapshot.docs);
             });
         }
         
-        async function handleLikePost(postId, button) {
-            if (!currentUser) {
-                alert("You must be logged in to like a post.");
-                return;
-            }
-
-            const postRef = db.collection('posts').doc(postId);
-            
-            // Use a transaction to safely update the like count
-            await db.runTransaction(async (transaction) => {
-                const postDoc = await transaction.get(postRef);
-                if (!postDoc.exists) {
-                    throw "Document does not exist!";
-                }
-                
-                // For simplicity, we just increment. A real app would check if the user already liked it.
-                const newLikeCount = (postDoc.data().likeCount || 0) + 1;
-                transaction.update(postRef, { likeCount: newLikeCount });
+        function listenForUserPosts() {
+            if (!currentUser) return;
+            const q = query(collection(db, "posts"), where("authorId", "==", currentUser.uid), orderBy("createdAt", "desc"));
+            unsubscribeUserPosts = onSnapshot(q, (snapshot) => {
+                renderPostCards(userPostsContainer, snapshot.docs);
             });
+        }
+        
+        function renderPostCards(container, postDocs) {
+            if (!container) return;
+            container.innerHTML = '';
+            postDocs.forEach(doc => {
+                const post = { id: doc.id, ...doc.data() };
+                const postElement = createPostElement(post);
+                container.appendChild(postElement);
+            });
+        }
 
-            // Update UI
-            button.classList.add('liked');
-            button.querySelector('span').textContent = 'Liked';
-            button.disabled = true; // Prevent multiple clicks
+        function createPostElement(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'post-card';
+            const timeAgo = post.createdAt ? timeSince(post.createdAt.toDate()) : 'just now';
+            const isLiked = currentUser && post.likedBy && post.likedBy.includes(currentUser.uid);
+
+            postElement.innerHTML = `
+                <div class="post-header">
+                    <img src="${post.authorAvatar}" alt="User" class="post-user-img">
+                    <div class="post-user-info">
+                        <div class="post-username">${post.authorName}</div>
+                        <div class="post-time">${timeAgo}</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p class="post-text">${post.text}</p>
+                    ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post image" class="post-image">` : ''}
+                </div>
+                <div class="post-stats">
+                    <div class="post-likes">
+                        <i class="fas fa-thumbs-up"></i> ${post.likeCount || 0} likes
+                    </div>
+                </div>
+                <div class="post-actions-bar">
+                    <button class="post-action-btn like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}">
+                        <i class="${isLiked ? 'fas' : 'far'} fa-thumbs-up"></i> <span>${isLiked ? 'Liked' : 'Like'}</span>
+                    </button>
+                    <button class="post-action-btn">
+                        <i class="far fa-comment"></i> <span>Comment</span>
+                    </button>
+                    <button class="post-action-btn share-btn">
+                        <i class="far fa-share-square"></i> <span>Share</span>
+                    </button>
+                </div>
+            `;
+            return postElement;
+        }
+        
+        async function handleLikePost(postId, button) {
+            if (!currentUser) return alert("You must be logged in to like posts.");
+
+            const postRef = doc(db, "posts", postId);
+            
+            await runTransaction(db, async (transaction) => {
+                const postDoc = await transaction.get(postRef);
+                if (!postDoc.exists()) throw "Document does not exist!";
+
+                const likedBy = postDoc.data().likedBy || [];
+                const isLiked = likedBy.includes(currentUser.uid);
+
+                if (isLiked) {
+                    // Unlike
+                    transaction.update(postRef, { 
+                        likeCount: increment(-1),
+                        likedBy: likedBy.filter(uid => uid !== currentUser.uid)
+                    });
+                } else {
+                    // Like
+                    transaction.update(postRef, { 
+                        likeCount: increment(1),
+                        likedBy: [...likedBy, currentUser.uid]
+                    });
+                }
+            }).catch(error => {
+                console.error("Like transaction failed: ", error);
+            });
         }
         
         // --- UTILITY FUNCTIONS ---
         function timeSince(date) {
             const seconds = Math.floor((new Date() - date) / 1000);
             let interval = seconds / 31536000;
-            if (interval > 1) return Math.floor(interval) + " years ago";
+            if (interval > 1) return `${Math.floor(interval)} years ago`;
             interval = seconds / 2592000;
-            if (interval > 1) return Math.floor(interval) + " months ago";
+            if (interval > 1) return `${Math.floor(interval)} months ago`;
             interval = seconds / 86400;
-            if (interval > 1) return Math.floor(interval) + " days ago";
+            if (interval > 1) return `${Math.floor(interval)} days ago`;
             interval = seconds / 3600;
-            if (interval > 1) return Math.floor(interval) + " hours ago";
+            if (interval > 1) return `${Math.floor(interval)} hours ago`;
             interval = seconds / 60;
-            if (interval > 1) return Math.floor(interval) + " minutes ago";
-            return Math.floor(seconds) + " seconds ago";
+            if (interval > 1) return `${Math.floor(interval)} minutes ago`;
+            return `${Math.floor(seconds)} seconds ago`;
         }
     </script>
 </body>
