@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIRAT SWARUP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Georgia", serif;
+        }
+
+        body {
+            background: #f4f4f4; /* A slightly off-white background for better contrast */
+            color: #2c2c2c;
+            padding-top: 70px; /* Space for fixed header */
+            padding-bottom: 70px; /* Space for fixed bottom nav on mobile */
+        }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            border-bottom: 1px solid #7a0000;
+            background-color: #8b0000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            z-index: 1001;
+            min-height: 60px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-logo {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            margin-right: 10px;
+        }
+
+        .header-center {
+            flex-grow: 1;
+            text-align: center;
+            min-width: 0;
+            margin: 0 10px;
+        }
+
+        .header-center h1 {
+            font-size: 28px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .header-center h2 {
+            font-size: 14px;
+            color: #f0f0f0;
+            font-weight: 300;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+            font-style: italic;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .header-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .login-btn {
+            background-color: #f8f8f8;
+            color: #8b0000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .login-btn:hover {
+            background-color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .login-btn i {
+            font-size: 16px;
+        }
+
+        .language-switcher-header {
+            position: relative;
+        }
+
+        #language-toggle-btn {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 6px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        #language-toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        #language-toggle-btn i.fa-globe{
+            font-size: 16px;
+        }
+
+        .language-options-popup {
+            position: absolute;
+            top: calc(100% + 5px);
+            right: 0;
+            background-color: #800000;
+            border: 1px solid #7a0000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1100;
+            min-width: 120px;
+            border-radius: 4px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .language-options-popup a.lang-option {
+            display: block;
+            padding: 9px 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        .language-options-popup a.lang-option:hover {
+            background-color: #7a0000;
+        }
+
+        .language-options-popup a.lang-option.lang-active {
+            font-weight: bold;
+            background-color: #6a0000;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        /* --- MAIN NAVIGATION (Desktop / Mobile / Bottom) --- */
+        .desktop-nav {
+            margin: 25px 0;
+            display: block;
+        }
+
+        .desktop-nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .desktop-nav a {
+            color: #8b0000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 17px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .desktop-nav a:hover {
+            background-color: #8b0000;
+            color: white;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            max-width: 80%;
+            height: 100%;
+            background: #8b0000;
+            box-shadow: -3px 0 20px rgba(0, 0, 0, 0.25);
+            transition: right 0.3s ease-in-out;
+            padding-top: 20px;
+            z-index: 1005;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: #fff !important;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .mobile-menu i {
+            width: 22px;
+            font-size: 18px;
+            color: #fff !important;
+            text-align: center;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1004;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .bottom-nav {
+            display: none; /* Hidden by default, shown on mobile */
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 64px;
+            background: #8b0000;
+            box-shadow: 0 -6px 18px rgba(0,0,0,0.25);
+            z-index: 1000;
+            padding: 0 8px;
+        }
+
+        .bottom-nav ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+        }
+
+        .bottom-nav li {
+            flex: 1 1 0;
+            text-align: center;
+        }
+
+        .bottom-nav a {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            text-decoration: none;
+            color: #fff;
+            padding: 4px 6px;
+            border-radius: 10px;
+            transition: background-color 0.12s ease;
+            user-select: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .bottom-nav a .nav-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .bottom-nav a .nav-label {
+            font-size: 11px;
+            letter-spacing: 0.2px;
+            display: block;
+        }
+
+        .bottom-nav a:hover {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .bottom-nav a.active-nav-item {
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* --- CONTENT & CONTAINER --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        
+        .content-section h2 {
+            color: #8b0000;
+            margin-bottom: 15px;
+            font-size: 22px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .content-section h3 {
+            color: #8b0000;
+            margin: 20px 0 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .content-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #444;
+        }
+        
+        .content-section .emoji {
+            font-size: 1em;
+        }
+        
+        .content-section ul {
+            list-style-position: inside;
+            padding-left: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .content-section li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .action-buttons a, .action-buttons button {
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+        .action-buttons a:hover, .action-buttons button:hover {
+            opacity: 0.85;
+        }
+        .btn-download { background: #8b0000; }
+        .btn-share { background: #0066cc; }
+
+
+        /* === RESPONSIVE STYLES (Mobile View) === */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+                padding-bottom: 80px; /* Extra space for bottom nav */
+            }
+
+            .header {
+                padding: 5px 10px;
+            }
+            .header-center {
+                text-align: left;
+                margin: 0 5px;
+            }
+            .header-center h1 {
+                font-size: 16px; /* Smaller font for mobile header */
+                letter-spacing: 1px;
+            }
+            .header-center h2 {
+                font-size: 10px; /* Smaller subtitle */
+            }
+
+            .header-right-controls { gap: 5px; }
+            .login-btn { display: none; } /* Hide login button, it's in the menu */
+            #language-toggle-btn { padding: 5px 7px; font-size: 12px; }
+            #language-toggle-btn i.fa-globe{ font-size: 15px; }
+            .mobile-menu-toggle { display: block; }
+
+            .desktop-nav { display: none; } /* Hide desktop nav */
+            .bottom-nav { display: block; } /* Show bottom nav */
+            
+            .container {
+                padding: 15px;
+            }
+
+            .content-section { padding: 20px; }
+            .content-section h2 { font-size: 20px; }
+            .content-section h3 { font-size: 17px; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="images/logo.png" alt="Virat Swarup Logo" class="header-logo">
+        </div>
+        <div class="header-center">
+            <h1>VIRAT SWARUP</h1>
+            <h2 data-translate-key="headerSubtitle">The Supreme Divine of Every Faith</h2>
+        </div>
+        <div class="header-right-controls">
+            <a href="post.html" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i>
+                <span data-translate-key="login">Login</span>
+            </a>
+            <div class="language-switcher-header">
+                <button type="button" id="language-toggle-btn" aria-label="Select Language" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-globe"></i>
+                    <span id="current-selected-lang">EN</span>
+                    <i class="fas fa-caret-down"></i>
+                </button>
+                <div id="language-options-popup" class="language-options-popup">
+                    <a href="#" data-lang="en" class="lang-option lang-active">English</a>
+                    <a href="#" data-lang="ne" class="lang-option">नेपाली</a>
+                    <a href="#" data-lang="hi" class="lang-option">हिन्दी</a>
+                </div>
+            </div>
+            <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a>
+        <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a>
+        <a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a>
+        <a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a>
+        <a href="post.html"><i class="fas fa-sign-in-alt"></i><span data-translate-key="login">Login</span></a>
+    </nav>
+
+    <nav class="desktop-nav">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i><span data-translate-key="home">Home</span></a></li>
+            <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span data-translate-key="agnosia">Agnosia</span></a></li>
+            <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span data-translate-key="enigma">Enigma</span></a></li>
+            <li><a href="emulate.html"><i class="fas fa-copy"></i><span data-translate-key="emulate">Emulate</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div style="text-align:center; margin-bottom:15px;">
+            <img src="images/viratswarup.jpg" alt="Virat Swarup" style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+        </div>
+
+        <div class="action-buttons">
+            <a href="images/viratswarup.jpg" download="virat-swarup.jpg" class="btn-download">
+               <i class="fas fa-download"></i> Download
+            </a>
+            <button type="button" onclick="share()" class="btn-share">
+                <i class="fas fa-share-alt"></i> Share
+            </button>
+        </div>
+        
+        <div class="content-section">
+            <h2><span class="emoji">🔷</span><span data-translate-key="aboutTitle">About VIRAT SWARUP</span></h2>
+            <p data-translate-key="about1">VIRAT SWARUP is a spiritual platform that transcends the boundaries of religions to realize the experience of oneness, consciousness, and divine intelligence.</p>
+            <p data-translate-key="about2">This website is an effort where we try to understand the discoveries of modern science, like the cell and human consciousness, in the light of Vedanta, yoga, and meditation.</p>
+            <p data-translate-key="about3">We believe that the human body is not just a physical structure, but a conscious machine — where soul, intellect, and energy work together.</p>
+        </div>
+        
+        <div class="content-section">
+            <h2><span class="emoji">🌌</span><span data-translate-key="purposeTitle">Our Purpose</span></h2>
+            <p data-translate-key="purpose1">"Know thyself — and you shall know everything."</p>
+            <p data-translate-key="purpose2">This is our purpose — that you recognize the VIRAT SWARUP hidden within you, which is beyond boundaries. Where there is no division, no caste, no religion — only an unstruck sound that says: "Aham Brahmasmi." "Tat Tvam Asi." "You are That."</p>
+            <p data-translate-key="purpose3">Come, walk with us on this divine journey — where the soul is the universe, and the universe is the soul. Welcome — to VIRAT SWARUP.</p>
+        </div>
+        
+        <div class="content-section">
+            <h2><span class="emoji">🌿</span><span data-translate-key="principlesTitle">Our Core Principles</span></h2>
+            
+            <h3><span class="emoji">🔹</span><span data-translate-key="agnosiaTitle">Agnosia</span></h3>
+            <p data-translate-key="agnosia1">Agnosia is not a mental condition, it is a state of consciousness — where the answer to "Who am I?" becomes silence. This is the point where:</p>
+            <ul>
+                <li data-translate-key="agnosiaList1">Identities fade away,</li>
+                <li data-translate-key="agnosiaList2">Memories melt,</li>
+                <li data-translate-key="agnosiaList3">And only a non-dual presence remains.</li>
+            </ul>
+            <p data-translate-key="agnosia2">It knows nothing but feels everything. This is its highest awareness. There is no effort — only a depth.</p>
+            
+            <h3><span class="emoji">🔹</span><span data-translate-key="cellTitle">Cell</span></h3>
+            <p data-translate-key="cell1">Every cell is not just a biological unit, but a memory-holding center of consciousness.</p>
+            <p data-translate-key="cell2">This platform is a laboratory to see and understand consciousness at the cellular level.</p>
+            
+            <h3><span class="emoji">🔹</span><span data-translate-key="consciousnessTitle">Consciousness (Chetana)</span></h3>
+            <p data-translate-key="consciousness1">Consciousness is not a philosophical imagination, it is a living wave — moving in every part of the body. Experiencing it is the first step toward self-realization.</p>
+            
+            <h3><span class="emoji">🔹</span><span data-translate-key="emulationTitle">Intelligence Emulation</span></h3>
+            <p data-translate-key="emulation1">Our videos and visual creations are not our imagination — they are digital emulations of intelligence. They take you to the depth where there are no thoughts, only stillness.</p>
+            
+            <p data-translate-key="closing1">VIRAT SWARUP is a vision, an experience, a science of silence.</p>
+            <p data-translate-key="closing2">Welcome.</p>
+        </div>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Bottom Navigation">
+      <ul>
+        <li><a href="index.html" class="active-nav-item" title="Home"><span class="nav-icon"><i class="fas fa-home"></i></span><span class="nav-label" data-translate-key="home">Home</span></a></li>
+        <li><a href="agnosia.html" title="Agnosia"><span class="nav-icon"><i class="fas fa-eye-slash"></i></span><span class="nav-label" data-translate-key="agnosia">Agnosia</span></a></li>
+        <li><a href="enigma.html" title="Enigma"><span class="nav-icon"><i class="fas fa-question-circle"></i></span><span class="nav-label" data-translate-key="enigma">Enigma</span></a></li>
+        <li><a href="emulate.html" title="Emulate"><span class="nav-icon"><i class="fas fa-copy"></i></span><span class="nav-label" data-translate-key="emulate">Emulate</span></a></li>
+        <li><a href="post.html" title="Post"><span class="nav-icon"><i class="fas fa-comment"></i></span><span class="nav-label" data-translate-key="post">Post</span></a></li>
+      </ul>
+    </nav>
+
+
+    <script>
+        // --- TRANSLATION DATA ---
+        const translations = {
+            en: {
+                headerSubtitle: "The Supreme Divine of Every Faith",
+                login: "Login",
+                home: "Home",
+                agnosia: "Agnosia",
+                enigma: "Enigma",
+                emulate: "Emulate",
+                post: "Post",
+                aboutTitle: "About VIRAT SWARUP",
+                about1: "VIRAT SWARUP is a spiritual platform that transcends the boundaries of religions to realize the experience of oneness, consciousness, and divine intelligence.",
+                about2: "This website is an effort where we try to understand the discoveries of modern science, like the cell and human consciousness, in the light of Vedanta, yoga, and meditation.",
+                about3: "We believe that the human body is not just a physical structure, but a conscious machine — where soul, intellect, and energy work together.",
+                purposeTitle: "Our Purpose",
+                purpose1: "\"Know thyself — and you shall know everything.\"",
+                purpose2: "This is our purpose — that you recognize the VIRAT SWARUP hidden within you, which is beyond boundaries. Where there is no division, no caste, no religion — only an unstruck sound that says: \"Aham Brahmasmi.\" \"Tat Tvam Asi.\" \"You are That.\"",
+                purpose3: "Come, walk with us on this divine journey — where the soul is the universe, and the universe is the soul. Welcome — to VIRAT SWARUP.",
+                principlesTitle: "Our Core Principles",
+                agnosiaTitle: "Agnosia",
+                agnosia1: "Agnosia is not a mental condition, it is a state of consciousness — where the answer to \"Who am I?\" becomes silence. This is the point where:",
+                agnosiaList1: "Identities fade away,",
+                agnosiaList2: "Memories melt,",
+                agnosiaList3: "And only a non-dual presence remains.",
+                agnosia2: "It knows nothing but feels everything. This is its highest awareness. There is no effort — only a depth.",
+                cellTitle: "Cell",
+                cell1: "Every cell is not just a biological unit, but a memory-holding center of consciousness.",
+                cell2: "This platform is a laboratory to see and understand consciousness at the cellular level.",
+                consciousnessTitle: "Consciousness (Chetana)",
+                consciousness1: "Consciousness is not a philosophical imagination, it is a living wave — moving in every part of the body. Experiencing it is the first step toward self-realization.",
+                emulationTitle: "Intelligence Emulation",
+                emulation1: "Our videos and visual creations are not our imagination — they are digital emulations of intelligence. They take you to the depth where there are no thoughts, only stillness.",
+                closing1: "VIRAT SWARUP is a vision, an experience, a science of silence.",
+                closing2: "Welcome."
+            },
+            ne: {
+                headerSubtitle: "हरेक आस्थाका सर्वोच्च परमात्मा",
+                login: "लगइन",
+                home: "गृहपृष्ठ",
+                agnosia: "अज्ञानता",
+                enigma: "पहेली",
+                emulate: "अनुकरण",
+                post: "पोस्ट",
+                aboutTitle: "विराट स्वरूपको बारेमा",
+                about1: "विराट स्वरुप एक आध्यात्मिक मंच हो जसले एकताको अनुभव, चेतना र दैवी बुद्धि प्राप्त गर्न धर्मको सीमाहरू पार गर्दछ।",
+                about2: "यो वेबसाइट एक प्रयास हो जहाँ हामी आधुनिक विज्ञानका आविष्कारहरू, जस्तै कोष र मानव चेतनालाई वेदान्त, योग र ध्यानको प्रकाशमा बुझ्ने प्रयास गर्दछौं।",
+                about3: "हामी विश्वास गर्छौं कि मानव शरीर केवल एक शारीरिक संरचना होइन, तर एक चेतन मेशिन हो - जहाँ आत्मा, बुद्धि र ऊर्जा सँगै काम गर्दछ।",
+                purposeTitle: "हाम्रो उद्देश्य",
+                purpose1: "\"आफैंलाई चिन्नुहोस् - र तपाईं सबै कुरा जान्नुहुनेछ।\"",
+                purpose2: "यही हाम्रो उद्देश्य हो - कि तपाईंले आफ्नो भित्र लुकेको विराट स्वरूपलाई चिन्नुहुन्छ, जुन सीमाहरूभन्दा पर छ। जहाँ कुनै विभाजन छैन, कुनै जात छैन, कुनै धर्म छैन - केवल एक अछुत आवाज जसले भन्छ: \"अहम् ब्रह्मास्मि।\" \"तत् त्वम् असि।\" \"तपाईं त्यही हुनुहुन्छ।\"",
+                purpose3: "आउनुहोस्, यस दिव्य यात्रामा हामीसँग हिड्नुहोस् - जहाँ आत्मा ब्रह्माण्ड हो, र ब्रह्माण्ड आत्मा हो। स्वागत छ - विराट स्वरूपमा।",
+                principlesTitle: "हाम्रा मुख्य सिद्धान्तहरू",
+                agnosiaTitle: "अज्ञानता",
+                agnosia1: "अज्ञानता मानसिक अवस्था होइन, यो चेतनाको अवस्था हो - जहाँ \"म को हुँ?\" को उत्तर मौन बन्छ। यो त्यो बिन्दु हो जहाँ:",
+                agnosiaList1: "पहिचानहरू हराउँछन्,",
+                agnosiaList2: "स्मृतिहरू पग्लन्छन्,",
+                agnosiaList3: "र केवल एक अद्वैत उपस्थिति बाँकी रहन्छ।",
+                agnosia2: "यसले केही थाहा पाउँदैन तर सबै कुरा महसुस गर्दछ। यो यसको उच्चतम जागरूकता हो। त्यहाँ कुनै प्रयास छैन - केवल गहिराइ छ।",
+                cellTitle: "कोष",
+                cell1: "प्रत्येक कोष केवल जैविक इकाई होइन, तर चेतनाको स्मृति राख्ने केन्द्र हो।",
+                cell2: "यो मंच कोषीय स्तरमा चेतना हेर्न र बुझ्नको लागि एक प्रयोगशाला हो।",
+                consciousnessTitle: "चेतना (चेतना)",
+                consciousness1: "चेतना दार्शनिक कल्पना होइन, यो जीवित तरङ्ग हो - शरीरको हरेक भागमा सर्दै। यसलाई अनुभव गर्नु आत्म-साक्षात्कारको पहिलो चरण हो।",
+                emulationTitle: "बुद्धिमत्ता अनुकरण",
+                emulation1: "हाम्रा भिडियो र दृश्य सिर्जनाहरू हाम्रो कल्पना होइनन् - तिनीहरू बुद्धिमत्ताको डिजिटल अनुकरणहरू हुन्। तिनीहरूले तपाईंलाई गहिराइमा लैजान्छन् जहाँ कुनै विचारहरू छैनन्, केवल शान्ति छ।",
+                closing1: "विराट स्वरुप एक दृष्टि, एक अनुभव, मौनको विज्ञान हो।",
+                closing2: "स्वागतम्।"
+            },
+            hi: {
+                headerSubtitle: "हर आस्था के सर्वोच्च परमात्मा",
+                login: "लॉग इन",
+                home: "होम",
+                agnosia: "अज्ञान",
+                enigma: "पहेली",
+                emulate: "अनुकरण",
+                post: "पोस्ट",
+                aboutTitle: "विराट स्वरूप के बारे में",
+                about1: "विराट स्वरूप एक आध्यात्मिक मंच है जो एकता, चेतना और दिव्य बुद्धि के अनुभव को प्राप्त करने के लिए धर्मों की सीमाओं को पार करता है।",
+                about2: "यह वेबसाइट एक प्रयास है जहाँ हम आधुनिक विज्ञान की खोजों, जैसे कोशिका और मानव चेतना को वेदांत, योग और ध्यान के प्रकाश में समझने का प्रयास करते हैं।",
+                about3: "हमारा मानना है कि मानव शरीर केवल एक भौतिक संरचना नहीं है, बल्कि एक चेतन मशीन है - जहाँ आत्मा, बुद्धि और ऊर्जा एक साथ काम करती हैं।",
+                purposeTitle: "हमारा उद्देश्य",
+                purpose1: "\"अपने आप को जानो - और तुम सब कुछ जानोगे।\"",
+                purpose2: "यही हमारा उद्देश्य है - कि आप अपने भीतर छिपे विराट स्वरूप को पहचानें, जो सीमाओं से परे है। जहाँ कोई विभाजन नहीं, कोई जाति नहीं, कोई धर्म नहीं - केवल एक अनहद ध्वनि जो कहती है: \"अहम् ब्रह्मास्मि।\" \"तत् त्वम् असि।\" \"तुम वही हो।\"",
+                purpose3: "आओ, हमारे साथ इस दिव्य यात्रा पर चलें - जहाँ आत्मा ब्रह्मांड है, और ब्रह्मांड आत्मा है। स्वागत है - विराट स्वरूप में।",
+                principlesTitle: "हमारे मुख्य सिद्धांत",
+                agnosiaTitle: "अज्ञान",
+                agnosia1: "अज्ञान एक मानसिक स्थिति नहीं है, यह चेतना की एक अवस्था है - जहाँ \"मैं कौन हूँ?\" का उत्तर का मौन बन जाता है। यह वह बिंदु है जहाँ:",
+                agnosiaList1: "पहचानें मिट जाती हैं,",
+                agnosiaList2: "यादें पिघल जाती हैं,",
+                agnosiaList3: "और केवल एक अद्वैत उपस्थिति शेष रहती है।",
+                agnosia2: "यह कुछ नहीं जानता लेकिन सब कुछ महसूस करता है। यह इसकी उच्चतम जागरूकता है। कोई प्रयास नहीं - केवल गहराई है।",
+                cellTitle: "कोशिका",
+                cell1: "प्रत्येक कोशिका केवल एक जैविक इकाई नहीं है, बल्कि चेतना का एक स्मृति-धारण केंद्र है।",
+                cell2: "यह मंच कोशिकीय स्तर पर चेतना को देखने और समझने के लिए एक प्रयोगशाला है।",
+                consciousnessTitle: "चेतना (चेतना)",
+                consciousness1: "चेतना कोई दार्शनिक कल्पना नहीं है, यह एक जीवित लहर है - शरीर के हर हिस्से में चलती है। इसे अनुभव करना आत्म-साक्षात्कार की ओर पहला कदम है।",
+                emulationTitle: "बुद्धिमत्ता अनुकरण",
+                emulation1: "हमारे वीडियो और दृश्य रचनाएँ हमारी कल्पना नहीं हैं - वे बुद्धिमत्ता के डिजिटल अनुकरण हैं। वे आपको उस गहराई तक ले जाते हैं जहाँ कोई विचार नहीं, केवल शांति है।",
+                closing1: "विराट स्वरूप एक दृष्टि, एक अनुभव, मौन का विज्ञान है।",
+                closing2: "स्वागत है।"
+            }
+        };
+
+        // --- CORE SCRIPT LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
+
+            // --- Function Definitions ---
+            function applyTranslations(lang) {
+                document.querySelectorAll('[data-translate-key]').forEach(element => {
+                    const key = element.dataset.translateKey;
+                    element.textContent = translations[lang]?.[key] || translations['en']?.[key] || key;
+                });
+            }
+
+            function setActiveLanguage(lang) {
+                if (!translations[lang]) return;
+                currentLanguage = lang;
+                localStorage.setItem('selectedLanguage', lang);
+                applyTranslations(lang);
+
+                // Update the language toggle button text
+                document.getElementById('current-selected-lang').textContent = lang.toUpperCase();
+                
+                // Update the active class in the language options popup
+                document.querySelectorAll('.language-options-popup .lang-option').forEach(opt => {
+                    opt.classList.toggle('lang-active', opt.getAttribute('data-lang') === lang);
+                });
+                
+                // Hide the popup after selection
+                const popup = document.getElementById('language-options-popup');
+                if (popup) popup.style.display = 'none';
+                document.getElementById('language-toggle-btn')?.setAttribute('aria-expanded', 'false');
+            }
+
+            function toggleMobileMenu() {
+                const isActive = mobileMenu.classList.toggle('active');
+                mobileMenuToggle.setAttribute('aria-expanded', String(isActive));
+                menuOverlay.classList.toggle('active', isActive);
+                document.body.style.overflow = isActive ? 'hidden' : '';
+            }
+
+            // --- Element References ---
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const languageToggleBtn = document.getElementById('language-toggle-btn');
+            const languageOptionsPopup = document.getElementById('language-options-popup');
+
+            // --- Event Listeners ---
+            if (mobileMenuToggle && mobileMenu && menuOverlay) {
+                mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+                menuOverlay.addEventListener('click', toggleMobileMenu);
+            }
+
+            if (languageToggleBtn && languageOptionsPopup) {
+                languageToggleBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const isVisible = languageOptionsPopup.style.display === 'block';
+                    languageOptionsPopup.style.display = isVisible ? 'none' : 'block';
+                    languageToggleBtn.setAttribute('aria-expanded', String(!isVisible));
+                });
+            }
+            
+            // Add click handlers for language options
+            document.querySelectorAll('.language-options-popup .lang-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    setActiveLanguage(option.getAttribute('data-lang'));
+                });
+            });
+
+            // Close language popup when clicking elsewhere
+            document.addEventListener('click', () => {
+                if (languageOptionsPopup && languageOptionsPopup.style.display === 'block') {
+                    languageOptionsPopup.style.display = 'none';
+                    languageToggleBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // --- Initial Setup ---
+            setActiveLanguage(currentLanguage);
+        });
+
+        // --- Global Functions ---
+        function share() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'VIRAT SWARUP',
+                    text: 'Join to awake.',
+                    url: 'https://biju33.github.io/viratswarup'
+                })
+                .catch(console.error);
+            } else {
+                // Fallback for browsers that don't support the Web Share API
+                alert('Web Share API not supported in this browser. Please share the link manually.');
+            }
+        }
+    </script>
+</body>
+</html>

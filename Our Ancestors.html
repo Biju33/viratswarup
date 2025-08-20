@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VIRAT SWARUP - 100 Great Rishis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      /* --- GLOBAL RESET & FONT --- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Georgia", serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: #f4f4f4;
+        color: #2c2c2c;
+        /* This padding is crucial to prevent content from hiding under the fixed header. */
+        padding-top: 61px; 
+        padding-bottom: 70px;
+      }
+
+      /* --- HEADER --- */
+      .site-header {
+          background-color: #8b0000;
+          color: white;
+          padding: 8px 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          /* --- KEY CHANGE FOR GUARANTEED FROZEN HEADER --- */
+          position: fixed; /* Changed from 'sticky' to 'fixed' for absolute positioning */
+          top: 0;
+          left: 0; /* Added for cross-browser consistency with position:fixed */
+          z-index: 900;
+          /* ----------------------------------------------- */
+          border-bottom: 1px solid #7a0000;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      .header-left-section { display: flex; align-items: center; }
+      .site-logo { height: 45px; margin-right: 12px; }
+      .site-titles { display: flex; flex-direction: column; justify-content: center; }
+      .site-main-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.1; text-transform: uppercase; }
+      .site-subtitle { font-size: 12px; font-style: italic; color: rgba(255, 255, 255, 0.9); margin: 2px 0 0 0; font-weight: 300; line-height: 1.1; }
+      .header-right-section { display: flex; align-items: center; gap: 12px; }
+      
+      /* --- LANGUAGE SWITCHER (HEADER) --- */
+      .language-selector-wrapper { position: relative; }
+      .header-language-switcher {
+          display: flex; align-items: center; border: 1px solid rgba(255, 255, 255, 0.5);
+          border-radius: 4px; padding: 6px 8px; cursor: pointer; color: white; gap: 5px;
+          background-color: rgba(0,0,0,0.1); transition: background-color 0.2s;
+      }
+      .header-language-switcher:hover { background-color: rgba(0,0,0,0.2); }
+      .header-language-switcher .fas { font-size: 14px; }
+      .header-language-switcher .lang-abbr { font-size: 13px; font-weight: 500; text-transform: uppercase; }
+      .language-dropdown {
+          display: none; position: absolute; top: calc(100% + 5px); right: 0; background-color: #800000;
+          border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.15); z-index: 910; min-width: 150px; padding: 5px 0;
+      }
+      .language-dropdown.active { display: block; }
+      .language-dropdown a { display: block; padding: 8px 15px; color: white; text-decoration: none; font-size: 13px; }
+      .language-dropdown a:hover { background-color: rgba(255, 255, 255, 0.1); }
+      .language-dropdown a.lang-active { font-weight: bold; background-color: rgba(0, 0, 0, 0.2); }
+
+      /* --- HAMBURGER & MOBILE MENU --- */
+      .hamburger {
+        cursor: pointer;
+        display: none;
+        width: 28px; height: auto; padding: 5px 0; z-index: 1001;
+      }
+      .hamburger-line {
+        width: 28px; height: 2px; background: #ffffff;
+        margin: 6px 0; transition: 0.4s;
+      }
+      .hamburger.active .hamburger-line:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+      .hamburger.active .hamburger-line:nth-child(2) { opacity: 0; }
+      .hamburger.active .hamburger-line:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+
+      .mobile-menu {
+        position: fixed; top: 0; right: -300px; width: 300px; max-width: 80%; height: 100%;
+        background: #8b0000; box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+        transition: right 0.4s ease-in-out; padding-top: 20px;
+        z-index: 1000; overflow-y: auto;
+      }
+      .mobile-menu.active { right: 0; }
+      .mobile-menu a {
+        display: flex; align-items: center; gap: 15px; padding: 15px 30px;
+        color: #fff !important; text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer;
+      }
+      .mobile-menu i { width: 25px; font-size: 20px; color: #fff !important; }
+
+      /* --- DESKTOP NAVIGATION --- */
+      .desktop-nav {
+        margin: 0 auto 30px auto;
+        text-align: center;
+        padding-top: 30px;
+      }
+      .desktop-nav ul { display: inline-flex; justify-content: center; gap: 32px; list-style: none; }
+      .desktop-nav a {
+        color: #8b0000; text-decoration: none; display: flex; align-items: center;
+        gap: 8px; font-size: 18px; padding: 5px 10px; border-radius: 5px; transition: background-color 0.2s, color 0.2s;
+      }
+      .desktop-nav a:hover {
+        background-color: #8b0000;
+        color: white;
+      }
+      
+      /* --- MAIN CONTENT & RISHI LIST --- */
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 0 20px 20px 20px;
+      }
+      .content-section {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08)
+      }
+      .section-title{text-align:center; color:#8b0000; font-size:28px; margin-bottom:15px;}
+      .intro-text{text-align:center; color:#444; margin-bottom:25px; line-height:1.7; max-width: 700px; margin-left: auto; margin-right: auto;}
+      .rishi-list{list-style:none; padding:0; margin:0}
+      .rishi-item{padding:15px 10px; border-bottom:1px solid #eee}
+      .rishi-item:last-child{border-bottom:none}
+      .rishi-name{font-weight:700; color:#8b0000; font-size:18px;}
+      .rishi-contribution{color:#333; margin-top:8px; line-height:1.6; font-size: 15px;}
+      .translation-note{font-size:13px; color:#666; margin-top:20px; text-align: center; font-style: italic;}
+
+
+      /* --- BOTTOM NAVIGATION (MOBILE) --- */
+      .bottom-nav {
+        position: fixed; bottom: 0; left: 0; width: 100%; background: #8b0000;
+        border-top: 1px solid #7a0000; padding: 5px 0; display: none; z-index: 899;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      }
+      .bottom-nav ul { display: flex; justify-content: space-around; list-style: none; }
+      .bottom-nav a {
+        color: #fff !important; font-size: 16px; text-decoration: none; display: flex;
+        flex-direction: column; align-items: center; gap: 4px; padding: 8px 10px;
+        border-radius: 8px; transition: background 0.2s; flex: 1; text-align: center;
+      }
+      .bottom-nav a i { font-size: 20px; }
+      .bottom-nav a span { font-size: 12px; }
+      .bottom-nav a:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+      /* --- RESPONSIVE MEDIA QUERIES FOR MOBILE --- */
+      @media (max-width: 768px) {
+        body { padding-top: 57px; } 
+        .hamburger { display: block; }
+        .desktop-nav { display: none; }
+        .bottom-nav { display: flex; }
+        
+        .site-header { padding: 8px 10px; }
+        .site-main-title { font-size: 17px; }
+        .site-subtitle { font-size: 10px; }
+        .site-logo { height: 40px; margin-right: 8px; }
+
+        .header-language-switcher { padding: 5px 7px; gap: 4px; }
+        .header-language-switcher .fas, .header-language-switcher .lang-abbr { font-size: 12px; }
+        .header-right-section { gap: 8px; }
+
+        .container {
+            padding: 20px 15px;
+        }
+        .content-section {
+            padding: 20px 15px;
+        }
+        .section-title{ font-size:22px; }
+        .intro-text { font-size: 15px; line-height: 1.6; }
+        .rishi-name { font-size: 17px; }
+        .rishi-contribution { font-size: 14px; }
+      }
+    </style>
+  </head>
+<body>
+    <!-- Mobile slide-out menu -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="agnosia.html"><i class="fas fa-eye-slash"></i><span>Agnosia</span></a>
+        <a href="enigma.html"><i class="fas fa-question-circle"></i><span>Enigma</span></a>
+        <a href="emulate.html"><i class="fas fa-copy"></i><span>Emulate</span></a>
+        <a href="post.html"><i class="fas fa-comment"></i><span>Post</span></a>
+        <a href="#"><i class="fas fa-sign-in-alt"></i><span>Login</span></a>
+    </nav>
+
+    <!-- Fixed Header -->
+    <header class="site-header">
+        <div class="header-left-section">
+            <img src="images/logo.png" alt="Virat Swarup Logo" class="site-logo">
+            <div class="site-titles">
+                <h1 class="site-main-title">VIRAT SWARUP</h1>
+                <p class="site-subtitle" data-translate-key="headerSubtitleReality">The Supreme Divine of Every Faith</p>
+            </div>
+        </div>
+        <div class="header-right-section">
+            <div class="language-selector-wrapper">
+                <div class="header-language-switcher" id="headerLangSwitcher">
+                    <i class="fas fa-globe"></i>
+                    <span class="lang-abbr" id="langAbbr">EN</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="language-dropdown" id="headerLangDropdown">
+                    <a href="#" data-lang="en">English</a>
+                    <a href="#" data-lang="hi">हिन्दी (Hindi)</a>
+                    <a href="#" data-lang="ne">नेपाली (Nepali)</a>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+        <li><a href="agnosia.html"><i class="fas fa-eye-slash"></i><span>Agnosia</span></a></li>
+        <li><a href="enigma.html"><i class="fas fa-question-circle"></i><span>Enigma</span></a></li>
+        <li><a href="emulate.html"><i class="fas fa-copy"></i><span>Emulate</span></a></li>
+        <li><a href="post.html"><i class="fas fa-comment"></i><span>Post</span></a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="container">
+        <section class="content-section" id="list-section" aria-live="polite">
+            <h2 class="section-title" id="page-title"></h2>
+            <p class="intro-text" id="intro"></p>
+            <ul class="rishi-list" id="rishiList">
+                <!-- Rishi list will be rendered here by JavaScript -->
+            </ul>
+            <p class="translation-note" id="translation-note"></p>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation for Mobile -->
+    <nav class="bottom-nav">
+      <ul>
+        <li><a href="index.html" title="Home"><i class="fas fa-home"></i><span>Home</span></a></li>
+        <li><a href="agnosia.html" title="Agnosia"><i class="fas fa-eye-slash"></i><span>Agnosia</span></a></li>
+        <li><a href="enigma.html" title="Enigma"><i class="fas fa-question-circle"></i><span>Enigma</span></a></li>
+        <li><a href="emulate.html" title="Emulate"><i class="fas fa-copy"></i><span>Emulate</span></a></li>
+        <li><a href="post.html" title="Post"><i class="fas fa-comment"></i><span>Post</span></a></li>
+      </ul>
+    </nav>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        // --- ELEMENTS ---
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const langSwitcher = document.getElementById('headerLangSwitcher');
+        const langDropdown = document.getElementById('headerLangDropdown');
+        const langLinks = langDropdown.querySelectorAll('a[data-lang]');
+        const langAbbr = document.getElementById('langAbbr');
+        
+        // --- MOBILE MENU TOGGLE ---
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        // --- LANGUAGE SWITCHER LOGIC ---
+        langSwitcher.addEventListener('click', (event) => {
+            event.stopPropagation();
+            langDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', () => {
+            if (langDropdown.classList.contains('active')) {
+                langDropdown.classList.remove('active');
+            }
+        });
+
+        langLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedLang = this.getAttribute('data-lang');
+                setLanguage(selectedLang);
+                langDropdown.classList.remove('active');
+            });
+        });
+
+        function setLanguage(lang) {
+            renderList(lang);
+            langAbbr.textContent = lang;
+            localStorage.setItem('selectedLanguage', lang);
+            
+            langLinks.forEach(link => {
+                link.classList.toggle('lang-active', link.getAttribute('data-lang') === lang);
+            });
+        }
+
+        // --- RISHI DATA AND RENDERING ---
+        const rishis = [
+            {id:1, en:{name:"Bhrigu", contrib:"Author of Bhrigu Samhita; early astrological works and Vedic hymns."}, hi:{name:"भृगु", contrib:"भृगु संहिता के रचयिता; प्रारम्भिक ज्योतिष और वैदिक सूक्तों के योगदानकर्ता।"}, ne:{name:"भृगु", contrib:"भृगु संहिता का लेखक; प्रारम्भिक ज्योतिष र वैदिक सूक्तमा योगदान।"}},
+            {id:2, en:{name:"Angiras", contrib:"Composer of Vedic hymns and teacher of sacred knowledge."}, hi:{name:"अंगिरस", contrib:"वैदिक सूक्तों के रचयिता और पवित्र ज्ञान के आचार्य।"}, ne:{name:"अंगिरस", contrib:"वैदिक सूक्तहरूको रचयिता र पवित्र ज्ञानका गुरु।"}},
+            {id:3, en:{name:"Atri", contrib:"Contributor to Rigveda; known for tapasya and spiritual power."}, hi:{name:"अत्रि", contrib:"ऋग्वेद में योगदानकर्ता; तपस्या और आध्यात्मिक शक्ति के लिए प्रसिद्ध।"}, ne:{name:"अत्रि", contrib:"ऋग्वेदमा योगदान गर्ने; तपस्या र आध्यात्मिक शक्तिका लागि परिचित।"}},
+            {id:4, en:{name:"Vasishtha", contrib:"Vedic sage; guru of Lord Rama; author of many hymns."}, hi:{name:"वशिष्ठ", contrib:"वैदिक ऋषि; भगवान राम के गुरु; अनेक सूक्तों के रचयिता।"}, ne:{name:"वशिष्ठ", contrib:"वैदिक ऋषि; भगवान रामका गुरु; धेरै सूक्तका लेखक।"}},
+            {id:5, en:{name:"Kashyapa", contrib:"Progenitor of many beings; contributor to Vedic literature."}, hi:{name:"कश्यप", contrib:"बहु प्राणियों के कुलोत्पन्नकर्ता; वैदिक साहित्य में योगदान।"}, ne:{name:"कश्यप", contrib:"धेरै प्राणीहरूको वंशज; वैदिक साहित्यमा योगदान।"}},
+            {id:6, en:{name:"Gautama", contrib:"Author of Nyaya Sutras; founder of logical school Nyaya."}, hi:{name:"गौतम", contrib:"न्याय सूत्रों के रचयिता; न्याय दर्शन के संस्थापक।"}, ne:{name:"गौतम", contrib:"न्याय सूत्रका लेखक; न्याय दर्शनको संस्थापक।"}},
+            {id:7, en:{name:"Bharadwaja", contrib:"Scholar, contributed to Rigveda; known for knowledge in Ayurveda and sciences."}, hi:{name:"भरद्वाज", contrib:"वैदिक विद्वान; आयुर्वेद और विज्ञानों में विशेषज्ञता।"}, ne:{name:"भरद्वाज", contrib:"वैदिक विद्वान; आयुर्वेद र विज्ञानमा विज्ञ।"}},
+            {id:8, en:{name:"Vishwamitra", contrib:"Composer of many hymns incl. Gayatri; became Brahmarishi through tapasya."}, hi:{name:"विश्वामित्र", contrib:"गायत्री समेत कई सूक्तों के रचयिता; तपस्या से ब्रह्मर्षि बने।"}, ne:{name:"विश्वामित्र", contrib:"गायत्री लगायत धेरै सूक्तका लेखक; तपस्याबाट ब्रह्मर्षि बने।"}},
+            {id:9, en:{name:"Agastya", contrib:"Spread Vedic culture to south; founder of Siddha traditions."}, hi:{name:"अगस्त्य", contrib:"दक्षिण में वैदिक संस्कृति का प्रचार; सिद्ध परंपराओं के संस्थापक।"}, ne:{name:"अगस्त्य", contrib:"दक्षिणतिर वैदिक संस्कृति फैलाउँदै गएका; सिद्ध परम्पराका संस्थापक।"}},
+            {id:10, en:{name:"Jamadagni", contrib:"Vedic scholar; father of Parashurama and holder of great penance."}, hi:{name:"जमदग्नि", contrib:"वैदिक विद्वान; परशुराम के पिता; तपस्या और ज्ञान के धनी।"}, ne:{name:"जमदग्नि", contrib:"वैदिक विद्वान; परशुरामका पिताजी; महान तपस्याका धनी।"}},
+            {id:11, en:{name:"Kanva", contrib:"Adoptive father of Shakuntala; contributed Rigvedic hymns."}, hi:{name:"कन्व", contrib:"शकुंतला के गोद लिए हुए पिता; ऋग्वैदिक सूक्तों में योगदान।"}, ne:{name:"कन्व", contrib:"शकुंतलाका दत्त पिता; ऋग्वैदिक सूक्तमा योगदान।"}},
+            {id:12, en:{name:"Parashara", contrib:"Author of Vishnu Purana; pioneer in astrology."}, hi:{name:"पराशर", contrib:"विष्णु पुराण के रचयिता; ज्योतिष के पुरोधा।"}, ne:{name:"पराशर", contrib:"विष्णु पुराणका लेखक; ज्योतिषमा पायनियर।"}},
+            {id:13, en:{name:"Valmiki", contrib:"Author of Ramayana; called Adi Kavi (first poet)."}, hi:{name:"वाल्मीकि", contrib:"रामायण के लेखक; आदिकवि कहलाए।"}, ne:{name:"वाल्मीकि", contrib:"रामायणका लेखक; आदिकवि भनिन्छ।"}},
+            {id:14, en:{name:"Vyasa", contrib:"Compiler of the Vedas; author of Mahabharata and Puranas."}, hi:{name:"व्यास", contrib:"वेदों के संकलनकर्ता; महाभारत और पुराणों के रचयिता।"}, ne:{name:"व्यास", contrib:"वेदहरूका सङ्कलक; महाभारत र पुराणका लेखक।"}},
+            {id:15, en:{name:"Markandeya", contrib:"Author of Markandeya Purana; devotee of Shiva and long-lived sage."}, hi:{name:"मार्कण्डेय", contrib:"मार्कण्डेय पुराण के लेखक; शिव भक्त और अल्पमरण वाले ऋषि।"}, ne:{name:"मार्कण्डेय", contrib:"मार्कण्डेय पुराणका लेखक; शिवका भक्त र दीर्घायु ऋषि।"}},
+            {id:16, en:{name:"Narada", contrib:"Divine messenger, master of bhakti and music."}, hi:{name:"नारद", contrib:"दैवीय संदेशवाहक; भक्ति एवं संगीत के उस्ताद।"}, ne:{name:"नारद", contrib:"दिव्य सन्देशवाहक; भक्ति र सङ्गीतका निपुण।"}},
+            {id:17, en:{name:"Durvasa", contrib:"Known for ascetic power and stern temperament; powerful sage."}, hi:{name:"दुर्वासा", contrib:"कठोर तपस्वी और तीव्र स्वभाव के लिए प्रसिद्ध ऋषि।"}, ne:{name:"दुर्वासा", contrib:"कठोर तपस्वी र कडा स्वभावका लागि प्रसिद्ध।"}},
+            {id:18, en:{name:"Yajnavalkya", contrib:"Philosopher in Brihadaranyaka Upanishad; taught neti-neti."}, hi:{name:"याज्ञवल्क्य", contrib:"बृहदारण्यक उपनिषद् के फ़िलॉसफ़र; नेति-नेति शिक्षा दी।"}, ne:{name:"याज्ञवल्क्य", contrib:"बृहदारण्यक उपनिषद्का दार्शनिक; नेति-नेति सिकाए।"}},
+            {id:19, en:{name:"Uddalaka Aruni", contrib:"Taught 'Tat Tvam Asi' in Chandogya Upanishad."}, hi:{name:"उदडालक अरुणि", contrib:"चांदोघ्य उपनिषद् में 'तत्त्वमसि' की शिक्षा देने वाले।"}, ne:{name:"उद्दालक अरुणि", contrib:"चाण्डोग्य उपनिषद्मा 'तत्त्वमसि' सिकाउने।"}},
+            {id:20, en:{name:"Shvetaketu", contrib:"Disciple of Uddalaka; central in Chandogya Upanishad teachings."}, hi:{name:"श्वेतकेतु", contrib:"उद्दालक के शिष्य; चाण्डोग्य उपनिषद के केन्द्रीय पात्र।"}, ne:{name:"श्वेतकेतु", contrib:"उद्दालकका शिष्य; चाण्डोग्य उपनिषद्का केन्द्रिय पात्र।"}},
+            {id:21, en:{name:"Pippalada", contrib:"Sage linked with Prashna Upanishad and knowledge of nature."}, hi:{name:"पिप्पलाद", contrib:"प्रश्न उपनिषद के प्रमुख ऋषि; प्रकृति और जीवन के प्रश्नों के ज्ञाता।"}, ne:{name:"पिप्पलाद", contrib:"प्रश्न उपनिषद्का प्रमुख ऋषि; प्रकृति र जीवनका प्रश्न जान्ने।"}},
+            {id:22, en:{name:"Sanatkumara", contrib:"One of the four Kumaras; eternal youth and spiritual teacher."}, hi:{name:"सनत्कुमार", contrib:"चार कुमारों में से एक; अनन्त यौवन और आध्यात्मिक गुरू।"}, ne:{name:"सनत्कुमार", contrib:"चार कुमारहरू मध्ये एक; अनन्त युवा र आध्यात्मिक शिक्षक।"}},
+            {id:23, en:{name:"Ashtavakra", contrib:"Author of Ashtavakra Gita; taught non-dual wisdom."}, hi:{name:"अष्टावक्र", contrib:"अष्टावक्र गीता के रचयिता; अद्वैत ज्ञान के उपदेशक।"}, ne:{name:"अष्टावक्र", contrib:"अष्टावक्र गीता का लेखक; अद्वैत ज्ञान सिकाउने।"}},
+            {id:24, en:{name:"Gargi", contrib:"Renowned woman philosopher; debated in Upanishadic assemblies."}, hi:{name:"गार्गी", contrib:"प्रसिद्ध महिला दार्शनिक; उपनिषदिक परिषदों में वाद-विवाद की प्रत्यक्षी।"}, ne:{name:"गार्गी", contrib:"प्रसिद्ध महिला दार्शनिक; उपनिषदसभाॆंमा बहस गर्ने।"}},
+            {id:25, en:{name:"Maitreyi", contrib:"Woman sage who discussed liberation and self-knowledge."}, hi:{name:"मैत्रेयी", contrib:"मुक्ति और आत्म-ज्ञान पर विमर्श करने वाली महिला ऋषि।"}, ne:{name:"मैत्रेयी", contrib:"मुक्ति र आत्म-ज्ञानमा बहस गर्ने महिला ऋषि।"}},
+            {id:26, en:{name:"Patanjali", contrib:"Compiler of Yoga Sutras; systematized classical yoga."}, hi:{name:"पतञ्जलि", contrib:"योग सूत्रों के संकलनकर्ता; क्लासिकल योग का व्यवस्थितकर्ता।"}, ne:{name:"पतञ्जलि", contrib:"योग सूत्रहरूको संकलक; क्लासिक योगलाई संरचित गरे।"}},
+            {id:27, en:{name:"Matsyendranath", contrib:"Founder of Nath tradition; early Hatha Yoga pioneer."}, hi:{name:"मत्स्येन्द्रनाथ", contrib:"नाथ संप्रदाय के संस्थापक; हठ योग के अग्रदूत।"}, ne:{name:"मत्स्येन्द्रनाथ", contrib:"नाथ परम्पराका संस्थापक; हठयोगका अग्रज।"}},
+            {id:28, en:{name:"Gorakhnath", contrib:"Systematized Hatha Yoga; major Nath lineage figure."}, hi:{name:"गोरखनाथ", contrib:"हठ योग को व्यवस्थित किया; नाथ परंपरा के प्रमुख।"}, ne:{name:"गोरखनाथ", contrib:"हठयोगलाई व्यवस्थित गरे; नाथ परम्पराका प्रमुख।"}},
+            {id:29, en:{name:"Dattatreya", contrib:"Avadhuta tradition teacher; wrote Avadhuta Gita."}, hi:{name:"दत्तात्रेय", contrib:"अवधूत परंपरा के आचार्य; अवधूत गीता के लेखक।"}, ne:{name:"दत्तात्रेय", contrib:"अवधूत परम्पराका गुरु; अवधूत गीता का लेखक।"}},
+            {id:30, en:{name:"Vasugupta", contrib:"Revealed Shiva Sutras; key figure in Kashmir Shaivism."}, hi:{name:"वासुगुप्त", contrib:"शिव सूत्रों का प्रकाशक; कश्मीर शैवमत के प्रमुख।"}, ne:{name:"वासुगुप्त", contrib:"शिव सूत्र प्रकट गरे; काश्मीर शैवमतका महत्वपूर्ण व्यक्ति।"}},
+            {id:31, en:{name:"Kapila", contrib:"Founder of Samkhya philosophy; analytical dualism."}, hi:{name:"कपिल", contrib:"सांख्य दर्शन के संस्थापक; विश्लेषणात्मक द्वैतवाद के प्रवर्तक।"}, ne:{name:"कपिल", contrib:"सांख्य दर्शनका संस्थापक; विश्लेषणात्म्क द्वैतवादी।"}},
+            {id:32, en:{name:"Jaimini", contrib:"Founder of Mimamsa school focusing on Vedic ritual and exegesis."}, hi:{name:"जैमिनी", contrib:"मीमांसा स्कूल के संस्थापक; वेदों की रस्मों और व्याख्या पर केन्द्रित।"}, ne:{name:"जैमिनी", contrib:"मीमांसा विद्यालयका संस्थापक; वैदिक कर्म र व्याख्यामा केन्द्रीत।"}},
+            {id:33, en:{name:"Kanada", contrib:"Founder of Vaisheshika; early atomic theory and metaphysics."}, hi:{name:"कनाड", contrib:"वैशेषिक के संस्थापक; प्राचीन परमाणु-सिद्धांत और तत्वज्ञान।"}, ne:{name:"कनाड", contrib:"वैशेषिकका संस्थापक; प्राचिन परमाणु सिद्धान्त र तत्वज्ञान।"}},
+            {id:34, en:{name:"Badarayana", contrib:"Compiler of Brahma Sutras; foundation of Vedanta."}, hi:{name:"बदरीयाण", contrib:"ब्रह्मसूत्रों के संकलक; वेदांत का आधार।"}, ne:{name:"बदरयान", contrib:"ब्रह्मसूत्रको सङ्कलक; वेदान्तको आधार।"}},
+            {id:35, en:{name:"Shankaracharya", contrib:"Exponent of Advaita Vedanta; established monastic maths."}, hi:{name:"शंकराचार्य", contrib:"अद्वैत वेदांत के प्रवर्तक; मठों की स्थापना की।"}, ne:{name:"शंकराचार्य", contrib:"अद्वैत वेदान्तका प्रवर्तक; मठ स्थापना गरे।"}},
+            {id:36, en:{name:"Ramanujacharya", contrib:"Founder of Vishishtadvaita; devotional Vedanta emphasizing personal God."}, hi:{name:"रामानुजाचार्य", contrib:"विशिष्टाद्वैत के संस्थापक; व्यक्तिगत ईश्वर में भक्ति पर बल।"}, ne:{name:"रामानुजाचार्य", contrib:"विशिष्टाद्वैतकका संस्थापक; व्यक्तिगत देवतामा भक्ति जोड्ने।"}},
+            {id:37, en:{name:"Madhvacharya", contrib:"Founder of Dvaita Vedanta; philosopher of dualism."}, hi:{name:"माध्वाचार्य", contrib:"द्वैत वेदांत के संस्थापक; द्वैतवादी दर्शन के प्रवर्तक।"}, ne:{name:"माध्वाचार्य", contrib:"द्वैत वेदान्तका संस्थापक; द्वैतवादी दार्शनिक।"}},
+            {id:38, en:{name:"Nimbarka", contrib:"Propounder of Dvaitadvaita (dual-nondual) philosophy."}, hi:{name:"निंबार्क", contrib:"द्वैत-अद्वैत (द्वैताद्वैत) दर्शन के प्रवर्तक।"}, ne:{name:"निंबार्क", contrib:"द्वैत-अद्वैत दर्शनका प्रवर्तक।"}},
+            {id:39, en:{name:"Vallabhacharya", contrib:"Founder of Shuddhadvaita and strong Krishna bhakti tradition."}, hi:{name:"वल्लभाचार्य", contrib:"शुद्धाद्वैत के संस्थापक; कृष्ण भक्ति पर जोर।"}, ne:{name:"वल्लभाचार्य", contrib:"शुद्धाद्वैतक संस्थापक; कृष्णभक्तिमा जोड।"}},
+            {id:40, en:{name:"Chaitanya Mahaprabhu", contrib:"Spread Gaudiya Vaishnavism and public sankirtan."}, hi:{name:"चैतन्य महाप्रभु", contrib:"गौड़ीय वैष्णव धर्म का प्रचारक; सार्वजनिक संकीर्तन के प्रेरक।"}, ne:{name:"चैतन्य महाप्रभु", contrib:"गौडीय वैष्णवता फैलाउने र सार्वजनिक संकीर्तन प्रचलित गर्ने।"}},
+            {id:41, en:{name:"Tulsidas", contrib:"Author of Ramcharitmanas; popularized Ram's story in vernacular."}, hi:{name:"तुलसीदास", contrib:"रामचरितमानस के रचयिता; लोकभाषा में रामकथा को लोकप्रिय किया।"}, ne:{name:"तुलसीदास", contrib:"रामचरितमानसका लेखक; जनभाषामा रामकथा लोकप्रिय बनाए।"}},
+            {id:42, en:{name:"Surdas", contrib:"Bhakti poet devoted to Krishna; composed many devotional songs."}, hi:{name:"सूरदास", contrib:"कृष्ण भक्ति के कवि; अनेक भक्ति गीतों के रचयिता।"}, ne:{name:"सूरदास", contrib:"कृष्णभक्त कवि; धेरै भजनका लेखक।"}},
+            {id:43, en:{name:"Kabir", contrib:"Mystic poet bridging Hindu and Muslim ideas; emphasized devotion and truth."}, hi:{name:"कबीर", contrib:"हिन्दू और मुस्लिम विचारों को जोड़ने वाले सूफी-भक्ति कवि; सच्चाई और भक्ति पर जोर।"}, ne:{name:"कबीर", contrib:"हिन्दू र मुस्लिम विचारलाई जोड्ने रहस्यवादी कवि; भक्ति र सत्यमा जोड।"}},
+            {id:44, en:{name:"Mirabai", contrib:"Rajput princess and Krishna bhakti poetess famed for devotional songs."}, hi:{name:"मीराबाई", contrib:"राजपूत राजकुमारी और कृष्ण भक्ति कवयित्री; भक्ति गीतों के लिए प्रसिद्ध।"}, ne:{name:"मीराबाई", contrib:"राजपूत राजकुमारी र कृष्णभक्ति कवयित्री; भजनका लागि प्रसिद्ध।"}},
+            {id:45, en:{name:"Ramananda", contrib:"Bhakti teacher who popularized devotion across castes."}, hi:{name:"रामानन्द", contrib:"भक्ति आचार्य जिन्होंने जाति-बंधनों के पार भक्ति का प्रसार किया।"}, ne:{name:"रामानन्द", contrib:"भक्ति गुरु जसले जाति भन्दा माथि भक्ति फैलाए।"}},
+            {id:46, en:{name:"Basava", contrib:"Lingayat leader and social reformer; promoted equality and devotion."}, hi:{name:"बसव", contrib:"लिंगायत नेता और समाज सुधारक; समानता और भक्ति को बढ़ावा दिया।"}, ne:{name:"बसव", contrib:"लिङ्गायत नेता र समाजसुधारक; समानता र भक्ति प्रवर्धन गरे।"}},
+            {id:47, en:{name:"Eknath", contrib:"Bhakti poet and teacher in Maharashtra; wrote spiritual works in Marathi."}, hi:{name:"एकनाथ", contrib:"महाराष्ट्र के भक्ति कवि; मराठी में आध्यात्मिक रचनाएँ रचीं।"}, ne:{name:"एकनाथ", contrib:"महाराष्ट्रका भक्ति कवि; मराठीमा आध्यात्मिक रचना।"}},
+            {id:48, en:{name:"Tukaram", contrib:"Varkari saint and Marathi bhakti poet famous for Abhangs."}, hi:{name:"तुकाराम", contrib:"वारकरी संत और मराठी भक्ति कवि; अभंगों के लिए प्रसिद्ध।"}, ne:{name:"तुकाराम", contrib:"वारकरी संत र मराठी भक्ति कवि; अभंगका लागि प्रसिद्ध।"}},
+            {id:49, en:{name:"Jnaneshwar", contrib:"Wrote Jnaneshwari (commentary on Bhagavad Gita) in Marathi."}, hi:{name:"ज्ञानेश्वर", contrib:"ज्ञानेश्वरी (गीता पर टीका) मराठी में लिखी।"}, ne:{name:"ज्ञानेश्वर", contrib:"ज्ञानेश्वरी (गीता टीका) मराठीमा लेखे।"}},
+            {id:50, en:{name:"Namdev", contrib:"Bhakti saint whose hymns are in Sikh scripture (Guru Granth Sahib)."}, hi:{name:"नामदेव", contrib:"भक्ति संत जिनकी भजनें गुरु ग्रंथ साहिब में हैं।"}, ne:{name:"नामदेव", contrib:"भक्ति संत; उनका भजन गुरु ग्रन्थ साहिबमा छन्।"}},
+            {id:51, en:{name:"Andal", contrib:"Female Alvar saint and Tamil devotional poet to Vishnu."}, hi:{name:"आन्डल", contrib:"अल्वर महिला संत और तमिल में विष्णु भक्ति कवयित्री।"}, ne:{name:"आण्डल", contrib:"अल्वर महिला संत तथा तमिल विष्णुभक्ति कवयित्री।"}},
+            {id:52, en:{name:"Raghavendra Swami", contrib:"19th-century saint and scholar worshipped in South India."}, hi:{name:"राघवेंद्र स्वामी", contrib:"दक्षिण भारत में पूजनीय 17–19वीं शताब्दी के संत-पण्डित।"}, ne:{name:"राघवेंद्र स्वामी", contrib:"दक्षिण भारतमा पूजनीय आधुनिक ऋषि तथा विद्वान्।"}},
+            {id:53, en:{name:"Tirumular", contrib:"Tamil Siddhar and author of Tirumantiram (Shaiva text)." }, hi:{name:"तिरुमुलर", contrib:"तमिल सिद्ध और तिरुमन्तिरम (शैव ग्रन्थ) के लेखक।"}, ne:{name:"तिरुमुलर", contrib:"तमिल सिद्ध; तिरुमन्तिरम लेखेका।"}},
+            {id:54, en:{name:"Ramana Maharshi", contrib:"Modern sage of Arunachala; taught self-inquiry (Atma Vichara)."}, hi:{name:"रमण महार्षि", contrib:"अरुणाचल के आधुनिक संत; आत्म-अन्वेषण की शिक्षा।"}, ne:{name:"रमण महार्षि", contrib:"अरुणाचलका आधुनिक गुरु; आत्म-अन्वेषण (आत्मविचार) सिकाए।"}},
+            {id:55, en:{name:"Ramakrishna Paramahamsa", contrib:"Mystic saint who emphasized unity of religions."}, hi:{name:"रामकृष्ण परमहंस", contrib:"धर्मों की एकता पर बल देने वाले रहस्यवादी संत।"}, ne:{name:"रामकृष्ण परमहंस", contrib:"धर्महरूको एकतालाई जोड्ने रहस्यवादी संत।"}},
+            {id:56, en:{name:"Swami Vivekananda", contrib:"Disciples of Ramakrishna; spread Vedanta and yoga to West."}, hi:{name:"स्वामी विवेकानंद", contrib:"रामकृष्ण के शिष्य; वेदांत और योग को पश्चिम में पहुँचाया।"}, ne:{name:"स्वामी विवेकानन्द", contrib:"रामकृष्णका शिष्य; वेदान्त र योगलाई पश्चिममा पुर्याए।"}},
+            {id:57, en:{name:"Sri Aurobindo", contrib:"Philosopher and yogi who integrated spirituality and social life."}, hi:{name:"श्री अरबिंदो", contrib:"दर्शनकार और योगी जिन्होंने आध्यात्म और समाज को जोड़ा।"}, ne:{name:"श्री अरविन्दो", contrib:"दर्शनशास्त्री र योगी जसले आध्यात्म र सामाजिक जीवन समायोजन गरे।"}},
+            {id:58, en:{name:"Dayananda Saraswati", contrib:"Founder of Arya Samaj; promoted Vedic revival and social reform."}, hi:{name:"दयानंद सरस्वती", contrib:"आर्य समुदाय के संस्थापक; वैदिक पुनरुद्धार और सामाजिक सुधार के प्रणेता।"}, ne:{name:"दयानन्द सरस्वती", contrib:"आर्य समाजका संस्थापक; वैदिक पुनरुद्धार र सामाजिक सुधार प्रवर्तक।"}},
+            {id:59, en:{name:"Sri Nisargadatta Maharaj", contrib:"Teacher of Advaita nondualism; famous for 'I am that' dialogues."}, hi:{name:"निसर्गदत्त महाराज", contrib:"अद्वैत के उपदेशक; 'आई एम दैट' शैली के उदात्त संवाद।"}, ne:{name:"निसर्गदत्त महाराज", contrib:"अद्वैत शिक्षक; 'आइ एम दट' संवादका लागि प्रसिद्ध।"}},
+            {id:60, en:{name:"Swami Sivananda", contrib:"Founder of Divine Life Society; prolific writer on yoga and bhakti."}, hi:{name:"स्वामी शिवानंद", contrib:"डिवाइन लाइफ सोसाइटी के संस्थापक; योग और भक्ति पर अनेक लेखन।"}, ne:{name:"स्वामी शिवानन्द", contrib:"डिभाइन लाइफ सोसाइटी संस्थापक; योग तथा भक्ति सम्बन्धी धेरै रचना।"}},
+            {id:61, en:{name:"Bhaskara", contrib:"(Name used for classical scholars)—mathematician/astronomer tradition."}, hi:{name:"भास्कर", contrib:"क्लासिकल गणित/ज्योतिष परंपरा से जुड़े विद्वान का नाम।"}, ne:{name:"भास्कर", contrib:"शास्त्रीय गणित/खगोलीय परम्पराका विद्वान।"}},
+            {id:62, en:{name:"Sankaradeva", contrib:"Assamese saint and cultural reformer; propagated Vaishnavism."}, hi:{name:"शंकरदेव", contrib:"असम के संत और सांस्कृतिक सुधारक; वैष्णव धर्म का प्रसार।"}, ne:{name:"शंकरदेव", contrib:"असमका संत र सांस्कृतिक सुधारक; वैष्णवतालाई फैलाए।"}},
+            {id:63, en:{name:"Adishankaracharya", contrib:"(Alternative name for Shankara) — consolidated Advaita tradition."}, hi:{name:"आदिशंकराचार्य", contrib:"(शंकर का सम्मान सूचक नाम) — अद्वैत परंपरा को मजबूत किया।"}, ne:{name:"आदिशंकराचार्य", contrib:"(शंकरकै सम्मानित रूप) — अद्वैत परम्परा सुदृढ गरे।"}},
+            {id:64, en:{name:"Sage Bharata", contrib:"Associated with Natyashastra (dramatic arts) tradition."}, hi:{name:"भरत", contrib:"नाट्यशास्त्र और कला परंपरा से जुड़े मनीषी।"}, ne:{name:"भरत", contrib:"नाट्यशास्त्र परम्परासँग सम्बन्धित ऋषि।"}},
+            {id:65, en:{name:"Sage Shuka", contrib:"Son of Vyasa; narrator of Bhagavata Purana in some traditions."}, hi:{name:"शुक", contrib:"व्यास के पुत्र; कुछ परम्पराओं में भागवत पुराण के कथावाचक।"}, ne:{name:"शुक", contrib:"व्यासका सन्तान; भागवत पुराण कथावाचकको रुपमा मानिन्छ।"}},
+            {id:66, en:{name:"Sage Vyaghrapada", contrib:"Associated with Shaiva traditions and temple worship."}, hi:{name:"व्याघ्रपाद", contrib:"शैव परंपराओं और मंदिरपूजा से जुड़े ऋषि।"}, ne:{name:"व्याघ्रपाद", contrib:"शैव परम्परा र मन्दिरपूजासँग सम्बन्धित।"}},
+            {id:67, en:{name:"Agnihotra Rishis (collective)", contrib:"Developers of Vedic fire ritual sciences and yajna practices."}, hi:{name:"अग्नि-होत्र ऋषि (समूह)", contrib:"वैदिक अग्नि-यज्ञ और हवन प्रथाओं के विकासकर्ता।"}, ne:{name:"अग्नि-होत्र ऋषि", contrib:"वैदिक आगि यज्ञ र हवन प्रथाहरूका विकासकर्ता।"}},
+            {id:68, en:{name:"Sage Katyayana", contrib:"Ancient grammarian and contributor to Vedic rites."}, hi:{name:"कात्यायन", contrib:"प्राचीन व्याकरणशास्त्री और वैदिक रीतियों में योगदान।"}, ne:{name:"कात्यायन", contrib:"प्राचीन व्याकरणज्ञ र वैदिक रीति-रिवाजमा योगदान।"}},
+            {id:69, en:{name:"Sage Manu", contrib:"Author of Manusmriti (traditional law code) and social guidelines."}, hi:{name:"मनु", contrib:"मनुस्मृति के लेखक; सामाजिक और धार्मिक निर्देशक।"}, ne:{name:"मनु", contrib:"मनुस्मृति लेखक; सामाजिक र धार्मिक निर्देश।"}},
+            {id:70, en:{name:"Sage Ikshvaku", contrib:"Ancient solar dynasty founder often cited in epics and Puranas."}, hi:{name:"इक्ष्वाकु", contrib:"प्राचीन सौर वंश के संस्थापक; महाकाव्यों में वर्णित।"}, ne:{name:"इक्ष्वाकु", contrib:"प्राचीन सौर वंशका संस्थापक; महाकाव्यमा उल्लेखित।"}},
+            {id:71, en:{name:"Sage Agnivesha", contrib:"Associated with early Ayurveda and Charaka tradition."}, hi:{name:"अग्निवेश", contrib:"प्रारम्भिक आयुर्वेद और चरक परंपरा से जुड़े।"}, ne:{name:"अग्निवेश", contrib:"प्रारम्भिक आयुर्वेद र चरक परम्परासँग सम्बन्धित।"}},
+            {id:72, en:{name:"Sage Charaka", contrib:"Pioneer of Ayurveda medical system (Charaka Samhita)." }, hi:{name:"चरक", contrib:"आयुर्वेदिक प्रणाली के पायनियर; चरक संहिता के रचयिता।"}, ne:{name:"चरक", contrib:"आयुर्वेदका प्रवर्तक; चरक संहिता लेखक।"}},
+            {id:73, en:{name:"Sage Sushruta", contrib:"Father of surgery in ancient India (Sushruta Samhita)."}, hi:{name:"सुश्रुत", contrib:"प्राचीन भारत में शस्त्रक्रिया के प्रवर्तक; सुश्रुत संहिता के लेखक।"}, ne:{name:"सुश्रुत", contrib:"प्राचीन भारतका शल्यचिकित्सा प्रवर्तक; सुश्रुत संहिता लेखक।"}},
+            {id:74, en:{name:"Sage Bharadvaja (medicine)", contrib:"Contributed to Vedic sciences and early medical knowledge."}, hi:{name:"भरद्वाज (चिकित्सा)", contrib:"वैदिक विज्ञानों और प्रारम्भिक चिकित्सा ज्ञान में योगदान।"}, ne:{name:"भरद्वाज (चिकित्सा)", contrib:"वैदिक विज्ञान र प्रारम्भिक चिकित्सा ज्ञानमा योगदान।"}},
+            {id:75, en:{name:"Sage Veda Vyasa (alternate)", contrib:"Sometimes referenced distinctly for Vedic compilation work."}, hi:{name:"वेद व्यास (वैकल्पिक)", contrib:"वैदिक संकलन कार्यों के लिए अलग संदर्भ में उल्लिखित।"}, ne:{name:"वेद व्यास (वैकल्पिक)", contrib:"वैदिक सङ्कलन कार्यमा फरक सन्दर्भमा उल्लिखित।"}},
+            {id:76, en:{name:"Sage Ananda", contrib:"Disciples and companions in Buddhist tradition; preservers of teachings."}, hi:{name:"आनंद", contrib:"बौद्ध परंपरा में शिष्य और उपदेश के संरक्षक।"}, ne:{name:"आनन्द", contrib:"बौद्ध परम्पराका शिष्य तथा उपदेशको संरक्षण गर्ने।"}},
+            {id:77, en:{name:"Sage Mahavira", contrib:"24th Tirthankara of Jainism; taught non-violence and asceticism."}, hi:{name:"महावीर", contrib:"जैन धर्म के 24वें तीर्थंकर; अहिंसा और तपस्या का उपदेशक।"}, ne:{name:"महावीर", contrib:"जैन धर्मका २४औँ तीर्थंकर; अहिंसा र तपस्याका उपदेशक।"}},
+            {id:78, en:{name:"Lord Buddha (Siddhartha)", contrib:"Taught Middle Way, Four Noble Truths, and path to liberation."}, hi:{name:"बुद्ध (सिद्धार्थ)", contrib:"मध्यम मार्ग और चार आर्य सत्यों का उपदेशक; मुक्ति-मार्ग बताया।"}, ne:{name:"बुद्ध (सिद्धार्थ)", contrib:"मध्यम मार्ग, चार आर्य सत्य र मोक्षको बाटो सिकाए।"}},
+            {id:79, en:{name:"Nagarjuna", contrib:"Founder of Madhyamaka school of Mahayana Buddhist philosophy."}, hi:{name:"नागार्जुन", contrib:"मध्यमक (महा-यान) बौद्ध दर्शन के संस्थापक।"}, ne:{name:"नागर्जुन", contrib:"माध्यमक महायान बौद्ध दर्शनका संस्थापक।"}},
+            {id:80, en:{name:"Asanga", contrib:"Important Mahayana scholar and proponent of Yogacara school."}, hi:{name:"असंग", contrib:"महायान के महत्वपूर्ण विद्वान और योगाचार परंपरा के प्रवर्तक।"}, ne:{name:"असङ्ग", contrib:"महायानका महत्वपूर्ण विद्वान; योगाचार प्रवर्तक।"}},
+            {id:81, en:{name:"Vasishtha (alternate sageship)", contrib:"Later schools referencing Vashistha's teachings and mantras."}, hi:{name:"वशिष्ठ (वैकल्पिक)", contrib:"वशिष्ठ के उपदेशों और मन्त्रों का बाद के विद्यालयों में संदर्भ।"}, ne:{name:"वशिष्ठ (वैकल्पिक)", contrib:"वशिष्ठका उपदेश र मन्त्रलाई पछिल्ला विद्यालयले उद्धृत गरे।"}},
+            {id:82, en:{name:"Sage Agnivesh (social reformer)", contrib:"Modern social reformers inspired by Vedic ethics."}, hi:{name:"अग्निवेश (समाज सुधारक)", contrib:"वैदिक नैतिकता से प्रेरित आधुनिक समाज सुधारक।"}, ne:{name:"अग्निवेश (समाज सुधारक)", contrib:"वैदिक नीतिबाट प्रेरित आधुनिक समाज सुधारक।"}},
+            {id:83, en:{name:"Rabi Thakur (Rabindranath Tagore)", contrib:"Poet-philosopher who blended spiritual and humanist thought."}, hi:{name:"रबि ठाकुर (रविन्द्रनाथ टैगोर)", contrib:"कवि-दार्शनिक जिन्होंने आध्यात्मिकता और मानवतावाद संग जोड़ा।"}, ne:{name:"रवीन्द्रनाथ टैगोर", contrib:"कवि-दार्शनिक जसले आध्यात्म र मानववाद मेल गरे।"}},
+            {id:84, en:{name:"Sage Vyasa (symbolic)", contrib:"Symbolic representation of compilation and teaching lineage."}, hi:{name:"व्यास (प्रतीकात्मक)", contrib:"संकलन और शिक्षण परंपरा के प्रतीक के रूप में संदर्भित।"}, ne:{name:"व्यास (प्रतीकात्मक)", contrib:"सङ्कलन र शिक्षण परम्पराको प्रतीक।"}},
+            {id:85, en:{name:"Ramakrishna (teacher tradition)", contrib:"Influential mystic tradition continuing through disciples."}, hi:{name:"रामकृष्ण (परम्परा)", contrib:"शिष्यों के माध्यम से जारी रह रही प्रभावशाली रहस्यवादी परंपरा।"}, ne:{name:"रामकृष्ण (परम्परा)", contrib:"शिष्यहरूमार्फत जारी रहिरहेकी रहस्यपरम्परा।"}},
+            {id:86, en:{name:"Sage Yaska", contrib:"Ancient grammarian and interpreter of Vedic words."}, hi:{name:"यास्क", contrib:"प्राचीन व्याकरणज्ञ और वैदिक शब्दार्थ के व्याख्याता।"}, ne:{name:"यास्क", contrib:"प्राचीन व्याकरणज्ञ र वैदिक शब्दार्थ व्याख्याता।"}},
+            {id:87, en:{name:"Sage Katyayani (female tradition)", contrib:"Associated with certain tantric and folk traditions."}, hi:{name:"कात्यायनी (स्त्री परम्परा)", contrib:"कुछ तांत्रिक और लोक परंपराओं से संबंधित।"}, ne:{name:"कात्यायनी (महिला परम्परा)", contrib:"केही तान्त्रिक तथा लोक परम्परासँग सम्बन्धित।"}},
+            {id:88, en:{name:"Sage Vasistha Maitra", contrib:"Local/lineage sages preserving oral traditions."}, hi:{name:"वशिष्ठ मैत्र", contrib:"मौखिक परंपराओं के संरक्षक स्थानीय/वंशीय ऋषि।"}, ne:{name:"वशिष्ठ मैत्र", contrib:"मुखिक परम्परा संरक्षण गर्ने स्थानीय/वंशीय ऋषि।"}},
+            {id:89, en:{name:"Sage Shuka (symbolic)", contrib:"Narrators and tradition-carriers of Puranic lore."}, hi:{name:"शुक (प्रतीक)", contrib:"पुराणिक कथाओं के कथावाचक और परंपरा-धारक।"}, ne:{name:"शुक (प्रतीक)", contrib:"पुराणिक कथाका कथावाचक र परम्पराधारक।"}},
+            {id:90, en:{name:"Modern teachers (collective)", contrib:"Group of modern spiritual teachers continuing the lineage."}, hi:{name:"आधुनिक गुरु (समूह)", contrib:"आधुनिक आध्यात्मिक शिक्षकों का समूह जो परंपरा जारी रखें।"}, ne:{name:"आधुनिक गुरु (समूह)", contrib:"आधुनिक आध्यात्मिक शिक्षकहरूको समूह जसले परम्परा अगाडि बढाउँछन्।"}},
+            {id:91, en:{name:"Sage Vamana", contrib:"Vedic and Puranic teacher often invoked in moral tales."}, hi:{name:"वामन", contrib:"वैदिक और पुराणिक कथा-शिक्षाओं में स्थान रखने वाले ऋषि/आचार्य।"}, ne:{name:"वामन", contrib:"वैदिक र पुराणिक कथामा नीतिक शिक्षकको रूपमा उल्लेखित।"}},
+            {id:92, en:{name:"Sage Ila", contrib:"Mythic teacher figure appearing in several traditions."}, hi:{name:"इला", contrib:"कई परंपराओं में वृत्तमान पौराणिक आचार्य।"}, ne:{name:"इला", contrib:"धेरै परम्परामा देखा पर्ने पुराणिक आचार्य।"}},
+            {id:93, en:{name:"Sage Vyaasa (collective memory)", contrib:"Name representing many compilers and transmitters of lore."}, hi:{name:"व्यास (संग्रह स्मृति)", contrib:"कथाओं और शिक्षाओं के कई संकलकों का प्रतिनिधि नाम।"}, ne:{name:"व्यास (संग्रह स्मृति)", contrib:"कथा र शिक्षाका धेरै सङ्कलकहरूको प्रतिनिधि नाम।"}},
+            {id:94, en:{name:"Sage Agnidhra", contrib:"Associated with ritual knowledge and Vedic rites."}, hi:{name:"अग्निध्र", contrib:"यज्ञ और वैदिक अनुष्ठानों के विद्वान।"}, ne:{name:"अग्निध्र", contrib:"यज्ञ र वैदिक अनुष्ठानका विद्वान।"}},
+            {id:95, en:{name:"Sage Vasishthika", contrib:"Later teachers continuing Vashistha's hermeneutics."}, hi:{name:"वशिष्ठिका", contrib:"वशिष्ठ की व्याख्या और शिक्षाओं को आगे बढ़ाने वाले शिक्षक।"}, ne:{name:"वशिष्ठिका", contrib:"वशिष्ठका व्याख्या र शिक्षालाई अगाडि बढाउने गुरुहरू।"}},
+            {id:96, en:{name:"Sage Lopamudra", contrib:"Consort of Agastya; credited with hymns and spiritual insight."}, hi:{name:"लोपामुद्रा", contrib:"अगस्त्य की पत्नी; सूक्तों और आध्यात्मिक दृष्टि के लिए सम्मानित।"}, ne:{name:"लोपामुद्रा", contrib:"अगस्त्यकी साथी; सूक्त र आध्यात्मिक दृष्टिका लागि सम्मानित।"}},
+            {id:97, en:{name:"Sage Bharata (symbolic arts)", contrib:"Symbol of cultural arts and dramaturgy across India."}, hi:{name:"भरत (सांस्कृतिक)", contrib:"भारत के नाट्य और सांस्कृतिक कला परंपरा का प्रतीक।"}, ne:{name:"भरत (सांस्कृतिक)", contrib:"नाट्य र साँस्कृतिक कलाका प्रतीक।"}},
+            {id:98, en:{name:"Sage Shandilya", contrib:"Author of Shandilya Upanishad and teacher in Vaishnava lineages."}, hi:{name:"शांडिल्य", contrib:"शांडिल्य उपनिषद के लेखक; वैष्णव परंपरा में शिक्षक।"}, ne:{name:"शाण्डिल्य", contrib:"शाण्डिल्य उपनिषदका लेखक; वैष्णव परम्पराका गुरु।"}},
+            {id:99, en:{name:"Sage Gautama (other)", contrib:"Different figures named Gautama in Vedic and later texts (unique here)."}, hi:{name:"गौतम (अन्य)", contrib:"वैदिक व बाद के ग्रंथों में गौतम नामक विभिन्न व्यक्तियों का प्रतिनिधि।"}, ne:{name:"गौतम (अन्य)", contrib:"वैदिक तथा पछिल्ला ग्रन्थमा गौतम नामक भिन्न व्यक्तिहरू।"}},
+            {id:100, en:{name:"All those who preserve wisdom", contrib:"Collective honour to all sages, teachers and tradition-bearers."}, hi:{name:"वे सभी जो ज्ञान संरक्षित करते हैं", contrib:"सभी ऋषियों, गुरुओं एवं परंपरा-धारकों को समर्पित सम्मानीय श्रेय।"}, ne:{name:"जो सबै ज्ञान संरक्षण गर्छन्", contrib:"सबै ऋषि, गुरु र परम्पराधारकलाई समर्पित सम्मान।"}}
+        ];
+
+        function renderList(lang = 'en') {
+            const ul = document.getElementById('rishiList');
+            if (!ul) return;
+            ul.innerHTML = ''; 
+            
+            rishis.forEach(item => {
+                const data = item[lang] || item.en; 
+                const li = document.createElement('li');
+                li.className = 'rishi-item';
+                li.innerHTML = `
+                    <div class="rishi-name">${item.id}. ${escapeHtml(data.name)}</div>
+                    <div class="rishi-contribution">${escapeHtml(data.contrib)}</div>
+                `;
+                ul.appendChild(li);
+            });
+
+            const pageTitle = document.getElementById('page-title');
+            const intro = document.getElementById('intro');
+            const translationNote = document.getElementById('translation-note');
+
+            if (lang === 'en') {
+                pageTitle.textContent = '100 Great Rishi Munis of Ancient India';
+                intro.textContent = 'The ancient sages of India made extraordinary contributions to spirituality, philosophy, science, and human civilization. Here we honor 100 of these enlightened beings and their timeless wisdom.';
+                translationNote.textContent = 'Use the language selector in the header to change languages.';
+            } else if (lang === 'hi') {
+                pageTitle.textContent = 'प्राचीन भारत के 100 महान ऋषि-मुनि';
+                intro.textContent = 'प्राचीन भारत के ऋषियों ने आध्यात्म, दर्शन, विज्ञान और मानव सभ्यता में असाधारण योगदान दिया। यहाँ हम 100 ऐसे बुद्धिमान मुनियों और उनके शाश्वत ज्ञान का सम्मान करते हैं।';
+                translationNote.textContent = 'भाषा बदलने के लिए हेडर में भाषा चयनकर्ता का उपयोग करें।';
+            } else if (lang === 'ne') {
+                pageTitle.textContent = 'प्राचीन भारतका १०० महान ऋषि मुनिहरू';
+                intro.textContent = 'प्राचीन भारतका ऋषिहरूले आध्यात्म, दर्शन, विज्ञान र मानव सभ्यतामा असाधारण योगदान दिए। यहाँ हामी यी १०० प्रबुद्ध प्राणीहरू र उनीहरूको कालातीत ज्ञानलाई सम्मान गर्दछौं।';
+                translationNote.textContent = 'भाषा परिवर्तन गर्न हेडरमा भाषा चयनकर्ता प्रयोग गर्नुहोस्।';
+            }
+        }
+
+        function escapeHtml(text) {
+            return String(text).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+        }
+        
+        // --- INITIAL LOAD ---
+        const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+        setLanguage(savedLang);
+    });
+    </script>
+</body>
+</html>
