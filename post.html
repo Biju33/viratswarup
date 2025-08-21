@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIRAT SWARUP - Post</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header-nav-placeholder"></div>
+
+    <main class="container">
+        <section id="loginSection" class="content-section login-section">
+            <h1>Welcome</h1>
+            <p>Sign in to share and connect.</p>
+            <button class="login-btn google-btn" id="googleLoginBtn">
+                <i class="fab fa-google"></i> <span>Sign in with Google</span>
+            </button>
+            <button class="login-btn facebook-btn" id="facebookLoginBtn">
+                <i class="fab fa-facebook-f"></i> <span>Sign in with Facebook</span>
+            </button>
+        </section>
+
+        <section id="appSection" class="app-section">
+            <div class="user-info">
+                <img id="userPhoto" alt="User Photo">
+                <div>
+                    <h2 id="userName"></h2>
+                </div>
+                <button id="logoutBtn">Logout</button>
+            </div>
+
+            <div class="post-form">
+                <h3>Create a Post</h3>
+                <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+                <label for="postImageFile"><i class="fas fa-image"></i> Add Image</label>
+                <input type="file" id="postImageFile" accept="image/*" style="display: none;">
+                <img id="imagePreview" src="#" alt="Image Preview" style="display:none;">
+                <div id="uploadProgressContainer">
+                    <progress id="uploadProgress" value="0" max="100"></progress>
+                    <p id="uploadProgressText"></p>
+                </div>
+                <button id="postBtn">Post</button>
+            </div>
+
+            <div id="postsContainer">
+                <h3>Feed</h3>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script type="module" src="post-app.js"></script>
+</body>
+</html>
